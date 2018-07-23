@@ -4,6 +4,7 @@ import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
+import com.paulek.core.utils.TeleportUtil;
 import com.paulek.core.utils.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -35,7 +36,7 @@ public class SpawnCMD extends Command {
             Location location = new Location(Bukkit.getWorld(Config.SETTINGS_SPAWN_WORLD), Config.SETTINGS_SPAWN_BLOCKX, Config.SETTINGS_SPAWN_BLOCKY, Config.SETTINGS_SPAWN_BLOCKZ);
             location.setYaw((float)Config.SETTINGS_SPAWN_YAW);
 
-            player.teleport(location);
+            new TeleportUtil(location, player);
 
             sender.sendMessage(Util.fixColor(Lang.INFO_SPAWN_TELEPORT));
         } else {
@@ -50,7 +51,7 @@ public class SpawnCMD extends Command {
                     Location location = new Location(Bukkit.getWorld(Config.SETTINGS_SPAWN_WORLD), Config.SETTINGS_SPAWN_BLOCKX, Config.SETTINGS_SPAWN_BLOCKY, Config.SETTINGS_SPAWN_BLOCKZ);
                     location.setYaw((float)Config.SETTINGS_SPAWN_YAW);
 
-                    player.teleport(location);
+                    new TeleportUtil(location, player);
 
                     sender.sendMessage(Util.fixColor(Lang.INFO_SPAWN_TELEPORT));
                 }
