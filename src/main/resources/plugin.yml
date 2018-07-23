@@ -1,0 +1,5 @@
+name: clCore
+author: PaulekOfficial
+version: ${project.version}
+main: com.paulek.core.Core
+softdepend: [Vault]
