@@ -5,6 +5,7 @@ import com.paulek.core.data.UserStorage;
 import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
 import com.paulek.core.data.objects.Skin;
+import com.paulek.core.utils.SkinUtil;
 import com.paulek.core.utils.Util;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -45,12 +46,12 @@ public class SkinCMD extends Command {
 
                                 String nick = Config.SETTINGS_NONPREMIUMSKINS.get(rand);
 
-                                Skin skin = new Skin(nick);
+                                Skin skin = new Skin(nick, null);
 
                                 UserStorage.getUser(player.getUniqueId()).setSkinset_manually(false);
                                 UserStorage.getUser(player.getUniqueId()).setSkin("");
                                 UserStorage.getUser(player.getUniqueId()).setSignature("");
-                                Util.applySkin(player, skin);
+                                SkinUtil.applySkin(player, skin);
 
                                 sender.sendMessage(Util.fixColor(Lang.INFO_SKIN_CLEAR));
 
@@ -60,7 +61,7 @@ public class SkinCMD extends Command {
                                 UserStorage.getUser(player.getUniqueId()).setSkinset_manually(false);
                                 UserStorage.getUser(player.getUniqueId()).setSkin(" ");
                                 UserStorage.getUser(player.getUniqueId()).setSignature(" ");
-                                Util.applySkin(player, skin);
+                                SkinUtil.applySkin(player, skin);
 
                                 sender.sendMessage(Util.fixColor(Lang.INFO_SKIN_CLEAR));
                             }
@@ -70,7 +71,8 @@ public class SkinCMD extends Command {
                             UserStorage.getUser(player.getUniqueId()).setSkinset_manually(false);
                             UserStorage.getUser(player.getUniqueId()).setSkin(" ");
                             UserStorage.getUser(player.getUniqueId()).setSignature(" ");
-                            Util.applySkin(player, skin);
+                            UserStorage.getUser(player.getUniqueId()).setSkin_senility(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 2);
+                            SkinUtil.applySkin(player, skin);
 
                             sender.sendMessage(Util.fixColor(Lang.INFO_SKIN_CLEAR));
 
@@ -93,14 +95,14 @@ public class SkinCMD extends Command {
 
                             try {
 
-                                skin = new Skin(skin_string);
+                                skin = new Skin(skin_string, null);
 
                             } catch (Exception e){
                                 safe = false;
                                 sender.sendMessage(Util.fixColor(Lang.ERROR_SKIN_ERROR));
                             }
                             if(safe) {
-                                Util.applySkin(player, skin);
+                                SkinUtil.applySkin(player, skin);
                                 UserStorage.getUser(player.getUniqueId()).setSkinset_manually(true);
                                 UserStorage.getUser(player.getUniqueId()).setSkin(skin.getValue());
                                 UserStorage.getUser(player.getUniqueId()).setSignature(skin.getSignature());
