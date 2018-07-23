@@ -6,6 +6,7 @@ import com.paulek.core.data.UserStorage;
 import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
 import com.paulek.core.data.objects.User;
+import com.paulek.core.utils.SkinUtil;
 import com.paulek.core.utils.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -27,8 +28,8 @@ public class PlayerJoinEvent implements Listener {
 
         if(Config.ENABLE_SKINS) {
             Bukkit.getScheduler().runTaskLater(Core.getPlugin(), () -> {
-                Util.applySkin(event.getPlayer());
-            }, 20);
+                SkinUtil.applySkin(event.getPlayer());
+            }, 10);
         }
 
         if(Config.SETTINGS_SAVE_VANISH){
