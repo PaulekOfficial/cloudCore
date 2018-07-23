@@ -2,6 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.data.configs.Lang;
+import com.paulek.core.utils.TeleportUtil;
 import com.paulek.core.utils.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -24,7 +25,7 @@ public class TpCMD extends Command{
                 Player player = null;
                 if (Bukkit.getPlayerExact(args[0]) != null) {
                     player = Bukkit.getPlayerExact(args[0]);
-                    ((Player)sender).teleport(player.getLocation());
+                    new TeleportUtil(player.getLocation(), (Player)sender);
                     sender.sendMessage(Util.fixColor(Lang.INFO_TP_INFO.replace("{player}", player.getDisplayName())));
                 } else {
                     sender.sendMessage(Util.fixColor(Lang.ERROR_TP_NOTONLINE));
@@ -39,7 +40,7 @@ public class TpCMD extends Command{
             if ((Bukkit.getPlayerExact(args[0]) != null) && (Bukkit.getPlayerExact(args[1]) != null)) {
                 player1 = Bukkit.getPlayerExact(args[0]);
                 player2 = Bukkit.getPlayerExact(args[1]);
-                player1.teleport(player2.getLocation());
+                new TeleportUtil(player2.getLocation(), player1);
                 player1.sendMessage(Util.fixColor(Lang.INFO_TP_PLAYERTOPLAYER.replace("{player}", player1.getDisplayName()).replace("{target}", player2.getDisplayName())));
             } else {
                 sender.sendMessage(Util.fixColor(Lang.ERROR_TP_NOTONLINE));
@@ -57,7 +58,7 @@ public class TpCMD extends Command{
                     z = Double.valueOf(args[2]);
                     Location loc = new Location(player.getWorld(), x, y, z);
                     player.getWorld().loadChunk((int)x, (int)y);
-                    player.teleport(loc);
+                    new TeleportUtil(loc, player);
                     String a = Lang.INFO_TP_CORDINATES.replace("{x}",String.valueOf(loc.getX()));
                     a = a.replace("{y}",String.valueOf(loc.getY()));
                     a = a.replace("{z}",String.valueOf(loc.getZ()));

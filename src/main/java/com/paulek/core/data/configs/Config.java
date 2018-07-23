@@ -21,6 +21,8 @@ public class Config {
     public static boolean ENABLE_STONEGENERATOR = true;
     public static boolean ENABLE_RANDOMTELEPORT = true;
 
+    public static boolean SETTINGS_SAFELOCATION = true;
+
     public static int SETTINGS_STONEGENERATOR_REGENERATE = 1;
     public static String SETTINGS_STONEGENERATOR_NAME = "§a§lGenerator";
     public static List<String> SETTINGS_STONEGENERATOR_LORE = Arrays.asList("§cPut a steward on the ground,", "§cPlace stone or obsidian on it", "§cFinished! Only the digger was left: D");
