@@ -26,12 +26,14 @@ public class AsyncPlayerChatEvent implements Listener {
         for(String s : groups_format.keySet()){
             if(Core.getPermission().playerInGroup(event.getPlayer(), s)){
                 String format;
-                if(!event.getPlayer().hasPermission("core.chat.color")){
-                    format = Util.fixColor(groups_format.get(s).replace("{displayname}", Core.getChat().getGroupPrefix(event.getPlayer().getWorld(), Core.getPermission().getPrimaryGroup(event.getPlayer())) + event.getPlayer().getDisplayName())).replace("{message}", event.getMessage());
-                } else {
-                    format = Util.fixColor(groups_format.get(s).replace("{displayname}", Core.getChat().getGroupPrefix(event.getPlayer().getWorld(), Core.getPermission().getPrimaryGroup(event.getPlayer())) + event.getPlayer().getDisplayName()).replace("{message}", event.getMessage()));
+                if(Core.getChat().getPrimaryGroup(event.getPlayer()) != null) {
+                    if (!event.getPlayer().hasPermission("core.chat.color")) {
+                        format = Util.fixColor(groups_format.get(s).replace("{displayname}", Core.getChat().getGroupPrefix(event.getPlayer().getWorld(), Core.getPermission().getPrimaryGroup(event.getPlayer())) + event.getPlayer().getDisplayName())).replace("{message}", event.getMessage());
+                    } else {
+                        format = Util.fixColor(groups_format.get(s).replace("{displayname}", Core.getChat().getGroupPrefix(event.getPlayer().getWorld(), Core.getPermission().getPrimaryGroup(event.getPlayer())) + event.getPlayer().getDisplayName()).replace("{message}", event.getMessage()));
+                    }
+                    event.setFormat(format);
                 }
-                event.setFormat(format);
             }
         }
 

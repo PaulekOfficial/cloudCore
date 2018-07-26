@@ -24,11 +24,11 @@ public class SpeedCMD extends Command {
 
                     Player player = (Player)sender;
 
-                    int a;
+                    double a = 0;
 
                     try {
 
-                        a = Integer.valueOf(args[0]);
+                        a = Double.valueOf(args[0]);
 
                     } catch (Exception e){
 
@@ -44,36 +44,13 @@ public class SpeedCMD extends Command {
                         return false;
                     }
 
-                    float f = 0.1F;
-
-                    switch (a){
-                        case 1: f = 0.1F;
-                                break;
-                        case 2: f = 0.2F;
-                            break;
-                        case 3: f = 0.3F;
-                            break;
-                        case 4: f = 0.4F;
-                            break;
-                        case 5: f = 0.5F;
-                            break;
-                        case 6: f = 0.6F;
-                            break;
-                        case 7: f = 0.7F;
-                            break;
-                        case 8: f = 0.8F;
-                            break;
-                        case 9: f = 0.9F;
-                            break;
-                        case 10: f = 1.0F;
-                            break;
-                    }
+                    a = a*0.1;
 
                     if (player.isFlying()){
-                        player.setFlySpeed(f);
+                        player.setFlySpeed((float) a);
                         sender.sendMessage(Util.fixColor(Lang.INFO_SPEED_CHANGED));
                     } else {
-                        player.setWalkSpeed(f);
+                        player.setWalkSpeed((float) a);
                         sender.sendMessage(Util.fixColor(Lang.INFO_SPEED_CHANGED));
                     }
 
@@ -89,11 +66,11 @@ public class SpeedCMD extends Command {
 
                     Player player = Bukkit.getPlayer(p);
 
-                    int a;
+                    double a = 0;
 
                     try {
 
-                        a = Integer.valueOf(args[1]);
+                        a = Double.valueOf(args[1]);
 
                     } catch (Exception e){
 
@@ -109,36 +86,13 @@ public class SpeedCMD extends Command {
                         return false;
                     }
 
-                    float f = 0.1F;
-
-                    switch (a){
-                        case 1: f = 0.1F;
-                            break;
-                        case 2: f = 0.2F;
-                            break;
-                        case 3: f = 0.3F;
-                            break;
-                        case 4: f = 0.4F;
-                            break;
-                        case 5: f = 0.5F;
-                            break;
-                        case 6: f = 0.6F;
-                            break;
-                        case 7: f = 0.7F;
-                            break;
-                        case 8: f = 0.8F;
-                            break;
-                        case 9: f = 0.9F;
-                            break;
-                        case 10: f = 1.0F;
-                            break;
-                    }
+                    a = a*0.1;
 
                     if (player.isFlying()){
-                        player.setFlySpeed(f);
+                        player.setFlySpeed((float) a);
                         sender.sendMessage(Util.fixColor(Lang.INFO_SPEED_CHANGED));
                     } else {
-                        player.setWalkSpeed(f);
+                        player.setWalkSpeed((float) a);
                         sender.sendMessage(Util.fixColor(Lang.INFO_SPEED_CHANGED));
                     }
 

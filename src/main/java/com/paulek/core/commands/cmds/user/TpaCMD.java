@@ -2,6 +2,7 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.data.UserStorage;
 import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
 import com.paulek.core.utils.Util;
@@ -34,6 +35,13 @@ public class TpaCMD extends Command {
 
             if(Bukkit.getPlayer(args[0]) != null){
                 final Player player = Bukkit.getPlayer(args[0]);
+
+                if(!UserStorage.getUser(player.getUniqueId()).isTptoogle()){
+
+                    sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
+
+                    return false;
+                }
 
                 BukkitTask id;
 

@@ -1,6 +1,7 @@
 package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
+import com.paulek.core.data.UserStorage;
 import com.paulek.core.data.configs.Lang;
 import com.paulek.core.utils.TeleportUtil;
 import com.paulek.core.utils.Util;
@@ -25,6 +26,14 @@ public class TpCMD extends Command{
                 Player player = null;
                 if (Bukkit.getPlayerExact(args[0]) != null) {
                     player = Bukkit.getPlayerExact(args[0]);
+
+                    if(UserStorage.getUser(player.getUniqueId()).isTptoogle()){
+
+                        sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
+
+                        return false;
+                    }
+
                     new TeleportUtil(player.getLocation(), (Player)sender);
                     sender.sendMessage(Util.fixColor(Lang.INFO_TP_INFO.replace("{player}", player.getDisplayName())));
                 } else {
@@ -39,6 +48,14 @@ public class TpCMD extends Command{
             Player player2 = null;
             if ((Bukkit.getPlayerExact(args[0]) != null) && (Bukkit.getPlayerExact(args[1]) != null)) {
                 player1 = Bukkit.getPlayerExact(args[0]);
+
+                if(UserStorage.getUser(player1.getUniqueId()).isTptoogle()){
+
+                    sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
+
+                    return false;
+                }
+
                 player2 = Bukkit.getPlayerExact(args[1]);
                 new TeleportUtil(player2.getLocation(), player1);
                 player1.sendMessage(Util.fixColor(Lang.INFO_TP_PLAYERTOPLAYER.replace("{player}", player1.getDisplayName()).replace("{target}", player2.getDisplayName())));

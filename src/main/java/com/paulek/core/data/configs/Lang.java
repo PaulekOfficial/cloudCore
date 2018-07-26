@@ -52,6 +52,8 @@ public class Lang {
     public static String ERROR_BACK_NOHISTORY = "$cSorry, but you haven't any teleport history!";
     public static String INFO_BACK_TELEPORTED = "$eYou have been teleported to the last place you stay";
     public static String INFO_BACK_TPDONE = "$eTeleported!";
+    public static String ERROR_SPAWN_PLAYEROFFINLE = "$cError! This player is offinle";
+    public static String INFO_SPAWN_PLAYERTELEPORTED = "$aYou have been teleported to spawn!";
     public static String INFO_SPAWN_SET = "$eSpawn localization set!";
     public static String INFO_SPAWN_TELEPORT = "$eTeleported!";
     public static String INFO_TPA_REQUEST = "$eA request for teleportation has been sent to {player}";
@@ -137,6 +139,14 @@ public class Lang {
     public static String ERROR_SPEED_NOTAVALUE = "$cPleace give a value not leater!";
     public static String INFO_WORKBENCH_OPENED = "$aYou opened a workbench!";
     public static String INFO_ANVIL_OPENED = "$aYou opened an anvil";
+    public static String INFO_TPHERE_TELEPORTED = "$aPlayer teleported to you";
+    public static String ERROR_TPHERE_PLAYEROFFINLE = "$aThis player is offinle";
+    public static String INFO_TPALL_TELEPORTED = "$aTeleported all online players to you!";
+    public static String INFO_TPTOOGLE_TPDENY = "$cThis player has disabled teleportation!";
+    public static String INFO_TPTOGGLE_ENABLED = "$aEnabled tptoggle!";
+    public static String INFO_TPTOGGLE_DISABLED = "$aDisabled tptoggle!";
+    public static String ERROR_TPTOGGLE_ENABLED = "$aTptoogle is already on!";
+    public static String ERROR_TPTOGGLE_DISABLED = "$aTptoggle is already off!";
 
     private static File file = new File(Core.getPlugin().getDataFolder(), "lang.yml");
     private static FileConfiguration c = null;
