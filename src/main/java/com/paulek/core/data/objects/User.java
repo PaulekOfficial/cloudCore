@@ -43,13 +43,14 @@ public class User {
     private boolean vanish;
     private boolean socialspy;
     private boolean afk;
+    private boolean tptoogle;
 
     public User(Player player){
         this.uuid = player.getUniqueId();
         this.displayname = player.getDisplayName();
         this.last_login = System.currentTimeMillis();
         this.god = false;
-        this.home = new HashMap<String, Location>();
+        this.home = new HashMap<>();
         this.fly = false;
         this.gamemode = player.getGameMode().getValue();
         this.skin = "";
@@ -66,10 +67,11 @@ public class User {
         String[] split_b = spilt_a[1].split(":");
 
         this.ipAddres =  split_b[0];
-        this.kit = new HashMap<String, Long>();
+        this.kit = new HashMap<>();
         this.vanish = false;
         this.socialspy = false;
         this.afk = false;
+        this.tptoogle = false;
 
         this.saveUser();
         this.loadFile();
@@ -157,6 +159,7 @@ public class User {
                 this.vanish = jsonObject.get("vanish").getAsBoolean();
                 this.socialspy = jsonObject.get("socialspy").getAsBoolean();
                 this.afk = jsonObject.get("afk").getAsBoolean();
+                this.tptoogle = jsonObject.get("tptoogle").getAsBoolean();
 
                 consoleLog.info("Loaded player " + jsonObject.get("displayname") + " file!");
 
@@ -269,6 +272,7 @@ public class User {
         jsonObject.addProperty("vanish", vanish);
         jsonObject.addProperty("socialspy", socialspy);
         jsonObject.addProperty("afk", afk);
+        jsonObject.addProperty("tptoogle", tptoogle);
 
     }
 
@@ -467,5 +471,13 @@ public class User {
 
     public void setSkinset_manually(boolean skinset_manually) {
         this.skinset_manually = skinset_manually;
+    }
+
+    public boolean isTptoogle() {
+        return tptoogle;
+    }
+
+    public void setTptoogle(boolean tptoogle) {
+        this.tptoogle = tptoogle;
     }
 }

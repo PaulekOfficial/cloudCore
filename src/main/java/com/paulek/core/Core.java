@@ -18,6 +18,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -51,6 +52,17 @@ public class Core extends JavaPlugin{
             return;
         }
 
+        if(this.getServer().getPluginManager().getPlugin("Vault") != null) {
+            RegisteredServiceProvider<Permission> serviceProvider_permission = this.getServer().getServicesManager().getRegistration(Permission.class);
+            if (serviceProvider_permission != null) permission = serviceProvider_permission.getProvider();
+            RegisteredServiceProvider<Chat> serviceProvider_chat = this.getServer().getServicesManager().getRegistration(Chat.class);
+            if(serviceProvider_chat != null) chat = serviceProvider_chat.getProvider();
+            consoleLog.info("Valut detected!");
+        } else {
+            consoleLog.log("Warning! Valut not detected! disabling plugin...", Level.WARNING);
+            this.getPluginLoader().disablePlugin(this);
+        }
+
         registerListeners();
         registerCommands();
 
@@ -66,7 +78,8 @@ public class Core extends JavaPlugin{
             meta.setLore(Config.SETTINGS_STONEGENERATOR_LORE);
             item.setItemMeta(meta);
 
-            ShapedRecipe recipe = new ShapedRecipe(item).shape(new String[]{
+            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "iocjow98345cj9673498yjw"), item)
+                    .shape(new String[]{
                     "RIR",
                     "ISI",
                     "RPR"
@@ -80,16 +93,6 @@ public class Core extends JavaPlugin{
         }
 
         if(Config.ENABLE_RANDOMTELEPORT) RandomtpStorage.loadButtons();
-
-        if(this.getServer().getPluginManager().getPlugin("Vault") != null) {
-            RegisteredServiceProvider<Permission> serviceProvider_permission = this.getServer().getServicesManager().getRegistration(Permission.class);
-            if (serviceProvider_permission != null) permission = serviceProvider_permission.getProvider();
-            RegisteredServiceProvider<Chat> serviceProvider_chat = this.getServer().getServicesManager().getRegistration(Chat.class);
-            if(serviceProvider_chat != null) chat = serviceProvider_chat.getProvider();
-            consoleLog.info("Valut detected!");
-        } else {
-            consoleLog.warning("Valut not detected! Disabling units...");
-        }
 
         AsyncPlayerChatEvent.loadGroups();
 
@@ -171,5 +174,8 @@ public class Core extends JavaPlugin{
         CommandManager.registerCommand(new SpeedCMD());
         CommandManager.registerCommand(new WorkbenchCMD());
         CommandManager.registerCommand(new AnvilCMD());
+        CommandManager.registerCommand(new TphereCMD());
+        CommandManager.registerCommand(new TpallCMD());
+        CommandManager.registerCommand(new TptoggleCMD());
     }
 }
