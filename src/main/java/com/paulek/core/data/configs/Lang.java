@@ -147,6 +147,24 @@ public class Lang {
     public static String INFO_TPTOGGLE_DISABLED = "$aDisabled tptoggle!";
     public static String ERROR_TPTOGGLE_ENABLED = "$aTptoogle is already on!";
     public static String ERROR_TPTOGGLE_DISABLED = "$aTptoggle is already off!";
+    public static String INFO_ENCHANT_ENCHANTED = "$aEnchanted!";
+    public static String ERROR_ENCHANT_NOTNUMBER = "$cSorry but this is not a number!";
+    public static String ERROR_ENCHANT_NOTFOUND = "$cNot found a enchantment by this name";
+    public static String ERROR_ENCHANT_UNSAFE = "$cSorry, unsafe enchants are disabled!";
+    public static String ERROR_ENCHANT_ITEMAIR = "$cWut? Item in your hand is air";
+    public static String INFO_ENCHANT_LIST = "$aList of enchantments: {list}";
+    public static String INFO_JUMP_YUP = "$aYup!";
+    public static String ERROR_JUMP_AIR = "$cNothing to jump :/";
+    public static String INFO_THOR_THORED = "$aPlayer thored";
+    public static String INFO_THOR_PLAYERTHORED = "$aYou got thored";
+    public static String ERROR_THOR_PLAYEROFFINLE = "$cSpecyficed player is offinle!";
+    public static String INFO_PING_FORMAT = "$a{player} ping equals {ping} ms.";
+    public static String ERROR_PING_GET = "$cError on getting ping!";
+    public static String ERROR_PING_PLAYEROFFINLE = "$cError player is offinle!";
+    public static String ERROR_WORLD_NOWORLD = "$cSpecyficed world don't exist!";
+    public static String INFO_WORLD_TELEPORTED = "$aTeleported!";
+    public static String ERROR_WORLD_PLAYEROFFINLE = "$cSpecyficed player is offinle!";
+    public static String INFO_WORLD_PLAYERTELEPORTED = "$aPlayer teleported!";
 
     private static File file = new File(Core.getPlugin().getDataFolder(), "lang.yml");
     private static FileConfiguration c = null;
