@@ -16,7 +16,9 @@ import com.paulek.core.utils.consoleLog;
 import com.paulek.core.utils.version;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
+import net.minecraft.server.v1_12_R1.MinecraftServer;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -52,6 +54,7 @@ public class Core extends JavaPlugin{
             return;
         }
 
+        //Valut permissions initialization
         if(this.getServer().getPluginManager().getPlugin("Vault") != null) {
             RegisteredServiceProvider<Permission> serviceProvider_permission = this.getServer().getServicesManager().getRegistration(Permission.class);
             if (serviceProvider_permission != null) permission = serviceProvider_permission.getProvider();
@@ -65,6 +68,19 @@ public class Core extends JavaPlugin{
 
         registerListeners();
         registerCommands();
+
+        //Spawn initialization
+        if(Config.SETTINGS_SPAWN_BLOCKY == 89177777777234789.0 && Config.SETTINGS_SPAWN_BLOCKX == -1 && Config.SETTINGS_SPAWN_BLOCKZ == 10){
+
+            Location world_dafault_spawn = Bukkit.getWorld("world").getSpawnLocation();
+
+            Config.SETTINGS_SPAWN_WORLD = world_dafault_spawn.getWorld().getName();
+            Config.SETTINGS_SPAWN_BLOCKX = world_dafault_spawn.getX();
+            Config.SETTINGS_SPAWN_BLOCKZ = world_dafault_spawn.getZ();
+            Config.SETTINGS_SPAWN_BLOCKY = world_dafault_spawn.getY();
+            Config.SETTINGS_SPAWN_YAW = world_dafault_spawn.getYaw();
+
+        }
 
         if(Config.SETTINGS_COMBAT_ENABLED){
             Bukkit.getScheduler().runTaskTimer(this, new CombatManager(), 20, 20);
@@ -177,5 +193,10 @@ public class Core extends JavaPlugin{
         CommandManager.registerCommand(new TphereCMD());
         CommandManager.registerCommand(new TpallCMD());
         CommandManager.registerCommand(new TptoggleCMD());
+        CommandManager.registerCommand(new EnchantCMD());
+        CommandManager.registerCommand(new JumpCMD());
+        CommandManager.registerCommand(new LightningCMD());
+        CommandManager.registerCommand(new PingCMD());
+        CommandManager.registerCommand(new WorldCMD());
     }
 }

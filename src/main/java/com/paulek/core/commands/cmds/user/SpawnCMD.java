@@ -26,7 +26,7 @@ public class SpawnCMD extends Command {
     @Override
     public boolean execute(final CommandSender sender, String[] args) {
 
-        if(args.length == 1) {
+        if(args.length == 0) {
 
             if (!(sender instanceof Player)) {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
@@ -68,7 +68,7 @@ public class SpawnCMD extends Command {
 
                 return false;
             }
-        } else if(args.length == 2){
+        } else if(args.length == 1){
 
             if(Bukkit.getPlayer(args[0]) != null) {
 

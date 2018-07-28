@@ -44,6 +44,8 @@ public class Config {
 
     public static boolean SETTINGS_EASTEREGG_EXPLODESHEEP = true;
 
+    public static boolean SETTINGS_ENCHANT_UNSAFE = true;
+
     public static boolean SETTINGS_COMBAT_ENABLED = true;
     public static boolean SETTINGS_COMBAT_KILLONLOGOUT = true;
     public static boolean SETTINGS_COMBAT_BRODCASTLOGOUT = true;
@@ -62,9 +64,9 @@ public class Config {
 
     public static int SETTINGS_SPAWN_DETLY = 10;
     public static String SETTINGS_SPAWN_WORLD = "world";
-    public static double SETTINGS_SPAWN_BLOCKX = 0;
-    public static double SETTINGS_SPAWN_BLOCKZ = 0;
-    public static double SETTINGS_SPAWN_BLOCKY = 100;
+    public static double SETTINGS_SPAWN_BLOCKX = -1;
+    public static double SETTINGS_SPAWN_BLOCKZ = 10;
+    public static double SETTINGS_SPAWN_BLOCKY = 89177777777234789.0;
     public static double SETTINGS_SPAWN_YAW = 0;
 
     public static boolean SETTINGS_SAVE_GAMEMODE = true;
