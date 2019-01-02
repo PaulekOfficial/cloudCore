@@ -18,33 +18,33 @@ public class RCMD extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
-        if(args.length != 0){
-            UUID uuid = ((Player)sender).getUniqueId();
-            if(MsgCMD.getMessages().containsKey(uuid)) {
-                String s = "";
-                for (int i = 0; i != args.length; i++) {
-                    s += args[i] + " ";
-                }
-                String message = Util.fixColor(Lang.INFO_MSG_FORMAT.replace("{message}", s));
-                if(Bukkit.getPlayer(MsgCMD.getMessages().get(uuid)) != null) {
-                    Bukkit.getPlayer(MsgCMD.getMessages().get(uuid)).sendMessage(message.replace("{from}", sender.getName()));
-                    sender.sendMessage(message.replace("{from}", sender.getName()));
-                    for(Player p : Bukkit.getOnlinePlayers()){
-                        UUID u = p.getUniqueId();
-                        if(UserStorage.getUser(u).isSocialspy()){
-                            String m = Util.fixColor(Lang.INFO_MSG_SPYFORMAT.replace("{from}", sender.getName()).replace("{to}", Bukkit.getPlayer(MsgCMD.getMessages().get(uuid)).getDisplayName()).replace("{message}", s));
-                            p.sendMessage(m);
-                        }
-                    }
-                }  else {
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_MSG_NOTHINGTOANSWER));
-                }
-            } else {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_MSG_PLAYEROFF));
-            }
-        } else {
-            sender.sendMessage(getUsage());
-        }
+//        if(args.length != 0){
+//            UUID uuid = ((Player)sender).getUniqueId();
+//            if(MsgCMD.getMessages().containsKey(uuid)) {
+//                String s = "";
+//                for (int i = 0; i != args.length; i++) {
+//                    s += args[i] + " ";
+//                }
+//                String message = Util.fixColor(Lang.INFO_MSG_FORMAT.replace("{message}", s));
+//                if(Bukkit.getPlayer(MsgCMD.getMessages().get(uuid)) != null) {
+//                    Bukkit.getPlayer(MsgCMD.getMessages().get(uuid)).sendMessage(message.replace("{from}", sender.getName()));
+//                    sender.sendMessage(message.replace("{from}", sender.getName()));
+//                    for(Player p : Bukkit.getOnlinePlayers()){
+//                        UUID u = p.getUniqueId();
+//                        if(UserStorage.getUser(u).isSocialspy()){
+//                            String m = Util.fixColor(Lang.INFO_MSG_SPYFORMAT.replace("{from}", sender.getName()).replace("{to}", Bukkit.getPlayer(MsgCMD.getMessages().get(uuid)).getDisplayName()).replace("{message}", s));
+//                            p.sendMessage(m);
+//                        }
+//                    }
+//                }  else {
+//                    sender.sendMessage(Util.fixColor(Lang.ERROR_MSG_NOTHINGTOANSWER));
+//                }
+//            } else {
+//                sender.sendMessage(Util.fixColor(Lang.ERROR_MSG_PLAYEROFF));
+//            }
+//        } else {
+//            sender.sendMessage(getUsage());
+//        }
         return false;
     }
 }

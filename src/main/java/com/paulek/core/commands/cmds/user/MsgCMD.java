@@ -21,38 +21,38 @@ public class MsgCMD extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
-        if (args.length != 0) {
-            String tosend = args[0];
-            if (Bukkit.getPlayer(tosend) != null) {
-                UUID uuid = ((Player) sender).getUniqueId();
-                if(!messages.containsKey(uuid)) {
-                    messages.put(uuid, tosend);
-                }
-                Player send = Bukkit.getPlayer(tosend);
-                UUID u = send.getUniqueId();
-                if(!messages.containsKey(u)) {
-                    messages.put(u, sender.getName());
-                }
-                String s = "";
-                for (int i = 1; i != args.length; i++) {
-                    s += args[i] + " ";
-                }
-                String message = Util.fixColor(Lang.INFO_MSG_FORMAT).replace("{message}", s);
-                send.sendMessage(message.replace("{from}", sender.getName()));
-                sender.sendMessage(message.replace("{from}", sender.getName()));
-                for(Player p : Bukkit.getOnlinePlayers()){
-                    UUID ue = p.getUniqueId();
-                    if(UserStorage.getUser(ue).isSocialspy()){
-                        String m = Util.fixColor(Lang.INFO_MSG_SPYFORMAT.replace("{from}", sender.getName()).replace("{to}", send.getDisplayName()).replace("{message}", s));
-                        p.sendMessage(m);
-                    }
-                }
-            } else {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_MSG_PLAYEROFF));
-            }
-        } else {
-            sender.sendMessage(getUsage());
-        }
+//        if (args.length != 0) {
+//            String tosend = args[0];
+//            if (Bukkit.getPlayer(tosend) != null) {
+//                UUID uuid = ((Player) sender).getUniqueId();
+//                if(!messages.containsKey(uuid)) {
+//                    messages.put(uuid, tosend);
+//                }
+//                Player send = Bukkit.getPlayer(tosend);
+//                UUID u = send.getUniqueId();
+//                if(!messages.containsKey(u)) {
+//                    messages.put(u, sender.getName());
+//                }
+//                String s = "";
+//                for (int i = 1; i != args.length; i++) {
+//                    s += args[i] + " ";
+//                }
+//                String message = Util.fixColor(Lang.INFO_MSG_FORMAT).replace("{message}", s);
+//                send.sendMessage(message.replace("{from}", sender.getName()));
+//                sender.sendMessage(message.replace("{from}", sender.getName()));
+//                for(Player p : Bukkit.getOnlinePlayers()){
+//                    UUID ue = p.getUniqueId();
+//                    if(UserStorage.getUser(ue).isSocialspy()){
+//                        String m = Util.fixColor(Lang.INFO_MSG_SPYFORMAT.replace("{from}", sender.getName()).replace("{to}", send.getDisplayName()).replace("{message}", s));
+//                        p.sendMessage(m);
+//                    }
+//                }
+//            } else {
+//                sender.sendMessage(Util.fixColor(Lang.ERROR_MSG_PLAYEROFF));
+//            }
+//        } else {
+//            sender.sendMessage(getUsage());
+//        }
         return false;
     }
 

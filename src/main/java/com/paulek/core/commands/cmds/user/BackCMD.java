@@ -25,46 +25,46 @@ public class BackCMD extends Command {
 
     @Override
     public boolean execute(final CommandSender sender, String[] args) {
-        if(!(sender instanceof Player)){
-            sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
-            return false;
-        }
-
-        final Player player = (Player)sender;
-
-        final UUID uuid = player.getUniqueId();
-
-        if(UserStorage.getUser(uuid).getLast_stay() != null){
-
-            if(sender.hasPermission("core.wait.bypass")){
-                Location location = UserStorage.getUser(uuid).getLast_stay();
-
-                player.teleport(location);
-
-                sender.sendMessage(Util.fixColor(Lang.INFO_BACK_TELEPORTED));
-                return false;
-            }
-
-            sender.sendMessage(Util.fixColor(Lang.INFO_BACK_WAIT));
-
-            BukkitTask id;
-
-            id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
-                public void run() {
-                    Location location = UserStorage.getUser(uuid).getLast_stay();
-
-                    player.teleport(location);
-
-                    sender.sendMessage(Util.fixColor(Lang.INFO_BACK_TPDONE));
-                }
-            }, Config.SETTINGS_BACK_DETLY * 20);
-
-            to_teleport.put(player.getUniqueId(), id.getTaskId());
-
-        } else {
-            sender.sendMessage(Util.fixColor(Lang.ERROR_BACK_NOHISTORY));
-            return false;
-        }
+//        if(!(sender instanceof Player)){
+//            sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
+//            return false;
+//        }
+//
+//        final Player player = (Player)sender;
+//
+//        final UUID uuid = player.getUniqueId();
+//
+//        if(UserStorage.getUser(uuid).getLastStay() != null){
+//
+//            if(sender.hasPermission("core.wait.bypass")){
+//                Location location = UserStorage.getUser(uuid).getLastStay();
+//
+//                player.teleport(location);
+//
+//                sender.sendMessage(Util.fixColor(Lang.INFO_BACK_TELEPORTED));
+//                return false;
+//            }
+//
+//            sender.sendMessage(Util.fixColor(Lang.INFO_BACK_WAIT));
+//
+//            BukkitTask id;
+//
+//            id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+//                public void run() {
+//                    Location location = UserStorage.getUser(uuid).getLastStay();
+//
+//                    player.teleport(location);
+//
+//                    sender.sendMessage(Util.fixColor(Lang.INFO_BACK_TPDONE));
+//                }
+//            }, Config.SETTINGS_BACK_DETLY * 20);
+//
+//            to_teleport.put(player.getUniqueId(), id.getTaskId());
+//
+//        } else {
+//            sender.sendMessage(Util.fixColor(Lang.ERROR_BACK_NOHISTORY));
+//            return false;
+//        }
 
         return false;
     }

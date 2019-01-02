@@ -20,8 +20,17 @@ public class Config {
     public static boolean ENABLE_SKINS = true;
     public static boolean ENABLE_STONEGENERATOR = true;
     public static boolean ENABLE_RANDOMTELEPORT = true;
+    public static boolean ENABLE_WHITELIST = true;
 
     public static boolean SETTINGS_SAFELOCATION = true;
+
+    public static String SETTINGS_STORAGETYPE = "json";
+
+    public static String SETTINGS_MYSQL_HOST = "localhost";
+    public static String SETTINGS_MYSQL_PORT = "3306";
+    public static String SETTINGS_MYSQL_DATABASE = "core";
+    public static String SETTINGS_MYSQL_USER = "root";
+    public static String SETTINGS_MYSQL_PASSWORD = "pass";
 
     public static int SETTINGS_STONEGENERATOR_REGENERATE = 1;
     public static String SETTINGS_STONEGENERATOR_NAME = "§a§lGenerator";
@@ -30,6 +39,10 @@ public class Config {
     public static int SETTINGS_RANDOMTELEPORT_MAX_X = 5000;
     public static int SETTINGS_RANDOMTELEPORT_MAX_Z = 5000;
     public static List<String> SETTINGS_RANDOMTELEPORT_BUTTONS = Arrays.asList("");
+
+    public static boolean SETTINGS_WHITELIST_ENABLED = false;
+    public static String SETTINGS_WHITELIST_MOTD = "$cYou are not in whitelist!";
+    public static List<String> SETTINGS_WHITELIST_LIST = Arrays.asList();
 
     public static boolean SETTINGS_SKINS_ENABLENOPREMIUMRANDOMSKIN = true;
 
@@ -68,8 +81,7 @@ public class Config {
     public static double SETTINGS_SPAWN_BLOCKZ = 10;
     public static double SETTINGS_SPAWN_BLOCKY = 89177777777234789.0;
     public static double SETTINGS_SPAWN_YAW = 0;
-
-    public static boolean SETTINGS_SAVE_GAMEMODE = true;
+    
     public static boolean SETTINGS_SAVE_FLY = true;
     public static boolean SETTINGS_SAVE_GOD = true;
     public static boolean SETTINGS_SAVE_SOCIALSPY = true;

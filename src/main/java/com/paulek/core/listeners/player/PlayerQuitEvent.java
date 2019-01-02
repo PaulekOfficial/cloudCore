@@ -8,6 +8,7 @@ import com.paulek.core.data.UserStorage;
 import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
 import com.paulek.core.data.CombatStorage;
+import com.paulek.core.data.objects.User;
 import com.paulek.core.utils.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -33,11 +34,20 @@ public class PlayerQuitEvent implements Listener {
 
         }
 
-        if(UserStorage.getUsers().containsKey(uuid)){
-            UserStorage.getUsers().get(uuid).saveUser();
-            UserStorage.getUsers().get(uuid).saveFile();
-            UserStorage.getUsers().remove(uuid);
-        }
+//        if(UserStorage.getUsers().containsKey(uuid)){
+//
+//            switch (User.STARAGE_TYPE){
+//                case "json":
+//                    UserStorage.getUsers().get(uuid).saveUser();
+//                    UserStorage.getUsers().get(uuid).saveFile();
+//                    break;
+//                case "mysql":
+//                    UserStorage.getUser(uuid).updateUserInDatabase();
+//                    break;
+//            }
+//
+//            UserStorage.getUsers().remove(uuid);
+//        }
 
         if(TpacceptCMD.getTo_teleport().containsKey(uuid)){
             Bukkit.getScheduler().cancelTask(TpacceptCMD.getTo_teleport().get(uuid));

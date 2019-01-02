@@ -40,11 +40,11 @@ public class BlockBreakEvent implements Listener {
             Location stone2 = new Location(loc2.getWorld(), loc2.getX(), loc2.getY() - 1.0, loc2.getZ());
             final Block sb2 = stone1.getBlock();
 
-            if ((block1.getType() == Material.STONE) && (sb1.getType() == Material.ENDER_STONE)) {
+            if ((block1.getType() == Material.STONE) && (sb1.getType() == Material.END_STONE)) {
 
                 Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                     public void run() {
-                        if (sb1.getType() == Material.ENDER_STONE) {
+                        if (sb1.getType() == Material.END_STONE) {
                             block1.setType(Material.STONE);
                         }
                     }
@@ -52,11 +52,11 @@ public class BlockBreakEvent implements Listener {
 
             }
 
-            if ((block2.getType() == Material.OBSIDIAN) && (sb2.getType() == Material.ENDER_STONE)) {
+            if ((block2.getType() == Material.OBSIDIAN) && (sb2.getType() == Material.END_STONE)) {
 
                 Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                     public void run() {
-                        if (sb2.getType() == Material.ENDER_STONE) {
+                        if (sb2.getType() == Material.END_STONE) {
                             block2.setType(Material.OBSIDIAN);
                         }
                     }

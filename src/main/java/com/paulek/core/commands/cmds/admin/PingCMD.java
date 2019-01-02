@@ -3,10 +3,10 @@ package com.paulek.core.commands.cmds.admin;
 import com.paulek.core.commands.Command;
 import com.paulek.core.data.configs.Lang;
 import com.paulek.core.utils.Util;
-import net.minecraft.server.v1_12_R1.EntityPlayer;
+import net.minecraft.server.v1_13_R2.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;

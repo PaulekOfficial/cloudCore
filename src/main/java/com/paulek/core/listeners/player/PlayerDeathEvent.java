@@ -16,7 +16,7 @@ public class PlayerDeathEvent implements Listener {
 
             UUID uuid = event.getEntity().getPlayer().getUniqueId();
 
-            UserStorage.getUser(uuid).setLast_stay(event.getEntity().getPlayer().getLocation());
+            //UserStorage.getUser(uuid).setLastStay(event.getEntity().getPlayer().getLocation());
 
         }
 

@@ -26,46 +26,46 @@ public class TpaCMD extends Command {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(!(sender instanceof Player)){
-            sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
-            return false;
-        }
-
-        if(args.length >= 1){
-
-            if(Bukkit.getPlayer(args[0]) != null){
-                final Player player = Bukkit.getPlayer(args[0]);
-
-                if(!UserStorage.getUser(player.getUniqueId()).isTptoogle()){
-
-                    sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
-
-                    return false;
-                }
-
-                BukkitTask id;
-
-                id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
-                    public void run() {
-                        waiting_to_accept.remove(player.getUniqueId());
-                        waiting_to_accept_id.remove(player.getUniqueId());
-                    }
-                }, Config.SETTINGS_TPA_WAITINGTOACCEPT * 20);
-
-                waiting_to_accept_id.put(player.getUniqueId(), id.getTaskId());
-                waiting_to_accept.put(player.getUniqueId(), ((Player)sender).getUniqueId());
-
-                sender.sendMessage(Util.fixColor(Lang.INFO_TPA_REQUEST.replace("{player}", player.getDisplayName())));
-
-                player.sendMessage(Util.fixColor(Lang.INFO_TPA_REQUESTPLAYER.replace("{player}", ((Player)sender).getDisplayName())));
-
-            } else {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_TPA_NOPLAYER));
-            }
-
-        } else {
-            sender.sendMessage(getUsage());
-        }
+//        if(!(sender instanceof Player)){
+//            sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
+//            return false;
+//        }
+//
+//        if(args.length >= 1){
+//
+//            if(Bukkit.getPlayer(args[0]) != null){
+//                final Player player = Bukkit.getPlayer(args[0]);
+//
+//                if(UserStorage.getUser(player.getUniqueId()).isTptoogle()){
+//
+//                    sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
+//
+//                    return false;
+//                }
+//
+//                BukkitTask id;
+//
+//                id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+//                    public void run() {
+//                        waiting_to_accept.remove(player.getUniqueId());
+//                        waiting_to_accept_id.remove(player.getUniqueId());
+//                    }
+//                }, Config.SETTINGS_TPA_WAITINGTOACCEPT * 20);
+//
+//                waiting_to_accept_id.put(player.getUniqueId(), id.getTaskId());
+//                waiting_to_accept.put(player.getUniqueId(), ((Player)sender).getUniqueId());
+//
+//                sender.sendMessage(Util.fixColor(Lang.INFO_TPA_REQUEST.replace("{player}", player.getDisplayName())));
+//
+//                player.sendMessage(Util.fixColor(Lang.INFO_TPA_REQUESTPLAYER.replace("{player}", ((Player)sender).getDisplayName())));
+//
+//            } else {
+//                sender.sendMessage(Util.fixColor(Lang.ERROR_TPA_NOPLAYER));
+//            }
+//
+//        } else {
+//            sender.sendMessage(getUsage());
+//        }
 
         return false;
     }

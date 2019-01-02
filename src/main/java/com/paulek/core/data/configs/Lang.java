@@ -165,6 +165,14 @@ public class Lang {
     public static String INFO_WORLD_TELEPORTED = "$aTeleported!";
     public static String ERROR_WORLD_PLAYEROFFINLE = "$cSpecyficed player is offinle!";
     public static String INFO_WORLD_PLAYERTELEPORTED = "$aPlayer teleported!";
+    public static String INFO_WHITELIST_MOTD = "$aWhitelist motd is: {motd}";
+    public static String INFO_WHITELIST_SETMOTD = "$aWhitelist motd set to: {motd}";
+    public static String ERROR_WHITELIST_CONTAINS = "$cA player named exacly same is soon in the whitelist!";
+    public static String INFO_WHITELIST_ADD = "$aPlayer added to whitelist";
+    public static String ERROR_WHITELIST_ON = "$cWhitelist is already enabled!";
+    public static String INFO_WHITELIST_ON = "$aEnabled whitelist";
+    public static String ERROR_WHITELIST_OFF = "$cWhitelist is already disabled!";
+    public static String INFO_WHITELIST_OFF = "$aDisabled whitelist!";
 
     private static File file = new File(Core.getPlugin().getDataFolder(), "lang.yml");
     private static FileConfiguration c = null;

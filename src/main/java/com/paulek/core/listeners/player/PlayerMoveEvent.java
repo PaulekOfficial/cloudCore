@@ -78,23 +78,5 @@ public class PlayerMoveEvent implements Listener {
             }
         }
 
-        if (Config.SETTINGS_COMBAT_DISCARD) {
-
-            if (CombatStorage.isMarked(event.getPlayer().getUniqueId())) {
-
-                Material m = Material.matchMaterial(Config.SETTINGS_COMBAT_DISCARDBLOCK);
-
-                if(m == null) m = Material.REDSTONE_BLOCK;
-
-                if ((event.getPlayer().getLocation().getBlock().getRelative(0, -1, 0).getType().equals(Material.REDSTONE_BLOCK)) ||
-                        (event.getPlayer().getLocation().getBlock().getRelative(0, -2, 0).getType().equals(Material.REDSTONE_BLOCK))) {
-
-                    event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().normalize().multiply(-0.68));
-
-                    event.getPlayer().setFallDistance(0.0F);
-
-                }
-            }
-        }
     }
 }

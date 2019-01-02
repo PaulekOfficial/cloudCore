@@ -26,45 +26,45 @@ public class TpahereCMD extends Command {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(!(sender instanceof Player)){
-            sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
-            return false;
-        }
-
-        final Player player = (Player)sender;
-
-        if(args.length >= 1) {
-
-            if (Bukkit.getPlayer(args[0]) != null) {
-                final Player p = Bukkit.getPlayer(args[0]);
-
-                if(!UserStorage.getUser(p.getUniqueId()).isTptoogle()){
-
-                    sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
-
-                    return false;
-                }
-
-                BukkitTask id;
-
-                id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
-                    public void run() {
-                        waiting_to_accept.remove(p.getUniqueId());
-                        waiting_to_accept_id.remove(p.getUniqueId());
-                    }
-                }, Config.SETTINGS_TPA_WAITINGTOACCEPT * 20);
-
-                waiting_to_accept_id.put(p.getUniqueId(), id.getTaskId());
-                waiting_to_accept.put(p.getUniqueId(), player.getUniqueId());
-
-                sender.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_REQUEST));
-                p.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_REQUESTPLAYER));
-
-            } else {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_TPAHERE_NOPLAYER));
-            }
-
-        }
+//        if(!(sender instanceof Player)){
+//            sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
+//            return false;
+//        }
+//
+//        final Player player = (Player)sender;
+//
+//        if(args.length >= 1) {
+//
+//            if (Bukkit.getPlayer(args[0]) != null) {
+//                final Player p = Bukkit.getPlayer(args[0]);
+//
+//                if(UserStorage.getUser(p.getUniqueId()).isTptoogle()){
+//
+//                    sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
+//
+//                    return false;
+//                }
+//
+//                BukkitTask id;
+//
+//                id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+//                    public void run() {
+//                        waiting_to_accept.remove(p.getUniqueId());
+//                        waiting_to_accept_id.remove(p.getUniqueId());
+//                    }
+//                }, Config.SETTINGS_TPA_WAITINGTOACCEPT * 20);
+//
+//                waiting_to_accept_id.put(p.getUniqueId(), id.getTaskId());
+//                waiting_to_accept.put(p.getUniqueId(), player.getUniqueId());
+//
+//                sender.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_REQUEST));
+//                p.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_REQUESTPLAYER));
+//
+//            } else {
+//                sender.sendMessage(Util.fixColor(Lang.ERROR_TPAHERE_NOPLAYER));
+//            }
+//
+//        }
 
         return false;
     }

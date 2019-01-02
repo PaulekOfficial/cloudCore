@@ -2,20 +2,13 @@ package com.paulek.core.utils;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-import com.paulek.core.Core;
-import com.paulek.core.data.UserStorage;
 import com.paulek.core.data.configs.Config;
-import com.paulek.core.data.objects.Skin;
-import com.paulek.core.data.objects.User;
-import net.minecraft.server.v1_12_R1.*;
-import org.bukkit.Bukkit;
+import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.io.*;
@@ -24,7 +17,7 @@ import java.net.URL;
 import java.util.Random;
 public class Util {
 
-    private static String url_test = "https://use.gameapis.net/mc/player/uuid/";
+    public static String PROFILE_API = "https://api.mojang.com/users/profiles/minecraft/";
 
     public static String fixColor(String string){
         return ChatColor.translateAlternateColorCodes('$', string);
@@ -48,17 +41,24 @@ public class Util {
     }
 
     public static boolean testPremium(String nick){
-        String json = readWebsite(url_test + nick + "?unsigned=false");
+        String json = readWebsite(PROFILE_API + nick + "?unsigned=false");
 
         if(json == null) return false;
 
         JsonParser parser = new JsonParser();
 
-        JsonObject object = parser.parse(json).getAsJsonObject();
+        try {
 
-        if(object.has("error")){
+            JsonObject object = parser.parse(json).getAsJsonObject();
+
+            if (object.has("error")) {
+                return false;
+            }
+
+        } catch (Exception e){
             return false;
         }
+
         return true;
     }
 
@@ -116,8 +116,8 @@ public class Util {
         return new Location(world, x, yfix, z);
     }
 
-    public static void giveParticle(Player player, EnumParticle particle, Location location, int offsetX, int offsetY, int offsetZ, int speed, int amount){
-        PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(EnumParticle.SMOKE_LARGE, true, (float)location.getX(), (float)location.getY(), (float)location.getZ(), offsetX, offsetY, offsetZ, speed, amount);
+    public static void giveParticle(Player player, ParticleParam particle, Location location, int offsetX, int offsetY, int offsetZ, int speed, int amount){
+        PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(particle, true, (float)location.getX(), (float)location.getY(), (float)location.getZ(), offsetX, offsetY, offsetZ, speed, amount);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     }
 
