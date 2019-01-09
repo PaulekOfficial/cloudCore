@@ -1,10 +1,9 @@
-package com.paulek.core.listeners.player;
+package com.paulek.core.listeners;
 
 import com.paulek.core.Core;
 import com.paulek.core.data.RandomtpStorage;
 import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
-import com.paulek.core.data.CombatStorage;
 import com.paulek.core.utils.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,9 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 
-public class PlayerInteractEvent implements Listener {
-
-    private static String message = Lang.INFO_RANDOMTP_TELEPORTED;
+public class RandomTeleportListener implements Listener {
 
     @EventHandler
     public void onInteract(org.bukkit.event.player.PlayerInteractEvent e){
@@ -44,7 +41,7 @@ public class PlayerInteractEvent implements Listener {
                             player.teleport(totp);
 
                             Location locafter = player.getLocation();
-                            message = Util.fixColor(message).replace("{x}", String.valueOf(locafter.getBlockX()))
+                            String message = Util.fixColor(Lang.INFO_RANDOMTP_TELEPORTED).replace("{x}", String.valueOf(locafter.getBlockX()))
                                     .replace("{y}", String.valueOf(locafter.getBlockY()))
                                     .replace("{z}", String.valueOf(locafter.getBlockZ()));
                             Util.sendActionbar(player, message);
@@ -55,4 +52,5 @@ public class PlayerInteractEvent implements Listener {
 
         }
     }
+
 }

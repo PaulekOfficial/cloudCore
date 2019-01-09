@@ -19,21 +19,22 @@ public class TpallCMD extends Command {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-//        if(!(sender instanceof Player)){
-//            sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
-//        }
-//
-//        Location location = ((Player)sender).getLocation();
-//
-//        for(Player p : Bukkit.getOnlinePlayers()){
-//
-//            if(!UserStorage.getUser(p.getUniqueId()).isTptoogle()){
-//                new TeleportUtil(location, p);
-//            }
-//
-//        }
-//
-//        sender.sendMessage(Util.fixColor(Lang.INFO_TPALL_TELEPORTED));
+        if(!(sender instanceof Player)){
+
+            sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
+        }
+
+        Location location = ((Player)sender).getLocation();
+
+        for(Player p : Bukkit.getOnlinePlayers()){
+
+            if(!UserStorage.getUser(p.getUniqueId()).getSettings().isTptoogle()){
+                p.teleport(location);
+            }
+
+        }
+
+        sender.sendMessage(Util.fixColor(Lang.INFO_TPALL_TELEPORTED));
 
         return false;
     }

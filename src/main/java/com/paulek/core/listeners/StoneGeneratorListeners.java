@@ -1,32 +1,38 @@
-package com.paulek.core.listeners.block;
+package com.paulek.core.listeners;
 
 import com.paulek.core.Core;
 import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
-import com.paulek.core.data.CombatStorage;
 import com.paulek.core.utils.Util;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-public class BlockBreakEvent implements Listener {
+public class StoneGeneratorListeners implements Listener {
 
-    int regenerate = Config.SETTINGS_STONEGENERATOR_REGENERATE;
+    @EventHandler
+    public void onPlace(org.bukkit.event.block.BlockPlaceEvent event) {
+
+        if (Config.ENABLE_STONEGENERATOR) {
+
+            Block block = event.getBlock();
+            Location loc = new Location(block.getWorld(), block.getX(), block.getY() - 1.0D, block.getZ());
+            Block sb = loc.getBlock();
+            if ((block.getType() == Material.STONE) && (sb.getType() == Material.END_STONE)) {
+                sb.getWorld().spawnParticle(Particle.REDSTONE, sb.getLocation(), 10, 5, 5 , 5, new Particle.DustOptions(Color.GRAY, 10));
+                event.getPlayer().sendMessage(Util.fixColor(Lang.INFO_STONEGENERATOR_PLACE));
+            }
+            if ((block.getType() == Material.OBSIDIAN) && (sb.getType() == Material.END_STONE)) {
+                sb.getWorld().spawnParticle(Particle.REDSTONE, sb.getLocation(), 10, 5, 5 , 5, new Particle.DustOptions(Color.GRAY, 10));
+                event.getPlayer().sendMessage(Util.fixColor(Lang.INFO_STONEGENERATOR_PLACE));
+            }
+
+        }
+    }
 
     @EventHandler
     public void onBroke(org.bukkit.event.block.BlockBreakEvent event){
-
-        if(Config.SETTINGS_COMBAT_DISABLEBREAKING){
-
-            if(CombatStorage.isMarked(event.getPlayer().getUniqueId())) {
-                event.getPlayer().sendMessage(Util.fixColor(Lang.ERROR_COMBAT_BREAKDISABLED));
-
-                event.setCancelled(true);
-            }
-        }
 
         if(Config.ENABLE_STONEGENERATOR) {
 
@@ -48,7 +54,7 @@ public class BlockBreakEvent implements Listener {
                             block1.setType(Material.STONE);
                         }
                     }
-                }, regenerate * 20);
+                }, Config.SETTINGS_STONEGENERATOR_REGENERATE * 20);
 
             }
 
@@ -60,10 +66,11 @@ public class BlockBreakEvent implements Listener {
                             block2.setType(Material.OBSIDIAN);
                         }
                     }
-                }, regenerate * 20);
+                }, Config.SETTINGS_STONEGENERATOR_REGENERATE * 20);
 
             }
         }
 
     }
+
 }

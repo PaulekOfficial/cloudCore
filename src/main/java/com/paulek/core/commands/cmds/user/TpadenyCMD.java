@@ -1,6 +1,7 @@
 package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.commands.Command;
+import com.paulek.core.data.TpaStorage;
 import com.paulek.core.data.configs.Lang;
 import com.paulek.core.utils.Util;
 import org.bukkit.Bukkit;
@@ -24,29 +25,21 @@ public class TpadenyCMD extends Command {
 
             UUID uuid = player.getUniqueId();
 
-            if(TpahereCMD.getWaiting_to_accept().containsKey(uuid)){
+            if(TpaStorage.getToAcceptTpahere(uuid) != null){
 
-                if(Bukkit.getPlayer(TpahereCMD.getWaiting_to_accept().get(uuid)) != null) Bukkit.getPlayer(TpahereCMD.getWaiting_to_accept().get(uuid)).sendMessage(Util.fixColor(Lang.INFO_TPADENY_REJECTED));
+                if(Bukkit.getPlayer(TpaStorage.getToAcceptTpahere(uuid)) != null) Bukkit.getPlayer(TpaStorage.getToAcceptTpahere(uuid)).sendMessage(Util.fixColor(Lang.INFO_TPADENY_REJECTED));
 
-                TpahereCMD.getWaiting_to_accept().remove(uuid);
-
-                int id = TpahereCMD.getWaiting_to_accept_id().get(uuid);
-                TpahereCMD.getWaiting_to_accept_id().remove(uuid);
-
-                Bukkit.getScheduler().cancelTask(id);
+                TpaStorage.removeToAcceptTpahere(uuid);
+                TpaStorage.cancelTaskTpahere(uuid);
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPADENY_DENY));
 
-            } else if(TpaCMD.getWaiting_to_accept().containsKey(uuid)){
+            } else if(TpaStorage.getToAcceptTpa(uuid) != null){
 
-                if(Bukkit.getPlayer(TpaCMD.getWaiting_to_accept().get(uuid)) != null) Bukkit.getPlayer(TpaCMD.getWaiting_to_accept().get(uuid)).sendMessage(Util.fixColor(Lang.INFO_TPADENY_REJECTED));
+                if(Bukkit.getPlayer(TpaStorage.getToAcceptTpa(uuid)) != null) Bukkit.getPlayer(TpaStorage.getToAcceptTpa(uuid)).sendMessage(Util.fixColor(Lang.INFO_TPADENY_REJECTED));
 
-                TpaCMD.getWaiting_to_accept().remove(uuid);
-
-                int id = TpaCMD.getWaiting_to_accept_id().get(uuid);
-                TpaCMD.getWaiting_to_accept_id().remove(uuid);
-
-                Bukkit.getScheduler().cancelTask(id);
+                TpaStorage.removeToAcceptTpa(uuid);
+                TpaStorage.cancelTaskTpa(uuid);
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPADENY_DENY));
 

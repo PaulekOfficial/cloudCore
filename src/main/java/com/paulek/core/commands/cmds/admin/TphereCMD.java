@@ -19,36 +19,36 @@ public class TphereCMD extends Command {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-//        if(!(sender instanceof Player)){
-//            sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
-//        }
-//
-//        if(args.length == 1){
-//
-//            String nick = args[0];
-//
-//            if(Bukkit.getPlayer(nick) != null){
-//
-//                if(UserStorage.getUser(Bukkit.getPlayer(nick).getUniqueId()).isTptoogle()){
-//
-//                    sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
-//
-//                    return false;
-//                }
-//
-//                Location location = ((Player)sender).getLocation();
-//
-//                new TeleportUtil(location, Bukkit.getPlayer(nick));
-//
-//                sender.sendMessage(Util.fixColor(Lang.INFO_TPHERE_TELEPORTED));
-//
-//            } else {
-//                sender.sendMessage(Util.fixColor(Lang.ERROR_TPHERE_PLAYEROFFINLE));
-//            }
-//
-//        } else {
-//            sender.sendMessage(getUsage());
-//        }
+        if(!(sender instanceof Player)){
+            sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
+        }
+
+        if(args.length == 1){
+
+            String nick = args[0];
+
+            if(Bukkit.getPlayer(nick) != null){
+
+                if(UserStorage.getUser(Bukkit.getPlayer(nick).getUniqueId()).getSettings().isTptoogle()){
+
+                    sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
+
+                    return false;
+                }
+
+                Location location = ((Player)sender).getLocation();
+
+                Bukkit.getPlayer(nick).teleport(location);
+
+                sender.sendMessage(Util.fixColor(Lang.INFO_TPHERE_TELEPORTED));
+
+            } else {
+                sender.sendMessage(Util.fixColor(Lang.ERROR_TPHERE_PLAYEROFFINLE));
+            }
+
+        } else {
+            sender.sendMessage(getUsage());
+        }
 
         return false;
     }

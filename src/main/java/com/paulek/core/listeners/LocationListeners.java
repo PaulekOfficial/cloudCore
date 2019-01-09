@@ -1,21 +1,18 @@
-package com.paulek.core.listeners.player;
+package com.paulek.core.listeners;
 
 import com.paulek.core.commands.cmds.user.BackCMD;
 import com.paulek.core.commands.cmds.user.HomeCMD;
 import com.paulek.core.commands.cmds.user.SpawnCMD;
 import com.paulek.core.commands.cmds.user.TpacceptCMD;
-import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
-import com.paulek.core.data.CombatStorage;
 import com.paulek.core.utils.Util;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.UUID;
 
-public class PlayerMoveEvent implements Listener {
+public class LocationListeners implements Listener {
 
     @EventHandler
     public void onMove(org.bukkit.event.player.PlayerMoveEvent event){
@@ -79,4 +76,5 @@ public class PlayerMoveEvent implements Listener {
         }
 
     }
+
 }

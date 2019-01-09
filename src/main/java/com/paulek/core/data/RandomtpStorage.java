@@ -17,9 +17,6 @@ public class RandomtpStorage {
         return buttons;
     }
 
-    public static void setList(List<Location> button){
-        buttons = button;
-    }
     public static void addToList(Location location){
         String tosave = location.getWorld().getName() + "#" + location.getBlockX() + "#" + location.getBlockY() + "#" +
                 location.getBlockZ();

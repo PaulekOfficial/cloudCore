@@ -1,10 +1,10 @@
 package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.commands.Command;
+import com.paulek.core.data.CombatStorage;
 import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
-import com.paulek.core.data.CombatStorage;
-import com.paulek.core.data.objects.PlayerObject;
+import com.paulek.core.data.objects.Warrior;
 import com.paulek.core.utils.Util;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,7 +26,7 @@ public class CombatCMD extends Command {
 
             if (CombatStorage.isMarked(player.getUniqueId())) {
 
-                for (PlayerObject po : CombatStorage.getMarked().values()) {
+                for (Warrior po : CombatStorage.getMarked().values()) {
 
                     if (po.getUuid().equals(player.getUniqueId())) {
                         long time = (java.lang.System.currentTimeMillis() / 1000L) - (po.getCurenttimemilirs() / 1000L);

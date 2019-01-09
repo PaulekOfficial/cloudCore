@@ -3,7 +3,11 @@ package com.paulek.core.utils;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.paulek.core.data.configs.Config;
-import net.minecraft.server.v1_13_R2.*;
+import com.paulek.core.data.objects.Skin;
+import net.minecraft.server.v1_13_R2.ChatMessageType;
+import net.minecraft.server.v1_13_R2.IChatBaseComponent;
+import net.minecraft.server.v1_13_R2.PacketPlayOutChat;
+import net.minecraft.server.v1_13_R2.PacketPlayOutTitle;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -17,7 +21,8 @@ import java.net.URL;
 import java.util.Random;
 public class Util {
 
-    public static String PROFILE_API = "https://api.mojang.com/users/profiles/minecraft/";
+    private static String PROFILE_API = "https://api.mojang.com/users/profiles/minecraft/";
+    private static String SKIN_API = "https://sessionserver.mojang.com/session/minecraft/profile/";
 
     public static String fixColor(String string){
         return ChatColor.translateAlternateColorCodes('$', string);
@@ -40,10 +45,51 @@ public class Util {
         }
     }
 
-    public static boolean testPremium(String nick){
+    public static Skin getPremiumSkin(String nick){
+
+        String uuid = getPremiumUuid(nick);
+
+        if(Config.SETTINGS_SKINS_ENABLENOPREMIUMRANDOMSKIN){
+
+            if(uuid == null){
+
+                Random random = new Random();
+
+                String randomPremiumNick = Config.SETTINGS_NONPREMIUMSKINS.get(random.nextInt(Config.SETTINGS_NONPREMIUMSKINS.size()));
+
+                uuid = getPremiumUuid(randomPremiumNick);
+
+            }
+
+        } else if(uuid == null){
+            return null;
+        }
+
+        String json = readWebsite(SKIN_API + uuid + "?unsigned=false");
+
+        if(json == null) return null;
+
+        JsonParser parser = new JsonParser();
+
+        try {
+
+            JsonObject object = parser.parse(json).getAsJsonObject();
+            JsonObject properties = object.getAsJsonArray("properties").get(0).getAsJsonObject();
+            String name = properties.get("name").getAsString();
+            String value = properties.get("value").getAsString();
+            String signature = properties.get("signature").getAsString();
+
+            return new Skin(name, value, signature);
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String getPremiumUuid(String nick){
         String json = readWebsite(PROFILE_API + nick + "?unsigned=false");
 
-        if(json == null) return false;
+        if(json == null) return null;
 
         JsonParser parser = new JsonParser();
 
@@ -52,14 +98,14 @@ public class Util {
             JsonObject object = parser.parse(json).getAsJsonObject();
 
             if (object.has("error")) {
-                return false;
+                return null;
             }
 
-        } catch (Exception e){
-            return false;
-        }
+            return object.get("id").getAsString();
 
-        return true;
+        } catch (Exception e){
+            return null;
+        }
     }
 
     public static String readWebsite(String url){
@@ -71,6 +117,8 @@ public class Util {
             httpURLConnection.setRequestMethod("GET");
 
             httpURLConnection.addRequestProperty("User-Agent", "clCore");
+
+            httpURLConnection.setConnectTimeout(5000);
 
             httpURLConnection.setDoOutput(true);
 
@@ -114,11 +162,6 @@ public class Util {
         Location loc = new Location(world, x, y, z);
         int yfix = world.getHighestBlockYAt(loc);
         return new Location(world, x, yfix, z);
-    }
-
-    public static void giveParticle(Player player, ParticleParam particle, Location location, int offsetX, int offsetY, int offsetZ, int speed, int amount){
-        PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(particle, true, (float)location.getX(), (float)location.getY(), (float)location.getZ(), offsetX, offsetY, offsetZ, speed, amount);
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     }
 
     public static void sendTitle(Player player, String messageA, String messageB, int a, int b, int c){

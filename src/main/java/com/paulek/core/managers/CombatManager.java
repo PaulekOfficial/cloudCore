@@ -1,9 +1,9 @@
 package com.paulek.core.managers;
 
+import com.paulek.core.data.CombatStorage;
 import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
-import com.paulek.core.data.CombatStorage;
-import com.paulek.core.data.objects.PlayerObject;
+import com.paulek.core.data.objects.Warrior;
 import com.paulek.core.utils.Util;
 import org.bukkit.Bukkit;
 
@@ -19,11 +19,11 @@ public class CombatManager implements Runnable {
 
         if(CombatStorage.getMarked() == null) return;
 
-        Iterator<PlayerObject> i = CombatStorage.getMarked().values().iterator();
+        Iterator<Warrior> i = CombatStorage.getMarked().values().iterator();
 
         while(i.hasNext()){
 
-            PlayerObject p = i.next();
+            Warrior p = i.next();
 
             long time = (java.lang.System.currentTimeMillis() / 1000L) - (p.getCurenttimemilirs() / 1000L);
 

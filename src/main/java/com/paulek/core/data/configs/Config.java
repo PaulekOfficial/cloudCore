@@ -12,7 +12,8 @@ public class Config {
 
     private static final String prefix = "config.";
 
-    public static boolean ENABLED = false;
+    public static boolean ENABLED = true;
+    public static boolean FIRSTCONFIGURATION = true;
     public static boolean ENABLE_CENZOR = true;
     public static boolean ENABLE_SLOWDOWN = true;
     public static boolean ENABLE_NOUPPERCASE = true;
@@ -81,11 +82,6 @@ public class Config {
     public static double SETTINGS_SPAWN_BLOCKZ = 10;
     public static double SETTINGS_SPAWN_BLOCKY = 89177777777234789.0;
     public static double SETTINGS_SPAWN_YAW = 0;
-    
-    public static boolean SETTINGS_SAVE_FLY = true;
-    public static boolean SETTINGS_SAVE_GOD = true;
-    public static boolean SETTINGS_SAVE_SOCIALSPY = true;
-    public static boolean SETTINGS_SAVE_VANISH = true;
 
     public static boolean SETTINGS_VANISH_SILIENTJOIN = true;
     public static boolean SETTINGS_VANISH_DISALLOWINTERACT = true;

@@ -8,11 +8,7 @@ import com.paulek.core.data.UserStorage;
 import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
 import com.paulek.core.data.objects.User;
-import com.paulek.core.listeners.block.BlockBreakEvent;
-import com.paulek.core.listeners.block.BlockPlaceEvent;
-import com.paulek.core.listeners.entity.EntityDamageByEntityEvent;
-import com.paulek.core.listeners.player.PlayerShearEntityEvent;
-import com.paulek.core.listeners.player.*;
+import com.paulek.core.listeners.*;
 import com.paulek.core.managers.CombatManager;
 import com.paulek.core.managers.MySQL;
 import com.paulek.core.utils.consoleLog;
@@ -30,10 +26,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.UUID;
 import java.util.logging.Level;
 
 public class Core extends JavaPlugin{
@@ -78,7 +73,7 @@ public class Core extends JavaPlugin{
         registerCommands();
 
         //Spawn initialization
-        if (Config.SETTINGS_SPAWN_BLOCKY == 89177777777234789.0 && Config.SETTINGS_SPAWN_BLOCKX == -1 && Config.SETTINGS_SPAWN_BLOCKZ == 10) {
+        if (Config.FIRSTCONFIGURATION) {
 
             Location world_dafault_spawn = Bukkit.getWorld("world").getSpawnLocation();
 
@@ -88,6 +83,8 @@ public class Core extends JavaPlugin{
             Config.SETTINGS_SPAWN_BLOCKY = world_dafault_spawn.getY();
             Config.SETTINGS_SPAWN_YAW = world_dafault_spawn.getYaw();
 
+            Config.FIRSTCONFIGURATION = false;
+            Config.reloadConfig();
         }
 
         if (Config.SETTINGS_COMBAT_ENABLED) {
@@ -103,11 +100,7 @@ public class Core extends JavaPlugin{
             item.setItemMeta(meta);
 
             ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "iocjow98345cj9673498yjw"), item)
-                    .shape(new String[]{
-                            "RIR",
-                            "ISI",
-                            "RPR"
-                    })
+                    .shape("RIR", "ISI", "RPR")
                     .setIngredient('R', Material.REDSTONE)
                     .setIngredient('I', Material.IRON_INGOT)
                     .setIngredient('S', Material.STONE)
@@ -118,59 +111,26 @@ public class Core extends JavaPlugin{
 
         if (Config.ENABLE_RANDOMTELEPORT) RandomtpStorage.loadButtons();
 
-        AsyncPlayerChatEvent.loadGroups();
+        PluginListeners.loadGroups();
+        new UserStorage();
+        SethomeCMD.loadGroups();
+    }
 
-        File folder = new File("./plugins/clCore/users/");
+    @Override
+    public void onDisable(){
 
-        for(File f : folder.listFiles()){
+        for(User u : UserStorage.getUsers().values()){
 
-            String uuid = f.getName().split(".")[0];
-
-            User user = new User(uuid);
-
-            UserStorage.getUsers().put(UUID.fromString(uuid), user);
+            if(!u.isUptodate()) {
+                try {
+                    UserStorage.saveUserData(u);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
         }
 
-        //TODO
-        //Ładowanie userów z bazy wszystkich
-//        if(mysql != null){
-//
-//            try{
-//
-//                Connection connection = mysql.getConnection();
-//
-//                try{
-//
-//                    PreparedStatement statement = connection.prepareStatement("SELECT * FROM users");
-//
-//                    ResultSet users = statement.executeQuery();
-//
-//                    while(users.next()){
-//
-//
-//                        String uuid = users.getString("uuid");
-//
-//                        //User user = new User(UUID.fromString(uuid));
-//
-//                        //UserStorage.getUsers().put(UUID.fromString(uuid), user);
-//
-//
-//                    }
-//
-//                    statement.close();
-//                } finally {
-//                    connection.close();
-//                }
-//
-//                if(!connection.isClosed()) connection.close();
-//            } catch (SQLException e){
-//
-//                e.printStackTrace();
-//
-//            }
-//      }
-        
     }
 
     public static Core getPlugin() {
@@ -192,20 +152,12 @@ public class Core extends JavaPlugin{
     private void registerListeners(){
         consoleLog.info("Registering Listeners...");
         PluginManager pluginManager = plugin.getServer().getPluginManager();
-        pluginManager.registerEvents(new AsyncPlayerChatEvent(), plugin);
-        pluginManager.registerEvents(new PlayerMoveEvent(), plugin);
-        pluginManager.registerEvents(new PlayerTeleportEvent(), plugin);
-        pluginManager.registerEvents(new PlayerRespawnEvent(), plugin);
-        pluginManager.registerEvents(new PlayerJoinEvent(), plugin);
-        pluginManager.registerEvents(new PlayerQuitEvent(), plugin);
-        pluginManager.registerEvents(new EntityDamageByEntityEvent(), plugin);
-        pluginManager.registerEvents(new PlayerCommandPreprocessEvent(), plugin);
-        pluginManager.registerEvents(new PlayerInteractEvent(), plugin);
-        pluginManager.registerEvents(new BlockBreakEvent(), plugin);
-        pluginManager.registerEvents(new BlockPlaceEvent(), plugin);
-        pluginManager.registerEvents(new PlayerShearEntityEvent(), plugin);
-        pluginManager.registerEvents(new PlayerDeathEvent(), plugin);
-        pluginManager.registerEvents(new AsyncPlayerPreLoginEvent(), plugin);
+        pluginManager.registerEvents(new CombatListeners(), this);
+        pluginManager.registerEvents(new EasterEggListeners(), this);
+        pluginManager.registerEvents(new PluginListeners(), this);
+        pluginManager.registerEvents(new RandomTeleportListener(), this);
+        pluginManager.registerEvents(new StoneGeneratorListeners(),this);
+        pluginManager.registerEvents(new UserListeners(), this);
     }
 
     private void registerCommands(){

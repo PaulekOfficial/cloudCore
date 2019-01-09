@@ -1,15 +1,15 @@
 package com.paulek.core.data;
 
-import com.paulek.core.data.objects.PlayerObject;
+import com.paulek.core.data.objects.Warrior;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 public class CombatStorage {
 
-    private static HashMap<UUID, PlayerObject> marked = new HashMap<UUID, PlayerObject>();
+    private static HashMap<UUID, Warrior> marked = new HashMap<UUID, Warrior>();
 
-    public CombatStorage(PlayerObject playerObject){
+    public CombatStorage(Warrior playerObject){
         marked.put(playerObject.getUuid(), playerObject);
     }
 
@@ -18,7 +18,7 @@ public class CombatStorage {
         return marked.containsKey(uuid);
     }
 
-    public static HashMap<UUID, PlayerObject> getMarked() {
+    public static HashMap<UUID, Warrior> getMarked() {
         return marked;
     }
 
