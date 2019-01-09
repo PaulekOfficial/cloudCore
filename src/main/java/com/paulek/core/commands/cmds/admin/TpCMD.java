@@ -27,14 +27,14 @@ public class TpCMD extends Command{
                 if (Bukkit.getPlayerExact(args[0]) != null) {
                     player = Bukkit.getPlayerExact(args[0]);
 
-                    if(UserStorage.getUser(player.getUniqueId()).isTptoogle()){
+                    if(UserStorage.getUser(player.getUniqueId()).getSettings().isTptoogle()){
 
                         sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
 
                         return false;
                     }
 
-                    new TeleportUtil(player.getLocation(), (Player)sender);
+                    ((Player)sender).teleport(player.getLocation());
                     sender.sendMessage(Util.fixColor(Lang.INFO_TP_INFO.replace("{player}", player.getDisplayName())));
                 } else {
                     sender.sendMessage(Util.fixColor(Lang.ERROR_TP_NOTONLINE));
@@ -49,7 +49,7 @@ public class TpCMD extends Command{
             if ((Bukkit.getPlayerExact(args[0]) != null) && (Bukkit.getPlayerExact(args[1]) != null)) {
                 player1 = Bukkit.getPlayerExact(args[0]);
 
-                if(UserStorage.getUser(player1.getUniqueId()).isTptoogle()){
+                if(UserStorage.getUser(player1.getUniqueId()).getSettings().isTptoogle()){
 
                     sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
 
@@ -57,7 +57,7 @@ public class TpCMD extends Command{
                 }
 
                 player2 = Bukkit.getPlayerExact(args[1]);
-                new TeleportUtil(player2.getLocation(), player1);
+                player1.teleport(player2.getLocation());
                 player1.sendMessage(Util.fixColor(Lang.INFO_TP_PLAYERTOPLAYER.replace("{player}", player1.getDisplayName()).replace("{target}", player2.getDisplayName())));
             } else {
                 sender.sendMessage(Util.fixColor(Lang.ERROR_TP_NOTONLINE));
@@ -75,7 +75,7 @@ public class TpCMD extends Command{
                     z = Double.valueOf(args[2]);
                     Location loc = new Location(player.getWorld(), x, y, z);
                     player.getWorld().loadChunk((int)x, (int)y);
-                    new TeleportUtil(loc, player);
+                    player.teleport(loc);
                     String a = Lang.INFO_TP_CORDINATES.replace("{x}",String.valueOf(loc.getX()));
                     a = a.replace("{y}",String.valueOf(loc.getY()));
                     a = a.replace("{z}",String.valueOf(loc.getZ()));

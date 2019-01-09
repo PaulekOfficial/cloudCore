@@ -6,8 +6,6 @@ import org.bukkit.plugin.Plugin;
 import java.util.logging.Level;
 
 public class consoleLog {
-
-
     private static Plugin plugin = Core.getPlugin();
 
     public static void warning(String message){
@@ -21,6 +19,4 @@ public class consoleLog {
     public static void log(String message, Level level){
         plugin.getLogger().log(level, message);
     }
-
-
 }

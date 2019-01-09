@@ -34,10 +34,10 @@ public class BackCMD extends Command {
 
         final UUID uuid = player.getUniqueId();
 
-        if(UserStorage.getUser(uuid).getLast_stay() != null){
+        if(UserStorage.getUser(uuid).getLastlocation() != null){
 
             if(sender.hasPermission("core.wait.bypass")){
-                Location location = UserStorage.getUser(uuid).getLast_stay();
+                Location location = UserStorage.getUser(uuid).getLastlocation();
 
                 player.teleport(location);
 
@@ -51,7 +51,7 @@ public class BackCMD extends Command {
 
             id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                 public void run() {
-                    Location location = UserStorage.getUser(uuid).getLast_stay();
+                    Location location = UserStorage.getUser(uuid).getLastlocation();
 
                     player.teleport(location);
 

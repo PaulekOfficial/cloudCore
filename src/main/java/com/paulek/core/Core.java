@@ -4,19 +4,17 @@ import com.paulek.core.commands.CommandManager;
 import com.paulek.core.commands.cmds.admin.*;
 import com.paulek.core.commands.cmds.user.*;
 import com.paulek.core.data.RandomtpStorage;
+import com.paulek.core.data.UserStorage;
 import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
-import com.paulek.core.listeners.block.BlockBreakEvent;
-import com.paulek.core.listeners.block.BlockPlaceEvent;
-import com.paulek.core.listeners.entity.EntityDamageByEntityEvent;
-import com.paulek.core.listeners.player.PlayerShearEntityEvent;
-import com.paulek.core.listeners.player.*;
+import com.paulek.core.data.objects.User;
+import com.paulek.core.listeners.*;
 import com.paulek.core.managers.CombatManager;
+import com.paulek.core.managers.MySQL;
 import com.paulek.core.utils.consoleLog;
 import com.paulek.core.utils.version;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
-import net.minecraft.server.v1_12_R1.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,6 +26,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.logging.Level;
 
 public class Core extends JavaPlugin{
@@ -35,9 +36,10 @@ public class Core extends JavaPlugin{
     private static Core plugin;
     private static Permission permission = null;
     private static Chat chat = null;
+    private static MySQL mysql;
 
     @Override
-    public void onEnable(){
+    public void onEnable() {
         plugin = this;
 
         saveDefaultConfig();
@@ -48,29 +50,30 @@ public class Core extends JavaPlugin{
         Config.reloadConfig();
         Lang.reloadLang();
 
-        if(!Config.ENABLED){
+        if (!Config.ENABLED) {
             consoleLog.log("Warning! Core disabled in config!", Level.WARNING);
             this.getPluginLoader().disablePlugin(this);
             return;
         }
 
         //Valut permissions initialization
-        if(this.getServer().getPluginManager().getPlugin("Vault") != null) {
+        if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
             RegisteredServiceProvider<Permission> serviceProvider_permission = this.getServer().getServicesManager().getRegistration(Permission.class);
             if (serviceProvider_permission != null) permission = serviceProvider_permission.getProvider();
             RegisteredServiceProvider<Chat> serviceProvider_chat = this.getServer().getServicesManager().getRegistration(Chat.class);
-            if(serviceProvider_chat != null) chat = serviceProvider_chat.getProvider();
+            if (serviceProvider_chat != null) chat = serviceProvider_chat.getProvider();
             consoleLog.info("Valut detected!");
         } else {
             consoleLog.log("Warning! Valut not detected! disabling plugin...", Level.WARNING);
             this.getPluginLoader().disablePlugin(this);
+            return;
         }
 
         registerListeners();
         registerCommands();
 
         //Spawn initialization
-        if(Config.SETTINGS_SPAWN_BLOCKY == 89177777777234789.0 && Config.SETTINGS_SPAWN_BLOCKX == -1 && Config.SETTINGS_SPAWN_BLOCKZ == 10){
+        if (Config.FIRSTCONFIGURATION) {
 
             Location world_dafault_spawn = Bukkit.getWorld("world").getSpawnLocation();
 
@@ -80,37 +83,53 @@ public class Core extends JavaPlugin{
             Config.SETTINGS_SPAWN_BLOCKY = world_dafault_spawn.getY();
             Config.SETTINGS_SPAWN_YAW = world_dafault_spawn.getYaw();
 
+            Config.FIRSTCONFIGURATION = false;
+            Config.reloadConfig();
         }
 
-        if(Config.SETTINGS_COMBAT_ENABLED){
+        if (Config.SETTINGS_COMBAT_ENABLED) {
             Bukkit.getScheduler().runTaskTimer(this, new CombatManager(), 20, 20);
         }
 
-        if(Config.ENABLE_STONEGENERATOR) {
+        if (Config.ENABLE_STONEGENERATOR) {
 
-            ItemStack item = new ItemStack(Material.ENDER_STONE);
+            ItemStack item = new ItemStack(Material.END_STONE);
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(Config.SETTINGS_STONEGENERATOR_NAME);
             meta.setLore(Config.SETTINGS_STONEGENERATOR_LORE);
             item.setItemMeta(meta);
 
             ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "iocjow98345cj9673498yjw"), item)
-                    .shape(new String[]{
-                    "RIR",
-                    "ISI",
-                    "RPR"
-            })
+                    .shape("RIR", "ISI", "RPR")
                     .setIngredient('R', Material.REDSTONE)
                     .setIngredient('I', Material.IRON_INGOT)
                     .setIngredient('S', Material.STONE)
-                    .setIngredient('P', Material.PISTON_BASE);
+                    .setIngredient('P', Material.PISTON);
             plugin.getServer().addRecipe(recipe);
 
         }
 
-        if(Config.ENABLE_RANDOMTELEPORT) RandomtpStorage.loadButtons();
+        if (Config.ENABLE_RANDOMTELEPORT) RandomtpStorage.loadButtons();
 
-        AsyncPlayerChatEvent.loadGroups();
+        PluginListeners.loadGroups();
+        new UserStorage();
+        SethomeCMD.loadGroups();
+    }
+
+    @Override
+    public void onDisable(){
+
+        for(User u : UserStorage.getUsers().values()){
+
+            if(!u.isUptodate()) {
+                try {
+                    UserStorage.saveUserData(u);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
 
     }
 
@@ -130,26 +149,18 @@ public class Core extends JavaPlugin{
         return permission;
     }
 
-    public void registerListeners(){
+    private void registerListeners(){
         consoleLog.info("Registering Listeners...");
-        PluginManager pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(new AsyncPlayerChatEvent(), getPlugin());
-        pluginManager.registerEvents(new PlayerMoveEvent(), getPlugin());
-        pluginManager.registerEvents(new PlayerTeleportEvent(), getPlugin());
-        pluginManager.registerEvents(new PlayerRespawnEvent(), getPlugin());
-        pluginManager.registerEvents(new PlayerJoinEvent(), getPlugin());
-        pluginManager.registerEvents(new PlayerQuitEvent(), getPlugin());
-        pluginManager.registerEvents(new EntityDamageByEntityEvent(), getPlugin());
-        pluginManager.registerEvents(new PlayerCommandPreprocessEvent(), getPlugin());
-        pluginManager.registerEvents(new PlayerInteractEvent(), getPlugin());
-        pluginManager.registerEvents(new BlockBreakEvent(), getPlugin());
-        pluginManager.registerEvents(new BlockPlaceEvent(), getPlugin());
-        pluginManager.registerEvents(new PlayerShearEntityEvent(), getPlugin());
-        pluginManager.registerEvents(new PlayerDeathEvent(), getPlugin());
-        pluginManager.registerEvents(new PlayerGameModeChangeEvent(), getPlugin());
+        PluginManager pluginManager = plugin.getServer().getPluginManager();
+        pluginManager.registerEvents(new CombatListeners(), this);
+        pluginManager.registerEvents(new EasterEggListeners(), this);
+        pluginManager.registerEvents(new PluginListeners(), this);
+        pluginManager.registerEvents(new RandomTeleportListener(), this);
+        pluginManager.registerEvents(new StoneGeneratorListeners(),this);
+        pluginManager.registerEvents(new UserListeners(), this);
     }
 
-    public void registerCommands(){
+    private void registerCommands(){
         consoleLog.info("Registering Commands...");
         CommandManager.registerCommand(new CoreCMD());
         CommandManager.registerCommand(new ChatCMD());
@@ -198,5 +209,11 @@ public class Core extends JavaPlugin{
         CommandManager.registerCommand(new LightningCMD());
         CommandManager.registerCommand(new PingCMD());
         CommandManager.registerCommand(new WorldCMD());
+
+        if(Config.ENABLE_WHITELIST) CommandManager.registerCommand(new WhitelistCMD());
+    }
+
+    public static Connection getConnection() throws SQLException {
+        return mysql.getConnection();
     }
 }

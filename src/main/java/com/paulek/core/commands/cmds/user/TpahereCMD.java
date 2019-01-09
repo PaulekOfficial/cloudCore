@@ -2,6 +2,7 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.data.TpaStorage;
 import com.paulek.core.data.UserStorage;
 import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
@@ -15,9 +16,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class TpahereCMD extends Command {
-
-    private static HashMap<UUID, Integer> waiting_to_accept_id = new HashMap<UUID, Integer>();
-    private static HashMap<UUID, UUID> waiting_to_accept = new HashMap<UUID, UUID>();
 
     public TpahereCMD() {
         super("tpahere", "teleport to you", "/tpahere {player}", "core.tpahere", new String[]{});
@@ -38,7 +36,7 @@ public class TpahereCMD extends Command {
             if (Bukkit.getPlayer(args[0]) != null) {
                 final Player p = Bukkit.getPlayer(args[0]);
 
-                if(!UserStorage.getUser(p.getUniqueId()).isTptoogle()){
+                if(UserStorage.getUser(p.getUniqueId()).getSettings().isTptoogle()){
 
                     sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
 
@@ -49,13 +47,13 @@ public class TpahereCMD extends Command {
 
                 id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                     public void run() {
-                        waiting_to_accept.remove(p.getUniqueId());
-                        waiting_to_accept_id.remove(p.getUniqueId());
+                        TpaStorage.removeToAcceptTpahere(p.getUniqueId());
+                        TpaStorage.cancelTaskTpahere(p.getUniqueId());
                     }
                 }, Config.SETTINGS_TPA_WAITINGTOACCEPT * 20);
 
-                waiting_to_accept_id.put(p.getUniqueId(), id.getTaskId());
-                waiting_to_accept.put(p.getUniqueId(), player.getUniqueId());
+                TpaStorage.addTaskTpahere(p.getUniqueId(), id.getTaskId());
+                TpaStorage.addToAcceptTpahere(p.getUniqueId(), player.getUniqueId());
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_REQUEST));
                 p.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_REQUESTPLAYER));
@@ -67,13 +65,5 @@ public class TpahereCMD extends Command {
         }
 
         return false;
-    }
-
-    public static HashMap<UUID, Integer> getWaiting_to_accept_id() {
-        return waiting_to_accept_id;
-    }
-
-    public static HashMap<UUID, UUID> getWaiting_to_accept() {
-        return waiting_to_accept;
     }
 }

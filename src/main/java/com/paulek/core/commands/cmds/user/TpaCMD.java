@@ -2,6 +2,7 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.data.TpaStorage;
 import com.paulek.core.data.UserStorage;
 import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
@@ -11,13 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 public class TpaCMD extends Command {
-
-    private static HashMap<UUID, Integer> waiting_to_accept_id = new HashMap<UUID, Integer>();
-    private static HashMap<UUID, UUID> waiting_to_accept = new HashMap<UUID, UUID>();
 
     public TpaCMD(){
         super("tpa", "teleports player to player", "/tpa {player}","core.tpa" ,new String[] {});
@@ -36,7 +31,7 @@ public class TpaCMD extends Command {
             if(Bukkit.getPlayer(args[0]) != null){
                 final Player player = Bukkit.getPlayer(args[0]);
 
-                if(!UserStorage.getUser(player.getUniqueId()).isTptoogle()){
+                if(UserStorage.getUser(player.getUniqueId()).getSettings().isTptoogle()){
 
                     sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
 
@@ -47,13 +42,13 @@ public class TpaCMD extends Command {
 
                 id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                     public void run() {
-                        waiting_to_accept.remove(player.getUniqueId());
-                        waiting_to_accept_id.remove(player.getUniqueId());
+                        TpaStorage.removeToAcceptTpa(player.getUniqueId());
+                        TpaStorage.cancelTaskTpa(player.getUniqueId());
                     }
                 }, Config.SETTINGS_TPA_WAITINGTOACCEPT * 20);
 
-                waiting_to_accept_id.put(player.getUniqueId(), id.getTaskId());
-                waiting_to_accept.put(player.getUniqueId(), ((Player)sender).getUniqueId());
+                TpaStorage.addTaskTpa(player.getUniqueId(), id.getTaskId());
+                TpaStorage.addToAcceptTpa(player.getUniqueId(), ((Player)sender).getUniqueId());
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPA_REQUEST.replace("{player}", player.getDisplayName())));
 
@@ -68,13 +63,5 @@ public class TpaCMD extends Command {
         }
 
         return false;
-    }
-
-    public static HashMap<UUID, Integer> getWaiting_to_accept_id() {
-        return waiting_to_accept_id;
-    }
-
-    public static HashMap<UUID, UUID> getWaiting_to_accept() {
-        return waiting_to_accept;
     }
 }

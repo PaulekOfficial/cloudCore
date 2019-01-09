@@ -43,7 +43,7 @@ public class SethomeCMD extends Command {
                 User user = UserStorage.getUser(player.getUniqueId());
 
                 if(!sender.hasPermission("core.bypass.home")) {
-                    if (user.getHome().size() >= amount) {
+                    if (user.getHomes().size() >= amount) {
 
                         sender.sendMessage(Util.fixColor(Lang.ERROR_HOME_CANNOTSET));
 
@@ -51,9 +51,8 @@ public class SethomeCMD extends Command {
                     }
                 }
 
-                if(!user.getHome().containsKey(args[0])){
-                    user.getHome().put(args[0], location);
-                    user.saveUser();
+                if(user.getHome(args[0]) == null){
+                    user.addHome(args[0], location);
                     sender.sendMessage(Util.fixColor(Lang.INFO_HOME_SET.replace("{name}", args[0])));
                 } else {
                     sender.sendMessage(Util.fixColor(Lang.ERROR_HOME_EXIST));
@@ -67,7 +66,7 @@ public class SethomeCMD extends Command {
 
                 User user = UserStorage.getUser(player.getUniqueId());
 
-                user.getHome().put("default", location);
+                user.addHome("home", location);
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_HOME_SETNONAME));
             } else {
@@ -87,7 +86,7 @@ public class SethomeCMD extends Command {
 
             String[] a = s.split(" ");
 
-            groups_amount.put(a[0], Integer.valueOf(s.replaceAll(a[0], "")));
+            groups_amount.put(a[0], Integer.valueOf(a[1]));
 
         }
 

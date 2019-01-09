@@ -35,7 +35,7 @@ public class HomeCMD extends Command {
 
             if(args.length == 1){
 
-                if(user.getHome().containsKey(args[0])){
+                if(user.getHome(args[0]) != null){
 
                     if(!sender.hasPermission("core.detly.bypass")) {
 
@@ -45,7 +45,7 @@ public class HomeCMD extends Command {
 
                         id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                             public void run() {
-                                new TeleportUtil(user.getHome().get(args[0]), player);
+                                new TeleportUtil(user.getHome(args[0]), player);
 
                                 sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORT));
                             }
@@ -54,7 +54,7 @@ public class HomeCMD extends Command {
                         to_teleport.put(player.getUniqueId(), id.getTaskId());
 
                     } else {
-                        new TeleportUtil(user.getHome().get(args[0]), player);
+                        new TeleportUtil(user.getHome(args[0]), player);
 
                         sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORT));
                     }
@@ -67,11 +67,11 @@ public class HomeCMD extends Command {
 
             } else if(args.length == 0){
 
-                if(user.getHome().size() > 1){
+                if(user.getHomes().size() > 1){
 
                     String s = "";
 
-                    for(String str : user.getHome().keySet()){
+                    for(String str : user.getHomes().keySet()){
 
                         s += str + ", ";
 
@@ -82,7 +82,7 @@ public class HomeCMD extends Command {
 
                 }
 
-                if(user.getHome().containsKey("default")){
+                if(user.getHome("home") != null){
 
                     if(!sender.hasPermission("core.detly.bypass")) {
 
@@ -92,7 +92,7 @@ public class HomeCMD extends Command {
 
                         id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                             public void run() {
-                                player.teleport(user.getHome().get("default"));
+                                player.teleport(user.getHome("home"));
 
                                 sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORT));
                             }
@@ -101,7 +101,7 @@ public class HomeCMD extends Command {
                         to_teleport.put(player.getUniqueId(), id.getTaskId());
 
                     } else {
-                        player.teleport(user.getHome().get("default"));
+                        player.teleport(user.getHome("home"));
 
                         sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORT));
                     }

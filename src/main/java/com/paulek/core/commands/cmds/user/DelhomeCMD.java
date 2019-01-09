@@ -24,9 +24,9 @@ public class DelhomeCMD extends Command {
 
             if (args.length == 0) {
 
-                if(user.getHome().containsKey("default")){
+                if(user.getHome("home") != null){
 
-                    user.getHome().remove("default");
+                    user.removeHome("home");
 
                     sender.sendMessage(Util.fixColor(Lang.INFO_HOME_DELETED));
 
@@ -38,9 +38,9 @@ public class DelhomeCMD extends Command {
 
             } else if (args.length == 1) {
 
-                if(user.getHome().containsKey(args[0])){
+                if(user.getHome(args[0]) != null){
 
-                    user.getHome().remove(args[0]);
+                    user.removeHome(args[0]);
 
                     sender.sendMessage(Util.fixColor(Lang.INFO_HOME_DELETED));
 

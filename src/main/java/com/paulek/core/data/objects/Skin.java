@@ -1,137 +1,155 @@
 package com.paulek.core.data.objects;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import com.paulek.core.utils.Util;
+import com.paulek.core.Core;
+import net.minecraft.server.v1_13_R2.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
+import org.bukkit.entity.Player;
+
+import java.util.HashSet;
+import java.util.UUID;
 
 public class Skin {
 
-    String sessionserver = "https://sessionserver.mojang.com/session/minecraft/profile/";
-    String api = "https://api.mojang.com/users/profiles/minecraft/";
-    String gameapis = "https://use.gameapis.net/mc/player/profile/";
-
-    private Property property;
+    private String name;
     private String value;
     private String signature;
+    private Long lastUpdate;
 
-    public Skin(String nick){
+    @JsonIgnore
+    public Skin(String nick, String value, String signature, Long lastUpdate){
 
-        this.property = getProperty(nick);
-
-    }
-
-    public Skin(String nick, String nil){
-
-        String uuid = this.getUUID(nick);
-
-        if(uuid != null){
-            this.property = this.getSkinProperty(uuid);
-        }
+        this.name = nick;
+        this.value = value;
+        this.signature = signature;
+        this.lastUpdate = lastUpdate;
 
     }
 
-    public Property getProperty(String nick){
-        JsonParser jsonParser = new JsonParser();
+    @JsonIgnore
+    public Skin(String name, String value, String signature){
 
-        String json = Util.readWebsite(gameapis + nick + "?unsigned=false");
+        this.name = name;
+        this.value = value;
+        this.signature = signature;
+        this.lastUpdate = System.currentTimeMillis();
 
-        if(json == null){
-            return null;
-        }
-
-        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-
-        if(jsonObject.has("error")){
-            return null;
-        }
-
-        JsonArray jsonArray = jsonObject.get("properties").getAsJsonArray();
-
-        Property property = null;
-
-        for(int i = 0; i <= jsonArray.size(); i++){
-
-            try {
-
-                JsonObject object = jsonArray.get(i).getAsJsonObject();
-
-                String name = object.get("name").getAsString();
-                String value = object.get("value").getAsString();
-                String signature = object.get("signature") != null ? object.get("signature").getAsString() : null;
-
-                this.value = value;
-                this.signature = signature;
-
-                property = new Property(name, value, signature);
-
-            } catch (Exception exe){
-
-            }
-
-        }
-        return property;
     }
 
-    @Deprecated
-    public String getUUID(String nick){
+    @JsonIgnore
+    public void applySkinForPlayers(Player player){
 
-        JsonParser jsonParser = new JsonParser();
+            GameProfile gameProfile = ((CraftPlayer) player).getProfile();
 
-        String json_string = Util.readWebsite(api + nick + "?unsigned=false");
+            gameProfile.getProperties().clear();
 
-        if(json_string == null){
-            return null;
-        }
+            gameProfile.getProperties().put("textures", getProperty());
 
-        JsonObject jsonObject = jsonParser.parse(json_string).getAsJsonObject();
+            Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                @Override
+                public void run() {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
 
-        return jsonObject.get("id").getAsString();
+                        p.hidePlayer(player);
+                        p.showPlayer(player);
+
+                    }
+                }
+            });
+
     }
 
-    @Deprecated
-    public Property getSkinProperty(String uuid){
+    @JsonIgnore
+    public void updateSkinForPlayer(Player player){
 
-        JsonParser jsonParser = new JsonParser();
+        UUID uuid = player.getUniqueId();
 
-        String json = Util.readWebsite(sessionserver + uuid + "?unsigned=false");
+        if(Bukkit.getPlayer(uuid) == null) return;
 
-        if(json == null){
-            return null;
+        EnumGamemode enumGamemode = EnumGamemode.getById(player.getGameMode().getValue());
+
+        WorldType worldType = WorldType.getType(player.getWorld().getWorldType().getName());
+
+        EnumDifficulty enumDifficulty = EnumDifficulty.getById(player.getWorld().getDifficulty().getValue());
+
+        DimensionManager dimension;
+
+        switch (player.getWorld().getEnvironment()){
+            case NORMAL:
+                dimension = DimensionManager.OVERWORLD;
+                break;
+            case THE_END:
+                dimension = DimensionManager.THE_END;
+                break;
+            case NETHER:
+                dimension = DimensionManager.NETHER;
+                break;
+            default:
+                dimension = DimensionManager.OVERWORLD;
+                break;
         }
 
-        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+        PacketPlayOutPlayerInfo packetPlayOutPlayerInfo_remove = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer)player).getHandle());
 
-        JsonArray jsonArray = jsonObject.get("properties").getAsJsonArray();
+        PacketPlayOutPlayerInfo packetPlayOutPlayerInfo_add = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer)player).getHandle());
 
-        Property property = null;
+        PacketPlayOutRespawn packetPlayOutRespawn = new PacketPlayOutRespawn(dimension, enumDifficulty, worldType, enumGamemode);
 
-        for(int i = 0; i <= jsonArray.size(); i++){
+        Location loc = player.getLocation();
 
-            try {
+        PacketPlayOutPosition packetPlayOutPosition = new PacketPlayOutPosition(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch(), new HashSet<>(), 0);
 
-                JsonObject object = jsonArray.get(i).getAsJsonObject();
+        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), () -> {
 
-                String name = object.get("name").getAsString();
-                String value = object.get("value").getAsString();
-                String signature = object.get("signature") != null ? object.get("signature").getAsString() : null;
+            boolean fly = player.isFlying();
 
-                this.value = value;
-                this.signature = signature;
+            ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packetPlayOutPlayerInfo_remove);
+            ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packetPlayOutPlayerInfo_add);
+            ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packetPlayOutRespawn);
 
-                property = new Property(name, value, signature);
+            if(player.isFlying()) player.setFlying(true);
 
-            } catch (Exception exe){
+            ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packetPlayOutPosition);
 
-            }
+            ((CraftPlayer) player).updateScaledHealth();
 
-        }
-        return property;
+            player.updateInventory();
+
+            ((CraftPlayer) player).getHandle().triggerHealthUpdate();
+
+            if(fly) player.setFlying(true);
+
+        }, 20);
+
     }
 
-    public Property getProperty() {
-        return property;
+    @JsonIgnore
+    public Property getProperty(){
+        return new Property(name, value, signature);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
+    public void setLastUpdate(Long lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getValue() {
@@ -140,5 +158,9 @@ public class Skin {
 
     public String getSignature() {
         return signature;
+    }
+
+    public Long getLastUpdate() {
+        return lastUpdate;
     }
 }

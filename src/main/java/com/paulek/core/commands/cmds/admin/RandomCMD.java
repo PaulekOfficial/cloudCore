@@ -31,7 +31,7 @@ public class RandomCMD extends Command {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
                 return false;
             }
-            if ((player.getTargetBlock((Set<Material>) null, 1).getType() == Material.WOOD_BUTTON) || (player.getTargetBlock((Set<Material>) null, 5).getType() == Material.STONE_BUTTON)) {
+            if ((player.getTargetBlock((Set<Material>) null, 1).getType() == Material.LEGACY_WOOD_BUTTON) || (player.getTargetBlock((Set<Material>) null, 5).getType() == Material.STONE_BUTTON)) {
                 Location loc = player.getTargetBlock((Set<Material>) null, 1).getLocation();
                 if (RandomtpStorage.getList().contains(loc)) {
                     RandomtpStorage.removeFromList(loc);
@@ -53,7 +53,7 @@ public class RandomCMD extends Command {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
                 return false;
             }
-            if ((player.getTargetBlock((Set<Material>) null, 1).getType() == Material.WOOD_BUTTON) || (player.getTargetBlock((Set<Material>) null, 5).getType() == Material.STONE_BUTTON)) {
+            if ((player.getTargetBlock((Set<Material>) null, 1).getType() == Material.LEGACY_WOOD_BUTTON) || (player.getTargetBlock((Set<Material>) null, 5).getType() == Material.STONE_BUTTON)) {
                 Location loc = player.getTargetBlock((Set<Material>) null, 1).getLocation();
                 if (RandomtpStorage.getList().contains(loc)) {
                     sender.sendMessage(Util.fixColor(Lang.ERROR_RANDOMTP_EXIST));

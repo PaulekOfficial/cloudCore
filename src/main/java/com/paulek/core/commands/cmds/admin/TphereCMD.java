@@ -29,7 +29,7 @@ public class TphereCMD extends Command {
 
             if(Bukkit.getPlayer(nick) != null){
 
-                if(UserStorage.getUser(Bukkit.getPlayer(nick).getUniqueId()).isTptoogle()){
+                if(UserStorage.getUser(Bukkit.getPlayer(nick).getUniqueId()).getSettings().isTptoogle()){
 
                     sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
 
@@ -38,7 +38,7 @@ public class TphereCMD extends Command {
 
                 Location location = ((Player)sender).getLocation();
 
-                new TeleportUtil(location, Bukkit.getPlayer(nick));
+                Bukkit.getPlayer(nick).teleport(location);
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPHERE_TELEPORTED));
 

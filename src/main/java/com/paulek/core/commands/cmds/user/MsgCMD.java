@@ -1,6 +1,7 @@
 package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.commands.Command;
+import com.paulek.core.data.MsgStorage;
 import com.paulek.core.data.UserStorage;
 import com.paulek.core.data.configs.Lang;
 import com.paulek.core.utils.Util;
@@ -13,8 +14,6 @@ import java.util.UUID;
 
 public class MsgCMD extends Command {
 
-    private static HashMap<UUID, String> messages = new HashMap<UUID, String>();
-
     public MsgCMD(){
         super("msg", "sends a private message", "/msg {player} {message}", "core.msg", new String[]{"wiadomosc"});
     }
@@ -25,13 +24,13 @@ public class MsgCMD extends Command {
             String tosend = args[0];
             if (Bukkit.getPlayer(tosend) != null) {
                 UUID uuid = ((Player) sender).getUniqueId();
-                if(!messages.containsKey(uuid)) {
-                    messages.put(uuid, tosend);
+                if(!MsgStorage.getMessages().containsKey(uuid)) {
+                    MsgStorage.getMessages().put(uuid, tosend);
                 }
                 Player send = Bukkit.getPlayer(tosend);
                 UUID u = send.getUniqueId();
-                if(!messages.containsKey(u)) {
-                    messages.put(u, sender.getName());
+                if(!MsgStorage.getMessages().containsKey(u)) {
+                    MsgStorage.getMessages().put(u, sender.getName());
                 }
                 String s = "";
                 for (int i = 1; i != args.length; i++) {
@@ -42,7 +41,7 @@ public class MsgCMD extends Command {
                 sender.sendMessage(message.replace("{from}", sender.getName()));
                 for(Player p : Bukkit.getOnlinePlayers()){
                     UUID ue = p.getUniqueId();
-                    if(UserStorage.getUser(ue).isSocialspy()){
+                    if(UserStorage.getUser(ue).getSettings().isSocialspy()){
                         String m = Util.fixColor(Lang.INFO_MSG_SPYFORMAT.replace("{from}", sender.getName()).replace("{to}", send.getDisplayName()).replace("{message}", s));
                         p.sendMessage(m);
                     }
@@ -54,10 +53,6 @@ public class MsgCMD extends Command {
             sender.sendMessage(getUsage());
         }
         return false;
-    }
-
-    public static HashMap<UUID, String> getMessages() {
-        return messages;
     }
 
 }

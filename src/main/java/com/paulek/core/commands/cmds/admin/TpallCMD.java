@@ -20,6 +20,7 @@ public class TpallCMD extends Command {
     public boolean execute(CommandSender sender, String[] args) {
 
         if(!(sender instanceof Player)){
+
             sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
         }
 
@@ -27,8 +28,8 @@ public class TpallCMD extends Command {
 
         for(Player p : Bukkit.getOnlinePlayers()){
 
-            if(!UserStorage.getUser(p.getUniqueId()).isTptoogle()){
-                new TeleportUtil(location, p);
+            if(!UserStorage.getUser(p.getUniqueId()).getSettings().isTptoogle()){
+                p.teleport(location);
             }
 
         }

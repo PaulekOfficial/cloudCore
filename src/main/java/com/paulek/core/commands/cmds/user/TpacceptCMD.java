@@ -2,6 +2,7 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.data.TpaStorage;
 import com.paulek.core.data.configs.Config;
 import com.paulek.core.data.configs.Lang;
 import com.paulek.core.utils.TeleportUtil;
@@ -34,21 +35,18 @@ public class TpacceptCMD extends Command {
         final Player player = (Player)sender;
         UUID uuid = player.getUniqueId();
 
-        if(TpaCMD.getWaiting_to_accept().containsKey(uuid)){
+        if(TpaStorage.getToAcceptTpa(uuid) != null){
 
-            if(Bukkit.getPlayer(TpaCMD.getWaiting_to_accept().get(uuid)) != null){
+            if(Bukkit.getPlayer(TpaStorage.getToAcceptTpa(uuid)) != null){
 
-                final Player to_teleport = Bukkit.getPlayer(TpaCMD.getWaiting_to_accept().get(uuid));
+                final Player to_teleport = Bukkit.getPlayer(TpaStorage.getToAcceptTpa(uuid));
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPA_ACCEPT));
 
                 to_teleport.sendMessage(Util.fixColor(Lang.INFO_TPA_ACCEPTED));
 
-                if(TpaCMD.getWaiting_to_accept_id().containsKey(to_teleport.getUniqueId())) {
-                    Bukkit.getScheduler().cancelTask(TpaCMD.getWaiting_to_accept_id().get(to_teleport.getUniqueId()));
-                    TpaCMD.getWaiting_to_accept_id().remove(to_teleport.getUniqueId());
-                }
-                TpaCMD.getWaiting_to_accept().remove(uuid);
+                TpaStorage.cancelTaskTpa(to_teleport.getUniqueId());
+                TpaStorage.removeToAcceptTpa(uuid);
 
                 BukkitTask id;
 
@@ -72,25 +70,22 @@ public class TpacceptCMD extends Command {
                 sender.sendMessage(Util.fixColor(Lang.ERROR_TPA_NOPLAYER));
             }
 
-        } else if (TpahereCMD.getWaiting_to_accept().get(uuid) != null) {
+        } else if (TpaStorage.getToAcceptTpahere(uuid) != null) {
 
-            if(Bukkit.getPlayer(TpahereCMD.getWaiting_to_accept().get(uuid)) != null) {
+            if(Bukkit.getPlayer(TpaStorage.getToAcceptTpahere(uuid)) != null) {
 
-                final Player player1 = Bukkit.getPlayer(TpahereCMD.getWaiting_to_accept().get(uuid));
+                final Player player1 = Bukkit.getPlayer(TpaStorage.getToAcceptTpahere(uuid));
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_ACCEPTED));
 
                 player1.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_ACCEPT));
 
-                if (TpahereCMD.getWaiting_to_accept_id().containsKey(player.getUniqueId())) {
-                    Bukkit.getScheduler().cancelTask(TpahereCMD.getWaiting_to_accept_id().get(player.getUniqueId()));
-                    TpahereCMD.getWaiting_to_accept_id().remove(player.getUniqueId());
-                }
-                TpahereCMD.getWaiting_to_accept().remove(uuid);
+                TpaStorage.cancelTaskTpahere(player.getUniqueId());
+                TpaStorage.removeToAcceptTpahere(uuid);
 
                 BukkitTask id;
 
-                final Location location = Bukkit.getPlayer(TpahereCMD.getWaiting_to_accept().get(player1.getUniqueId())).getLocation();
+                final Location location = Bukkit.getPlayer(TpaStorage.getToAcceptTpahere(player1.getUniqueId())).getLocation();
 
                 id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                     public void run() {
