@@ -1,8 +1,8 @@
 package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
-import com.paulek.core.data.configs.Lang;
-import com.paulek.core.utils.Util;
+import com.paulek.core.common.Util;
+import com.paulek.core.common.configs.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
