@@ -1,15 +1,14 @@
 package com.paulek.core.commands.cmds.user;
 
+import com.paulek.core.basic.data.PrivateMessagesStorage;
+import com.paulek.core.basic.data.UserStorage;
 import com.paulek.core.commands.Command;
-import com.paulek.core.data.MsgStorage;
-import com.paulek.core.data.UserStorage;
-import com.paulek.core.data.configs.Lang;
-import com.paulek.core.utils.Util;
+import com.paulek.core.common.Util;
+import com.paulek.core.common.configs.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 public class MsgCMD extends Command {
@@ -24,13 +23,13 @@ public class MsgCMD extends Command {
             String tosend = args[0];
             if (Bukkit.getPlayer(tosend) != null) {
                 UUID uuid = ((Player) sender).getUniqueId();
-                if(!MsgStorage.getMessages().containsKey(uuid)) {
-                    MsgStorage.getMessages().put(uuid, tosend);
+                if(!PrivateMessagesStorage.getMessages().containsKey(uuid)) {
+                    PrivateMessagesStorage.getMessages().put(uuid, tosend);
                 }
                 Player send = Bukkit.getPlayer(tosend);
                 UUID u = send.getUniqueId();
-                if(!MsgStorage.getMessages().containsKey(u)) {
-                    MsgStorage.getMessages().put(u, sender.getName());
+                if(!PrivateMessagesStorage.getMessages().containsKey(u)) {
+                    PrivateMessagesStorage.getMessages().put(u, sender.getName());
                 }
                 String s = "";
                 for (int i = 1; i != args.length; i++) {

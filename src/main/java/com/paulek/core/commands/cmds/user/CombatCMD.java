@@ -1,11 +1,11 @@
 package com.paulek.core.commands.cmds.user;
 
+import com.paulek.core.basic.Warrior;
+import com.paulek.core.basic.data.CombatStorage;
 import com.paulek.core.commands.Command;
-import com.paulek.core.data.CombatStorage;
-import com.paulek.core.data.configs.Config;
-import com.paulek.core.data.configs.Lang;
-import com.paulek.core.data.objects.Warrior;
-import com.paulek.core.utils.Util;
+import com.paulek.core.common.Util;
+import com.paulek.core.common.configs.Config;
+import com.paulek.core.common.configs.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

@@ -1,7 +1,7 @@
 package com.paulek.core.commands;
 
-import com.paulek.core.data.configs.Lang;
-import com.paulek.core.utils.Util;
+import com.paulek.core.common.Util;
+import com.paulek.core.common.configs.Lang;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;

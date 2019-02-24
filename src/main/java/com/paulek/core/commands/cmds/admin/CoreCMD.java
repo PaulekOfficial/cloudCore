@@ -2,9 +2,9 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.data.configs.Config;
-import com.paulek.core.data.configs.Lang;
-import com.paulek.core.utils.Util;
+import com.paulek.core.common.Util;
+import com.paulek.core.common.configs.Config;
+import com.paulek.core.common.configs.Lang;
 import net.minecraft.server.v1_13_R2.MinecraftServer;
 import org.bukkit.command.CommandSender;
 
