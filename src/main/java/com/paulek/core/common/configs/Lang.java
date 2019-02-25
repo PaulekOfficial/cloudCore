@@ -173,6 +173,7 @@ public class Lang {
     public static String INFO_WHITELIST_ON = "$aEnabled whitelist";
     public static String ERROR_WHITELIST_OFF = "$cWhitelist is already disabled!";
     public static String INFO_WHITELIST_OFF = "$aDisabled whitelist!";
+    public static String INFO_GC = "$aServer status: \n $afree memory: {freememory} \n $amax memory: {maxmemory} \n $atotal memory: {totalmemory} \n \n $atps: {tps} \n \n $aloaded chunks: {chunks} \n $aloaded entities: {entities} \n tasks: {tasks}";
 
     private static File file = new File(Core.getPlugin().getDataFolder(), "lang.yml");
     private static FileConfiguration c = null;
