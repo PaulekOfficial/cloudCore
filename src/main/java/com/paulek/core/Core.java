@@ -158,6 +158,7 @@ public class Core extends JavaPlugin{
         pluginManager.registerEvents(new RandomTeleportListener(), this);
         pluginManager.registerEvents(new StoneGeneratorListeners(),this);
         pluginManager.registerEvents(new UserListeners(), this);
+        pluginManager.registerEvents(new GUIListeners(), this);
     }
 
     private void registerCommands(){
@@ -211,6 +212,10 @@ public class Core extends JavaPlugin{
         CommandManager.registerCommand(new WorldCMD());
 
         if(Config.ENABLE_WHITELIST) CommandManager.registerCommand(new WhitelistCMD());
+
+        CommandManager.registerCommand(new GcCMD());
+
+        CommandManager.registerCommand(new KitCMD());
     }
 
     public static Connection getConnection() throws SQLException {
