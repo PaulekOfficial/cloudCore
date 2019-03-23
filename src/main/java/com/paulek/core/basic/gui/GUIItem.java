@@ -1,5 +1,6 @@
-package com.paulek.core.basic;
+package com.paulek.core.basic.gui;
 
+import com.paulek.core.basic.gui.GUIEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,6 +19,6 @@ public class GUIItem {
     }
 
     public void invClick(InventoryClickEvent e) {
-        this.inventoryClickEvent.event(e);
+        if(inventoryClickEvent != null && e != null) this.inventoryClickEvent.event(e);
     }
 }

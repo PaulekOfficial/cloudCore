@@ -1,9 +1,10 @@
 package com.paulek.core.basic;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paulek.core.Core;
-import com.paulek.core.basic.data.UserStorage;
+import com.paulek.core.basic.data.Users;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Config;
+import com.paulek.core.common.io.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -22,7 +23,7 @@ public class User {
     private Location logoutlocation;
     private Location lastlocation;
     private InetAddress ipAddres;
-    //timestamps
+    private HashMap<String, Timestamp> timestamps = new HashMap<>();
     private boolean afk;
     private Long afkSince;
     private String afkResson;
@@ -30,6 +31,7 @@ public class User {
     private long lastActivity;
     private UserSettings settings;
 
+    @JsonIgnore
     private boolean uptodate = true;
 
     //W przyszłości coś ekonomi :P
@@ -48,25 +50,8 @@ public class User {
             lastActivity = System.currentTimeMillis();
             settings = new UserSettings();
 
-            if(Config.ENABLE_SKINS && (!Bukkit.getServer().getOnlineMode())) {
-                Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
-                    @Override
-                    public void run() {
-                        Skin skin = Util.getPremiumSkin(lastAccountName);
-                        if (skin != null) {
-                            setSkin(skin);
-                            skin.applySkinForPlayers(onlinePlayer);
-                            skin.updateSkinForPlayer(onlinePlayer);
-
-                            try {
-                                UserStorage.saveUserData(UserStorage.getUser(uuid));
-                            } catch (IOException ioe) {
-                                ioe.printStackTrace();
-                            }
-
-                        }
-                    }
-                });
+            if(Config.SKINS_ENABLE && (!Bukkit.getServer().getOnlineMode())) {
+                applySkin(lastAccountName, onlinePlayer);
             }
 
         } else if(Bukkit.getOfflinePlayer(uuid) != null){
@@ -76,6 +61,27 @@ public class User {
             settings = new UserSettings();
         }
 
+    }
+
+    private void applySkin(String lastAccountName, Player onlinePlayer){
+        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                Skin skin = Util.getPremiumSkin(lastAccountName);
+                if (skin != null) {
+                    setSkin(skin);
+                    skin.applySkinForPlayers(onlinePlayer);
+                    skin.updateSkinForPlayer(onlinePlayer);
+
+                    try {
+                        Users.saveUserData(Users.getUser(uuid));
+                    } catch (IOException ioe) {
+                        ioe.printStackTrace();
+                    }
+
+                }
+            }
+        });
     }
 
     public void setSkin(Skin skin) {
@@ -113,6 +119,22 @@ public class User {
         uptodate = false;
     }
 
+    public void setTimeStamp(String key, Timestamp o){
+        this.timestamps.put(key, o);
+    }
+
+    public void removeTimestamp(String name){
+        this.timestamps.remove(name);
+    }
+
+    public void addTimestamp(String name, Timestamp timestamp){
+        this.timestamps.put(name, timestamp);
+    }
+
+    public Timestamp getTimeStamp(String key){
+        return this.timestamps.get(key);
+    }
+
     public void setLastlocation(Location lastlocation) {
         this.lastlocation = lastlocation;
         uptodate = false;
@@ -126,6 +148,10 @@ public class User {
     public void setLastActivity(long lastActivity) {
         this.lastActivity = lastActivity;
         uptodate = false;
+    }
+
+    public HashMap<String, Timestamp> getTimestamps() {
+        return timestamps;
     }
 
     public UUID getUuid() {
@@ -205,11 +231,12 @@ public class User {
         uptodate = false;
     }
 
+    @JsonIgnore
     public boolean isUptodate() {
         return uptodate;
     }
 
-
+    @JsonIgnore
     public void setUptodate(boolean uptodate) {
         this.uptodate = uptodate;
     }

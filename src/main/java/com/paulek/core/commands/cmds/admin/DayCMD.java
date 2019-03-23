@@ -2,14 +2,14 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class DayCMD extends Command {
 
     public DayCMD(){
-        super("day", "makes day", "/day", "core.day", new String[] {"dzien"});
+        super("day", "makes day", "/day", "core.cmd.day", new String[] {"dzien"});
     }
 
     @Override

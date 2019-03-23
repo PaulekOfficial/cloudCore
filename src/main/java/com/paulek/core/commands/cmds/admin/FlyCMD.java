@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class FlyCMD extends Command{
 
     public FlyCMD(){
-        super("fly", "allow flight", "/fly (player)", "core.command.fly", new String[0]);
+        super("fly", "allow flight", "/fly (player)", "core.cmd.fly", new String[0]);
     }
 
     @Override
@@ -18,13 +18,7 @@ public class FlyCMD extends Command{
         if(args.length == 0){
             if(sender instanceof Player){
                 Player player = (Player)sender;
-                if(player.getAllowFlight()){
-                    player.setAllowFlight(false);
-                    sender.sendMessage(Util.fixColor(Lang.INFO_FLY_SETOFF));
-                } else {
-                    player.setAllowFlight(true);
-                    sender.sendMessage(Util.fixColor(Lang.INFO_FLY_SETON));
-                }
+                setPlayersFlight(player);
             } else {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
             }
@@ -35,13 +29,7 @@ public class FlyCMD extends Command{
                     Player player = null;
                     if (Bukkit.getPlayerExact(args[0]) != null) {
                         player = Bukkit.getPlayerExact(args[0]);
-                        if(player.getAllowFlight()){
-                            player.setAllowFlight(false);
-                            player.sendMessage(Util.fixColor(Lang.INFO_FLY_SETOFF));
-                        } else {
-                            player.setAllowFlight(true);
-                            player.sendMessage(Util.fixColor(Lang.INFO_FLY_SETON));
-                        }
+                        setPlayersFlight(player);
                         sender.sendMessage(Util.fixColor(Lang.INFO_FLY_SETONFOR.replace("{player}", player.getDisplayName())));
                     } else {
                         sender.sendMessage(Util.fixColor(Lang.ERROR_FLY_NOTONLINE));
@@ -60,5 +48,15 @@ public class FlyCMD extends Command{
             sender.sendMessage(this.getUsage());
         }
         return false;
+    }
+
+    private void setPlayersFlight(Player player){
+        if(player.getAllowFlight()){
+            player.setAllowFlight(false);
+            player.sendMessage(Util.fixColor(Lang.INFO_FLY_SETOFF));
+        } else {
+            player.setAllowFlight(true);
+            player.sendMessage(Util.fixColor(Lang.INFO_FLY_SETON));
+        }
     }
 }

@@ -2,12 +2,12 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.User;
-import com.paulek.core.basic.data.UserStorage;
+import com.paulek.core.basic.data.Users;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.TeleportUtil;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Config;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ public class HomeCMD extends Command {
     private static HashMap<UUID, Integer> to_teleport = new HashMap<UUID, Integer>();
 
     public HomeCMD(){
-        super("home", "teleports to home", "/home {name}", "core.home", new String[]{});
+        super("home", "teleports to home", "/home {name}", "core.cmd.home", new String[]{});
     }
 
     @Override
@@ -31,7 +31,7 @@ public class HomeCMD extends Command {
 
             final Player player = (Player)sender;
 
-            final User user = UserStorage.getUser(player.getUniqueId());
+            final User user = Users.getUser(player.getUniqueId());
 
             if(args.length == 1){
 
@@ -49,7 +49,7 @@ public class HomeCMD extends Command {
 
                                 sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORT));
                             }
-                        }, Config.SETTINGS_HOME_DETLY * 20);
+                        }, Config.HOME_DETLY * 20);
 
                         to_teleport.put(player.getUniqueId(), id.getTaskId());
 
@@ -96,7 +96,7 @@ public class HomeCMD extends Command {
 
                                 sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORT));
                             }
-                        }, Config.SETTINGS_HOME_DETLY * 20);
+                        }, Config.HOME_DETLY * 20);
 
                         to_teleport.put(player.getUniqueId(), id.getTaskId());
 

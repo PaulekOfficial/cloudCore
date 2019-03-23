@@ -3,7 +3,7 @@ package com.paulek.core.basic.data;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class PrivateMessagesStorage {
+public class Pms {
 
     private static HashMap<UUID, String> messages = new HashMap<UUID, String>();
 
@@ -12,6 +12,6 @@ public class PrivateMessagesStorage {
     }
 
     public static void setMessages(HashMap<UUID, String> messages) {
-        PrivateMessagesStorage.messages = messages;
+        Pms.messages = messages;
     }
 }

@@ -3,15 +3,16 @@ package com.paulek.core.commands.cmds.admin;
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Config;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Kits;
+import com.paulek.core.common.io.Lang;
 import net.minecraft.server.v1_13_R2.MinecraftServer;
 import org.bukkit.command.CommandSender;
 
 public class CoreCMD extends Command {
 
     public CoreCMD(){
-        super("core", "all informations about core", "/core", "core.system", new String[] {"serwer", "version", "about"});
+        super("core", "all informations about core", "/core", "core.cmd.core", new String[] {"serwer", "version", "about"});
     }
 
     @Override
@@ -20,6 +21,7 @@ public class CoreCMD extends Command {
             if (args[0].equalsIgnoreCase("reload")) {
                 Config.reloadConfig();
                 Lang.reloadLang();
+                Kits.reload();
                 sender.sendMessage(Util.fixColor(Lang.INFO_CORE_RELOAD));
             }
             if (args[0].equalsIgnoreCase("stop")) {

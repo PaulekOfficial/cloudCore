@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class HelpopCMD extends Command {
 
     public HelpopCMD(){
-        super("helpop", "send a message to moderators", "/helpop (message)", "core.helpop", new String[] {"pomocy"});
+        super("helpop", "send a message to moderators", "/helpop (message)", "core.cmd.helpop", new String[] {"pomocy"});
     }
 
     @Override

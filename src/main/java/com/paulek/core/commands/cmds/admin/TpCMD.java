@@ -1,9 +1,9 @@
 package com.paulek.core.commands.cmds.admin;
 
-import com.paulek.core.basic.data.UserStorage;
 import com.paulek.core.commands.Command;
+import com.paulek.core.common.TeleportUtil;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class TpCMD extends Command{
 
     public TpCMD(){
-        super("tp", "teleport player to target", "/tp (nick, X) (target, Y) (Z)", "core.command.tp", new String[] {"tp"});
+        super("tp", "teleport player to target", "/tp (nick, X) (target, Y) (Z)", "core.cmd.tp", new String[] {"tp"});
     }
 
     @Override
@@ -26,12 +26,7 @@ public class TpCMD extends Command{
                 if (Bukkit.getPlayerExact(args[0]) != null) {
                     player = Bukkit.getPlayerExact(args[0]);
 
-                    if(UserStorage.getUser(player.getUniqueId()).getSettings().isTptoogle()){
-
-                        sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
-
-                        return false;
-                    }
+                    if(TeleportUtil.hasPlayerTpToogle(player)) return false;
 
                     ((Player)sender).teleport(player.getLocation());
                     sender.sendMessage(Util.fixColor(Lang.INFO_TP_INFO.replace("{player}", player.getDisplayName())));
@@ -48,12 +43,7 @@ public class TpCMD extends Command{
             if ((Bukkit.getPlayerExact(args[0]) != null) && (Bukkit.getPlayerExact(args[1]) != null)) {
                 player1 = Bukkit.getPlayerExact(args[0]);
 
-                if(UserStorage.getUser(player1.getUniqueId()).getSettings().isTptoogle()){
-
-                    sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
-
-                    return false;
-                }
+                if(TeleportUtil.hasPlayerTpToogle(player1)) return false;
 
                 player2 = Bukkit.getPlayerExact(args[1]);
                 player1.teleport(player2.getLocation());

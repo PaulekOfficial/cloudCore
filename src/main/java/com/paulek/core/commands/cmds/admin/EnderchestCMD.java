@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class EnderchestCMD extends Command {
 
     public EnderchestCMD() {
-        super("enderchest", "open a enderchest", "/enderchest {player}", "core.enderchest", new String[]{});
+        super("enderchest", "open a enderchest", "/enderchest {player}", "core.cmd.enderchest", new String[]{});
     }
 
     @Override

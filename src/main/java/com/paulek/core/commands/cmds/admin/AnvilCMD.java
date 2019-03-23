@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,7 +11,7 @@ import org.bukkit.event.inventory.InventoryType;
 public class AnvilCMD extends Command {
 
     public AnvilCMD() {
-        super("anvil", "opens a anvil", "/anvil", "core.anvil", new String[]{});
+        super("anvil", "opens a anvil", "/anvil", "core.cmd.anvil", new String[]{});
     }
 
     @Override

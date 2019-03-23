@@ -4,21 +4,22 @@ import com.paulek.core.basic.Warrior;
 import com.paulek.core.basic.data.CombatStorage;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Config;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CombatCMD extends Command {
 
-    private long timetoend = Config.SETTINGS_COMBAT_TIME;
+    private long timetoend = Config.COMBAT_TIME;
     private String yes = Lang.INFO_COMBAT_YES;
     private String no = Lang.INFO_COMBAT_NO;
 
     public CombatCMD(){
-        super("combat", "checks you combat status", "/combat", "core.combat", new String[]{"walka", "bicie"});
+        super("combat", "checks you combat status", "/combat", "core.cmd.combat", new String[]{"walka", "bicie"});
     }
 
+    //TODO Dodać opcję teleportacji gracza po stringu
     @Override
     public boolean execute(CommandSender sender, String[] args) {
         if(sender instanceof Player) {

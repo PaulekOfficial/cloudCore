@@ -3,7 +3,7 @@ package com.paulek.core.commands.cmds.admin;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.TeleportUtil;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class JumpCMD extends Command {
 
     public JumpCMD(){
-        super("jump", "teleport to crosshair", "/j", "core.jump", new String[]{"jumpto", "j"});
+        super("jump", "teleport to crosshair", "/j", "core.cmd.jump", new String[]{"jumpto", "j"});
     }
 
     @Override

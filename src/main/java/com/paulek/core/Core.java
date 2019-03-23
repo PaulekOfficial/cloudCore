@@ -3,15 +3,16 @@ package com.paulek.core;
 import com.paulek.core.basic.CombatManager;
 import com.paulek.core.basic.MySQL;
 import com.paulek.core.basic.User;
-import com.paulek.core.basic.data.RandomtpStorage;
-import com.paulek.core.basic.data.UserStorage;
+import com.paulek.core.basic.data.Rtps;
+import com.paulek.core.basic.data.Users;
 import com.paulek.core.basic.listeners.*;
 import com.paulek.core.commands.CommandManager;
 import com.paulek.core.commands.cmds.admin.*;
 import com.paulek.core.commands.cmds.user.*;
-import com.paulek.core.common.configs.Config;
-import com.paulek.core.common.configs.Lang;
 import com.paulek.core.common.consoleLog;
+import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Kits;
+import com.paulek.core.common.io.Lang;
 import com.paulek.core.common.version;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
@@ -49,6 +50,7 @@ public class Core extends JavaPlugin{
 
         Config.reloadConfig();
         Lang.reloadLang();
+        new Kits();
 
         if (!Config.ENABLED) {
             consoleLog.log("Warning! Core disabled in config!", Level.WARNING);
@@ -77,26 +79,26 @@ public class Core extends JavaPlugin{
 
             Location world_dafault_spawn = Bukkit.getWorld("world").getSpawnLocation();
 
-            Config.SETTINGS_SPAWN_WORLD = world_dafault_spawn.getWorld().getName();
-            Config.SETTINGS_SPAWN_BLOCKX = world_dafault_spawn.getX();
-            Config.SETTINGS_SPAWN_BLOCKZ = world_dafault_spawn.getZ();
-            Config.SETTINGS_SPAWN_BLOCKY = world_dafault_spawn.getY();
-            Config.SETTINGS_SPAWN_YAW = world_dafault_spawn.getYaw();
+            Config.SPAWN_WORLD = world_dafault_spawn.getWorld().getName();
+            Config.SPAWN_BLOCK_X = world_dafault_spawn.getX();
+            Config.SPAWN_BLOCK_Z = world_dafault_spawn.getZ();
+            Config.SPAWN_BLOCK_Y = world_dafault_spawn.getY();
+            Config.SPAWN_YAW = world_dafault_spawn.getYaw();
 
             Config.FIRSTCONFIGURATION = false;
             Config.reloadConfig();
         }
 
-        if (Config.SETTINGS_COMBAT_ENABLED) {
+        if (Config.COMBAT_ENABLED) {
             Bukkit.getScheduler().runTaskTimer(this, new CombatManager(), 20, 20);
         }
 
-        if (Config.ENABLE_STONEGENERATOR) {
+        if (Config.STONEGENERATOR_ENABLE) {
 
             ItemStack item = new ItemStack(Material.END_STONE);
             ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(Config.SETTINGS_STONEGENERATOR_NAME);
-            meta.setLore(Config.SETTINGS_STONEGENERATOR_LORE);
+            meta.setDisplayName(Config.STONEGENERATOR_GENERATORNAME);
+            meta.setLore(Config.STONEGENERATOR_DESCRIPTION);
             item.setItemMeta(meta);
 
             ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "iocjow98345cj9673498yjw"), item)
@@ -109,21 +111,21 @@ public class Core extends JavaPlugin{
 
         }
 
-        if (Config.ENABLE_RANDOMTELEPORT) RandomtpStorage.loadButtons();
+        if (Config.RTP_ENABLE) Rtps.loadButtons();
 
         PluginListeners.loadGroups();
-        new UserStorage();
+        new Users();
         SethomeCMD.loadGroups();
     }
 
     @Override
     public void onDisable(){
 
-        for(User u : UserStorage.getUsers().values()){
+        for(User u : Users.getUsers().values()){
 
             if(!u.isUptodate()) {
                 try {
-                    UserStorage.saveUserData(u);
+                    Users.saveUserData(u);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -180,7 +182,7 @@ public class Core extends JavaPlugin{
         CommandManager.registerCommand(new DayCMD());
         CommandManager.registerCommand(new NightCMD());
 
-        if(Config.ENABLE_RANDOMTELEPORT) CommandManager.registerCommand(new RandomCMD());
+        if(Config.RTP_ENABLE) CommandManager.registerCommand(new RandomCMD());
 
         CommandManager.registerCommand(new VanishCMD());
         CommandManager.registerCommand(new MsgCMD());
@@ -197,7 +199,7 @@ public class Core extends JavaPlugin{
         CommandManager.registerCommand(new TpahereCMD());
         CommandManager.registerCommand(new TpadenyCMD());
 
-        if(Config.ENABLE_SKINS) CommandManager.registerCommand(new SkinCMD());
+        if(Config.SKINS_ENABLE) CommandManager.registerCommand(new SkinCMD());
 
         CommandManager.registerCommand(new SpeedCMD());
         CommandManager.registerCommand(new WorkbenchCMD());
@@ -211,7 +213,7 @@ public class Core extends JavaPlugin{
         CommandManager.registerCommand(new PingCMD());
         CommandManager.registerCommand(new WorldCMD());
 
-        if(Config.ENABLE_WHITELIST) CommandManager.registerCommand(new WhitelistCMD());
+        if(Config.WHITELIST_ENABLE) CommandManager.registerCommand(new WhitelistCMD());
 
         CommandManager.registerCommand(new GcCMD());
 

@@ -1,9 +1,9 @@
 package com.paulek.core.commands.cmds.admin;
 
-import com.paulek.core.basic.data.UserStorage;
+import com.paulek.core.basic.data.Users;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class TpallCMD extends Command {
 
     public TpallCMD(){
-        super("tpall", "teleports all player to yours location", "/tpall", "core.tpall", new String[]{});
+        super("tpall", "teleports all player to yours location", "/tpall", "core.cmd.tpall", new String[]{});
     }
 
     @Override
@@ -27,7 +27,7 @@ public class TpallCMD extends Command {
 
         for(Player p : Bukkit.getOnlinePlayers()){
 
-            if(!UserStorage.getUser(p.getUniqueId()).getSettings().isTptoogle()){
+            if(!Users.getUser(p.getUniqueId()).getSettings().isTptoogle()){
                 p.teleport(location);
             }
 

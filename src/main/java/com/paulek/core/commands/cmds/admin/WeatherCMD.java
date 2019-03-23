@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class WeatherCMD extends Command {
 
     public WeatherCMD(){
-        super("weather", "set the wheater", "/weather (clear,rain)", "core.command.weather", new String[] {"pogoda"});
+        super("weather", "set the wheater", "/weather (clear,rain)", "core.cmd.weather", new String[] {"pogoda"});
     }
 
     @Override

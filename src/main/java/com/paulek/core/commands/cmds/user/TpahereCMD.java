@@ -2,11 +2,11 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.data.TpaStorage;
-import com.paulek.core.basic.data.UserStorage;
 import com.paulek.core.commands.Command;
+import com.paulek.core.common.TeleportUtil;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Config;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitTask;
 public class TpahereCMD extends Command {
 
     public TpahereCMD() {
-        super("tpahere", "teleport to you", "/tpahere {player}", "core.tpahere", new String[]{});
+        super("tpahere", "teleport to you", "/tpahere {player}", "core.cmd.tpahere", new String[]{});
     }
 
     @Override
@@ -33,12 +33,7 @@ public class TpahereCMD extends Command {
             if (Bukkit.getPlayer(args[0]) != null) {
                 final Player p = Bukkit.getPlayer(args[0]);
 
-                if(UserStorage.getUser(p.getUniqueId()).getSettings().isTptoogle()){
-
-                    sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
-
-                    return false;
-                }
+                if(TeleportUtil.hasPlayerTpToogle(player)) return false;
 
                 BukkitTask id;
 
@@ -47,7 +42,7 @@ public class TpahereCMD extends Command {
                         TpaStorage.removeToAcceptTpahere(p.getUniqueId());
                         TpaStorage.cancelTaskTpahere(p.getUniqueId());
                     }
-                }, Config.SETTINGS_TPA_WAITINGTOACCEPT * 20);
+                }, Config.TPA_WAITINGTIME * 20);
 
                 TpaStorage.addTaskTpahere(p.getUniqueId(), id.getTaskId());
                 TpaStorage.addToAcceptTpahere(p.getUniqueId(), player.getUniqueId());

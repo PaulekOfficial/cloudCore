@@ -1,11 +1,10 @@
 package com.paulek.core.commands;
 
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
-import java.util.List;
 
 public abstract class Command extends org.bukkit.command.Command {
 
@@ -16,7 +15,7 @@ public abstract class Command extends org.bukkit.command.Command {
 
 
     public Command(final String name, final String description, final String usage, final String permisions, final String[] aliases){
-        super(name, description, usage, (List) Arrays.asList(aliases));
+        super(name, description, usage, Arrays.asList(aliases));
         this.name = name;
         this.usage = usage;
         this.permisions = permisions;

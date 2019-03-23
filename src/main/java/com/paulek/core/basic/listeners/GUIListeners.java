@@ -1,7 +1,7 @@
 package com.paulek.core.basic.listeners;
 
-import com.paulek.core.basic.GUIItem;
-import com.paulek.core.basic.GUIWindow;
+import com.paulek.core.basic.gui.GUIItem;
+import com.paulek.core.basic.gui.GUIWindow;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;

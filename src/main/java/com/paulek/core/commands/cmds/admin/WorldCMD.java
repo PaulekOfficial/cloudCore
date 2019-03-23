@@ -3,7 +3,7 @@ package com.paulek.core.commands.cmds.admin;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.TeleportUtil;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class WorldCMD extends Command {
 
     public WorldCMD(){
-        super("world", "teleport to another world", "/world {name}", "core.world", new String[]{});
+        super("world", "teleport to another world", "/world {name}", "core.cmd.world", new String[]{});
     }
 
     @Override
@@ -26,61 +26,7 @@ public class WorldCMD extends Command {
                 return false;
             }
 
-            World world = null;
-
-            if (args[0].equalsIgnoreCase("nether")) {
-
-                for (World w : Bukkit.getWorlds()) {
-
-                    if (w.getEnvironment().equals(World.Environment.NETHER)) {
-
-                        world = w;
-
-                    }
-
-                }
-
-            } else if (args[0].equalsIgnoreCase("normal")) {
-
-                for (World w : Bukkit.getWorlds()) {
-
-                    if (w.getEnvironment().equals(World.Environment.NORMAL)) {
-
-                        world = w;
-
-                    }
-
-                }
-
-            } else {
-
-                try {
-
-                    int id = Integer.valueOf(args[0]);
-
-                    if (Bukkit.getWorlds().get(id) != null) {
-
-                        world = Bukkit.getWorlds().get(id);
-
-                    } else {
-                        sender.sendMessage(Util.fixColor(Lang.ERROR_WORLD_NOWORLD));
-                        return false;
-                    }
-
-                } catch (Exception e) {
-
-                    if (Bukkit.getWorld(args[0]) != null) {
-
-                        world = Bukkit.getWorld(args[0]);
-
-                    } else {
-                        sender.sendMessage(Util.fixColor(Lang.ERROR_WORLD_NOWORLD));
-                        return false;
-                    }
-
-                }
-
-            }
+            World world = getWorld(args[0]);
 
             if (world != null) {
 
@@ -110,61 +56,7 @@ public class WorldCMD extends Command {
                 return false;
             }
 
-            World world = null;
-
-            if (args[0].equalsIgnoreCase("nether")) {
-
-                for (World w : Bukkit.getWorlds()) {
-
-                    if (w.getEnvironment().equals(World.Environment.NETHER)) {
-
-                        world = w;
-
-                    }
-
-                }
-
-            } else if (args[0].equalsIgnoreCase("normal")) {
-
-                for (World w : Bukkit.getWorlds()) {
-
-                    if (w.getEnvironment().equals(World.Environment.NORMAL)) {
-
-                        world = w;
-
-                    }
-
-                }
-
-            } else {
-
-                try {
-
-                    int id = Integer.valueOf(args[0]);
-
-                    if (Bukkit.getWorlds().get(id) != null) {
-
-                        world = Bukkit.getWorlds().get(id);
-
-                    } else {
-                        sender.sendMessage(Util.fixColor(Lang.ERROR_WORLD_NOWORLD));
-                        return false;
-                    }
-
-                } catch (Exception e) {
-
-                    if (Bukkit.getWorld(args[0]) != null) {
-
-                        world = Bukkit.getWorld(args[0]);
-
-                    } else {
-                        sender.sendMessage(Util.fixColor(Lang.ERROR_WORLD_NOWORLD));
-                        return false;
-                    }
-
-                }
-
-            }
+            World world = getWorld(args[0]);
 
             if (world != null) {
 
@@ -186,5 +78,57 @@ public class WorldCMD extends Command {
 
 
         return false;
+    }
+
+    private World getWorld(String name){
+        World world = null;
+        if (name.equalsIgnoreCase("nether")) {
+
+            for (World w : Bukkit.getWorlds()) {
+
+                if (w.getEnvironment().equals(World.Environment.NETHER)) {
+
+                    world = w;
+
+                }
+
+            }
+
+        } else if (name.equalsIgnoreCase("normal")) {
+
+            for (World w : Bukkit.getWorlds()) {
+
+                if (w.getEnvironment().equals(World.Environment.NORMAL)) {
+
+                    world = w;
+
+                }
+
+            }
+
+        } else {
+
+            try {
+
+                int id = Integer.valueOf(name);
+
+                if (Bukkit.getWorlds().get(id) != null) {
+
+                    world = Bukkit.getWorlds().get(id);
+
+                }
+
+            } catch (Exception e) {
+
+                if (Bukkit.getWorld(name) != null) {
+
+                    world = Bukkit.getWorld(name);
+
+                }
+
+            }
+
+        }
+        return world;
     }
 }

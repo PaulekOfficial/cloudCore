@@ -1,13 +1,13 @@
 package com.paulek.core.basic.data;
 
-import com.paulek.core.common.configs.Config;
+import com.paulek.core.common.io.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RandomtpStorage {
+public class Rtps {
 
     private static List<Location> buttons = new ArrayList<Location>();
     private static List<String> but = new ArrayList<String>();
@@ -34,7 +34,7 @@ public class RandomtpStorage {
     }
 
     public static void loadButtons(){
-        List<String> buttonstoconvert = Config.SETTINGS_RANDOMTELEPORT_BUTTONS;
+        List<String> buttonstoconvert = Config.RTP_BUTTONLIST;
 
         if(buttonstoconvert == null) return;
 

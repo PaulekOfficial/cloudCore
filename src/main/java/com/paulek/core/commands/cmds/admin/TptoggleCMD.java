@@ -1,17 +1,17 @@
 package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.basic.User;
-import com.paulek.core.basic.data.UserStorage;
+import com.paulek.core.basic.data.Users;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class TptoggleCMD extends Command {
 
     public TptoggleCMD(){
-        super("tptoogle", "Togle your teleportation", "/tptoggle {on/off}", "core.tptoogle", new String[]{});
+        super("tptoogle", "Togle your teleportation", "/tptoggle {on/off}", "core.cmd.tptoogle", new String[]{});
     }
 
     @Override
@@ -22,7 +22,7 @@ public class TptoggleCMD extends Command {
             return false;
         }
 
-        User user = UserStorage.getUser(((Player)sender).getUniqueId());
+        User user = Users.getUser(((Player)sender).getUniqueId());
 
         if(args.length == 1){
 

@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import net.minecraft.server.v1_13_R2.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 public class PingCMD extends Command {
 
     public PingCMD(){
-        super("ping", "get player ping", "/ping {player}", "core.ping", new String[]{});
+        super("ping", "get player ping", "/ping {player}", "core.cmd.ping", new String[]{});
     }
 
     @Override
@@ -33,20 +33,7 @@ public class PingCMD extends Command {
 
             EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
 
-            try {
-
-                Field ping = entityPlayer.getClass().getDeclaredField("ping");
-
-                String ping_string = String.valueOf(ping.getInt(entityPlayer));
-
-                sender.sendMessage(Util.fixColor(Lang.INFO_PING_FORMAT.replace("{player}", player.getDisplayName()).replace("{ping}", ping_string)));
-
-            } catch (Exception e) {
-
-                sender.sendMessage(Util.fixColor(Lang.ERROR_PING_GET));
-
-                return false;
-            }
+            if(getPlayerPing(player, sender)) return false;
 
         } else if(args.length == 1) {
 
@@ -54,22 +41,7 @@ public class PingCMD extends Command {
 
                 Player player = Bukkit.getPlayer(args[0]);
 
-                EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
-
-                try {
-
-                    Field ping = entityPlayer.getClass().getDeclaredField("ping");
-
-                    String ping_string = String.valueOf(ping.getInt(entityPlayer));
-
-                    sender.sendMessage(Util.fixColor(Lang.INFO_PING_FORMAT.replace("{player}", player.getDisplayName()).replace("{ping}", ping_string)));
-
-                } catch (Exception e) {
-
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_PING_GET));
-
-                    return false;
-                }
+                if(getPlayerPing(player, sender)) return false;
 
             } else {
 
@@ -84,4 +56,25 @@ public class PingCMD extends Command {
 
         return false;
     }
+
+    private boolean getPlayerPing(Player player, CommandSender sender){
+        EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+
+        try {
+
+            Field ping = entityPlayer.getClass().getDeclaredField("ping");
+
+            String ping_string = String.valueOf(ping.getInt(entityPlayer));
+
+            sender.sendMessage(Util.fixColor(Lang.INFO_PING_FORMAT.replace("{player}", player.getDisplayName()).replace("{ping}", ping_string)));
+
+        } catch (Exception e) {
+
+            sender.sendMessage(Util.fixColor(Lang.ERROR_PING_GET));
+
+            return true;
+        }
+        return false;
+    }
+
 }

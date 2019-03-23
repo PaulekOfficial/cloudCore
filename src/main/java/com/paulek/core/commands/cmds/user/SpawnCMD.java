@@ -4,8 +4,8 @@ import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.TeleportUtil;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Config;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -20,7 +20,7 @@ public class SpawnCMD extends Command {
     private static HashMap<UUID, Integer> in_detly = new HashMap<UUID, Integer>();
 
     public SpawnCMD(){
-        super("spawn", "teleports to spawn", "/spawn {player}", "core.spawn", new String[] {"spawnpoint"});
+        super("spawn", "teleports to spawn", "/spawn {player}", "core.cmd.spawn", new String[] {"spawnpoint"});
     }
 
     @Override
@@ -33,13 +33,10 @@ public class SpawnCMD extends Command {
                 return false;
             }
 
-            if (sender.hasPermission("core.detly.bypass")) {
+            if (sender.hasPermission("core.cmd.spawn.cooldownbypass")) {
                 Player player = (Player) sender;
 
-                Location location = new Location(Bukkit.getWorld(Config.SETTINGS_SPAWN_WORLD), Config.SETTINGS_SPAWN_BLOCKX, Config.SETTINGS_SPAWN_BLOCKY, Config.SETTINGS_SPAWN_BLOCKZ);
-                location.setYaw((float) Config.SETTINGS_SPAWN_YAW);
-
-                new TeleportUtil(location, player);
+                teleportSpawn(player);
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_SPAWN_TELEPORT));
 
@@ -53,14 +50,11 @@ public class SpawnCMD extends Command {
 
                         Player player = (Player) sender;
 
-                        Location location = new Location(Bukkit.getWorld(Config.SETTINGS_SPAWN_WORLD), Config.SETTINGS_SPAWN_BLOCKX, Config.SETTINGS_SPAWN_BLOCKY, Config.SETTINGS_SPAWN_BLOCKZ);
-                        location.setYaw((float) Config.SETTINGS_SPAWN_YAW);
-
-                        new TeleportUtil(location, player);
+                        teleportSpawn(player);
 
                         sender.sendMessage(Util.fixColor(Lang.INFO_SPAWN_TELEPORT));
                     }
-                }, Config.SETTINGS_SPAWN_DETLY * 20);
+                }, Config.SPAWN_DETLY * 20);
 
                 in_detly.put(((Player) sender).getUniqueId(), id.getTaskId());
 
@@ -69,30 +63,37 @@ public class SpawnCMD extends Command {
                 return false;
             }
         } else if(args.length == 1){
+            if(sender.hasPermission("core.cmd.spawn.admin")) {
+                if (Bukkit.getPlayer(args[0]) != null) {
 
-            if(Bukkit.getPlayer(args[0]) != null) {
+                    Player player = Bukkit.getPlayer(args[0]);
 
-                Player player = Bukkit.getPlayer(args[0]);
+                    teleportSpawn(player);
 
-                Location location = new Location(Bukkit.getWorld(Config.SETTINGS_SPAWN_WORLD), Config.SETTINGS_SPAWN_BLOCKX, Config.SETTINGS_SPAWN_BLOCKY, Config.SETTINGS_SPAWN_BLOCKZ);
-                location.setYaw((float) Config.SETTINGS_SPAWN_YAW);
+                    player.sendMessage(Util.fixColor(Lang.INFO_SPAWN_PLAYERTELEPORTED));
 
-                new TeleportUtil(location, player);
+                    return false;
+                } else {
 
-                player.sendMessage(Util.fixColor(Lang.INFO_SPAWN_PLAYERTELEPORTED));
+                    sender.sendMessage(Util.fixColor(Lang.ERROR_SPAWN_PLAYEROFFINLE));
 
-                return false;
+                    return false;
+                }
             } else {
-
-                sender.sendMessage(Util.fixColor(Lang.ERROR_SPAWN_PLAYEROFFINLE));
-
-                return false;
+                sender.sendMessage(Util.fixColor(getPermissionMessage()));
             }
         } else {
             sender.sendMessage(getUsage());
         }
 
         return false;
+    }
+
+    private void teleportSpawn(Player player){
+        Location location = new Location(Bukkit.getWorld(Config.SPAWN_WORLD), Config.SPAWN_BLOCK_X, Config.SPAWN_BLOCK_Y, Config.SPAWN_BLOCK_Z);
+        location.setYaw((float) Config.SPAWN_YAW);
+
+        new TeleportUtil(location, player);
     }
 
     public static HashMap<UUID, Integer> getIn_detly() {

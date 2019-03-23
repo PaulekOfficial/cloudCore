@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class BrodcastCMD extends Command {
 
     public BrodcastCMD() {
-        super("brodcast", "brodcast a message", "/bc {title, action, chat} {message}", "core.bc", new String[]{"bc"});
+        super("brodcast", "brodcast a message", "/bc {title, action, chat} {message}", "core.cmd.bc", new String[]{"brodcast"});
     }
 
     @Override

@@ -2,15 +2,15 @@ package com.paulek.core.basic;
 
 import com.paulek.core.basic.data.CombatStorage;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Config;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 
 import java.util.Iterator;
 
 public class CombatManager implements Runnable {
 
-    private long timetoend = Config.SETTINGS_COMBAT_TIME;
+    private long timetoend = Config.COMBAT_TIME;
     private String message = Util.fixColor(Lang.INFO_COMBAT_ACTIONBAR);
     private String end_combat = Util.fixColor(Lang.INFO_COMBAT_ENDEDACTION);
 
@@ -37,7 +37,7 @@ public class CombatManager implements Runnable {
 
                 if((Bukkit.getPlayer(p.getNick()) != null)) Util.sendActionbar(Bukkit.getPlayer(p.getNick()), end_combat);
 
-                if((Bukkit.getPlayer(p.getNick()) != null)) if(Config.SETTINGS_COMBAT_CHATMESSAGE) Bukkit.getPlayer(p.getNick()).sendMessage(Util.fixColor(Lang.INFO_COMBAT_ENDCHAT));
+                if((Bukkit.getPlayer(p.getNick()) != null)) if(Config.COMBAT_CHATMESSAGE) Bukkit.getPlayer(p.getNick()).sendMessage(Util.fixColor(Lang.INFO_COMBAT_ENDCHAT));
 
             }
 

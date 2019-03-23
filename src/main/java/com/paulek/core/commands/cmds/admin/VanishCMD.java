@@ -12,13 +12,13 @@ public class VanishCMD extends Command {
     private static HashMap<UUID, BukkitTask> list = new HashMap<UUID, BukkitTask>();
 
     public VanishCMD() {
-        super("vanish", "vanish yourself", "/v {Player}", "core.vanish", new String[] {"v"});
+        super("vanish", "vanish yourself", "/v {Player}", "core.cmd.vanish", new String[] {"v"});
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        //TODO Więcej funkcji
+        //TODO to fix
 
 //        if(sender instanceof Player) {
 //            final Player p = (Player) sender;
@@ -35,14 +35,14 @@ public class VanishCMD extends Command {
 //                        }
 //                    },20, 20);
 //                    list.put(uuid, id);
-//                    UserStorage.getUser(uuid).setVanish(true);
+//                    Users.getUser(uuid).setVanish(true);
 //                    p.getLocation().getWorld().spawnParticle(Particle.SMOKE_LARGE, p.getLocation(), 500, 20, 20 , 20);
 //                    p.sendMessage(Util.fixColor(Lang.INFO_VANISH_VANISHED));
 //                } else {
 //                    p.getLocation().getWorld().spawnParticle(Particle.SMOKE_LARGE, p.getLocation(), 500, 20, 20 , 20);
 //                    list.get(uuid).cancel();
 //                    list.remove(uuid);
-//                    UserStorage.getUser(uuid).setVanish(false);
+//                    Users.getUser(uuid).setVanish(false);
 //                    for (Player player : Bukkit.getOnlinePlayers()) {
 //                        player.showPlayer(p);
 //                    }
@@ -63,13 +63,13 @@ public class VanishCMD extends Command {
 //                            }
 //                        },20, 20);
 //                        list.put(uuid, id);
-//                        UserStorage.getUser(uuid).setVanish(true);
+//                        Users.getUser(uuid).setVanish(true);
 //                        player.sendMessage(Util.fixColor(Lang.INFO_VANISH_VANISHED));
 //                        p.getLocation().getWorld().spawnParticle(Particle.SMOKE_LARGE, p.getLocation(), 500, 20, 20 , 20);
 //                    } else {
 //                        list.get(uuid).cancel();
 //                        list.remove(uuid);
-//                        UserStorage.getUser(uuid).setVanish(false);
+//                        Users.getUser(uuid).setVanish(false);
 //                        for (Player d : Bukkit.getOnlinePlayers()) {
 //                            d.showPlayer(player);
 //                        }

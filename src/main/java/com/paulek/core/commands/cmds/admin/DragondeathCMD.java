@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Player;
@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class DragondeathCMD extends Command {
 
     public DragondeathCMD(){
-        super("dragondeath", "play dragon death", "/dragondeaath", "core.dragondeath", new String[]{});
+        super("dragondeath", "play dragon death", "/dragondeaath", "core.cmd.dragondeath", new String[]{});
     }
 
     @Override

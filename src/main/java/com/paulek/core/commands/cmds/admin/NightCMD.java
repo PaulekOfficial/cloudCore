@@ -2,14 +2,14 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class NightCMD extends Command {
 
     public NightCMD(){
-        super("night", "makes night", "/night", "core.night", new String[] {"noc"});
+        super("night", "makes night", "/night", "core.cmd.night", new String[] {"noc"});
     }
 
     @Override

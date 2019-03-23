@@ -2,8 +2,8 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Config;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -12,10 +12,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class EnchantCMD extends Command {
 
-    private boolean unsafeEnchants = Config.SETTINGS_ENCHANT_UNSAFE;
+    private boolean unsafeEnchants = Config.ENCHANT_UNSAFE;
 
     public EnchantCMD(){
-        super("enchant", "enchant a item in your hand", "/enchant {enchantment type} {lvl}", "core.enchant", new String[]{});
+        super("enchant", "enchant a item in your hand", "/enchant {enchantment type} {lvl}", "core.cmd.enchant", new String[]{});
     }
 
     @Override
@@ -43,7 +43,7 @@ public class EnchantCMD extends Command {
                     return false;
                 }
 
-                if (Enchantment.getByName(args[0]) == null) {
+                if (Enchantment.getByName(args[0].toUpperCase()) == null && !args[0].toUpperCase().equalsIgnoreCase("ALL")) {
 
                     sender.sendMessage(Util.fixColor(Lang.ERROR_ENCHANT_NOTFOUND));
 

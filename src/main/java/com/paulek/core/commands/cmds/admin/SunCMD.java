@@ -2,14 +2,14 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SunCMD extends Command {
 
     public SunCMD() {
-        super("sun", "makes sun", "/sun", "core.sun", new String[]{});
+        super("sun", "makes sun", "/sun", "core.cmd.sun", new String[]{});
     }
 
     @Override

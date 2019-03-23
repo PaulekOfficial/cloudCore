@@ -5,7 +5,7 @@ import com.paulek.core.commands.cmds.user.HomeCMD;
 import com.paulek.core.commands.cmds.user.SpawnCMD;
 import com.paulek.core.commands.cmds.user.TpacceptCMD;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

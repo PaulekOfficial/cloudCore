@@ -5,8 +5,8 @@ import com.paulek.core.basic.data.TpaStorage;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.TeleportUtil;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Config;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -21,7 +21,7 @@ public class TpacceptCMD extends Command {
     private static HashMap<UUID, Integer> to_teleport_map = new HashMap<UUID, Integer>();
 
     public TpacceptCMD(){
-        super("tpaccept", "accepts a teleport to player", "/tpaccept", "core.tpaccept", new String[]{});
+        super("tpaccept", "accepts a teleport to player", "/tpaccept", "core.cmd.tpaccept", new String[]{});
     }
 
     @Override
@@ -62,7 +62,7 @@ public class TpacceptCMD extends Command {
                         to_teleport_map.remove(to_teleport.getUniqueId());
 
                     }
-                }, Config.SETTINGS_TPA_DETLY * 20);
+                }, Config.TPA_DETLY * 20);
 
                 to_teleport_map.put(to_teleport.getUniqueId(), id.getTaskId());
 
@@ -98,7 +98,7 @@ public class TpacceptCMD extends Command {
                         to_teleport_map.remove(player1.getUniqueId());
 
                     }
-                }, Config.SETTINGS_TPA_DETLY * 20);
+                }, Config.TPA_DETLY * 20);
 
                 to_teleport_map.put(player1.getUniqueId(), id.getTaskId());
             } else {

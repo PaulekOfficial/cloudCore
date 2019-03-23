@@ -2,14 +2,14 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Config;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 
 public class WhitelistCMD extends Command {
 
     public WhitelistCMD(){
-        super("whitelist", "menage your whitelist", "/whitelist {set/add/remove/motd} {on/off|player|motd}", "core.whitelist", new String[]{});
+        super("whitelist", "menage your whitelist", "/whitelist {set/add/remove/motd} {on/off|player|motd}", "core.cmd.whitelist", new String[]{});
     }
 
     @Override
@@ -21,7 +21,7 @@ public class WhitelistCMD extends Command {
 
                 if (args.length == 1) {
 
-                    sender.sendMessage(Util.fixColor(Lang.INFO_WHITELIST_MOTD.replace("{motd}", Config.SETTINGS_WHITELIST_MOTD)));
+                    sender.sendMessage(Util.fixColor(Lang.INFO_WHITELIST_MOTD.replace("{motd}", Config.WHITELIST_MOD)));
 
                 } else {
 
@@ -34,7 +34,7 @@ public class WhitelistCMD extends Command {
 
                     }
 
-                    Config.SETTINGS_WHITELIST_MOTD = stringBuilder.toString();
+                    Config.WHITELIST_MOD = stringBuilder.toString();
                     Config.saveConfig();
                     Config.reloadConfig();
 
@@ -48,9 +48,9 @@ public class WhitelistCMD extends Command {
 
                     if (args[1].equalsIgnoreCase("on")) {
 
-                        if (!Config.SETTINGS_WHITELIST_ENABLED) {
+                        if (!Config.WHITELIST_ENABLE) {
 
-                            Config.SETTINGS_WHITELIST_ENABLED = true;
+                            Config.WHITELIST_ENABLE = true;
                             Config.saveConfig();
                             Config.reloadConfig();
 
@@ -65,9 +65,9 @@ public class WhitelistCMD extends Command {
 
                     } else if (args[1].equalsIgnoreCase("off")) {
 
-                        if (Config.SETTINGS_WHITELIST_ENABLED) {
+                        if (Config.WHITELIST_ENABLE) {
 
-                            Config.SETTINGS_WHITELIST_ENABLED = false;
+                            Config.WHITELIST_ENABLE = false;
                             Config.saveConfig();
                             Config.reloadConfig();
 
@@ -99,9 +99,9 @@ public class WhitelistCMD extends Command {
 
                     String nick = args[1];
 
-                    if (!Config.SETTINGS_WHITELIST_LIST.contains(nick)) {
+                    if (!Config.WHITELIST_ALLOWEDPLAYERS.contains(nick)) {
 
-                        Config.SETTINGS_WHITELIST_LIST.add(nick);
+                        Config.WHITELIST_ALLOWEDPLAYERS.add(nick);
                         Config.saveConfig();
                         Config.reloadConfig();
 

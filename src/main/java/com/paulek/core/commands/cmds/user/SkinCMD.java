@@ -6,9 +6,10 @@ import org.bukkit.command.CommandSender;
 public class SkinCMD extends Command {
 
     public SkinCMD(){
-        super("skin", "set yours skin", "/skin {set, clear} {nick}", "core.skin", new String[]{});
+        super("skin", "set yours skin", "/skin {set, clear} {nick}", "core.cmd.skin", new String[]{});
     }
 
+    //TODO to fix
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
@@ -24,24 +25,24 @@ public class SkinCMD extends Command {
 //
 //                        if(!Util.testPremium(player.getDisplayName())) {
 //
-//                            if (Config.SETTINGS_SKINS_ENABLENOPREMIUMRANDOMSKIN) {
+//                            if (Config.SKINS_HIDENONPREMIUM) {
 //
-//                                if(Config.SETTINGS_NONPREMIUMSKINS.size() == 0){
+//                                if(Config.SKINS_SKINSFORNONPREMIUM.size() == 0){
 //                                    sender.sendMessage(Util.fixColor(Lang.INFO_SKIN_CLEAR));
 //                                    return false;
 //                                }
 //
 //                                Random random = new Random();
 //
-//                                int rand = random.nextInt(Config.SETTINGS_NONPREMIUMSKINS.size());
+//                                int rand = random.nextInt(Config.SKINS_SKINSFORNONPREMIUM.size());
 //
-//                                String nick = Config.SETTINGS_NONPREMIUMSKINS.get(rand);
+//                                String nick = Config.SKINS_SKINSFORNONPREMIUM.get(rand);
 //
 //                                Skin skin = new Skin(nick, null);
 //
-//                                UserStorage.getUser(player.getUniqueId()).setSkinsetManually(false);
-//                                UserStorage.getUser(player.getUniqueId()).setSkin("");
-//                                UserStorage.getUser(player.getUniqueId()).setSignature("");
+//                                Users.getUser(player.getUniqueId()).setSkinsetManually(false);
+//                                Users.getUser(player.getUniqueId()).setSkin("");
+//                                Users.getUser(player.getUniqueId()).setSignature("");
 //                                SkinUtil.applySkin(player, skin);
 //
 //                                sender.sendMessage(Util.fixColor(Lang.INFO_SKIN_CLEAR));
@@ -50,9 +51,9 @@ public class SkinCMD extends Command {
 //
 //                                Skin skin = new Skin("Steve");
 //
-//                                UserStorage.getUser(player.getUniqueId()).setSkinsetManually(false);
-//                                UserStorage.getUser(player.getUniqueId()).setSkin(" ");
-//                                UserStorage.getUser(player.getUniqueId()).setSignature(" ");
+//                                Users.getUser(player.getUniqueId()).setSkinsetManually(false);
+//                                Users.getUser(player.getUniqueId()).setSkin(" ");
+//                                Users.getUser(player.getUniqueId()).setSignature(" ");
 //                                SkinUtil.applySkin(player, skin);
 //
 //                                sender.sendMessage(Util.fixColor(Lang.INFO_SKIN_CLEAR));
@@ -60,10 +61,10 @@ public class SkinCMD extends Command {
 //                        } else {
 //
 //                            Skin skin = new Skin(player.getDisplayName());
-//                            UserStorage.getUser(player.getUniqueId()).setSkinsetManually(false);
-//                            UserStorage.getUser(player.getUniqueId()).setSkin(" ");
-//                            UserStorage.getUser(player.getUniqueId()).setSignature(" ");
-//                            UserStorage.getUser(player.getUniqueId()).setSkinSenility(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 2);
+//                            Users.getUser(player.getUniqueId()).setSkinsetManually(false);
+//                            Users.getUser(player.getUniqueId()).setSkin(" ");
+//                            Users.getUser(player.getUniqueId()).setSignature(" ");
+//                            Users.getUser(player.getUniqueId()).setSkinSenility(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 2);
 //                            SkinUtil.applySkin(player, skin);
 //
 //                            sender.sendMessage(Util.fixColor(Lang.INFO_SKIN_CLEAR));
@@ -95,9 +96,9 @@ public class SkinCMD extends Command {
 //                            }
 //                            if(safe) {
 //                                SkinUtil.applySkin(player, skin);
-//                                UserStorage.getUser(player.getUniqueId()).setSkinsetManually(true);
-//                                UserStorage.getUser(player.getUniqueId()).setSkin(skin.getValue());
-//                                UserStorage.getUser(player.getUniqueId()).setSignature(skin.getSignature());
+//                                Users.getUser(player.getUniqueId()).setSkinsetManually(true);
+//                                Users.getUser(player.getUniqueId()).setSkin(skin.getValue());
+//                                Users.getUser(player.getUniqueId()).setSignature(skin.getSignature());
 //
 //                                sender.sendMessage(Util.fixColor(Lang.INFO_SKIN_CHANGED));
 //                            }

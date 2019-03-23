@@ -1,9 +1,9 @@
 package com.paulek.core.commands.cmds.admin;
 
-import com.paulek.core.basic.data.UserStorage;
+import com.paulek.core.basic.data.Users;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -12,7 +12,7 @@ import java.util.UUID;
 public class MsgspyCMD extends Command {
 
     public MsgspyCMD() {
-        super("spymsg", "spy private messages", "/mspy {on, off}", "core.mspy", new String[] {"mspy", "socialspy"});
+        super("spymsg", "spy private messages", "/mspy {on, off}", "core.cmd.mspy", new String[] {"mspy", "socialspy"});
     }
 
     @Override
@@ -20,8 +20,8 @@ public class MsgspyCMD extends Command {
         if(args.length != 0) {
             if (args[0].equalsIgnoreCase("on")) {
                 UUID uuid = ((Player) sender).getUniqueId();
-                if (!UserStorage.getUser(uuid).getSettings().isSocialspy()) {
-                    UserStorage.getUser(uuid).getSettings().setSocialspy(true);
+                if (!Users.getUser(uuid).getSettings().isSocialspy()) {
+                    Users.getUser(uuid).getSettings().setSocialspy(true);
                     sender.sendMessage(Util.fixColor(Lang.INFO_MSG_SPY));
                 } else {
                     sender.sendMessage(Util.fixColor(Lang.ERROR_MSG_ALREADY));
@@ -29,8 +29,8 @@ public class MsgspyCMD extends Command {
             }
             if (args[0].equalsIgnoreCase("off")) {
                 UUID uuid = ((Player) sender).getUniqueId();
-                if (UserStorage.getUser(uuid).getSettings().isSocialspy()) {
-                    UserStorage.getUser(uuid).getSettings().setSocialspy(false);
+                if (Users.getUser(uuid).getSettings().isSocialspy()) {
+                    Users.getUser(uuid).getSettings().setSocialspy(false);
                     sender.sendMessage(Util.fixColor(Lang.INFO_MSG_DISABLE));
                 } else {
                     sender.sendMessage(Util.fixColor(Lang.ERROR_MSG_ALREADYNO));

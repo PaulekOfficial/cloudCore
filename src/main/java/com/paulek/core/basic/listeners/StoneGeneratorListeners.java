@@ -2,8 +2,8 @@ package com.paulek.core.basic.listeners;
 
 import com.paulek.core.Core;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Config;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -14,7 +14,7 @@ public class StoneGeneratorListeners implements Listener {
     @EventHandler
     public void onPlace(org.bukkit.event.block.BlockPlaceEvent event) {
 
-        if (Config.ENABLE_STONEGENERATOR) {
+        if (Config.STONEGENERATOR_ENABLE) {
 
             Block block = event.getBlock();
             Location loc = new Location(block.getWorld(), block.getX(), block.getY() - 1.0D, block.getZ());
@@ -34,7 +34,7 @@ public class StoneGeneratorListeners implements Listener {
     @EventHandler
     public void onBroke(org.bukkit.event.block.BlockBreakEvent event){
 
-        if(Config.ENABLE_STONEGENERATOR) {
+        if(Config.STONEGENERATOR_ENABLE) {
 
             final Block block1 = event.getBlock();
             Location loc1 = block1.getLocation();
@@ -54,7 +54,7 @@ public class StoneGeneratorListeners implements Listener {
                             block1.setType(Material.STONE);
                         }
                     }
-                }, Config.SETTINGS_STONEGENERATOR_REGENERATE * 20);
+                }, Config.STONEGENERATOR_REGENERATETIME * 20);
 
             }
 
@@ -66,7 +66,7 @@ public class StoneGeneratorListeners implements Listener {
                             block2.setType(Material.OBSIDIAN);
                         }
                     }
-                }, Config.SETTINGS_STONEGENERATOR_REGENERATE * 20);
+                }, Config.STONEGENERATOR_REGENERATETIME * 20);
 
             }
         }

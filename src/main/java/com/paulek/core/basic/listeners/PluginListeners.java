@@ -8,8 +8,8 @@ import com.paulek.core.commands.cmds.admin.VanishCMD;
 import com.paulek.core.commands.cmds.user.SpawnCMD;
 import com.paulek.core.commands.cmds.user.TpacceptCMD;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Config;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class PluginListeners implements Listener {
 
-    private List<String> cenzored = Config.BLACKLISTED_WORDS;
+    private List<String> cenzored = Config.CHAT_BLACKLISTEDWORDS;
     private String replacecenzor = Config.CHAT_CENZOREDREPLACE;
     private HashMap<UUID, Long> slowdon = new HashMap<UUID, Long>();
     private static HashMap<String, String> groups_format = new HashMap<String, String>();
@@ -64,7 +64,7 @@ public class PluginListeners implements Listener {
         if(CombatStorage.isMarked(uuid)){
             CombatStorage.unmark(uuid);
 
-            if(Config.SETTINGS_COMBAT_BRODCASTLOGOUT) {
+            if(Config.COMBAT_BRODCASTLOGOUT) {
 
                 String s = Util.fixColor(Lang.INFO_COMBAT_BRODCASTLOGOUT).replace("{player}", event.getPlayer().getName()).replace("{health}", Double.toString((int)event.getPlayer().getHealth()) + "♥");
 
@@ -72,28 +72,20 @@ public class PluginListeners implements Listener {
 
             }
 
-            if(Config.SETTINGS_COMBAT_KILLONLOGOUT) event.getPlayer().setHealth(0.0);
+            if(Config.COMBAT_KILLONLOGOUT) event.getPlayer().setHealth(0.0);
 
         }
     }
 
     @EventHandler
     public void onPreLogin(org.bukkit.event.player.AsyncPlayerPreLoginEvent event){
+        if(Config.WHITELIST_ENABLE){
+            if(!Config.WHITELIST_ALLOWEDPLAYERS.contains(event.getName())){
 
-        if(Config.ENABLE_WHITELIST){
-
-            if(Config.SETTINGS_WHITELIST_ENABLED){
-
-                if(!Config.SETTINGS_WHITELIST_LIST.contains(event.getName())){
-
-                    event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST, Util.fixColor(Config.SETTINGS_WHITELIST_MOTD));
-
-                }
+                event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST, Util.fixColor(Config.WHITELIST_MOD));
 
             }
-
         }
-
     }
 
     @EventHandler
@@ -120,7 +112,7 @@ public class PluginListeners implements Listener {
                 return;
             }
         }
-        if(!Config.ENABLE_CHAT){
+        if(!Config.CHAT_ENABLE){
             if(!event.getPlayer().hasPermission("core.chat.disable")){
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(Util.fixColor(Lang.ERROR_CHAT_DISABLEDTYPE));
@@ -128,13 +120,13 @@ public class PluginListeners implements Listener {
             }
         }
 
-        if(Config.ENABLE_NOUPPERCASE){
+        if(Config.CHAT_ENABLE_NOUPPERCASE){
             if(!event.getPlayer().hasPermission("core.chat.nouppercase")){
                 event.setMessage(event.getMessage().toLowerCase());
             }
         }
 
-        if(Config.ENABLE_SLOWDOWN) {
+        if(Config.SLOWDOWN_ENABLED) {
             if(!event.getPlayer().hasPermission("core.chat.noslowdown")){
                 UUID uuid = event.getPlayer().getUniqueId();
                 if (slowdon.containsKey(uuid)) {
@@ -149,7 +141,7 @@ public class PluginListeners implements Listener {
                 }
             }
         }
-        if(Config.ENABLE_CENZOR){
+        if(Config.CENZOR_ENABLED){
             if(!event.getPlayer().hasPermission("core.chat.nocenzor")){
                 for (String s : cenzored){
                     event.setMessage(event.getMessage().replaceAll(s, replacecenzor));

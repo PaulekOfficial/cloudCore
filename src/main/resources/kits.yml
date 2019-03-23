@@ -1,0 +1,10 @@
+kits:
+  vip:
+    menu-name: "$aKit vip"
+    gui-item: DIAMOND_SWORD
+    permission: "kit.vip"
+    cooldown: 1000000
+    show-in-gui: true
+    description: "A simple kit"
+    content:
+      - DIAMOND_CHESTPLATE 1 name:$aKit_vip lore:$cNajlepszy_kit_na_swiecie~$cA_tu_druga_linijka fire_protection:4 durability:10

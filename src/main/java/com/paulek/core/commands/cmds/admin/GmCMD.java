@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class GmCMD extends Command{
 
     public GmCMD(){
-        super("gm", "change your gamemode", "/gm (1,2,3)", "core.gm", new String[] {"gamemode"});
+        super("gm", "change your gamemode", "/gm (1,2,3)", "core.cmd.gm", new String[] {"gamemode"});
     }
 
     @Override

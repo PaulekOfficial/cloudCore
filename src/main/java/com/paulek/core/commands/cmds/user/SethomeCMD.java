@@ -2,11 +2,11 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.User;
-import com.paulek.core.basic.data.UserStorage;
+import com.paulek.core.basic.data.Users;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Config;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ public class SethomeCMD extends Command {
     private static HashMap<String, Integer> groups_amount = new HashMap<String, Integer>();
 
     public SethomeCMD(){
-        super("sethome", "sets a home", "/sethome {name}", "core.sethome", new String[]{});
+        super("sethome", "sets a home", "/sethome {name}", "core.cmd.sethome", new String[]{});
     }
 
     @Override
@@ -40,9 +40,9 @@ public class SethomeCMD extends Command {
 
                 Location location = player.getLocation();
 
-                User user = UserStorage.getUser(player.getUniqueId());
+                User user = Users.getUser(player.getUniqueId());
 
-                if(!sender.hasPermission("core.bypass.home")) {
+                if(!sender.hasPermission("core.cmd.home.bypasslimit")) {
                     if (user.getHomes().size() >= amount) {
 
                         sender.sendMessage(Util.fixColor(Lang.ERROR_HOME_CANNOTSET));
@@ -64,7 +64,7 @@ public class SethomeCMD extends Command {
 
                 Location location = player.getLocation();
 
-                User user = UserStorage.getUser(player.getUniqueId());
+                User user = Users.getUser(player.getUniqueId());
 
                 user.addHome("home", location);
 

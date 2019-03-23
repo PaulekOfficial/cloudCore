@@ -2,8 +2,8 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Config;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class SetSpawnCMD extends Command {
 
     public SetSpawnCMD() {
-        super("setspawn", "sets spawn", "/setspawn", "core.setspawn", new String[]{});
+        super("setspawn", "sets spawn", "/setspawn", "core.cmd.setspawn", new String[]{});
     }
 
     @Override
@@ -26,11 +26,11 @@ public class SetSpawnCMD extends Command {
 
         location.getWorld().setSpawnLocation(location);
 
-        Config.SETTINGS_SPAWN_WORLD = location.getWorld().getName();
-        Config.SETTINGS_SPAWN_BLOCKX = location.getX();
-        Config.SETTINGS_SPAWN_BLOCKZ = location.getZ();
-        Config.SETTINGS_SPAWN_BLOCKY = location.getY();
-        Config.SETTINGS_SPAWN_YAW = location.getYaw();
+        Config.SPAWN_WORLD = location.getWorld().getName();
+        Config.SPAWN_BLOCK_X = location.getX();
+        Config.SPAWN_BLOCK_Z = location.getZ();
+        Config.SPAWN_BLOCK_Y = location.getY();
+        Config.SPAWN_YAW = location.getYaw();
 
 
         Config.saveConfig();

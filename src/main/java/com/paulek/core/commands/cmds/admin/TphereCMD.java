@@ -1,9 +1,9 @@
 package com.paulek.core.commands.cmds.admin;
 
-import com.paulek.core.basic.data.UserStorage;
+import com.paulek.core.basic.data.Users;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class TphereCMD extends Command {
 
     public TphereCMD(){
-        super("tphere", "teleport a player to you", "/tphere {player}", "core.tphere", new String[]{});
+        super("tphere", "teleport a player to you", "/tphere {player}", "core.cmd.tphere", new String[]{});
     }
 
     @Override
@@ -28,7 +28,7 @@ public class TphereCMD extends Command {
 
             if(Bukkit.getPlayer(nick) != null){
 
-                if(UserStorage.getUser(Bukkit.getPlayer(nick).getUniqueId()).getSettings().isTptoogle()){
+                if(Users.getUser(Bukkit.getPlayer(nick).getUniqueId()).getSettings().isTptoogle()){
 
                     sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
 

@@ -3,7 +3,7 @@ package com.paulek.core.common;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.paulek.core.basic.Skin;
-import com.paulek.core.common.configs.Config;
+import com.paulek.core.common.io.Config;
 import net.minecraft.server.v1_13_R2.ChatMessageType;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent;
 import net.minecraft.server.v1_13_R2.PacketPlayOutChat;
@@ -18,6 +18,8 @@ import org.bukkit.entity.Player;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 public class Util {
 
@@ -26,6 +28,14 @@ public class Util {
 
     public static String fixColor(String string){
         return ChatColor.translateAlternateColorCodes('$', string);
+    }
+
+    public static List<String> fixColors(List<String> string){
+        List<String> arrayList = new ArrayList<>();
+        for(String line : string){
+            arrayList.add(ChatColor.translateAlternateColorCodes('$', line));
+        }
+        return arrayList;
     }
 
     public static void copy(InputStream in, File file) {
@@ -49,13 +59,13 @@ public class Util {
 
         String uuid = getPremiumUuid(nick);
 
-        if(Config.SETTINGS_SKINS_ENABLENOPREMIUMRANDOMSKIN){
+        if(Config.SKINS_HIDENONPREMIUM){
 
             if(uuid == null){
 
                 Random random = new Random();
 
-                String randomPremiumNick = Config.SETTINGS_NONPREMIUMSKINS.get(random.nextInt(Config.SETTINGS_NONPREMIUMSKINS.size()));
+                String randomPremiumNick = Config.SKINS_SKINSFORNONPREMIUM.get(random.nextInt(Config.SKINS_SKINSFORNONPREMIUM.size()));
 
                 uuid = getPremiumUuid(randomPremiumNick);
 
@@ -151,9 +161,9 @@ public class Util {
 
     public static Location randomTeleport(World world){
         Random RAND = new Random();
-        int x = (Config.SETTINGS_RANDOMTELEPORT_MAX_X * -1) + RAND.nextInt(Config.SETTINGS_RANDOMTELEPORT_MAX_X -
-                (Config.SETTINGS_RANDOMTELEPORT_MAX_X * -1) + 1);
-        int z = (Config.SETTINGS_RANDOMTELEPORT_MAX_Z * -1) + RAND.nextInt(Config.SETTINGS_RANDOMTELEPORT_MAX_Z - (Config.SETTINGS_RANDOMTELEPORT_MAX_Z * -1) + 1);
+        int x = (Config.RTP_MAXVALUES_X * -1) + RAND.nextInt(Config.RTP_MAXVALUES_X -
+                (Config.RTP_MAXVALUES_X * -1) + 1);
+        int z = (Config.RTP_MAXVALUES_Z * -1) + RAND.nextInt(Config.RTP_MAXVALUES_Z - (Config.RTP_MAXVALUES_Z * -1) + 1);
         int y = world.getHighestBlockYAt(x, z);
         if((world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.OCEAN) || (world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.DEEP_OCEAN)
                 || (world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.FROZEN_OCEAN)){

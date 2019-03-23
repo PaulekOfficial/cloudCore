@@ -7,7 +7,7 @@ import com.paulek.core.Core;
 import com.paulek.core.basic.Skin;
 import com.paulek.core.basic.User;
 import com.paulek.core.common.*;
-import com.paulek.core.common.configs.Config;
+import com.paulek.core.common.io.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class UserStorage implements Runnable{
+public class Users implements Runnable{
 
     private static ObjectMapper mapper = new ObjectMapper();
 
@@ -27,7 +27,7 @@ public class UserStorage implements Runnable{
         return users;
     }
 
-    public UserStorage(){
+    public Users(){
         SimpleModule locationSerializerModule = new SimpleModule("LocationSerializer", new Version(1, 0, 0 ,null, null, null));
         locationSerializerModule.addSerializer(Location.class, new LocationSerializer());
 
@@ -103,7 +103,7 @@ public class UserStorage implements Runnable{
                     user.setLastlocation(onlinePlayer.getLocation());
                     user.setLastActivity(System.currentTimeMillis());
 
-                    if(Config.ENABLE_SKINS && (!Bukkit.getServer().getOnlineMode())) {
+                    if(Config.SKINS_ENABLE && (!Bukkit.getServer().getOnlineMode())) {
                         Skin skin = user.getSkin();
 
                         if (skin != null) {
@@ -127,7 +127,7 @@ public class UserStorage implements Runnable{
                     users.replace(uuid, users.get(uuid), user);
 
                     try{
-                        UserStorage.saveUserData(UserStorage.getUser(uuid));
+                        Users.saveUserData(Users.getUser(uuid));
                     } catch (IOException ioe){
                         ioe.printStackTrace();
                     }

@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class SpeedCMD extends Command {
 
     public SpeedCMD(){
-        super("speed", "change yours speed", "/speed {player} {speed}", "core.speed", new String[]{});
+        super("speed", "change yours speed", "/speed {player} {speed}", "core.cmd.speed", new String[]{});
     }
 
     @Override
@@ -37,22 +37,7 @@ public class SpeedCMD extends Command {
                         return false;
                     }
 
-                    if(a > 10){
-
-                        sender.sendMessage(Util.fixColor(Lang.ERROR_SPEED_VALUE));
-
-                        return false;
-                    }
-
-                    a = a*0.1;
-
-                    if (player.isFlying()){
-                        player.setFlySpeed((float) a);
-                        sender.sendMessage(Util.fixColor(Lang.INFO_SPEED_CHANGED));
-                    } else {
-                        player.setWalkSpeed((float) a);
-                        sender.sendMessage(Util.fixColor(Lang.INFO_SPEED_CHANGED));
-                    }
+                    if(setPlayerSpeed(player, a, sender)) return false;
 
                 } else {
                     sender.sendMessage(getUsage());
@@ -79,22 +64,7 @@ public class SpeedCMD extends Command {
                         return false;
                     }
 
-                    if(a > 10){
-
-                        sender.sendMessage(Util.fixColor(Lang.ERROR_SPEED_VALUE));
-
-                        return false;
-                    }
-
-                    a = a*0.1;
-
-                    if (player.isFlying()){
-                        player.setFlySpeed((float) a);
-                        sender.sendMessage(Util.fixColor(Lang.INFO_SPEED_CHANGED));
-                    } else {
-                        player.setWalkSpeed((float) a);
-                        sender.sendMessage(Util.fixColor(Lang.INFO_SPEED_CHANGED));
-                    }
+                   if(setPlayerSpeed(player, a, sender)) return false;
 
                     sender.sendMessage(Util.fixColor(Lang.INFO_SPEED_PLAYERCHANGED));
 
@@ -108,6 +78,26 @@ public class SpeedCMD extends Command {
 
         }
 
+        return false;
+    }
+
+    private boolean setPlayerSpeed(Player player, double a, CommandSender sender){
+        if(a > 10){
+
+            sender.sendMessage(Util.fixColor(Lang.ERROR_SPEED_VALUE));
+
+            return true;
+        }
+
+        a = a*0.1;
+
+        if (player.isFlying()){
+            player.setFlySpeed((float) a);
+            sender.sendMessage(Util.fixColor(Lang.INFO_SPEED_CHANGED));
+        } else {
+            player.setWalkSpeed((float) a);
+            sender.sendMessage(Util.fixColor(Lang.INFO_SPEED_CHANGED));
+        }
         return false;
     }
 }

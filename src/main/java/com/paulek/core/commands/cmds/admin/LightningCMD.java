@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.configs.Lang;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class LightningCMD extends Command {
 
     public LightningCMD(){
-        super("thor", "Create a lightning", "/thor {player}", "core.thor", new String[]{"lightning"});
+        super("thor", "Create a lightning", "/thor {player}", "core.cmd.thor", new String[]{"lightning"});
     }
 
     @Override

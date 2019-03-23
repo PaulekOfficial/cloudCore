@@ -1,4 +1,4 @@
-package com.paulek.core.basic;
+package com.paulek.core.basic.gui;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -31,7 +31,6 @@ public class GUIWindow {
         this.gui = new HashMap<>(rows * 9);
         this.cancellInteract = true;
         this.cancellOpen = true;
-
     }
 
     public boolean isCancellInteract() {
@@ -39,11 +38,11 @@ public class GUIWindow {
     }
 
     public void callOpen(InventoryOpenEvent event){
-        inventoryOpenEvent.event(event);
+        if(inventoryOpenEvent != null)  inventoryOpenEvent.event(event);
     }
 
     public void callClose(InventoryCloseEvent event){
-        inventoryCloseEvent.event(event);
+        if(inventoryCloseEvent != null)  inventoryCloseEvent.event(event);
     }
 
     public void setCancellInteract(boolean cancellInteract) {
@@ -71,7 +70,7 @@ public class GUIWindow {
         guiWindowMap.put(name, this);
     }
 
-    private void unregister(){
+    public void unregister(){
         registered = false;
         guiWindowMap.remove(name);
     }
@@ -85,12 +84,12 @@ public class GUIWindow {
         return gui.get(slot);
     }
 
-    public void setInventoryOpenEvent(InventoryOpenEvent event){
-        if(inventoryOpenEvent != null) this.inventoryOpenEvent.event(event);
+    public void setInventoryOpenEvent(GUIEvent<InventoryOpenEvent> event){
+        this.inventoryOpenEvent = event;
     }
 
-    public void setInventoryCloseEvent(InventoryCloseEvent event){
-        if(inventoryCloseEvent != null) this.inventoryCloseEvent.event(event);
+    public void setInventoryCloseEvent(GUIEvent<InventoryCloseEvent> event){
+        this.inventoryCloseEvent = event;
     }
 
 

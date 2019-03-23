@@ -1,6 +1,6 @@
 package com.paulek.core.basic.listeners;
 
-import com.paulek.core.common.configs.Config;
+import com.paulek.core.common.io.Config;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +12,7 @@ public class EasterEggListeners implements Listener {
     @EventHandler
     public void onShear(org.bukkit.event.player.PlayerShearEntityEvent event){
 
-        if(Config.SETTINGS_EASTEREGG_EXPLODESHEEP) {
+        if(Config.EASTEREGGS) {
 
             if (event.getEntity().getType().equals(EntityType.SHEEP)) {
 

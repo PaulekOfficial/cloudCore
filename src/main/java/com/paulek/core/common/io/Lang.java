@@ -1,4 +1,4 @@
-package com.paulek.core.common.configs;
+package com.paulek.core.common.io;
 
 import com.paulek.core.Core;
 import com.paulek.core.common.Util;
@@ -9,6 +9,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
 
 public class Lang {
 
@@ -173,7 +175,17 @@ public class Lang {
     public static String INFO_WHITELIST_ON = "$aEnabled whitelist";
     public static String ERROR_WHITELIST_OFF = "$cWhitelist is already disabled!";
     public static String INFO_WHITELIST_OFF = "$aDisabled whitelist!";
-    public static String INFO_GC = "$aServer status: \n $afree memory: {freememory} \n $amax memory: {maxmemory} \n $atotal memory: {totalmemory} \n \n $atps: {tps} \n \n $aloaded chunks: {chunks} \n $aloaded entities: {entities} \n tasks: {tasks}";
+    public static String INFO_GC = "$aServer status: /n $afree memory: {freememory} /n $amax memory: {maxmemory} /n $atotal memory: {totalmemory} /n /n $atps: {tps} /n /n $aloaded chunks: {chunks} /n $aloaded entities: {entities} /n tasks: {tasks}";
+    public static String INFO_KIT_SUCCES = "$aUdalo ci sie uzyskac kit {kit}";
+    public static String INFO_KIT_GUINAME = "$aKity/Zestawy";
+    public static List<String> INFO_KIT_LORE = Arrays.asList("$aDostepny dla ciebie: {availability}", "{availablein}");
+    public static String INFO_KIT_YES = "$aTAK";
+    public static String INFO_KIT_NO = "$cNIE";
+    public static String ERROR_KIT_WAIT = "$aAby uzyskac ten zestaw musisz odczekac {time}";
+    public static String ERROR_KIT_NOKIT = "$aNie ma zestawu o takiej nazwie!";
+    public static String ERROR_KIT_NOPLAYER = "$ePlayer is offinle";
+    public static String INFO_KIT_GRANTED = "$aPrzyznano ci kit {kit}!";
+    public static String KIT_NOACCES = "$cBrak dostepu do tego kitu!";
 
     private static File file = new File(Core.getPlugin().getDataFolder(), "lang.yml");
     private static FileConfiguration c = null;
