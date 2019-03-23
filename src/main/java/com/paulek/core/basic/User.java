@@ -64,7 +64,7 @@ public class User {
     }
 
     private void applySkin(String lastAccountName, Player onlinePlayer){
-        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(core.getPlugin(), new Runnable() {
             @Override
             public void run() {
                 Skin skin = Util.getPremiumSkin(lastAccountName);
@@ -72,13 +72,6 @@ public class User {
                     setSkin(skin);
                     skin.applySkinForPlayers(onlinePlayer);
                     skin.updateSkinForPlayer(onlinePlayer);
-
-                    try {
-                        Users.saveUserData(Users.getUser(uuid));
-                    } catch (IOException ioe) {
-                        ioe.printStackTrace();
-                    }
-
                 }
             }
         });
@@ -225,9 +218,7 @@ public class User {
     }
 
     public void removeHome(String homeName){
-        if(homes.containsKey(homeName)){
-            homes.remove(homeName);
-        }
+        homes.remove(homeName);
         uptodate = false;
     }
 

@@ -3,15 +3,15 @@ package com.paulek.core.basic.data;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class Pms {
+public class Pms{
 
-    private static HashMap<UUID, String> messages = new HashMap<UUID, String>();
+    private HashMap<UUID, String> messages = new HashMap<UUID, String>();
 
-    public static HashMap<UUID, String> getMessages() {
+    public HashMap<UUID, String> getMessages() {
         return messages;
     }
 
-    public static void setMessages(HashMap<UUID, String> messages) {
-        Pms.messages = messages;
+    public void setMessages(HashMap<UUID, String> messages) {
+        messages = messages;
     }
 }

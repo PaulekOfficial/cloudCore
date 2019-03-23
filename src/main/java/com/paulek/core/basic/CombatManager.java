@@ -1,12 +1,13 @@
 package com.paulek.core.basic;
 
-import com.paulek.core.basic.data.CombatStorage;
+import com.paulek.core.Core;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 public class CombatManager implements Runnable {
 
@@ -14,11 +15,17 @@ public class CombatManager implements Runnable {
     private String message = Util.fixColor(Lang.INFO_COMBAT_ACTIONBAR);
     private String end_combat = Util.fixColor(Lang.INFO_COMBAT_ENDEDACTION);
 
+    private Core core;
+
+    public CombatManager(Core core){
+        this.core = Objects.requireNonNull(core, "Core");
+    }
+
     public void run() {
 
-        if(CombatStorage.getMarked() == null) return;
+        if(core.getCombatStorage().getMarked() == null) return;
 
-        Iterator<Warrior> i = CombatStorage.getMarked().values().iterator();
+        Iterator<Warrior> i = core.getCombatStorage().getMarked().values().iterator();
 
         while(i.hasNext()){
 

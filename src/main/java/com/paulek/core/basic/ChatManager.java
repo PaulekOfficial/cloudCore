@@ -5,23 +5,23 @@ import java.util.UUID;
 
 public class ChatManager {
 
-    public static boolean chatEnabled = true;
-    public static HashMap<UUID, Long> muted = new HashMap<UUID, Long>();
+    public boolean chatEnabled = true;
+    public HashMap<UUID, Long> muted = new HashMap<UUID, Long>();
 
 
-    public static boolean isChatEnabled() {
+    public boolean isChatEnabled() {
         return chatEnabled;
     }
 
-    public static void setChatEnabled(boolean chatEnabled) {
-        ChatManager.chatEnabled = chatEnabled;
+    public void setChatEnabled(boolean chatEnabled) {
+        this.chatEnabled = chatEnabled;
     }
 
-    public static HashMap<UUID, Long> getMuted() {
+    public HashMap<UUID, Long> getMuted() {
         return muted;
     }
 
-    public static void setMuted(HashMap<UUID, Long> muted) {
-        ChatManager.muted = muted;
+    public void setMuted(HashMap<UUID, Long> muted) {
+        this.muted = muted;
     }
 }

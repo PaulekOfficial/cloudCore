@@ -15,19 +15,26 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
-public class Users implements Runnable{
+public class Users implements Runnable {
 
-    private static ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper();
 
-    private static HashMap<UUID, User> users = new HashMap<UUID, User>();
+    private Map<UUID, User> users = new HashMap<UUID, User>();
 
-    public static HashMap<UUID, User> getUsers() {
+    public Map<UUID, User> getUsers() {
         return users;
     }
 
-    public Users(){
+    private Core core;
+
+    public Users(Core core){
+
+        this.core = Objects.requireNonNull(core, "Core");
+
         SimpleModule locationSerializerModule = new SimpleModule("LocationSerializer", new Version(1, 0, 0 ,null, null, null));
         locationSerializerModule.addSerializer(Location.class, new LocationSerializer());
 
@@ -41,7 +48,7 @@ public class Users implements Runnable{
         mapper.registerModule(locationDeserializerModule);
         mapper.registerModule(skinDeserializerModule);
 
-        File directory = new File("./plugins/clCore/users");
+        File directory = new File(core.getPlugin().getDataFolder(), "users");
 
         if(!directory.exists()){
             directory.mkdir();
@@ -64,23 +71,21 @@ public class Users implements Runnable{
             consoleLog.info("Loaded " + loadedUsers + " users. Took: " + timeTook + "ms.");
         }
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(Core.getPlugin(), this, 20*60*5, 20*60*10);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(core.getPlugin(), this, 20*60*5, 20*60*10);
 
     }
 
-    public static void removeUser(UUID uuid){
-        if(users.containsKey(uuid)){
-            users.remove(uuid);
-        }
+    public void removeUser(UUID uuid){
+        users.remove(uuid);
     }
 
-    public static void loadUser(UUID uuid){
+    public void loadUser(UUID uuid){
         Long startTime = System.currentTimeMillis();
         if(!users.containsKey(uuid)){
             User user = new User(uuid);
             users.put(uuid, user);
 
-            Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(core.getPlugin(), new Runnable() {
                 @Override
                 public void run() {
                     try {
@@ -92,7 +97,7 @@ public class Users implements Runnable{
             }, 20*60);
 
         } else {
-            Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskAsynchronously(core.getPlugin(), new Runnable() {
                 @Override
                 public void run() {
                     User user = users.get(uuid);
@@ -127,7 +132,7 @@ public class Users implements Runnable{
                     users.replace(uuid, users.get(uuid), user);
 
                     try{
-                        Users.saveUserData(Users.getUser(uuid));
+                        saveUserData(getUser(uuid));
                     } catch (IOException ioe){
                         ioe.printStackTrace();
                     }
@@ -144,7 +149,7 @@ public class Users implements Runnable{
         for(User u : users.values()){
             if(!u.isUptodate()){
                 u.setUptodate(true);
-                Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTaskAsynchronously(core.getPlugin(), new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -159,13 +164,13 @@ public class Users implements Runnable{
 
     }
 
-    public static User loadUserData(File file) throws IOException {
+    private User loadUserData(File file) throws IOException {
         return mapper.readValue(file, User.class);
     }
 
-    public static void saveUserData(User user) throws IOException{
+    public void saveUserData(User user) throws IOException{
         Long startTime = System.currentTimeMillis();
-        File file = new File("./plugins/clCore/users/" + user.getUuid().toString() + ".json");
+        File file = new File(core.getPlugin().getDataFolder(), "users/" + user.getUuid().toString() + ".json");
 
         if(!file.exists()){
             if(!file.getParentFile().exists()){
@@ -178,7 +183,7 @@ public class Users implements Runnable{
         consoleLog.info("Saved " + user.getLastAccountName() + " user file. Took: " + timeTook + "ms.");
     }
 
-    public static User getUser(UUID uuid){
+    public User getUser(UUID uuid){
         return users.get(uuid);
     }
 }

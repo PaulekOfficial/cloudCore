@@ -3,8 +3,7 @@ package com.paulek.core;
 import com.paulek.core.basic.CombatManager;
 import com.paulek.core.basic.MySQL;
 import com.paulek.core.basic.User;
-import com.paulek.core.basic.data.Rtps;
-import com.paulek.core.basic.data.Users;
+import com.paulek.core.basic.data.*;
 import com.paulek.core.basic.listeners.*;
 import com.paulek.core.commands.CommandManager;
 import com.paulek.core.commands.cmds.admin.*;
@@ -23,6 +22,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,10 +34,17 @@ import java.util.logging.Level;
 
 public class Core extends JavaPlugin{
 
-    private static Core plugin;
-    private static Permission permission = null;
-    private static Chat chat = null;
-    private static MySQL mysql;
+    private Plugin plugin;
+    private Permission permission = null;
+    private Chat chat = null;
+    private MySQL mysql;
+
+    private CombatStorage combatStorage;
+    private Drops dropsStorage;
+    private Pms pmsStorage;
+    private Rtps rtpsStorage;
+    private TpaStorage tpaStorage;
+    private Users usersStorage;
 
     @Override
     public void onEnable() {
@@ -50,13 +57,24 @@ public class Core extends JavaPlugin{
 
         Config.reloadConfig();
         Lang.reloadLang();
-        new Kits();
 
         if (!Config.ENABLED) {
             consoleLog.log("Warning! Core disabled in config!", Level.WARNING);
             this.getPluginLoader().disablePlugin(this);
             return;
         }
+
+        new Kits();
+
+        CombatManager combatManager = new CombatManager(this);
+
+        //init all storages
+        combatStorage = new CombatStorage();
+        dropsStorage = new Drops();
+        pmsStorage = new Pms();
+        rtpsStorage = new Rtps();
+        tpaStorage = new TpaStorage();
+        usersStorage = new Users(this);
 
         //Valut permissions initialization
         if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
@@ -90,7 +108,7 @@ public class Core extends JavaPlugin{
         }
 
         if (Config.COMBAT_ENABLED) {
-            Bukkit.getScheduler().runTaskTimer(this, new CombatManager(), 20, 20);
+            Bukkit.getScheduler().runTaskTimer(this, combatManager, 20, 20);
         }
 
         if (Config.STONEGENERATOR_ENABLE) {
@@ -111,21 +129,20 @@ public class Core extends JavaPlugin{
 
         }
 
-        if (Config.RTP_ENABLE) Rtps.loadButtons();
+        if (Config.RTP_ENABLE) rtpsStorage.loadButtons();
 
         PluginListeners.loadGroups();
-        new Users();
         SethomeCMD.loadGroups();
     }
 
     @Override
     public void onDisable(){
 
-        for(User u : Users.getUsers().values()){
+        for(User u : usersStorage.getUsers().values()){
 
             if(!u.isUptodate()) {
                 try {
-                    Users.saveUserData(u);
+                    usersStorage.saveUserData(u);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -135,19 +152,19 @@ public class Core extends JavaPlugin{
 
     }
 
-    public static Core getPlugin() {
+    public Plugin getPlugin() {
         return plugin;
     }
 
-    public static String getVersion(){
+    public String getVersion(){
         return plugin.getDescription().getVersion();
     }
 
-    public static Chat getChat() {
+    public Chat getChat() {
         return chat;
     }
 
-    public static Permission getPermission() {
+    public Permission getPermission() {
         return permission;
     }
 
@@ -220,7 +237,31 @@ public class Core extends JavaPlugin{
         CommandManager.registerCommand(new KitCMD());
     }
 
-    public static Connection getConnection() throws SQLException {
+    public Connection getConnection() throws SQLException {
         return mysql.getConnection();
+    }
+
+    public CombatStorage getCombatStorage() {
+        return combatStorage;
+    }
+
+    public Drops getDropsStorage() {
+        return dropsStorage;
+    }
+
+    public Pms getPmsStorage() {
+        return pmsStorage;
+    }
+
+    public Rtps getRtpsStorage() {
+        return rtpsStorage;
+    }
+
+    public TpaStorage getTpaStorage() {
+        return tpaStorage;
+    }
+
+    public Users getUsersStorage() {
+        return usersStorage;
     }
 }

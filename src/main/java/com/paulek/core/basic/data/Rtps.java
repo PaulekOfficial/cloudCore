@@ -7,33 +7,33 @@ import org.bukkit.Location;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Rtps {
+public class Rtps{
 
-    private static List<Location> buttons = new ArrayList<Location>();
-    private static List<String> but = new ArrayList<String>();
+    private List<Location> buttons = new ArrayList<Location>();
+    private List<String> but = new ArrayList<String>();
 
 
-    public static List getList(){
+    public List getList(){
         return buttons;
     }
 
-    public static void addToList(Location location){
+    public void addToList(Location location){
         String tosave = location.getWorld().getName() + "#" + location.getBlockX() + "#" + location.getBlockY() + "#" +
                 location.getBlockZ();
         but.add(tosave);
         buttons.add(location);
     }
-    public static void removeFromList(Location location){
+    public void removeFromList(Location location){
         String tosave = location.getWorld().getName() + "#" + location.getBlockX() + "#" + location.getBlockY() + "#" +
                 location.getBlockZ();
         but.remove(tosave);
         buttons.remove(location);
     }
-    public static List getStringLoc(){
+    public List getStringLoc(){
         return but;
     }
 
-    public static void loadButtons(){
+    public void loadButtons(){
         List<String> buttonstoconvert = Config.RTP_BUTTONLIST;
 
         if(buttonstoconvert == null) return;

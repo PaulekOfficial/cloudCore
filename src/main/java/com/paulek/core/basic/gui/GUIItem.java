@@ -1,6 +1,5 @@
 package com.paulek.core.basic.gui;
 
-import com.paulek.core.basic.gui.GUIEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 

@@ -8,7 +8,10 @@ import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @SerializableAs("StoneDrop")
 public class StoneDrop implements ConfigurationSerializable {
@@ -87,9 +90,7 @@ public class StoneDrop implements ConfigurationSerializable {
         }
         if(this.height.contains("=")){
 
-            if(Double.valueOf(this.height.replace("=", "")).equals(height)){
-                return true;
-            }
+            return Double.valueOf(this.height.replace("=", "")).equals(height);
 
         }
 
