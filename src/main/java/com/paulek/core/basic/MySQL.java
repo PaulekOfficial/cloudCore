@@ -10,7 +10,7 @@ public class MySQL {
 
     private HikariDataSource dataSource;
 
-    public MySQL(String host, String port, String database, String user, String password){
+    public MySQL(String host, String port, String database, String user, String password) {
 
         HikariConfig config = new HikariConfig();
 

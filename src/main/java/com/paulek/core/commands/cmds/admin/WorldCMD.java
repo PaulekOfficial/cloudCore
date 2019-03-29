@@ -1,5 +1,6 @@
 package com.paulek.core.commands.cmds.admin;
 
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.TeleportUtil;
 import com.paulek.core.common.Util;
@@ -12,8 +13,8 @@ import org.bukkit.entity.Player;
 
 public class WorldCMD extends Command {
 
-    public WorldCMD(){
-        super("world", "teleport to another world", "/world {name}", "core.cmd.world", new String[]{});
+    public WorldCMD(Core core) {
+        super("world", "teleport to another world", "/world {name}", "core.cmd.world", new String[]{}, core);
     }
 
     @Override
@@ -21,7 +22,7 @@ public class WorldCMD extends Command {
 
         if (args.length == 1) {
 
-            if(!(sender instanceof Player)){
+            if (!(sender instanceof Player)) {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
                 return false;
             }
@@ -32,7 +33,7 @@ public class WorldCMD extends Command {
 
                 Location location = world.getSpawnLocation();
 
-                new TeleportUtil(location, (Player)sender);
+                new TeleportUtil(location, (Player) sender);
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_WORLD_TELEPORTED));
 
@@ -41,11 +42,11 @@ public class WorldCMD extends Command {
                 sender.sendMessage(Util.fixColor(Lang.ERROR_WORLD_NOWORLD));
             }
 
-        } else if(args.length == 2){
+        } else if (args.length == 2) {
 
             Player player = null;
 
-            if(Bukkit.getPlayer(args[1]) != null){
+            if (Bukkit.getPlayer(args[1]) != null) {
 
                 player = Bukkit.getPlayer(args[1]);
 
@@ -80,7 +81,7 @@ public class WorldCMD extends Command {
         return false;
     }
 
-    private World getWorld(String name){
+    private World getWorld(String name) {
         World world = null;
         if (name.equalsIgnoreCase("nether")) {
 

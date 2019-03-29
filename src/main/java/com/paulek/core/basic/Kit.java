@@ -16,7 +16,7 @@ public class Kit {
     private String description;
 
 
-    public Kit(String name, String permission, ItemStack guiItem, List<ItemStack> items, boolean enabled, boolean showInGui, int cooldown, String description){
+    public Kit(String name, String permission, ItemStack guiItem, List<ItemStack> items, boolean enabled, boolean showInGui, int cooldown, String description) {
         this.name = name;
         this.permission = permission;
         this.guiItem = guiItem;
@@ -31,16 +31,16 @@ public class Kit {
         return guiItem;
     }
 
+    public void setGuiItem(ItemStack guiItem) {
+        this.guiItem = guiItem;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setGuiItem(ItemStack guiItem) {
-        this.guiItem = guiItem;
     }
 
     public String getName() {

@@ -1,5 +1,6 @@
 package com.paulek.core.commands.cmds.admin;
 
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
@@ -14,19 +15,19 @@ public class EnchantCMD extends Command {
 
     private boolean unsafeEnchants = Config.ENCHANT_UNSAFE;
 
-    public EnchantCMD(){
-        super("enchant", "enchant a item in your hand", "/enchant {enchantment type} {lvl}", "core.cmd.enchant", new String[]{});
+    public EnchantCMD(Core core) {
+        super("enchant", "enchant a item in your hand", "/enchant {enchantment type} {lvl}", "core.cmd.enchant", new String[]{}, core);
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(!(sender instanceof Player)){
+        if (!(sender instanceof Player)) {
             sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
             return false;
         }
 
-        if(args.length == 2) {
+        if (args.length == 2) {
 
             Player player = (Player) sender;
 
@@ -78,7 +79,7 @@ public class EnchantCMD extends Command {
 
             StringBuilder enchamtment_list = new StringBuilder();
 
-            for(Enchantment e : Enchantment.values()){
+            for (Enchantment e : Enchantment.values()) {
 
                 enchamtment_list.append(e.getName());
                 enchamtment_list.append(", ");

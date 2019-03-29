@@ -1,7 +1,6 @@
 package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.data.TpaStorage;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.TeleportUtil;
 import com.paulek.core.common.Util;
@@ -20,44 +19,50 @@ public class TpacceptCMD extends Command {
 
     private static HashMap<UUID, Integer> to_teleport_map = new HashMap<UUID, Integer>();
 
-    public TpacceptCMD(){
-        super("tpaccept", "accepts a teleport to player", "/tpaccept", "core.cmd.tpaccept", new String[]{});
+    public TpacceptCMD(Core core) {
+        super("tpaccept", "accepts a teleport to player", "/tpaccept", "core.cmd.tpaccept", new String[]{}, core);
+    }
+
+    public static HashMap<UUID, Integer> getTo_teleport() {
+        return to_teleport_map;
     }
 
     @Override
     public boolean execute(final CommandSender sender, String[] args) {
 
-        if(!(sender instanceof Player)){
+        if (!(sender instanceof Player)) {
             sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
             return false;
         }
 
-        final Player player = (Player)sender;
+        final Player player = (Player) sender;
         UUID uuid = player.getUniqueId();
 
-        if(TpaStorage.getToAcceptTpa(uuid) != null){
+        if (getCore().getTpaStorage().getToAcceptTpa(uuid) != null) {
 
-            if(Bukkit.getPlayer(TpaStorage.getToAcceptTpa(uuid)) != null){
+            if (Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpa(uuid)) != null) {
 
-                final Player to_teleport = Bukkit.getPlayer(TpaStorage.getToAcceptTpa(uuid));
+                final Player to_teleport = Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpa(uuid));
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPA_ACCEPT));
 
                 to_teleport.sendMessage(Util.fixColor(Lang.INFO_TPA_ACCEPTED));
 
-                TpaStorage.cancelTaskTpa(to_teleport.getUniqueId());
-                TpaStorage.removeToAcceptTpa(uuid);
+                getCore().getTpaStorage().cancelTaskTpa(to_teleport.getUniqueId());
+                getCore().getTpaStorage().removeToAcceptTpa(uuid);
 
                 BukkitTask id;
 
                 final Location location = player.getLocation();
 
-                id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
                     public void run() {
 
-                        if(Bukkit.getPlayer(to_teleport.getUniqueId()) != null) new TeleportUtil(location, to_teleport);
+                        if (Bukkit.getPlayer(to_teleport.getUniqueId()) != null)
+                            new TeleportUtil(location, to_teleport);
 
-                        if(Bukkit.getPlayer(to_teleport.getUniqueId()) != null) to_teleport.sendMessage(Util.fixColor(Lang.INFO_TPA_TELEPORT));
+                        if (Bukkit.getPlayer(to_teleport.getUniqueId()) != null)
+                            to_teleport.sendMessage(Util.fixColor(Lang.INFO_TPA_TELEPORT));
 
                         to_teleport_map.remove(to_teleport.getUniqueId());
 
@@ -70,24 +75,24 @@ public class TpacceptCMD extends Command {
                 sender.sendMessage(Util.fixColor(Lang.ERROR_TPA_NOPLAYER));
             }
 
-        } else if (TpaStorage.getToAcceptTpahere(uuid) != null) {
+        } else if (getCore().getTpaStorage().getToAcceptTpahere(uuid) != null) {
 
-            if(Bukkit.getPlayer(TpaStorage.getToAcceptTpahere(uuid)) != null) {
+            if (Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpahere(uuid)) != null) {
 
-                final Player player1 = Bukkit.getPlayer(TpaStorage.getToAcceptTpahere(uuid));
+                final Player player1 = Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpahere(uuid));
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_ACCEPTED));
 
                 player1.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_ACCEPT));
 
-                TpaStorage.cancelTaskTpahere(player.getUniqueId());
-                TpaStorage.removeToAcceptTpahere(uuid);
+                getCore().getTpaStorage().cancelTaskTpahere(player.getUniqueId());
+                getCore().getTpaStorage().removeToAcceptTpahere(uuid);
 
                 BukkitTask id;
 
-                final Location location = Bukkit.getPlayer(TpaStorage.getToAcceptTpahere(player1.getUniqueId())).getLocation();
+                final Location location = Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpahere(player1.getUniqueId())).getLocation();
 
-                id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
                     public void run() {
 
                         if (Bukkit.getPlayer(player1.getUniqueId()) != null) new TeleportUtil(location, player1);
@@ -110,9 +115,5 @@ public class TpacceptCMD extends Command {
         }
 
         return false;
-    }
-
-    public static HashMap<UUID, Integer> getTo_teleport() {
-        return to_teleport_map;
     }
 }

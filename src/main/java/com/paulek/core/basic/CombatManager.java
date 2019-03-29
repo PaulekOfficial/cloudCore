@@ -17,17 +17,17 @@ public class CombatManager implements Runnable {
 
     private Core core;
 
-    public CombatManager(Core core){
+    public CombatManager(Core core) {
         this.core = Objects.requireNonNull(core, "Core");
     }
 
     public void run() {
 
-        if(core.getCombatStorage().getMarked() == null) return;
+        if (core.getCombatStorage().getMarked() == null) return;
 
         Iterator<Warrior> i = core.getCombatStorage().getMarked().values().iterator();
 
-        while(i.hasNext()){
+        while (i.hasNext()) {
 
             Warrior p = i.next();
 
@@ -37,14 +37,16 @@ public class CombatManager implements Runnable {
 
             String a = message.replace("{coldown}", Long.toString(coldown));
 
-            if((Bukkit.getPlayer(p.getNick()) != null)) Util.sendActionbar(Bukkit.getPlayer(p.getNick()), a);
+            if ((Bukkit.getPlayer(p.getNick()) != null)) Util.sendActionbar(Bukkit.getPlayer(p.getNick()), a);
 
-            if(coldown <= 0){
+            if (coldown <= 0) {
                 i.remove();
 
-                if((Bukkit.getPlayer(p.getNick()) != null)) Util.sendActionbar(Bukkit.getPlayer(p.getNick()), end_combat);
+                if ((Bukkit.getPlayer(p.getNick()) != null))
+                    Util.sendActionbar(Bukkit.getPlayer(p.getNick()), end_combat);
 
-                if((Bukkit.getPlayer(p.getNick()) != null)) if(Config.COMBAT_CHATMESSAGE) Bukkit.getPlayer(p.getNick()).sendMessage(Util.fixColor(Lang.INFO_COMBAT_ENDCHAT));
+                if ((Bukkit.getPlayer(p.getNick()) != null)) if (Config.COMBAT_CHATMESSAGE)
+                    Bukkit.getPlayer(p.getNick()).sendMessage(Util.fixColor(Lang.INFO_COMBAT_ENDCHAT));
 
             }
 

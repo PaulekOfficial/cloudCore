@@ -1,5 +1,6 @@
 package com.paulek.core.commands.cmds.admin;
 
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
@@ -7,24 +8,24 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class FlyCMD extends Command{
+public class FlyCMD extends Command {
 
-    public FlyCMD(){
-        super("fly", "allow flight", "/fly (player)", "core.cmd.fly", new String[0]);
+    public FlyCMD(Core core) {
+        super("fly", "allow flight", "/fly (player)", "core.cmd.fly", new String[]{}, core);
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
-        if(args.length == 0){
-            if(sender instanceof Player){
-                Player player = (Player)sender;
+        if (args.length == 0) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
                 setPlayersFlight(player);
             } else {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
             }
         }
-        if(args.length == 1){
-            if(sender.hasPermission("core.command.fly.other")) {
+        if (args.length == 1) {
+            if (sender.hasPermission("core.command.fly.other")) {
                 if (sender instanceof Player) {
                     Player player = null;
                     if (Bukkit.getPlayerExact(args[0]) != null) {
@@ -44,14 +45,14 @@ public class FlyCMD extends Command{
                 sender.sendMessage(error);
             }
         }
-        if(args.length > 1){
+        if (args.length > 1) {
             sender.sendMessage(this.getUsage());
         }
         return false;
     }
 
-    private void setPlayersFlight(Player player){
-        if(player.getAllowFlight()){
+    private void setPlayersFlight(Player player) {
+        if (player.getAllowFlight()) {
             player.setAllowFlight(false);
             player.sendMessage(Util.fixColor(Lang.INFO_FLY_SETOFF));
         } else {

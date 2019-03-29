@@ -1,7 +1,6 @@
 package com.paulek.core.commands.cmds.user;
 
-import com.paulek.core.basic.data.Pms;
-import com.paulek.core.basic.data.Users;
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
@@ -13,8 +12,8 @@ import java.util.UUID;
 
 public class MsgCMD extends Command {
 
-    public MsgCMD(){
-        super("msg", "sends a private message", "/msg {player} {message}", "core.cmd.msg", new String[]{"wiadomosc"});
+    public MsgCMD(Core core) {
+        super("msg", "sends a private message", "/msg {player} {message}", "core.cmd.msg", new String[]{"wiadomosc"}, core);
     }
 
     @Override
@@ -23,13 +22,13 @@ public class MsgCMD extends Command {
             String tosend = args[0];
             if (Bukkit.getPlayer(tosend) != null) {
                 UUID uuid = ((Player) sender).getUniqueId();
-                if(!Pms.getMessages().containsKey(uuid)) {
-                    Pms.getMessages().put(uuid, tosend);
+                if (!getCore().getPmsStorage().getMessages().containsKey(uuid)) {
+                    getCore().getPmsStorage().getMessages().put(uuid, tosend);
                 }
                 Player send = Bukkit.getPlayer(tosend);
                 UUID u = send.getUniqueId();
-                if(!Pms.getMessages().containsKey(u)) {
-                    Pms.getMessages().put(u, sender.getName());
+                if (!getCore().getPmsStorage().getMessages().containsKey(u)) {
+                    getCore().getPmsStorage().getMessages().put(u, sender.getName());
                 }
                 String s = "";
                 for (int i = 1; i != args.length; i++) {
@@ -38,9 +37,9 @@ public class MsgCMD extends Command {
                 String message = Util.fixColor(Lang.INFO_MSG_FORMAT).replace("{message}", s);
                 send.sendMessage(message.replace("{from}", sender.getName()));
                 sender.sendMessage(message.replace("{from}", sender.getName()));
-                for(Player p : Bukkit.getOnlinePlayers()){
+                for (Player p : Bukkit.getOnlinePlayers()) {
                     UUID ue = p.getUniqueId();
-                    if(Users.getUser(ue).getSettings().isSocialspy()){
+                    if (getCore().getUsersStorage().getUser(ue).getSettings().isSocialspy()) {
                         String m = Util.fixColor(Lang.INFO_MSG_SPYFORMAT.replace("{from}", sender.getName()).replace("{to}", send.getDisplayName()).replace("{message}", s));
                         p.sendMessage(m);
                     }

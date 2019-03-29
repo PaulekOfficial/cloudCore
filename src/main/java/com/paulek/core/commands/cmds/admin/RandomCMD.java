@@ -1,6 +1,6 @@
 package com.paulek.core.commands.cmds.admin;
 
-import com.paulek.core.basic.data.Rtps;
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
@@ -15,8 +15,8 @@ import java.util.Set;
 
 public class RandomCMD extends Command {
 
-    public RandomCMD() {
-        super("randomtp", "make a randomtp button", "/rtp {setbutton, removebutton}","core.cmd.rtp" ,new String[] {"rtp"});
+    public RandomCMD(Core core) {
+        super("randomtp", "make a randomtp button", "/rtp {setbutton, removebutton}", "core.cmd.rtp", new String[]{"rtp"}, core);
     }
 
     @Override
@@ -33,12 +33,12 @@ public class RandomCMD extends Command {
             }
             if ((player.getTargetBlock((Set<Material>) null, 1).getType() == Material.LEGACY_WOOD_BUTTON) || (player.getTargetBlock((Set<Material>) null, 5).getType() == Material.STONE_BUTTON)) {
                 Location loc = player.getTargetBlock((Set<Material>) null, 1).getLocation();
-                if (Rtps.getList().contains(loc)) {
-                    Rtps.removeFromList(loc);
+                if (getCore().getRtpsStorage().getList().contains(loc)) {
+                    getCore().getRtpsStorage().removeFromList(loc);
                     Config.RTP_BUTTONLIST = null;
-                    Config.RTP_BUTTONLIST = Rtps.getStringLoc();
-                    Config.saveConfig();
-                    Config.reloadConfig();
+                    Config.RTP_BUTTONLIST = getCore().getRtpsStorage().getStringLoc();
+                    getCore().getConfiguration().saveConfig();
+                    getCore().getConfiguration().reloadConfig();
                     sender.sendMessage(Util.fixColor(Lang.INFO_RANDOMTP_REMOVED));
                 } else {
                     sender.sendMessage(Util.fixColor(Lang.ERROR_RANDOMTP_NOTREMOVED));
@@ -55,16 +55,16 @@ public class RandomCMD extends Command {
             }
             if ((player.getTargetBlock((Set<Material>) null, 1).getType() == Material.LEGACY_WOOD_BUTTON) || (player.getTargetBlock((Set<Material>) null, 5).getType() == Material.STONE_BUTTON)) {
                 Location loc = player.getTargetBlock((Set<Material>) null, 1).getLocation();
-                if (Rtps.getList().contains(loc)) {
+                if (getCore().getRtpsStorage().getList().contains(loc)) {
                     sender.sendMessage(Util.fixColor(Lang.ERROR_RANDOMTP_EXIST));
                     return false;
                 }
                 Location button = new Location(Bukkit.getWorld(loc.getWorld().getName()), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-                Rtps.addToList(button);
+                getCore().getRtpsStorage().addToList(button);
                 Config.RTP_BUTTONLIST = null;
-                Config.RTP_BUTTONLIST = Rtps.getStringLoc();
-                Config.saveConfig();
-                Config.reloadConfig();
+                Config.RTP_BUTTONLIST = getCore().getRtpsStorage().getStringLoc();
+                getCore().getConfiguration().saveConfig();
+                getCore().getConfiguration().reloadConfig();
                 sender.sendMessage(Util.fixColor(Lang.INFO_RANDOMTP_CREATED));
                 return true;
             } else {

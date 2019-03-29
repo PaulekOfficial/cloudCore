@@ -1,8 +1,8 @@
 package com.paulek.core.common.io;
 
 import com.paulek.core.Core;
+import com.paulek.core.common.ConsoleLog;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.consoleLog;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -11,11 +11,11 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Lang {
 
     private static final String prefix = "lang.";
-
     public static String ERROR_TP_NOTCORDINATES = "$eThats are not cordinates!";
     public static String ERROR_MUSTBEPLAYER = "Error! You must be a player to run this!";
     public static String ERROR_TP_NOTONLINE = "$cError! Specificed player must be online!";
@@ -186,24 +186,30 @@ public class Lang {
     public static String ERROR_KIT_NOPLAYER = "$ePlayer is offinle";
     public static String INFO_KIT_GRANTED = "$aPrzyznano ci kit {kit}!";
     public static String KIT_NOACCES = "$cBrak dostepu do tego kitu!";
-
-    private static File file = new File(Core.getPlugin().getDataFolder(), "lang.yml");
+    private static File file;
     private static FileConfiguration c = null;
+    private Core core;
 
-    public static void loadLang(){
-        try{
+    public Lang(Core core) {
+        this.core = Objects.requireNonNull(core, "Core");
+        file = new File(core.getPlugin().getDataFolder(), "lang.yml");
+        reloadLang();
+    }
 
-            if(!file.exists()){
+    public void loadLang() {
+        try {
+
+            if (!file.exists()) {
                 file.getParentFile().mkdir();
-                InputStream is = Core.getPlugin().getResource(file.getName());
-                if(is != null){
+                InputStream is = core.getPlugin().getResource(file.getName());
+                if (is != null) {
                     Util.copy(is, file);
                 }
             }
 
             c = YamlConfiguration.loadConfiguration(file);
 
-            for(Field f : Lang.class.getFields()){
+            for (Field f : Lang.class.getFields()) {
 
                 if (c.isSet(prefix + f.getName().toLowerCase().replace("_", ".")))
                     f.set(null, c.get(prefix + f.getName().toLowerCase().replace("_", ".")));
@@ -211,24 +217,23 @@ public class Lang {
             }
 
 
-
-        } catch (Exception e){
-            consoleLog.warning(e.getMessage());
+        } catch (Exception e) {
+            core.getConsoleLog().warning(e.getMessage());
         }
     }
 
-    public static void saveLang() {
+    public void saveLang() {
         try {
             for (Field f : Lang.class.getFields()) {
                 c.set(prefix + f.getName().toLowerCase().replace("_", "."), f.get(null));
             }
             c.save(file);
         } catch (Exception e) {
-            consoleLog.warning(e.getMessage());
+            core.getConsoleLog().warning(e.getMessage());
         }
     }
 
-    public static void reloadLang(){
+    public void reloadLang() {
         loadLang();
         saveLang();
     }

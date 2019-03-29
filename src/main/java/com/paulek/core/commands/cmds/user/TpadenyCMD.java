@@ -1,6 +1,6 @@
 package com.paulek.core.commands.cmds.user;
 
-import com.paulek.core.basic.data.TpaStorage;
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
@@ -12,34 +12,36 @@ import java.util.UUID;
 
 public class TpadenyCMD extends Command {
 
-    public TpadenyCMD() {
-        super("tpadeny", "deny teleport", "/tpadeny", "core.cmd.tpadeny", new String[]{});
+    public TpadenyCMD(Core core) {
+        super("tpadeny", "deny teleport", "/tpadeny", "core.cmd.tpadeny", new String[]{}, core);
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(sender instanceof Player){
+        if (sender instanceof Player) {
 
-            Player player = (Player)sender;
+            Player player = (Player) sender;
 
             UUID uuid = player.getUniqueId();
 
-            if(TpaStorage.getToAcceptTpahere(uuid) != null){
+            if (getCore().getTpaStorage().getToAcceptTpahere(uuid) != null) {
 
-                if(Bukkit.getPlayer(TpaStorage.getToAcceptTpahere(uuid)) != null) Bukkit.getPlayer(TpaStorage.getToAcceptTpahere(uuid)).sendMessage(Util.fixColor(Lang.INFO_TPADENY_REJECTED));
+                if (Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpahere(uuid)) != null)
+                    Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpahere(uuid)).sendMessage(Util.fixColor(Lang.INFO_TPADENY_REJECTED));
 
-                TpaStorage.removeToAcceptTpahere(uuid);
-                TpaStorage.cancelTaskTpahere(uuid);
+                getCore().getTpaStorage().removeToAcceptTpahere(uuid);
+                getCore().getTpaStorage().cancelTaskTpahere(uuid);
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPADENY_DENY));
 
-            } else if(TpaStorage.getToAcceptTpa(uuid) != null){
+            } else if (getCore().getTpaStorage().getToAcceptTpa(uuid) != null) {
 
-                if(Bukkit.getPlayer(TpaStorage.getToAcceptTpa(uuid)) != null) Bukkit.getPlayer(TpaStorage.getToAcceptTpa(uuid)).sendMessage(Util.fixColor(Lang.INFO_TPADENY_REJECTED));
+                if (Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpa(uuid)) != null)
+                    Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpa(uuid)).sendMessage(Util.fixColor(Lang.INFO_TPADENY_REJECTED));
 
-                TpaStorage.removeToAcceptTpa(uuid);
-                TpaStorage.cancelTaskTpa(uuid);
+                getCore().getTpaStorage().removeToAcceptTpa(uuid);
+                getCore().getTpaStorage().cancelTaskTpa(uuid);
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPADENY_DENY));
 

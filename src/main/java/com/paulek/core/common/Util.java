@@ -2,6 +2,7 @@ package com.paulek.core.common;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.paulek.core.Core;
 import com.paulek.core.basic.Skin;
 import com.paulek.core.common.io.Config;
 import net.minecraft.server.v1_13_R2.ChatMessageType;
@@ -21,18 +22,19 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 public class Util {
 
     private static String PROFILE_API = "https://api.mojang.com/users/profiles/minecraft/";
     private static String SKIN_API = "https://sessionserver.mojang.com/session/minecraft/profile/";
 
-    public static String fixColor(String string){
+    public static String fixColor(String string) {
         return ChatColor.translateAlternateColorCodes('$', string);
     }
 
-    public static List<String> fixColors(List<String> string){
+    public static List<String> fixColors(List<String> string) {
         List<String> arrayList = new ArrayList<>();
-        for(String line : string){
+        for (String line : string) {
             arrayList.add(ChatColor.translateAlternateColorCodes('$', line));
         }
         return arrayList;
@@ -55,13 +57,13 @@ public class Util {
         }
     }
 
-    public static Skin getPremiumSkin(String nick){
+    public static Skin getPremiumSkin(String nick, Core core) {
 
         String uuid = getPremiumUuid(nick);
 
-        if(Config.SKINS_HIDENONPREMIUM){
+        if (Config.SKINS_HIDENONPREMIUM) {
 
-            if(uuid == null){
+            if (uuid == null) {
 
                 Random random = new Random();
 
@@ -71,13 +73,13 @@ public class Util {
 
             }
 
-        } else if(uuid == null){
+        } else if (uuid == null) {
             return null;
         }
 
         String json = readWebsite(SKIN_API + uuid + "?unsigned=false");
 
-        if(json == null) return null;
+        if (json == null) return null;
 
         JsonParser parser = new JsonParser();
 
@@ -89,17 +91,17 @@ public class Util {
             String value = properties.get("value").getAsString();
             String signature = properties.get("signature").getAsString();
 
-            return new Skin(name, value, signature);
-        } catch (Exception e){
+            return new Skin(name, value, signature, core);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public static String getPremiumUuid(String nick){
+    public static String getPremiumUuid(String nick) {
         String json = readWebsite(PROFILE_API + nick + "?unsigned=false");
 
-        if(json == null) return null;
+        if (json == null) return null;
 
         JsonParser parser = new JsonParser();
 
@@ -113,12 +115,12 @@ public class Util {
 
             return object.get("id").getAsString();
 
-        } catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
 
-    public static String readWebsite(String url){
+    public static String readWebsite(String url) {
 
         try {
 
@@ -142,7 +144,7 @@ public class Util {
 
             return output.toString();
 
-        } catch (Exception e){
+        } catch (Exception e) {
 
             e.printStackTrace();
             return null;
@@ -156,17 +158,17 @@ public class Util {
 
         PacketPlayOutChat packetPlayOutChat = new PacketPlayOutChat(iChatBaseComponent, ChatMessageType.GAME_INFO);
 
-        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packetPlayOutChat);
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutChat);
     }
 
-    public static Location randomTeleport(World world){
+    public static Location randomTeleport(World world) {
         Random RAND = new Random();
         int x = (Config.RTP_MAXVALUES_X * -1) + RAND.nextInt(Config.RTP_MAXVALUES_X -
                 (Config.RTP_MAXVALUES_X * -1) + 1);
         int z = (Config.RTP_MAXVALUES_Z * -1) + RAND.nextInt(Config.RTP_MAXVALUES_Z - (Config.RTP_MAXVALUES_Z * -1) + 1);
         int y = world.getHighestBlockYAt(x, z);
-        if((world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.OCEAN) || (world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.DEEP_OCEAN)
-                || (world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.FROZEN_OCEAN)){
+        if ((world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.OCEAN) || (world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.DEEP_OCEAN)
+                || (world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.FROZEN_OCEAN)) {
             randomTeleport(world);
         }
         Location loc = new Location(world, x, y, z);
@@ -174,7 +176,7 @@ public class Util {
         return new Location(world, x, yfix, z);
     }
 
-    public static void sendTitle(Player player, String messageA, String messageB, int a, int b, int c){
+    public static void sendTitle(Player player, String messageA, String messageB, int a, int b, int c) {
         IChatBaseComponent Title = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + messageA + "\"}");
         IChatBaseComponent subTitle = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + messageB + "\"}");
 

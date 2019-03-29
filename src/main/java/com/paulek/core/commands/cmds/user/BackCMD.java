@@ -1,7 +1,6 @@
 package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.data.Users;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
@@ -19,25 +18,29 @@ public class BackCMD extends Command {
 
     private static HashMap<UUID, Integer> to_teleport = new HashMap<UUID, Integer>();
 
-    public BackCMD() {
-        super("back", "teleports to the last place of stay", "/back", "core.cmd.back", new String[]{});
+    public BackCMD(Core core) {
+        super("back", "teleports to the last place of stay", "/back", "core.cmd.back", new String[]{}, core);
+    }
+
+    public static HashMap<UUID, Integer> getTo_teleport() {
+        return to_teleport;
     }
 
     @Override
     public boolean execute(final CommandSender sender, String[] args) {
-        if(!(sender instanceof Player)){
+        if (!(sender instanceof Player)) {
             sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
             return false;
         }
 
-        final Player player = (Player)sender;
+        final Player player = (Player) sender;
 
         final UUID uuid = player.getUniqueId();
 
-        if(Users.getUser(uuid).getLastlocation() != null){
+        if (getCore().getUsersStorage().getUser(uuid).getLastlocation() != null) {
 
-            if(sender.hasPermission("core.wait.bypass")){
-                Location location = Users.getUser(uuid).getLastlocation();
+            if (sender.hasPermission("core.wait.bypass")) {
+                Location location = getCore().getUsersStorage().getUser(uuid).getLastlocation();
 
                 player.teleport(location);
 
@@ -49,9 +52,9 @@ public class BackCMD extends Command {
 
             BukkitTask id;
 
-            id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+            id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
                 public void run() {
-                    Location location = Users.getUser(uuid).getLastlocation();
+                    Location location = getCore().getUsersStorage().getUser(uuid).getLastlocation();
 
                     player.teleport(location);
 
@@ -67,9 +70,5 @@ public class BackCMD extends Command {
         }
 
         return false;
-    }
-
-    public static HashMap<UUID, Integer> getTo_teleport() {
-        return to_teleport;
     }
 }

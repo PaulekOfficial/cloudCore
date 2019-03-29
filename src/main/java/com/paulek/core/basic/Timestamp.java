@@ -5,20 +5,20 @@ public class Timestamp {
     private long endTime;
     private String className;
 
-    public Timestamp(String className, long endTime){
+    public Timestamp(String className, long endTime) {
         this.className = className;
         this.endTime = endTime;
     }
 
-    public boolean applicable(){
-        if(endTime >= System.currentTimeMillis()){
+    public boolean applicable() {
+        if (endTime >= System.currentTimeMillis()) {
             return true;
         }
 
         return false;
     }
 
-    public String timeLeft(){
+    public String timeLeft() {
 
         int timeLeft = (int) ((endTime - System.currentTimeMillis()) / 1000L);
 
@@ -36,15 +36,15 @@ public class Timestamp {
 
         StringBuilder time = new StringBuilder();
 
-        if(days >= 1){
+        if (days >= 1) {
             time.append(days);
             time.append("d ");
         }
-        if(hours >= 1){
+        if (hours >= 1) {
             time.append(hours);
             time.append("h ");
         }
-        if(minutes >= 1){
+        if (minutes >= 1) {
             time.append(minutes);
             time.append("min ");
         }

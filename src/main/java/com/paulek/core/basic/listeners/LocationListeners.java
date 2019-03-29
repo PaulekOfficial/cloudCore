@@ -15,11 +15,11 @@ import java.util.UUID;
 public class LocationListeners implements Listener {
 
     @EventHandler
-    public void onMove(org.bukkit.event.player.PlayerMoveEvent event){
+    public void onMove(org.bukkit.event.player.PlayerMoveEvent event) {
 
         UUID uuid = event.getPlayer().getUniqueId();
 
-        if(SpawnCMD.getIn_detly().containsKey(uuid)) {
+        if (SpawnCMD.getIn_detly().containsKey(uuid)) {
 
             if ((event.getFrom().getBlockX() < event.getTo().getBlockX()) || (event.getFrom().getBlockZ() < event.getTo().getBlockZ()) || (event.getFrom().getBlockY() < event.getTo().getBlockY())) {
 
@@ -34,7 +34,7 @@ public class LocationListeners implements Listener {
             }
         }
 
-        if(BackCMD.getTo_teleport().containsKey(uuid)){
+        if (BackCMD.getTo_teleport().containsKey(uuid)) {
             if ((event.getFrom().getBlockX() < event.getTo().getBlockX()) || (event.getFrom().getBlockZ() < event.getTo().getBlockZ()) || (event.getFrom().getBlockY() < event.getTo().getBlockY())) {
                 int id = BackCMD.getTo_teleport().get(uuid);
 
@@ -46,7 +46,7 @@ public class LocationListeners implements Listener {
             }
         }
 
-        if(TpacceptCMD.getTo_teleport().containsKey(uuid)) {
+        if (TpacceptCMD.getTo_teleport().containsKey(uuid)) {
 
             if ((event.getFrom().getBlockX() < event.getTo().getBlockX()) || (event.getFrom().getBlockZ() < event.getTo().getBlockZ()) || (event.getFrom().getBlockY() < event.getTo().getBlockY())) {
 
@@ -61,7 +61,7 @@ public class LocationListeners implements Listener {
             }
         }
 
-        if(HomeCMD.getTo_teleport().containsKey(uuid)){
+        if (HomeCMD.getTo_teleport().containsKey(uuid)) {
             if ((event.getFrom().getBlockX() < event.getTo().getBlockX()) || (event.getFrom().getBlockZ() < event.getTo().getBlockZ()) || (event.getFrom().getBlockY() < event.getTo().getBlockY())) {
 
                 int id = HomeCMD.getTo_teleport().get(uuid);

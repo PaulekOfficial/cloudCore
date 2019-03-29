@@ -1,5 +1,6 @@
 package com.paulek.core.commands.cmds.admin;
 
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
@@ -8,14 +9,14 @@ import org.bukkit.command.CommandSender;
 
 public class WhitelistCMD extends Command {
 
-    public WhitelistCMD(){
-        super("whitelist", "menage your whitelist", "/whitelist {set/add/remove/motd} {on/off|player|motd}", "core.cmd.whitelist", new String[]{});
+    public WhitelistCMD(Core core) {
+        super("whitelist", "menage your whitelist", "/whitelist {set/add/remove/motd} {on/off|player|motd}", "core.cmd.whitelist", new String[]{}, core);
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(args.length >= 1) {
+        if (args.length >= 1) {
 
             if (args[0].equalsIgnoreCase("motd")) {
 
@@ -35,8 +36,8 @@ public class WhitelistCMD extends Command {
                     }
 
                     Config.WHITELIST_MOD = stringBuilder.toString();
-                    Config.saveConfig();
-                    Config.reloadConfig();
+                    getCore().getConfiguration().saveConfig();
+                    getCore().getConfiguration().reloadConfig();
 
                     sender.sendMessage(Util.fixColor(Lang.INFO_WHITELIST_SETMOTD.replace("{motd}", stringBuilder.toString())));
 
@@ -51,8 +52,8 @@ public class WhitelistCMD extends Command {
                         if (!Config.WHITELIST_ENABLE) {
 
                             Config.WHITELIST_ENABLE = true;
-                            Config.saveConfig();
-                            Config.reloadConfig();
+                            getCore().getConfiguration().saveConfig();
+                            getCore().getConfiguration().reloadConfig();
 
                             sender.sendMessage(Util.fixColor(Lang.INFO_WHITELIST_ON));
 
@@ -68,8 +69,8 @@ public class WhitelistCMD extends Command {
                         if (Config.WHITELIST_ENABLE) {
 
                             Config.WHITELIST_ENABLE = false;
-                            Config.saveConfig();
-                            Config.reloadConfig();
+                            getCore().getConfiguration().saveConfig();
+                            getCore().getConfiguration().reloadConfig();
 
                             sender.sendMessage(Util.fixColor(Lang.INFO_WHITELIST_OFF));
 
@@ -102,8 +103,8 @@ public class WhitelistCMD extends Command {
                     if (!Config.WHITELIST_ALLOWEDPLAYERS.contains(nick)) {
 
                         Config.WHITELIST_ALLOWEDPLAYERS.add(nick);
-                        Config.saveConfig();
-                        Config.reloadConfig();
+                        getCore().getConfiguration().saveConfig();
+                        getCore().getConfiguration().reloadConfig();
 
                         sender.sendMessage(Util.fixColor(Lang.INFO_WHITELIST_ADD));
 
@@ -117,11 +118,10 @@ public class WhitelistCMD extends Command {
                     return false;
                 }
 
-            } else if(args[0].equalsIgnoreCase("remove")){
+            } else if (args[0].equalsIgnoreCase("remove")) {
 
 
-
-            }else {
+            } else {
 
                 sender.sendMessage(getUsage());
 

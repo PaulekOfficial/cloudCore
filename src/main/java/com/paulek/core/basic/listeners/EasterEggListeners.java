@@ -10,9 +10,9 @@ import java.util.Random;
 public class EasterEggListeners implements Listener {
 
     @EventHandler
-    public void onShear(org.bukkit.event.player.PlayerShearEntityEvent event){
+    public void onShear(org.bukkit.event.player.PlayerShearEntityEvent event) {
 
-        if(Config.EASTEREGGS) {
+        if (Config.EASTEREGGS) {
 
             if (event.getEntity().getType().equals(EntityType.SHEEP)) {
 

@@ -1,7 +1,7 @@
 package com.paulek.core.commands.cmds.user;
 
+import com.paulek.core.Core;
 import com.paulek.core.basic.User;
-import com.paulek.core.basic.data.Users;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
@@ -10,21 +10,21 @@ import org.bukkit.entity.Player;
 
 public class DelhomeCMD extends Command {
 
-    public DelhomeCMD(){
-        super("delhome", "delete a home", "/delhome {name}", "core.cmd.delhome", new String[]{});
+    public DelhomeCMD(Core core) {
+        super("delhome", "delete a home", "/delhome {name}", "core.cmd.delhome", new String[]{}, core);
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
 
             Player player = (Player) sender;
-            User user = Users.getUser(player.getUniqueId());
+            User user = getCore().getUsersStorage().getUser(player.getUniqueId());
 
             if (args.length == 0) {
 
-                if(user.getHome("home") != null){
+                if (user.getHome("home") != null) {
 
                     user.removeHome("home");
 
@@ -38,7 +38,7 @@ public class DelhomeCMD extends Command {
 
             } else if (args.length == 1) {
 
-                if(user.getHome(args[0]) != null){
+                if (user.getHome(args[0]) != null) {
 
                     user.removeHome(args[0]);
 

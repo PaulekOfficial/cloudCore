@@ -9,7 +9,15 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.Objects;
+
 public class StoneGeneratorListeners implements Listener {
+
+    private Core core;
+
+    public StoneGeneratorListeners(Core core) {
+        this.core = Objects.requireNonNull(core, "Core");
+    }
 
     @EventHandler
     public void onPlace(org.bukkit.event.block.BlockPlaceEvent event) {
@@ -20,11 +28,11 @@ public class StoneGeneratorListeners implements Listener {
             Location loc = new Location(block.getWorld(), block.getX(), block.getY() - 1.0D, block.getZ());
             Block sb = loc.getBlock();
             if ((block.getType() == Material.STONE) && (sb.getType() == Material.END_STONE)) {
-                sb.getWorld().spawnParticle(Particle.REDSTONE, sb.getLocation(), 10, 5, 5 , 5, new Particle.DustOptions(Color.GRAY, 10));
+                sb.getWorld().spawnParticle(Particle.REDSTONE, sb.getLocation(), 10, 5, 5, 5, new Particle.DustOptions(Color.GRAY, 10));
                 event.getPlayer().sendMessage(Util.fixColor(Lang.INFO_STONEGENERATOR_PLACE));
             }
             if ((block.getType() == Material.OBSIDIAN) && (sb.getType() == Material.END_STONE)) {
-                sb.getWorld().spawnParticle(Particle.REDSTONE, sb.getLocation(), 10, 5, 5 , 5, new Particle.DustOptions(Color.GRAY, 10));
+                sb.getWorld().spawnParticle(Particle.REDSTONE, sb.getLocation(), 10, 5, 5, 5, new Particle.DustOptions(Color.GRAY, 10));
                 event.getPlayer().sendMessage(Util.fixColor(Lang.INFO_STONEGENERATOR_PLACE));
             }
 
@@ -32,9 +40,9 @@ public class StoneGeneratorListeners implements Listener {
     }
 
     @EventHandler
-    public void onBroke(org.bukkit.event.block.BlockBreakEvent event){
+    public void onBroke(org.bukkit.event.block.BlockBreakEvent event) {
 
-        if(Config.STONEGENERATOR_ENABLE) {
+        if (Config.STONEGENERATOR_ENABLE) {
 
             final Block block1 = event.getBlock();
             Location loc1 = block1.getLocation();
@@ -48,7 +56,7 @@ public class StoneGeneratorListeners implements Listener {
 
             if ((block1.getType() == Material.STONE) && (sb1.getType() == Material.END_STONE)) {
 
-                Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTaskLater(core.getPlugin(), new Runnable() {
                     public void run() {
                         if (sb1.getType() == Material.END_STONE) {
                             block1.setType(Material.STONE);
@@ -60,7 +68,7 @@ public class StoneGeneratorListeners implements Listener {
 
             if ((block2.getType() == Material.OBSIDIAN) && (sb2.getType() == Material.END_STONE)) {
 
-                Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTaskLater(core.getPlugin(), new Runnable() {
                     public void run() {
                         if (sb2.getType() == Material.END_STONE) {
                             block2.setType(Material.OBSIDIAN);

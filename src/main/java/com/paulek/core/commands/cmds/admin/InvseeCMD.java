@@ -1,5 +1,6 @@
 package com.paulek.core.commands.cmds.admin;
 
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
@@ -9,14 +10,14 @@ import org.bukkit.entity.Player;
 
 public class InvseeCMD extends Command {
 
-    public InvseeCMD() {
-        super("invsee", "open player inventory", "/invsee {player}", "core.cmd.invsee", new String[]{"inv"});
+    public InvseeCMD(Core core) {
+        super("invsee", "open player inventory", "/invsee {player}", "core.cmd.invsee", new String[]{"inv"}, core);
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
 
             if (args.length == 1) {
 

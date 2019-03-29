@@ -2,8 +2,8 @@ package com.paulek.core.common.io;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.Kit;
+import com.paulek.core.common.ConsoleLog;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.consoleLog;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,48 +12,50 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Kits {
 
-    private static Map<String, Kit> kits = new HashMap<>();
-    private File file = new File(Core.getPlugin().getDataFolder(), "kits.yml");
-    private static YamlConfiguration fileConfiguration;
+    private Map<String, Kit> kits = new HashMap<>();
+    private File file;
+    private YamlConfiguration fileConfiguration;
+    private Core core;
 
-    public Kits(){
+    public Kits(Core core) {
+        this.core = Objects.requireNonNull(core, "Core");
+        file = new File(core.getPlugin().getDataFolder(), "kits.yml");
         create();
         load();
     }
 
-    public static void reload(){
+    public void reload() {
         kits = new HashMap<>();
-        new Kits();
+        create();
+        load();
     }
 
-    private void create(){
-        consoleLog.info("Initializing kits...");
-        if(!file.exists()){
+    private void create() {
+        core.getConsoleLog().info("Initializing kits...");
+        if (!file.exists()) {
             file.getParentFile().mkdir();
-            Core.getPlugin().saveResource("kits.yml", true);
+            core.getPlugin().saveResource("kits.yml", true);
         }
     }
 
-    private void load(){
+    private void load() {
         fileConfiguration = YamlConfiguration.loadConfiguration(file);
 
         ConfigurationSection cs = fileConfiguration.getConfigurationSection("kits");
 
-        for(String kit : cs.getKeys(false)){
+        for (String kit : cs.getKeys(false)) {
 
             ConfigurationSection kitConfiguration = cs.getConfigurationSection(kit);
 
             String name = Util.fixColor(kitConfiguration.getString("menu-name"));
             String[] material = kitConfiguration.getString("gui-item").split(":");
             ItemStack guiItem = new ItemStack(Material.getMaterial(material[0]), 1);
-            if(material.length == 2) guiItem = new ItemStack(Material.getMaterial(material[0]), 1, Short.valueOf(material[1]));
+            if (material.length == 2)
+                guiItem = new ItemStack(Material.getMaterial(material[0]), 1, Short.valueOf(material[1]));
             ItemMeta im = guiItem.getItemMeta();
             im.setDisplayName(Util.fixColor(name));
             guiItem.setItemMeta(im);
@@ -63,7 +65,7 @@ public class Kits {
             boolean showInGui = kitConfiguration.getBoolean("show-in-gui");
             List<ItemStack> content = new ArrayList<>();
 
-            for(String item : kitConfiguration.getStringList("content")){
+            for (String item : kitConfiguration.getStringList("content")) {
 
                 String itemName = "";
                 int amount = 1;
@@ -78,42 +80,43 @@ public class Kits {
 
                 itemMaterial = Material.getMaterial(materials[0]);
 
-                if(item.length() >= 2) amount = Integer.valueOf(items[1]);
+                if (item.length() >= 2) amount = Integer.valueOf(items[1]);
 
 
-                for(String s : items) {
+                for (String s : items) {
 
                     boolean elementRead = false;
 
-                    if(s.contains("name:") && !elementRead){
+                    if (s.contains("name:") && !elementRead) {
                         String kitName = s.replace("name:", "");
                         itemName = Util.fixColor(kitName.replace("_", " "));
                         elementRead = true;
                     }
 
-                    if(s.contains("lore:") && !elementRead){
+                    if (s.contains("lore:") && !elementRead) {
                         String[] kitLore = s.replace("lore:", "").split("~");
-                        for(String klore : kitLore) {
+                        for (String klore : kitLore) {
                             lore.add(Util.fixColor(klore.replace("_", " ")));
                         }
                         elementRead = true;
                     }
 
-                    if(s.contains("durability:") && !elementRead){
+                    if (s.contains("durability:") && !elementRead) {
                         durability = Short.valueOf(s.replace("durability:", ""));
                         elementRead = true;
                     }
 
-                    if(s.contains(":") && !elementRead){
+                    if (s.contains(":") && !elementRead) {
                         String[] enchantment = s.split(":");
                         Enchantment e = Enchantment.getByName(enchantment[0].toUpperCase());
-                        if(e != null) enchants.put(e, Integer.valueOf(enchantment[1]));
+                        if (e != null) enchants.put(e, Integer.valueOf(enchantment[1]));
                     }
 
                 }
 
                 ItemStack is = new ItemStack(itemMaterial, amount);
-                if(materials.length == 2) is = new ItemStack(Material.getMaterial(materials[0]), amount, Short.valueOf(materials[1]));
+                if (materials.length == 2)
+                    is = new ItemStack(Material.getMaterial(materials[0]), amount, Short.valueOf(materials[1]));
                 is.setDurability(durability);
                 is.addUnsafeEnchantments(enchants);
                 ItemMeta m = is.getItemMeta();
@@ -124,13 +127,13 @@ public class Kits {
             }
 
             kits.put(kit, new Kit(name, permission, guiItem, content, true, showInGui, cooldown, description));
-            consoleLog.info("Loaded kit: " + Util.fixColor(name));
+            core.getConsoleLog().info("Loaded kit: " + Util.fixColor(name));
 
         }
 
     }
 
-    public static Map<String, Kit> getKits() {
+    public Map<String, Kit> getKits() {
         return kits;
     }
 }

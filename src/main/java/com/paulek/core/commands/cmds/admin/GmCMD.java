@@ -1,5 +1,6 @@
 package com.paulek.core.commands.cmds.admin;
 
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
@@ -8,20 +9,20 @@ import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class GmCMD extends Command{
+public class GmCMD extends Command {
 
-    public GmCMD(){
-        super("gm", "change your gamemode", "/gm (1,2,3)", "core.cmd.gm", new String[] {"gamemode"});
+    public GmCMD(Core core) {
+        super("gm", "change your gamemode", "/gm (1,2,3)", "core.cmd.gm", new String[]{"gamemode"}, core);
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
-        if(args.length < 1){
-            sender.sendMessage("§c"+this.getUsage());
+        if (args.length < 1) {
+            sender.sendMessage("§c" + this.getUsage());
         }
-        if(args.length == 1){
-            if(sender instanceof Player) {
-                Player player = (Player)sender;
+        if (args.length == 1) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
                 if (args[0].equalsIgnoreCase("0")) {
                     player.setGameMode(GameMode.SURVIVAL);
                     player.sendMessage(Util.fixColor(Lang.INFO_GM_CHANGE.replace("{gamemode}", "SURVIVAL")));
@@ -54,9 +55,9 @@ public class GmCMD extends Command{
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
             }
         }
-        if(args.length == 2){
+        if (args.length == 2) {
             Player player = null;
-            if(Bukkit.getPlayerExact(args[1]) != null){
+            if (Bukkit.getPlayerExact(args[1]) != null) {
                 player = Bukkit.getPlayerExact(args[1]);
             } else {
                 sender.sendMessage(Util.fixColor(Lang.ERROR_GM_NOTONLINE));

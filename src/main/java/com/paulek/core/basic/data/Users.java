@@ -24,25 +24,20 @@ public class Users implements Runnable {
     private ObjectMapper mapper = new ObjectMapper();
 
     private Map<UUID, User> users = new HashMap<UUID, User>();
-
-    public Map<UUID, User> getUsers() {
-        return users;
-    }
-
     private Core core;
 
-    public Users(Core core){
+    public Users(Core core) {
 
         this.core = Objects.requireNonNull(core, "Core");
 
-        SimpleModule locationSerializerModule = new SimpleModule("LocationSerializer", new Version(1, 0, 0 ,null, null, null));
+        SimpleModule locationSerializerModule = new SimpleModule("LocationSerializer", new Version(1, 0, 0, null, null, null));
         locationSerializerModule.addSerializer(Location.class, new LocationSerializer());
 
         SimpleModule locationDeserializerModule = new SimpleModule("LocationDeserializer", new Version(1, 0, 0, null, null, null));
         locationDeserializerModule.addDeserializer(Location.class, new LocationDeserializer());
 
         SimpleModule skinDeserializerModule = new SimpleModule("SkinDeserializer", new Version(1, 0, 0, null, null, null));
-        locationDeserializerModule.addDeserializer(Skin.class, new SkinDeserializer());
+        locationDeserializerModule.addDeserializer(Skin.class, new SkinDeserializer(core));
 
         mapper.registerModule(locationSerializerModule);
         mapper.registerModule(locationDeserializerModule);
@@ -50,39 +45,43 @@ public class Users implements Runnable {
 
         File directory = new File(core.getPlugin().getDataFolder(), "users");
 
-        if(!directory.exists()){
+        if (!directory.exists()) {
             directory.mkdir();
         } else {
             Long startTime = System.currentTimeMillis();
             int loadedUsers = 0;
 
-            for(File f : directory.listFiles()){
+            for (File f : directory.listFiles()) {
 
                 try {
                     User user = loadUserData(f);
                     users.put(user.getUuid(), user);
                     loadedUsers++;
-                } catch (IOException ioe){
+                } catch (IOException ioe) {
                     ioe.printStackTrace();
                 }
 
             }
             int timeTook = (int) (System.currentTimeMillis() - startTime);
-            consoleLog.info("Loaded " + loadedUsers + " users. Took: " + timeTook + "ms.");
+            core.getConsoleLog().info("Loaded " + loadedUsers + " users. Took: " + timeTook + "ms.");
         }
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(core.getPlugin(), this, 20*60*5, 20*60*10);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(core.getPlugin(), this, 20 * 60 * 5, 20 * 60 * 10);
 
     }
 
-    public void removeUser(UUID uuid){
+    public Map<UUID, User> getUsers() {
+        return users;
+    }
+
+    public void removeUser(UUID uuid) {
         users.remove(uuid);
     }
 
-    public void loadUser(UUID uuid){
+    public void loadUser(UUID uuid) {
         Long startTime = System.currentTimeMillis();
-        if(!users.containsKey(uuid)){
-            User user = new User(uuid);
+        if (!users.containsKey(uuid)) {
+            User user = new User(uuid, core);
             users.put(uuid, user);
 
             Bukkit.getScheduler().runTaskLaterAsynchronously(core.getPlugin(), new Runnable() {
@@ -90,11 +89,11 @@ public class Users implements Runnable {
                 public void run() {
                     try {
                         saveUserData(user);
-                    } catch (IOException ioe){
+                    } catch (IOException ioe) {
                         ioe.printStackTrace();
                     }
                 }
-            }, 20*60);
+            }, 20 * 60);
 
         } else {
             Bukkit.getScheduler().runTaskAsynchronously(core.getPlugin(), new Runnable() {
@@ -108,7 +107,7 @@ public class Users implements Runnable {
                     user.setLastlocation(onlinePlayer.getLocation());
                     user.setLastActivity(System.currentTimeMillis());
 
-                    if(Config.SKINS_ENABLE && (!Bukkit.getServer().getOnlineMode())) {
+                    if (Config.SKINS_ENABLE && (!Bukkit.getServer().getOnlineMode())) {
                         Skin skin = user.getSkin();
 
                         if (skin != null) {
@@ -117,7 +116,7 @@ public class Users implements Runnable {
 
                             if ((432000 - timeSinceTheLastSkinUpdate) < 0) {
 
-                                skin = Util.getPremiumSkin(onlinePlayer.getDisplayName());
+                                skin = Util.getPremiumSkin(onlinePlayer.getDisplayName(), core);
 
                                 if (skin != null) {
                                     user.setSkin(skin);
@@ -131,30 +130,30 @@ public class Users implements Runnable {
 
                     users.replace(uuid, users.get(uuid), user);
 
-                    try{
+                    try {
                         saveUserData(getUser(uuid));
-                    } catch (IOException ioe){
+                    } catch (IOException ioe) {
                         ioe.printStackTrace();
                     }
                 }
             });
         }
         int timeTook = (int) (System.currentTimeMillis() - startTime);
-        consoleLog.info("Loaded " + uuid.toString() + " user file. Took: " + timeTook + "ms.");
+        core.getConsoleLog().info("Loaded " + uuid.toString() + " user file. Took: " + timeTook + "ms.");
     }
 
     @Override
-    public void run(){
+    public void run() {
 
-        for(User u : users.values()){
-            if(!u.isUptodate()){
+        for (User u : users.values()) {
+            if (!u.isUptodate()) {
                 u.setUptodate(true);
                 Bukkit.getScheduler().runTaskAsynchronously(core.getPlugin(), new Runnable() {
                     @Override
                     public void run() {
                         try {
                             saveUserData(u);
-                        } catch (IOException ioe){
+                        } catch (IOException ioe) {
                             ioe.printStackTrace();
                         }
                     }
@@ -168,22 +167,22 @@ public class Users implements Runnable {
         return mapper.readValue(file, User.class);
     }
 
-    public void saveUserData(User user) throws IOException{
+    public void saveUserData(User user) throws IOException {
         Long startTime = System.currentTimeMillis();
         File file = new File(core.getPlugin().getDataFolder(), "users/" + user.getUuid().toString() + ".json");
 
-        if(!file.exists()){
-            if(!file.getParentFile().exists()){
+        if (!file.exists()) {
+            if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdir();
             }
         }
 
         mapper.writeValue(file, user);
         int timeTook = (int) (System.currentTimeMillis() - startTime);
-        consoleLog.info("Saved " + user.getLastAccountName() + " user file. Took: " + timeTook + "ms.");
+        core.getConsoleLog().info("Saved " + user.getLastAccountName() + " user file. Took: " + timeTook + "ms.");
     }
 
-    public User getUser(UUID uuid){
+    public User getUser(UUID uuid) {
         return users.get(uuid);
     }
 }

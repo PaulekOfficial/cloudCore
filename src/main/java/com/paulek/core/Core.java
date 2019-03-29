@@ -8,11 +8,11 @@ import com.paulek.core.basic.listeners.*;
 import com.paulek.core.commands.CommandManager;
 import com.paulek.core.commands.cmds.admin.*;
 import com.paulek.core.commands.cmds.user.*;
-import com.paulek.core.common.consoleLog;
+import com.paulek.core.common.ConsoleLog;
+import com.paulek.core.common.Version;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Kits;
 import com.paulek.core.common.io.Lang;
-import com.paulek.core.common.version;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -32,13 +32,19 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
-public class Core extends JavaPlugin{
+public class Core extends JavaPlugin {
 
+    public boolean chatEnabled = true;
     private Plugin plugin;
     private Permission permission = null;
+    private ConsoleLog consoleLog;
     private Chat chat = null;
     private MySQL mysql;
-
+    private Config config;
+    private Kits kits;
+    private Lang lang;
+    private CombatManager combatManager;
+    private CommandManager commandManager;
     private CombatStorage combatStorage;
     private Drops dropsStorage;
     private Pms pmsStorage;
@@ -52,11 +58,14 @@ public class Core extends JavaPlugin{
 
         saveDefaultConfig();
 
-        version version = new version();
+        Version version = new Version(this);
         version.chceckVersion();
 
-        Config.reloadConfig();
-        Lang.reloadLang();
+        consoleLog = new ConsoleLog(this);
+
+        config = new Config(this);
+        kits = new Kits(this);
+        lang = new Lang(this);
 
         if (!Config.ENABLED) {
             consoleLog.log("Warning! Core disabled in config!", Level.WARNING);
@@ -64,9 +73,7 @@ public class Core extends JavaPlugin{
             return;
         }
 
-        new Kits();
-
-        CombatManager combatManager = new CombatManager(this);
+        combatManager = new CombatManager(this);
 
         //init all storages
         combatStorage = new CombatStorage();
@@ -75,6 +82,9 @@ public class Core extends JavaPlugin{
         rtpsStorage = new Rtps();
         tpaStorage = new TpaStorage();
         usersStorage = new Users(this);
+
+        commandManager = new CommandManager(this);
+
 
         //Valut permissions initialization
         if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
@@ -94,7 +104,6 @@ public class Core extends JavaPlugin{
 
         //Spawn initialization
         if (Config.FIRSTCONFIGURATION) {
-
             Location world_dafault_spawn = Bukkit.getWorld("world").getSpawnLocation();
 
             Config.SPAWN_WORLD = world_dafault_spawn.getWorld().getName();
@@ -104,7 +113,6 @@ public class Core extends JavaPlugin{
             Config.SPAWN_YAW = world_dafault_spawn.getYaw();
 
             Config.FIRSTCONFIGURATION = false;
-            Config.reloadConfig();
         }
 
         if (Config.COMBAT_ENABLED) {
@@ -128,19 +136,14 @@ public class Core extends JavaPlugin{
             plugin.getServer().addRecipe(recipe);
 
         }
-
-        if (Config.RTP_ENABLE) rtpsStorage.loadButtons();
-
-        PluginListeners.loadGroups();
-        SethomeCMD.loadGroups();
     }
 
     @Override
-    public void onDisable(){
+    public void onDisable() {
 
-        for(User u : usersStorage.getUsers().values()){
+        for (User u : usersStorage.getUsers().values()) {
 
-            if(!u.isUptodate()) {
+            if (!u.isUptodate()) {
                 try {
                     usersStorage.saveUserData(u);
                 } catch (IOException e) {
@@ -156,7 +159,7 @@ public class Core extends JavaPlugin{
         return plugin;
     }
 
-    public String getVersion(){
+    public String getVersion() {
         return plugin.getDescription().getVersion();
     }
 
@@ -168,77 +171,89 @@ public class Core extends JavaPlugin{
         return permission;
     }
 
-    private void registerListeners(){
+    private void registerListeners() {
         consoleLog.info("Registering Listeners...");
         PluginManager pluginManager = plugin.getServer().getPluginManager();
-        pluginManager.registerEvents(new CombatListeners(), this);
+        pluginManager.registerEvents(new CombatListeners(this), this);
         pluginManager.registerEvents(new EasterEggListeners(), this);
-        pluginManager.registerEvents(new PluginListeners(), this);
-        pluginManager.registerEvents(new RandomTeleportListener(), this);
-        pluginManager.registerEvents(new StoneGeneratorListeners(),this);
-        pluginManager.registerEvents(new UserListeners(), this);
+        pluginManager.registerEvents(new PluginListeners(this), this);
+        pluginManager.registerEvents(new RandomTeleportListener(this), this);
+        pluginManager.registerEvents(new StoneGeneratorListeners(this), this);
+        pluginManager.registerEvents(new UserListeners(this), this);
         pluginManager.registerEvents(new GUIListeners(), this);
     }
 
-    private void registerCommands(){
+    private void registerCommands() {
         consoleLog.info("Registering Commands...");
-        CommandManager.registerCommand(new CoreCMD());
-        CommandManager.registerCommand(new ChatCMD());
-        CommandManager.registerCommand(new GmCMD());
-        CommandManager.registerCommand(new TpCMD());
-        CommandManager.registerCommand(new FlyCMD());
-        CommandManager.registerCommand(new HelpopCMD());
-        CommandManager.registerCommand(new WeatherCMD());
-        CommandManager.registerCommand(new TimeCMD());
-        CommandManager.registerCommand(new SpawnCMD());
-        CommandManager.registerCommand(new BackCMD());
-        CommandManager.registerCommand(new SetSpawnCMD());
-        CommandManager.registerCommand(new TpacceptCMD());
-        CommandManager.registerCommand(new TpaCMD());
-        CommandManager.registerCommand(new CombatCMD());
-        CommandManager.registerCommand(new DayCMD());
-        CommandManager.registerCommand(new NightCMD());
+        commandManager.registerCommand(new CoreCMD(this));
+        commandManager.registerCommand(new ChatCMD(this));
+        commandManager.registerCommand(new GmCMD(this));
+        commandManager.registerCommand(new TpCMD(this));
+        commandManager.registerCommand(new FlyCMD(this));
+        commandManager.registerCommand(new HelpopCMD(this));
+        commandManager.registerCommand(new WeatherCMD(this));
+        commandManager.registerCommand(new TimeCMD(this));
+        commandManager.registerCommand(new SpawnCMD(this));
+        commandManager.registerCommand(new BackCMD(this));
+        commandManager.registerCommand(new SetSpawnCMD(this));
+        commandManager.registerCommand(new TpacceptCMD(this));
+        commandManager.registerCommand(new TpaCMD(this));
+        commandManager.registerCommand(new CombatCMD(this));
+        commandManager.registerCommand(new DayCMD(this));
+        commandManager.registerCommand(new NightCMD(this));
 
-        if(Config.RTP_ENABLE) CommandManager.registerCommand(new RandomCMD());
+        if (Config.RTP_ENABLE) commandManager.registerCommand(new RandomCMD(this));
 
-        CommandManager.registerCommand(new VanishCMD());
-        CommandManager.registerCommand(new MsgCMD());
-        CommandManager.registerCommand(new MsgspyCMD());
-        CommandManager.registerCommand(new RCMD());
-        CommandManager.registerCommand(new BrodcastCMD());
-        CommandManager.registerCommand(new InvseeCMD());
-        CommandManager.registerCommand(new EnderchestCMD());
-        CommandManager.registerCommand(new SethomeCMD());
-        CommandManager.registerCommand(new HomeCMD());
-        CommandManager.registerCommand(new DragondeathCMD());
-        CommandManager.registerCommand(new SunCMD());
-        CommandManager.registerCommand(new DelhomeCMD());
-        CommandManager.registerCommand(new TpahereCMD());
-        CommandManager.registerCommand(new TpadenyCMD());
+        commandManager.registerCommand(new VanishCMD(this));
+        commandManager.registerCommand(new MsgCMD(this));
+        commandManager.registerCommand(new MsgspyCMD(this));
+        commandManager.registerCommand(new RCMD(this));
+        commandManager.registerCommand(new BrodcastCMD(this));
+        commandManager.registerCommand(new InvseeCMD(this));
+        commandManager.registerCommand(new EnderchestCMD(this));
+        commandManager.registerCommand(new SethomeCMD(this));
+        commandManager.registerCommand(new HomeCMD(this));
+        commandManager.registerCommand(new DragondeathCMD(this));
+        commandManager.registerCommand(new SunCMD(this));
+        commandManager.registerCommand(new DelhomeCMD(this));
+        commandManager.registerCommand(new TpahereCMD(this));
+        commandManager.registerCommand(new TpadenyCMD(this));
 
-        if(Config.SKINS_ENABLE) CommandManager.registerCommand(new SkinCMD());
+        if (Config.SKINS_ENABLE) commandManager.registerCommand(new SkinCMD(this));
 
-        CommandManager.registerCommand(new SpeedCMD());
-        CommandManager.registerCommand(new WorkbenchCMD());
-        CommandManager.registerCommand(new AnvilCMD());
-        CommandManager.registerCommand(new TphereCMD());
-        CommandManager.registerCommand(new TpallCMD());
-        CommandManager.registerCommand(new TptoggleCMD());
-        CommandManager.registerCommand(new EnchantCMD());
-        CommandManager.registerCommand(new JumpCMD());
-        CommandManager.registerCommand(new LightningCMD());
-        CommandManager.registerCommand(new PingCMD());
-        CommandManager.registerCommand(new WorldCMD());
+        commandManager.registerCommand(new SpeedCMD(this));
+        commandManager.registerCommand(new WorkbenchCMD(this));
+        commandManager.registerCommand(new AnvilCMD(this));
+        commandManager.registerCommand(new TphereCMD(this));
+        commandManager.registerCommand(new TpallCMD(this));
+        commandManager.registerCommand(new TptoggleCMD(this));
+        commandManager.registerCommand(new EnchantCMD(this));
+        commandManager.registerCommand(new JumpCMD(this));
+        commandManager.registerCommand(new LightningCMD(this));
+        commandManager.registerCommand(new PingCMD(this));
+        commandManager.registerCommand(new WorldCMD(this));
 
-        if(Config.WHITELIST_ENABLE) CommandManager.registerCommand(new WhitelistCMD());
+        if (Config.WHITELIST_ENABLE) commandManager.registerCommand(new WhitelistCMD(this));
 
-        CommandManager.registerCommand(new GcCMD());
+        commandManager.registerCommand(new GcCMD(this));
 
-        CommandManager.registerCommand(new KitCMD());
+        commandManager.registerCommand(new KitCMD(this));
     }
 
     public Connection getConnection() throws SQLException {
         return mysql.getConnection();
+    }
+
+    public Config getConfiguration() {
+        return config;
+    }
+
+    public Lang getLang() {
+        return lang;
+    }
+
+    public Kits getKits() {
+        return kits;
     }
 
     public CombatStorage getCombatStorage() {
@@ -263,5 +278,17 @@ public class Core extends JavaPlugin{
 
     public Users getUsersStorage() {
         return usersStorage;
+    }
+
+    public boolean isChatEnabled() {
+        return chatEnabled;
+    }
+
+    public void setChatEnabled(boolean chatEnabled) {
+        this.chatEnabled = chatEnabled;
+    }
+
+    public ConsoleLog getConsoleLog() {
+        return consoleLog;
     }
 }

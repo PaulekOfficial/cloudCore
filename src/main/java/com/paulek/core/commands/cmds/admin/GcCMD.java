@@ -1,5 +1,6 @@
 package com.paulek.core.commands.cmds.admin;
 
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
@@ -11,17 +12,17 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class GcCMD extends Command {
 
-    public GcCMD(){
-        super("gc", "Check server status", "/gc", "core.cmd.gc", new String[]{"perferomance", "status"});
+    public GcCMD(Core core) {
+        super("gc", "Check server status", "/gc", "core.cmd.gc", new String[]{"perferomance", "status"}, core);
     }
 
     //TODO to fix
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        int loadedChunks =  0;
+        int loadedChunks = 0;
         int entities = 0;
-        for(World world : Bukkit.getWorlds()){
+        for (World world : Bukkit.getWorlds()) {
             loadedChunks += world.getLoadedChunks().length;
             entities += world.getEntities().size();
         }
@@ -30,7 +31,7 @@ public class GcCMD extends Command {
         int maxMemory = (int) Runtime.getRuntime().maxMemory() / 1024 / 1024;
         double tps = MinecraftServer.getServer().recentTps[0];
         StringBuilder tasks = new StringBuilder();
-        for(BukkitTask bukkitTask : Bukkit.getScheduler().getPendingTasks()){
+        for (BukkitTask bukkitTask : Bukkit.getScheduler().getPendingTasks()) {
             StringBuilder sb = new StringBuilder();
             sb.append("taks id: ");
             sb.append(bukkitTask.getTaskId());

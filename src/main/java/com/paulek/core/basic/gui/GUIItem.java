@@ -8,7 +8,7 @@ public class GUIItem {
     private ItemStack itemStack;
     private GUIEvent<InventoryClickEvent> inventoryClickEvent;
 
-    public GUIItem(ItemStack itemStack, GUIEvent<InventoryClickEvent> inventoryClickEvent){
+    public GUIItem(ItemStack itemStack, GUIEvent<InventoryClickEvent> inventoryClickEvent) {
         this.inventoryClickEvent = inventoryClickEvent;
         this.itemStack = itemStack;
     }
@@ -18,6 +18,6 @@ public class GUIItem {
     }
 
     public void invClick(InventoryClickEvent e) {
-        if(inventoryClickEvent != null && e != null) this.inventoryClickEvent.event(e);
+        if (inventoryClickEvent != null && e != null) this.inventoryClickEvent.event(e);
     }
 }

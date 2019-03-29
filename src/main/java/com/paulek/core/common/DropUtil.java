@@ -14,29 +14,32 @@ public class DropUtil {
 
     private static Random random = new Random();
 
-    public static boolean getChance(Double chance){
+    public static boolean getChance(Double chance) {
         return chance >= 100.0 || chance >= getRandomDouble(0.0, 100.0);
     }
 
-    public static double getRandomDouble(double min, double max){
+    public static double getRandomDouble(double min, double max) {
         return random.nextDouble() * (max - min + 1D) + min;
     }
 
-    public static int getRandomInteger(int min, int max){
+    public static int getRandomInteger(int min, int max) {
         return random.nextInt(max - min + 1) + min;
     }
 
-    public static int getFortuneAmount(ItemStack itemStack){
+    public static int getFortuneAmount(ItemStack itemStack) {
 
-        switch (itemStack.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)){
+        switch (itemStack.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)) {
             case 1:
-                if(getChance(Config.DROP_FORTUNE_1_CHANCE)) return getRandomAmountFromString(Config.DROP_FORTUNE_1_AMOUNT);
+                if (getChance(Config.DROP_FORTUNE_1_CHANCE))
+                    return getRandomAmountFromString(Config.DROP_FORTUNE_1_AMOUNT);
                 break;
             case 2:
-                if(getChance(Config.DROP_FORTUNE_2_CHANCE)) return getRandomAmountFromString(Config.DROP_FORTUNE_2_AMOUNT);
+                if (getChance(Config.DROP_FORTUNE_2_CHANCE))
+                    return getRandomAmountFromString(Config.DROP_FORTUNE_2_AMOUNT);
                 break;
             case 3:
-                if(getChance(Config.DROP_FORTUNE_3_CHANCE)) return getRandomAmountFromString(Config.DROP_FORTUNE_3_AMOUNT);
+                if (getChance(Config.DROP_FORTUNE_3_CHANCE))
+                    return getRandomAmountFromString(Config.DROP_FORTUNE_3_AMOUNT);
                 break;
 
         }
@@ -44,15 +47,15 @@ public class DropUtil {
         return 0;
     }
 
-    public static int getRandomAmountFromString(String amount){
+    public static int getRandomAmountFromString(String amount) {
         String[] strings = amount.split("-");
         return getRandomInteger(Integer.valueOf(strings[0]), Integer.valueOf(strings[1]));
     }
 
-    public static void dropToPlayer(List<ItemStack> items, int exp, Player player){
+    public static void dropToPlayer(List<ItemStack> items, int exp, Player player) {
         Location location = player.getLocation();
         World world = location.getWorld();
-        for(ItemStack item : items){
+        for (ItemStack item : items) {
 
             world.dropItemNaturally(location, item);
 

@@ -15,11 +15,11 @@ import java.io.IOException;
 public class LocationDeserializer extends StdDeserializer<Location> {
 
 
-    public LocationDeserializer(){
+    public LocationDeserializer() {
         this(null);
     }
 
-    public LocationDeserializer(Class<Location> t){
+    public LocationDeserializer(Class<Location> t) {
         super(t);
     }
 
@@ -39,6 +39,6 @@ public class LocationDeserializer extends StdDeserializer<Location> {
         Float yaw = yawNode.floatValue();
         JsonNode pitchNode = node.get("pitch");
         Float pitch = pitchNode.floatValue();
-        return new Location(world, x, y ,z , yaw, pitch);
+        return new Location(world, x, y, z, yaw, pitch);
     }
 }

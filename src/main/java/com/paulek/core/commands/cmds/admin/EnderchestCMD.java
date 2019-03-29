@@ -1,5 +1,6 @@
 package com.paulek.core.commands.cmds.admin;
 
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
@@ -9,14 +10,14 @@ import org.bukkit.entity.Player;
 
 public class EnderchestCMD extends Command {
 
-    public EnderchestCMD() {
-        super("enderchest", "open a enderchest", "/enderchest {player}", "core.cmd.enderchest", new String[]{});
+    public EnderchestCMD(Core core) {
+        super("enderchest", "open a enderchest", "/enderchest {player}", "core.cmd.enderchest", new String[]{}, core);
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             if (args.length == 0) {
 
                 Player player = (Player) sender;
@@ -25,11 +26,11 @@ public class EnderchestCMD extends Command {
 
             } else if (args.length == 1) {
 
-                if(Bukkit.getPlayer(args[0]) != null){
+                if (Bukkit.getPlayer(args[0]) != null) {
 
                     Player player = Bukkit.getPlayer(args[0]);
 
-                    ((Player)sender).openInventory(player.getEnderChest());
+                    ((Player) sender).openInventory(player.getEnderChest());
 
                     sender.sendMessage(Util.fixColor(Lang.INFO_INV_ENDERCHEST));
 

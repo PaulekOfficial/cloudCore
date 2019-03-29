@@ -1,5 +1,6 @@
 package com.paulek.core.commands.cmds.admin;
 
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
@@ -13,16 +14,16 @@ import java.lang.reflect.Field;
 
 public class PingCMD extends Command {
 
-    public PingCMD(){
-        super("ping", "get player ping", "/ping {player}", "core.cmd.ping", new String[]{});
+    public PingCMD(Core core) {
+        super("ping", "get player ping", "/ping {player}", "core.cmd.ping", new String[]{}, core);
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(args.length == 0) {
+        if (args.length == 0) {
 
-            if(sender instanceof Player){
+            if (sender instanceof Player) {
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_PING_FORMAT.replace("{player}", sender.getName()).replace("{ping}", "0")));
 
@@ -33,15 +34,15 @@ public class PingCMD extends Command {
 
             EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
 
-            if(getPlayerPing(player, sender)) return false;
+            if (getPlayerPing(player, sender)) return false;
 
-        } else if(args.length == 1) {
+        } else if (args.length == 1) {
 
-            if(Bukkit.getPlayer(args[0]) != null) {
+            if (Bukkit.getPlayer(args[0]) != null) {
 
                 Player player = Bukkit.getPlayer(args[0]);
 
-                if(getPlayerPing(player, sender)) return false;
+                if (getPlayerPing(player, sender)) return false;
 
             } else {
 
@@ -57,7 +58,7 @@ public class PingCMD extends Command {
         return false;
     }
 
-    private boolean getPlayerPing(Player player, CommandSender sender){
+    private boolean getPlayerPing(Player player, CommandSender sender) {
         EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
 
         try {

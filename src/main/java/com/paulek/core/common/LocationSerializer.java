@@ -9,11 +9,11 @@ import java.io.IOException;
 
 public class LocationSerializer extends StdSerializer<Location> {
 
-    public LocationSerializer(){
+    public LocationSerializer() {
         this(null);
     }
 
-    public LocationSerializer(Class<Location> t){
+    public LocationSerializer(Class<Location> t) {
         super(t);
     }
 

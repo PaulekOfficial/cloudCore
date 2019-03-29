@@ -8,7 +8,7 @@ public class Warrior {
     private String nick;
     private long curenttimemilirs;
 
-    public Warrior(UUID uuid, String nick){
+    public Warrior(UUID uuid, String nick) {
         this.uuid = uuid;
         this.nick = nick;
         this.curenttimemilirs = System.currentTimeMillis();

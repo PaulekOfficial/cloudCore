@@ -4,12 +4,10 @@ import com.paulek.core.Core;
 import com.paulek.core.basic.Kit;
 import com.paulek.core.basic.Timestamp;
 import com.paulek.core.basic.User;
-import com.paulek.core.basic.data.Users;
 import com.paulek.core.basic.gui.GUIItem;
 import com.paulek.core.basic.gui.GUIWindow;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
-import com.paulek.core.common.io.Kits;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -23,31 +21,31 @@ import java.util.List;
 
 public class KitCMD extends Command {
 
-    public KitCMD(){
-        super("kit", "Get a kit", "/kit (name)", "core.cmd.kit", new String[]{});
+    public KitCMD(Core core) {
+        super("kit", "Get a kit", "/kit (name)", "core.cmd.kit", new String[]{}, core);
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if (args.length == 2){
+        if (args.length == 2) {
 
-            if(!sender.hasPermission("core.cmd.kit.admin")){
+            if (!sender.hasPermission("core.cmd.kit.admin")) {
                 setPermissionMessage("core.cmd.kit.admin");
                 return false;
             }
 
             String name = args[0];
 
-            if(Kits.getKits().get(name) == null){
+            if (getCore().getKits().getKits().get(name) == null) {
                 sender.sendMessage(Util.fixColor(Lang.ERROR_KIT_NOKIT));
                 return false;
             }
 
-            if(Bukkit.getPlayer(args[1]) != null) {
+            if (Bukkit.getPlayer(args[1]) != null) {
                 Player player2 = Bukkit.getPlayer(args[1]);
 
-                Kit kit = Kits.getKits().get(name);
+                Kit kit = getCore().getKits().getKits().get(name);
 
                 GUIWindow gui = getKitWindow(kit, player2);
 
@@ -63,26 +61,26 @@ public class KitCMD extends Command {
             return false;
         }
 
-        if(!(sender instanceof Player)){
+        if (!(sender instanceof Player)) {
             sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
             return false;
         }
 
-        Player player = (Player)sender;
+        Player player = (Player) sender;
 
-        if (args.length == 1){
+        if (args.length == 1) {
 
             String kitName = args[0];
 
-            if(Kits.getKits().get(kitName) != null){
+            if (getCore().getKits().getKits().get(kitName) != null) {
 
-                User user = Users.getUser(player.getUniqueId());
+                User user = getCore().getUsersStorage().getUser(player.getUniqueId());
 
-                if(user.getTimeStamp(kitName) != null){
+                if (user.getTimeStamp(kitName) != null) {
 
                     Timestamp timestamp = user.getTimeStamp(kitName);
-                    if(timestamp.getClassName().equalsIgnoreCase("kit")){
-                        if(timestamp.applicable()){
+                    if (timestamp.getClassName().equalsIgnoreCase("kit")) {
+                        if (timestamp.applicable()) {
                             sender.sendMessage(Util.fixColor(Lang.ERROR_KIT_WAIT.replace("{time}", timestamp.timeLeft())));
                             return false;
                         } else {
@@ -93,9 +91,9 @@ public class KitCMD extends Command {
 
                 }
 
-                Kit kit = Kits.getKits().get(kitName);
+                Kit kit = getCore().getKits().getKits().get(kitName);
 
-                if(!player.hasPermission(kit.getPermission())){
+                if (!player.hasPermission(kit.getPermission())) {
                     sender.sendMessage(Util.fixColor(Lang.KIT_NOACCES));
                     return false;
                 }
@@ -106,7 +104,8 @@ public class KitCMD extends Command {
 
                 player.sendMessage(Util.fixColor(Lang.INFO_KIT_SUCCES.replace("{kit}", kitName)));
 
-                if(!player.hasPermission("core.cmd.kit.nocooldown")) user.addTimestamp(kitName, new Timestamp("kit", System.currentTimeMillis() + (kit.getCooldown() * 1000L)));
+                if (!player.hasPermission("core.cmd.kit.nocooldown"))
+                    user.addTimestamp(kitName, new Timestamp("kit", System.currentTimeMillis() + (kit.getCooldown() * 1000L)));
 
                 return false;
             }
@@ -115,18 +114,18 @@ public class KitCMD extends Command {
             return false;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(getCore().getPlugin(), new Runnable() {
             @Override
             public void run() {
 
-                User user = Users.getUser(player.getUniqueId());
+                User user = getCore().getUsersStorage().getUser(player.getUniqueId());
 
-                GUIWindow gui = new GUIWindow(Util.fixColor(Lang.INFO_KIT_GUINAME), getVaildRows(Kits.getKits().size()));
+                GUIWindow gui = new GUIWindow(Util.fixColor(Lang.INFO_KIT_GUINAME), getVaildRows(getCore().getKits().getKits().size()));
 
                 int slot = 0;
-                for (String kitName : Kits.getKits().keySet()) {
+                for (String kitName : getCore().getKits().getKits().keySet()) {
 
-                    Kit kit = Kits.getKits().get(kitName);
+                    Kit kit = getCore().getKits().getKits().get(kitName);
 
                     if (kit.isShowInGui() && sender.hasPermission(kit.getPermission())) {
 
@@ -136,19 +135,19 @@ public class KitCMD extends Command {
                         List<String> lore = new ArrayList<>();
 
                         Timestamp timestamp = null;
-                        if(user.getTimeStamp(kitName) != null) {
+                        if (user.getTimeStamp(kitName) != null) {
                             timestamp = user.getTimeStamp(kitName);
                         }
 
                         String availability = Lang.INFO_KIT_YES;
                         String timeLeft = "";
 
-                        if(timestamp != null){
-                            if(timestamp.applicable()) availability = Lang.INFO_KIT_NO;
+                        if (timestamp != null) {
+                            if (timestamp.applicable()) availability = Lang.INFO_KIT_NO;
                             timeLeft = timestamp.timeLeft();
                         }
 
-                        for(String s : Lang.INFO_KIT_LORE){
+                        for (String s : Lang.INFO_KIT_LORE) {
 
                             s = s.replace("{availability}", availability);
                             s = s.replace("{availablein}", timeLeft);
@@ -175,8 +174,8 @@ public class KitCMD extends Command {
                                 user.addTimestamp(kitName, new Timestamp("kit", System.currentTimeMillis() + (kit.getCooldown() * 1000L)));
 
                         });
-                        if(timestamp != null){
-                            if(timestamp.applicable()){
+                        if (timestamp != null) {
+                            if (timestamp.applicable()) {
                                 item = new GUIItem(itemStack, event -> {
                                     player.sendMessage(Util.fixColor(Lang.ERROR_KIT_WAIT.replace("{time}", finalTimeLeft)));
                                 });
@@ -201,7 +200,7 @@ public class KitCMD extends Command {
         return false;
     }
 
-    private GUIWindow getKitWindow(Kit kit, Player player){
+    private GUIWindow getKitWindow(Kit kit, Player player) {
 
         GUIWindow gui = new GUIWindow(Util.fixColor(kit.getName()), getVaildRows(kit.getItems().size()));
         gui.setCancellOpen(false);
@@ -222,7 +221,8 @@ public class KitCMD extends Command {
         gui.setInventoryCloseEvent(closeEvent -> {
             if (closeEvent.getInventory().getSize() > 0) {
                 for (ItemStack is : closeEvent.getInventory().getContents()) {
-                    if (is != null) closeEvent.getPlayer().getLocation().getWorld().dropItemNaturally(closeEvent.getPlayer().getLocation(), is);
+                    if (is != null)
+                        closeEvent.getPlayer().getLocation().getWorld().dropItemNaturally(closeEvent.getPlayer().getLocation(), is);
                 }
             }
             gui.unregister();
@@ -233,7 +233,7 @@ public class KitCMD extends Command {
         return gui;
     }
 
-    private int getVaildRows(int slots){
+    private int getVaildRows(int slots) {
 
         if (slots >= 46) return 6;
         if (slots >= 39) return 5;

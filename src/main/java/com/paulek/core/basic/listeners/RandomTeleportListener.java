@@ -1,7 +1,6 @@
 package com.paulek.core.basic.listeners;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.data.Rtps;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
@@ -14,12 +13,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 
+import java.util.Objects;
+
 public class RandomTeleportListener implements Listener {
 
-    @EventHandler
-    public void onInteract(org.bukkit.event.player.PlayerInteractEvent e){
+    private Core core;
 
-        if(Config.RTP_ENABLE) {
+    public RandomTeleportListener(Core core) {
+        core = Objects.requireNonNull(core, "Core");
+    }
+
+    @EventHandler
+    public void onInteract(org.bukkit.event.player.PlayerInteractEvent e) {
+
+        if (Config.RTP_ENABLE) {
 
             Action action = e.getAction();
             Block clickedb = e.getClickedBlock();
@@ -28,8 +35,8 @@ public class RandomTeleportListener implements Listener {
             if ((action == Action.RIGHT_CLICK_BLOCK) && ((clickedb.getType() == Material.OAK_BUTTON) || (clickedb.getType() == Material.STONE_BUTTON))) {
                 Location loc = clickedb.getLocation();
                 Player player = e.getPlayer();
-                if (Rtps.getList().contains(loc)) {
-                    Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                if (core.getRtpsStorage().getList().contains(loc)) {
+                    Bukkit.getScheduler().runTask(core.getPlugin(), new Runnable() {
                         @Override
                         public void run() {
 

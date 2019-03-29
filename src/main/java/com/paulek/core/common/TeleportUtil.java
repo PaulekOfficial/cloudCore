@@ -1,6 +1,6 @@
 package com.paulek.core.common;
 
-import com.paulek.core.basic.data.Users;
+import com.paulek.core.Core;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
@@ -12,7 +12,7 @@ public class TeleportUtil {
 
     public TeleportUtil(Location location, Player player) {
 
-        if(Config.TP_SAFELOCATION){
+        if (Config.TP_SAFELOCATION) {
 
             player.teleport(safeLocation(location));
 
@@ -21,6 +21,13 @@ public class TeleportUtil {
 
         player.teleport(location);
 
+    }
+
+    public static boolean hasPlayerTpToogle(Player player, Core core) {
+        if (core.getUsersStorage().getUser(player.getUniqueId()).getSettings().isTptoogle()) {
+            return true;
+        }
+        return false;
     }
 
     public Location safeLocation(Location location) {
@@ -38,15 +45,8 @@ public class TeleportUtil {
         return fixed;
     }
 
-    public static boolean hasPlayerTpToogle(Player player){
-        if(Users.getUser(player.getUniqueId()).getSettings().isTptoogle()){
-            return true;
-        }
-        return false;
-    }
-
-    public boolean infoPlayerHasTpToogle(Player player, CommandSender sender){
-        if(hasPlayerTpToogle(player)){
+    public boolean infoPlayerHasTpToogle(Player player, CommandSender sender, Core core) {
+        if (hasPlayerTpToogle(player, core)) {
 
             sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
 

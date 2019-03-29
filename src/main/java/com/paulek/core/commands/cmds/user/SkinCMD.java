@@ -1,12 +1,13 @@
 package com.paulek.core.commands.cmds.user;
 
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import org.bukkit.command.CommandSender;
 
 public class SkinCMD extends Command {
 
-    public SkinCMD(){
-        super("skin", "set yours skin", "/skin {set, clear} {nick}", "core.cmd.skin", new String[]{});
+    public SkinCMD(Core core) {
+        super("skin", "set yours skin", "/skin {set, clear} {nick}", "core.cmd.skin", new String[]{}, core);
     }
 
     //TODO to fix

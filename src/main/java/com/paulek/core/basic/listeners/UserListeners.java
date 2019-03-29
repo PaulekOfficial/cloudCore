@@ -1,5 +1,6 @@
 package com.paulek.core.basic.listeners;
 
+import com.paulek.core.Core;
 import com.paulek.core.basic.data.Users;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -7,32 +8,40 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
+import java.util.Objects;
+
 public class UserListeners implements Listener {
 
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event){
+    private Core core;
 
-        Users.loadUser(event.getPlayer().getUniqueId());
+    public UserListeners(Core core){
+        this.core = Objects.requireNonNull(core, "Ccre");
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+
+        core.getUsersStorage().loadUser(event.getPlayer().getUniqueId());
 
     }
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent event){
+    public void onQuit(PlayerQuitEvent event) {
 
-        if(Users.getUser(event.getPlayer().getUniqueId()) != null){
+        if (core.getUsersStorage().getUser(event.getPlayer().getUniqueId()) != null) {
 
-            Users.getUser(event.getPlayer().getUniqueId()).setLogoutlocation(event.getPlayer().getLocation());
-            Users.getUser(event.getPlayer().getUniqueId()).setLastActivity(System.currentTimeMillis());
+            core.getUsersStorage().getUser(event.getPlayer().getUniqueId()).setLogoutlocation(event.getPlayer().getLocation());
+            core.getUsersStorage().getUser(event.getPlayer().getUniqueId()).setLastActivity(System.currentTimeMillis());
 
         }
 
     }
 
     @EventHandler
-    public void onTeleport(PlayerTeleportEvent event){
+    public void onTeleport(PlayerTeleportEvent event) {
 
-        if(Users.getUser(event.getPlayer().getUniqueId()) != null){
-            Users.getUser(event.getPlayer().getUniqueId()).setLastlocation(event.getTo());
+        if (core.getUsersStorage().getUser(event.getPlayer().getUniqueId()) != null) {
+            core.getUsersStorage().getUser(event.getPlayer().getUniqueId()).setLastlocation(event.getTo());
         }
 
     }

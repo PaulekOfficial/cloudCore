@@ -1,5 +1,6 @@
 package com.paulek.core.commands.cmds.admin;
 
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
@@ -10,16 +11,16 @@ import org.bukkit.entity.Player;
 
 public class LightningCMD extends Command {
 
-    public LightningCMD(){
-        super("thor", "Create a lightning", "/thor {player}", "core.cmd.thor", new String[]{"lightning"});
+    public LightningCMD(Core core) {
+        super("thor", "Create a lightning", "/thor {player}", "core.cmd.thor", new String[]{"lightning"}, core);
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(args.length == 1){
+        if (args.length == 1) {
 
-            if(Bukkit.getPlayer(args[0]) != null){
+            if (Bukkit.getPlayer(args[0]) != null) {
 
                 Player player = Bukkit.getPlayer(args[0]);
 
@@ -39,12 +40,12 @@ public class LightningCMD extends Command {
             }
 
         } else {
-            if(!(sender instanceof Player)){
+            if (!(sender instanceof Player)) {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
                 return false;
             }
 
-            Player player = (Player)sender;
+            Player player = (Player) sender;
 
             Location location = player.getTargetBlock(null, 2000).getLocation();
 

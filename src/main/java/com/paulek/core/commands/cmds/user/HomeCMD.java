@@ -2,7 +2,6 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.User;
-import com.paulek.core.basic.data.Users;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.TeleportUtil;
 import com.paulek.core.common.Util;
@@ -20,30 +19,34 @@ public class HomeCMD extends Command {
 
     private static HashMap<UUID, Integer> to_teleport = new HashMap<UUID, Integer>();
 
-    public HomeCMD(){
-        super("home", "teleports to home", "/home {name}", "core.cmd.home", new String[]{});
+    public HomeCMD(Core core) {
+        super("home", "teleports to home", "/home {name}", "core.cmd.home", new String[]{}, core);
+    }
+
+    public static HashMap<UUID, Integer> getTo_teleport() {
+        return to_teleport;
     }
 
     @Override
     public boolean execute(final CommandSender sender, final String[] args) {
 
-        if(sender instanceof Player){
+        if (sender instanceof Player) {
 
-            final Player player = (Player)sender;
+            final Player player = (Player) sender;
 
-            final User user = Users.getUser(player.getUniqueId());
+            final User user = getCore().getUsersStorage().getUser(player.getUniqueId());
 
-            if(args.length == 1){
+            if (args.length == 1) {
 
-                if(user.getHome(args[0]) != null){
+                if (user.getHome(args[0]) != null) {
 
-                    if(!sender.hasPermission("core.detly.bypass")) {
+                    if (!sender.hasPermission("core.detly.bypass")) {
 
                         sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORTING));
 
                         BukkitTask id;
 
-                        id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                        id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
                             public void run() {
                                 new TeleportUtil(user.getHome(args[0]), player);
 
@@ -60,18 +63,17 @@ public class HomeCMD extends Command {
                     }
 
 
-
                 } else {
                     sender.sendMessage(Util.fixColor(Lang.ERROR_HOME_NOTEXIST.replace("{name}", args[0])));
                 }
 
-            } else if(args.length == 0){
+            } else if (args.length == 0) {
 
-                if(user.getHomes().size() > 1){
+                if (user.getHomes().size() > 1) {
 
                     String s = "";
 
-                    for(String str : user.getHomes().keySet()){
+                    for (String str : user.getHomes().keySet()) {
 
                         s += str + ", ";
 
@@ -82,15 +84,15 @@ public class HomeCMD extends Command {
 
                 }
 
-                if(user.getHome("home") != null){
+                if (user.getHome("home") != null) {
 
-                    if(!sender.hasPermission("core.detly.bypass")) {
+                    if (!sender.hasPermission("core.detly.bypass")) {
 
                         sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORTING));
 
                         BukkitTask id;
 
-                        id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                        id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
                             public void run() {
                                 player.teleport(user.getHome("home"));
 
@@ -119,9 +121,5 @@ public class HomeCMD extends Command {
         }
 
         return false;
-    }
-
-    public static HashMap<UUID, Integer> getTo_teleport() {
-        return to_teleport;
     }
 }

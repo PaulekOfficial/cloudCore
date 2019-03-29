@@ -1,5 +1,6 @@
 package com.paulek.core.commands.cmds.admin;
 
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
@@ -10,14 +11,14 @@ import org.bukkit.event.inventory.InventoryType;
 
 public class AnvilCMD extends Command {
 
-    public AnvilCMD() {
-        super("anvil", "opens a anvil", "/anvil", "core.cmd.anvil", new String[]{});
+    public AnvilCMD(Core core) {
+        super("anvil", "opens a anvil", "/anvil", "core.cmd.anvil", new String[]{}, core);
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
 
             Player player = (Player) sender;
 

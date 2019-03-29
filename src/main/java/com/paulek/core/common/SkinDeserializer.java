@@ -6,18 +6,23 @@ import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.paulek.core.Core;
 import com.paulek.core.basic.Skin;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class SkinDeserializer extends StdDeserializer<Skin> {
 
-    public SkinDeserializer(){
-        this(null);
+    private Core core;
+
+    public SkinDeserializer(Core core) {
+        this(null, core);
     }
 
-    public SkinDeserializer(Class<Skin> t){
+    public SkinDeserializer(Class<Skin> t, Core core) {
         super(t);
+        this.core = Objects.requireNonNull(core, "Core");
     }
 
 
@@ -29,6 +34,6 @@ public class SkinDeserializer extends StdDeserializer<Skin> {
         JsonNode valueNode = node.get("value");
         JsonNode signature = node.get("signature");
         JsonNode lastUpdateNode = node.get("lastUpdate");
-        return new Skin(nameNode.asText(), valueNode.asText(), signature.asText(), lastUpdateNode.asLong());
+        return new Skin(nameNode.asText(), valueNode.asText(), signature.asText(), lastUpdateNode.asLong(), core);
     }
 }

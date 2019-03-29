@@ -1,5 +1,6 @@
 package com.paulek.core.commands.cmds.admin;
 
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitTask;
@@ -11,8 +12,12 @@ public class VanishCMD extends Command {
 
     private static HashMap<UUID, BukkitTask> list = new HashMap<UUID, BukkitTask>();
 
-    public VanishCMD() {
-        super("vanish", "vanish yourself", "/v {Player}", "core.cmd.vanish", new String[] {"v"});
+    public VanishCMD(Core core) {
+        super("vanish", "vanish yourself", "/v {Player}", "core.cmd.vanish", new String[]{"v"}, core);
+    }
+
+    public static HashMap<UUID, BukkitTask> getList() {
+        return list;
     }
 
     @Override
@@ -88,9 +93,5 @@ public class VanishCMD extends Command {
 //            return false;
 //        }
         return false;
-    }
-
-    public static HashMap<UUID, BukkitTask> getList() {
-        return list;
     }
 }

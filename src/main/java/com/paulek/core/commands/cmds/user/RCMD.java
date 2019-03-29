@@ -1,7 +1,6 @@
 package com.paulek.core.commands.cmds.user;
 
-import com.paulek.core.basic.data.Pms;
-import com.paulek.core.basic.data.Users;
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
@@ -13,31 +12,31 @@ import java.util.UUID;
 
 public class RCMD extends Command {
 
-    public RCMD() {
-        super("r", "reply to a message", "/r {message}", "core.cmd.r", new String[]{});
+    public RCMD(Core core) {
+        super("r", "reply to a message", "/r {message}", "core.cmd.r", new String[]{}, core);
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
-        if(args.length != 0){
-            UUID uuid = ((Player)sender).getUniqueId();
-            if(Pms.getMessages().containsKey(uuid)) {
+        if (args.length != 0) {
+            UUID uuid = ((Player) sender).getUniqueId();
+            if (getCore().getPmsStorage().getMessages().containsKey(uuid)) {
                 String s = "";
                 for (int i = 0; i != args.length; i++) {
                     s += args[i] + " ";
                 }
                 String message = Util.fixColor(Lang.INFO_MSG_FORMAT.replace("{message}", s));
-                if(Bukkit.getPlayer(Pms.getMessages().get(uuid)) != null) {
-                    Bukkit.getPlayer(Pms.getMessages().get(uuid)).sendMessage(message.replace("{from}", sender.getName()));
+                if (Bukkit.getPlayer(getCore().getPmsStorage().getMessages().get(uuid)) != null) {
+                    Bukkit.getPlayer(getCore().getPmsStorage().getMessages().get(uuid)).sendMessage(message.replace("{from}", sender.getName()));
                     sender.sendMessage(message.replace("{from}", sender.getName()));
-                    for(Player p : Bukkit.getOnlinePlayers()){
+                    for (Player p : Bukkit.getOnlinePlayers()) {
                         UUID u = p.getUniqueId();
-                        if(Users.getUser(u).getSettings().isSocialspy()){
-                            String m = Util.fixColor(Lang.INFO_MSG_SPYFORMAT.replace("{from}", sender.getName()).replace("{to}", Bukkit.getPlayer(Pms.getMessages().get(uuid)).getDisplayName()).replace("{message}", s));
+                        if (getCore().getUsersStorage().getUser(u).getSettings().isSocialspy()) {
+                            String m = Util.fixColor(Lang.INFO_MSG_SPYFORMAT.replace("{from}", sender.getName()).replace("{to}", Bukkit.getPlayer(getCore().getPmsStorage().getMessages().get(uuid)).getDisplayName()).replace("{message}", s));
                             p.sendMessage(m);
                         }
                     }
-                }  else {
+                } else {
                     sender.sendMessage(Util.fixColor(Lang.ERROR_MSG_NOTHINGTOANSWER));
                 }
             } else {

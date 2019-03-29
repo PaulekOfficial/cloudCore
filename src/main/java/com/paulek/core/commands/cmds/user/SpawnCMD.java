@@ -19,14 +19,18 @@ public class SpawnCMD extends Command {
 
     private static HashMap<UUID, Integer> in_detly = new HashMap<UUID, Integer>();
 
-    public SpawnCMD(){
-        super("spawn", "teleports to spawn", "/spawn {player}", "core.cmd.spawn", new String[] {"spawnpoint"});
+    public SpawnCMD(Core core) {
+        super("spawn", "teleports to spawn", "/spawn {player}", "core.cmd.spawn", new String[]{"spawnpoint"}, core);
+    }
+
+    public static HashMap<UUID, Integer> getIn_detly() {
+        return in_detly;
     }
 
     @Override
     public boolean execute(final CommandSender sender, String[] args) {
 
-        if(args.length == 0) {
+        if (args.length == 0) {
 
             if (!(sender instanceof Player)) {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
@@ -45,7 +49,7 @@ public class SpawnCMD extends Command {
 
                 BukkitTask id;
 
-                id = Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
                     public void run() {
 
                         Player player = (Player) sender;
@@ -62,8 +66,8 @@ public class SpawnCMD extends Command {
 
                 return false;
             }
-        } else if(args.length == 1){
-            if(sender.hasPermission("core.cmd.spawn.admin")) {
+        } else if (args.length == 1) {
+            if (sender.hasPermission("core.cmd.spawn.admin")) {
                 if (Bukkit.getPlayer(args[0]) != null) {
 
                     Player player = Bukkit.getPlayer(args[0]);
@@ -89,14 +93,10 @@ public class SpawnCMD extends Command {
         return false;
     }
 
-    private void teleportSpawn(Player player){
+    private void teleportSpawn(Player player) {
         Location location = new Location(Bukkit.getWorld(Config.SPAWN_WORLD), Config.SPAWN_BLOCK_X, Config.SPAWN_BLOCK_Y, Config.SPAWN_BLOCK_Z);
         location.setYaw((float) Config.SPAWN_YAW);
 
         new TeleportUtil(location, player);
-    }
-
-    public static HashMap<UUID, Integer> getIn_detly() {
-        return in_detly;
     }
 }

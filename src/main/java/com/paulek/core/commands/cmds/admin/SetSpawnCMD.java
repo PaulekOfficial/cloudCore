@@ -1,5 +1,6 @@
 package com.paulek.core.commands.cmds.admin;
 
+import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
@@ -10,19 +11,19 @@ import org.bukkit.entity.Player;
 
 public class SetSpawnCMD extends Command {
 
-    public SetSpawnCMD() {
-        super("setspawn", "sets spawn", "/setspawn", "core.cmd.setspawn", new String[]{});
+    public SetSpawnCMD(Core core) {
+        super("setspawn", "sets spawn", "/setspawn", "core.cmd.setspawn", new String[]{}, core);
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(!(sender instanceof Player)){
+        if (!(sender instanceof Player)) {
             sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
             return false;
         }
 
-        Location location = ((Player)sender).getLocation();
+        Location location = ((Player) sender).getLocation();
 
         location.getWorld().setSpawnLocation(location);
 
@@ -33,8 +34,8 @@ public class SetSpawnCMD extends Command {
         Config.SPAWN_YAW = location.getYaw();
 
 
-        Config.saveConfig();
-        Config.reloadConfig();
+        getCore().getConfiguration().saveConfig();
+        getCore().getConfiguration().reloadConfig();
 
         sender.sendMessage(Util.fixColor(Lang.INFO_SPAWN_SET));
 

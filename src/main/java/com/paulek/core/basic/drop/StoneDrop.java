@@ -42,68 +42,7 @@ public class StoneDrop implements ConfigurationSerializable {
         this.height = height;
     }
 
-    public boolean canDrop(Player player){
-        return permission == null || player.hasPermission(permission);
-    }
-
-    public double getChance(Player player){
-        if(Config.DROP_VIP_ENABLE && player.hasPermission("core.drop.vip")) return chance * Config.DROP_VIP_MULTIPLIER;
-        return chance;
-    }
-
-    public boolean correctTool(ItemStack itemStack){
-        return tools.contains(itemStack);
-    }
-
-    public boolean correctHight(Double height){
-        if(this.height.contains(">")){
-            String[] values = this.height.split(">");
-
-            if(Integer.valueOf(values[0]) > height && height > Integer.valueOf(values[1])){
-                return true;
-            }
-
-        }
-        if(this.height.contains("<")){
-            String[] values = this.height.split("<");
-
-            if(Integer.valueOf(values[0]) < height && height < Integer.valueOf(values[1])){
-                return true;
-            }
-
-        }
-        if(this.height.contains(">=")){
-            String[] values = this.height.split(">=");
-
-            if(Integer.valueOf(values[0]) >= height && height >= Integer.valueOf(values[1])){
-                return true;
-            }
-
-        }
-        if(this.height.contains("<=")){
-            String[] values = this.height.split("<=");
-
-            if(Integer.valueOf(values[0]) <= height && height <= Integer.valueOf(values[1])){
-                return true;
-            }
-
-        }
-        if(this.height.contains("=")){
-
-            return Double.valueOf(this.height.replace("=", "")).equals(height);
-
-        }
-
-
-        return false;
-    }
-
-    public int getRandomAmount(){
-        String[] strings = amount.split("-");
-        return DropUtil.getRandomInteger(Integer.valueOf(strings[0]), Integer.valueOf(strings[1]));
-    }
-
-    public static StoneDrop deserialize(Map<String, Object> map){
+    public static StoneDrop deserialize(Map<String, Object> map) {
 
         String name = "none";
         String message = "none";
@@ -130,6 +69,67 @@ public class StoneDrop implements ConfigurationSerializable {
         height = (String) map.get("height");
 
         return new StoneDrop(name, message, canDisable, material, tools, exp, permission, chance, false, amount, height);
+    }
+
+    public boolean canDrop(Player player) {
+        return permission == null || player.hasPermission(permission);
+    }
+
+    public double getChance(Player player) {
+        if (Config.DROP_VIP_ENABLE && player.hasPermission("core.drop.vip")) return chance * Config.DROP_VIP_MULTIPLIER;
+        return chance;
+    }
+
+    public boolean correctTool(ItemStack itemStack) {
+        return tools.contains(itemStack);
+    }
+
+    public boolean correctHight(Double height) {
+        if (this.height.contains(">")) {
+            String[] values = this.height.split(">");
+
+            if (Integer.valueOf(values[0]) > height && height > Integer.valueOf(values[1])) {
+                return true;
+            }
+
+        }
+        if (this.height.contains("<")) {
+            String[] values = this.height.split("<");
+
+            if (Integer.valueOf(values[0]) < height && height < Integer.valueOf(values[1])) {
+                return true;
+            }
+
+        }
+        if (this.height.contains(">=")) {
+            String[] values = this.height.split(">=");
+
+            if (Integer.valueOf(values[0]) >= height && height >= Integer.valueOf(values[1])) {
+                return true;
+            }
+
+        }
+        if (this.height.contains("<=")) {
+            String[] values = this.height.split("<=");
+
+            if (Integer.valueOf(values[0]) <= height && height <= Integer.valueOf(values[1])) {
+                return true;
+            }
+
+        }
+        if (this.height.contains("=")) {
+
+            return Double.valueOf(this.height.replace("=", "")).equals(height);
+
+        }
+
+
+        return false;
+    }
+
+    public int getRandomAmount() {
+        String[] strings = amount.split("-");
+        return DropUtil.getRandomInteger(Integer.valueOf(strings[0]), Integer.valueOf(strings[1]));
     }
 
     @Override

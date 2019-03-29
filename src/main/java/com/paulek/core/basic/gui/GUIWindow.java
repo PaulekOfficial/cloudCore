@@ -23,30 +23,34 @@ public class GUIWindow {
     private boolean cancellInteract;
     private boolean cancellOpen;
 
-    public GUIWindow(String name, int rows){
+    public GUIWindow(String name, int rows) {
 
         this.name = name;
         inventory = Bukkit.createInventory(null, rows * 9, name);
-        this. rows = rows;
+        this.rows = rows;
         this.gui = new HashMap<>(rows * 9);
         this.cancellInteract = true;
         this.cancellOpen = true;
+    }
+
+    public static GUIWindow getGuiWindowMap(String name) {
+        return guiWindowMap.get(name);
     }
 
     public boolean isCancellInteract() {
         return cancellInteract;
     }
 
-    public void callOpen(InventoryOpenEvent event){
-        if(inventoryOpenEvent != null)  inventoryOpenEvent.event(event);
-    }
-
-    public void callClose(InventoryCloseEvent event){
-        if(inventoryCloseEvent != null)  inventoryCloseEvent.event(event);
-    }
-
     public void setCancellInteract(boolean cancellInteract) {
         this.cancellInteract = cancellInteract;
+    }
+
+    public void callOpen(InventoryOpenEvent event) {
+        if (inventoryOpenEvent != null) inventoryOpenEvent.event(event);
+    }
+
+    public void callClose(InventoryCloseEvent event) {
+        if (inventoryCloseEvent != null) inventoryCloseEvent.event(event);
     }
 
     public boolean isCancellOpen() {
@@ -57,43 +61,38 @@ public class GUIWindow {
         this.cancellOpen = cancellOpen;
     }
 
-    public Inventory getInventory(){
+    public Inventory getInventory() {
         return inventory;
     }
 
-    public void openInventory(Player player){
-        if(registered) player.openInventory(inventory);
+    public void openInventory(Player player) {
+        if (registered) player.openInventory(inventory);
     }
 
-    public void register(){
+    public void register() {
         registered = true;
         guiWindowMap.put(name, this);
     }
 
-    public void unregister(){
+    public void unregister() {
         registered = false;
         guiWindowMap.remove(name);
     }
 
-    public void setItem(int slot, GUIItem item){
+    public void setItem(int slot, GUIItem item) {
         gui.put(slot, item);
         inventory.setItem(slot, item.getItemStack());
     }
 
-    public GUIItem getItem(int slot){
+    public GUIItem getItem(int slot) {
         return gui.get(slot);
     }
 
-    public void setInventoryOpenEvent(GUIEvent<InventoryOpenEvent> event){
+    public void setInventoryOpenEvent(GUIEvent<InventoryOpenEvent> event) {
         this.inventoryOpenEvent = event;
     }
 
-    public void setInventoryCloseEvent(GUIEvent<InventoryCloseEvent> event){
+    public void setInventoryCloseEvent(GUIEvent<InventoryCloseEvent> event) {
         this.inventoryCloseEvent = event;
-    }
-
-
-    public static GUIWindow getGuiWindowMap(String name) {
-        return guiWindowMap.get(name);
     }
 }

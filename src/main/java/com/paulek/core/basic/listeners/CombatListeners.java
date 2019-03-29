@@ -1,7 +1,7 @@
 package com.paulek.core.basic.listeners;
 
+import com.paulek.core.Core;
 import com.paulek.core.basic.Warrior;
-import com.paulek.core.basic.data.CombatStorage;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
@@ -15,14 +15,22 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.util.Objects;
+
 public class CombatListeners implements Listener {
 
+    private Core core;
+
+    public CombatListeners(Core core) {
+        this.core = Objects.requireNonNull(core, "Core");
+    }
+
     @EventHandler
-    public void onInteract(PlayerInteractEvent event){
+    public void onInteract(PlayerInteractEvent event) {
 
-        if(Config.COMBAT_DISABLECHESTS) {
+        if (Config.COMBAT_DISABLECHESTS) {
 
-            if(CombatStorage.isMarked(event.getPlayer().getUniqueId())) {
+            if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
 
                 if ((event.getAction().equals(Action.LEFT_CLICK_BLOCK) && event.getClickedBlock().getType().equals(Material.CHEST)) ||
                         (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getClickedBlock().getType().equals(Material.CHEST)) ||
@@ -44,7 +52,7 @@ public class CombatListeners implements Listener {
 
         if (Config.COMBAT_DISABLECOMMAND) {
 
-            if(CombatStorage.isMarked(event.getPlayer().getUniqueId())) {
+            if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
                 boolean found = false;
 
                 for (String s : Config.COMBAT_IGNORED_COMMANDS) {
@@ -63,23 +71,24 @@ public class CombatListeners implements Listener {
     }
 
     @EventHandler
-    public void onDeath(PlayerDeathEvent event){
+    public void onDeath(PlayerDeathEvent event) {
 
         Player player = event.getEntity();
 
-        if(CombatStorage.isMarked(player.getUniqueId())) CombatStorage.unmark(player.getUniqueId());
+        if (core.getCombatStorage().isMarked(player.getUniqueId()))
+            core.getCombatStorage().unmark(player.getUniqueId());
 
     }
 
     @EventHandler
-    public void onMove(PlayerMoveEvent event){
+    public void onMove(PlayerMoveEvent event) {
         if (Config.COMBAT_DISCARD) {
 
-            if (CombatStorage.isMarked(event.getPlayer().getUniqueId())) {
+            if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
 
                 Material m = Material.matchMaterial(Config.COMBAT_DISCARDBLOCK);
 
-                if(m == null) m = Material.REDSTONE_BLOCK;
+                if (m == null) m = Material.REDSTONE_BLOCK;
 
                 if ((event.getPlayer().getLocation().getBlock().getRelative(0, -1, 0).getType().equals(Material.REDSTONE_BLOCK)) ||
                         (event.getPlayer().getLocation().getBlock().getRelative(0, -2, 0).getType().equals(Material.REDSTONE_BLOCK))) {
@@ -98,7 +107,7 @@ public class CombatListeners implements Listener {
 
         if (Config.COMBAT_DISABLEBREAKING) {
 
-            if (CombatStorage.isMarked(event.getPlayer().getUniqueId())) {
+            if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
                 event.getPlayer().sendMessage(Util.fixColor(Lang.ERROR_COMBAT_BREAKDISABLED));
 
                 event.setCancelled(true);
@@ -111,7 +120,7 @@ public class CombatListeners implements Listener {
 
         if (Config.COMBAT_DISABLEPLEACING) {
 
-            if (CombatStorage.isMarked(event.getPlayer().getUniqueId())) {
+            if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
                 boolean allow = false;
 
                 for (String s : Config.COMBAT_IGNORED_BLOCKS) {
@@ -135,7 +144,7 @@ public class CombatListeners implements Listener {
     }
 
     @EventHandler
-    public void onDamageEntity(org.bukkit.event.entity.EntityDamageByEntityEvent event){
+    public void onDamageEntity(org.bukkit.event.entity.EntityDamageByEntityEvent event) {
 
         Entity attack = event.getDamager();
         Entity damaged = event.getEntity();
@@ -154,17 +163,17 @@ public class CombatListeners implements Listener {
 
         }
 
-        if(event.isCancelled()) test = false;
+        if (event.isCancelled()) test = false;
 
         if (test) {
-            if(Config.COMBAT_MOBDAMAGE) {
+            if (Config.COMBAT_MOBDAMAGE) {
                 if ((damaged instanceof Player) && (attack instanceof Monster)) {
                     Player player = (Player) damaged;
-                    if (CombatStorage.isMarked(player.getUniqueId())) {
-                        CombatStorage.changeTimeMilisrs(player.getUniqueId(), System.currentTimeMillis());
+                    if (core.getCombatStorage().isMarked(player.getUniqueId())) {
+                        core.getCombatStorage().changeTimeMilisrs(player.getUniqueId(), System.currentTimeMillis());
                         return;
                     }
-                    new CombatStorage(new Warrior(player.getUniqueId(), player.getDisplayName()));
+                    core.getCombatStorage().addMarkedWarrior(new Warrior(player.getUniqueId(), player.getDisplayName()));
                     if (Config.COMBAT_CHATMESSAGE) {
                         player.sendMessage(Util.fixColor(Lang.INFO_COMBAT_CHAT));
                     }
@@ -174,15 +183,15 @@ public class CombatListeners implements Listener {
             if ((attack instanceof Player) && (damaged instanceof Player)) {
                 Player player = (Player) damaged;
                 Player damager = (Player) attack;
-                if (CombatStorage.isMarked(player.getUniqueId()) && CombatStorage.isMarked(damager.getUniqueId())) {
-                    CombatStorage.changeTimeMilisrs(player.getUniqueId(), System.currentTimeMillis());
-                    CombatStorage.changeTimeMilisrs(damager.getUniqueId(), System.currentTimeMillis());
+                if (core.getCombatStorage().isMarked(player.getUniqueId()) && core.getCombatStorage().isMarked(damager.getUniqueId())) {
+                    core.getCombatStorage().changeTimeMilisrs(player.getUniqueId(), System.currentTimeMillis());
+                    core.getCombatStorage().changeTimeMilisrs(damager.getUniqueId(), System.currentTimeMillis());
                     return;
                 }
 
-                new CombatStorage(new Warrior(player.getUniqueId(), player.getDisplayName()));
-                new CombatStorage(new Warrior(damager.getUniqueId(), damager.getDisplayName()));
-                if(Config.COMBAT_CHATMESSAGE){
+                core.getCombatStorage().addMarkedWarrior(new Warrior(player.getUniqueId(), player.getDisplayName()));
+                core.getCombatStorage().addMarkedWarrior(new Warrior(damager.getUniqueId(), damager.getDisplayName()));
+                if (Config.COMBAT_CHATMESSAGE) {
                     player.sendMessage(Util.fixColor(Lang.INFO_COMBAT_CHAT));
                     damager.sendMessage(Util.fixColor(Lang.INFO_COMBAT_CHAT));
                 }
@@ -210,11 +219,12 @@ public class CombatListeners implements Listener {
                     damage = (Player) ((Projectile) damager).getShooter();
                 }
 
-                if(shotted != null) new CombatStorage(new Warrior(shotted.getUniqueId(), shotted.getDisplayName()));
-                new CombatStorage(new Warrior(damage.getUniqueId(), damage.getDisplayName()));
+                if (shotted != null)
+                    core.getCombatStorage().addMarkedWarrior(new Warrior(shotted.getUniqueId(), shotted.getDisplayName()));
+                core.getCombatStorage().addMarkedWarrior(new Warrior(damage.getUniqueId(), damage.getDisplayName()));
                 shotted.setLastDamage(0.5F);
 
-                if(Config.COMBAT_CHATMESSAGE){
+                if (Config.COMBAT_CHATMESSAGE) {
                     shotted.sendMessage(Util.fixColor(Lang.INFO_COMBAT_CHAT));
                     damager.sendMessage(Util.fixColor(Lang.INFO_COMBAT_CHAT));
                 }
