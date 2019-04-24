@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.net.InetAddress;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -22,11 +23,11 @@ public class User {
     private Location logoutlocation;
     private Location lastlocation;
     private InetAddress ipAddres;
-    private HashMap<String, Timestamp> timestamps = new HashMap<>();
+    private Map<String, Timestamp> timestamps = new HashMap<>();
     private boolean afk;
     private Long afkSince;
     private String afkResson;
-    private HashMap<String, Location> homes = new HashMap<>();
+    private Map<String, Location> homes = new HashMap<>();
     private long lastActivity;
     private UserSettings settings;
 
@@ -42,6 +43,7 @@ public class User {
         this.core = Objects.requireNonNull(core, "Core");
     }
 
+    @JsonIgnore
     public User(UUID uuid, Core core) {
         this.uuid = uuid;
         this.core = Objects.requireNonNull(core, "Core");
@@ -97,7 +99,7 @@ public class User {
         return this.timestamps.get(key);
     }
 
-    public HashMap<String, Timestamp> getTimestamps() {
+    public Map<String, Timestamp> getTimestamps() {
         return timestamps;
     }
 
@@ -107,6 +109,14 @@ public class User {
 
     public Skin getSkin() {
         return skin;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public void setTimestamps(Map<String, Timestamp> timestamps) {
+        this.timestamps = timestamps;
     }
 
     public void setSkin(Skin skin) {
@@ -231,52 +241,12 @@ public class User {
         this.uptodate = uptodate;
     }
 
-    public HashMap<String, Location> getHomes() {
+    public Map<String, Location> getHomes() {
         return homes;
     }
 
-    public void setHomes(HashMap<String, Location> homes) {
+    public void setHomes(Map<String, Location> homes) {
         this.homes = homes;
         uptodate = false;
-    }
-
-    public class UserSettings {
-
-        private boolean socialspy;
-        private boolean vanish;
-        private boolean tptoogle;
-        private boolean tps;
-
-        public boolean isSocialspy() {
-            return socialspy;
-        }
-
-        public void setSocialspy(boolean socialspy) {
-            this.socialspy = socialspy;
-        }
-
-        public boolean isVanish() {
-            return vanish;
-        }
-
-        public void setVanish(boolean vanish) {
-            this.vanish = vanish;
-        }
-
-        public boolean isTptoogle() {
-            return tptoogle;
-        }
-
-        public void setTptoogle(boolean tptoogle) {
-            this.tptoogle = tptoogle;
-        }
-
-        public boolean isTps() {
-            return tps;
-        }
-
-        public void setTps(boolean tps) {
-            this.tps = tps;
-        }
     }
 }

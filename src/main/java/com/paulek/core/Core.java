@@ -15,11 +15,15 @@ import com.paulek.core.common.io.Kits;
 import com.paulek.core.common.io.Lang;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
+import net.minecraft.server.v1_13_R2.DragonControllerDying;
+import net.minecraft.server.v1_13_R2.EntityEnderDragon;
+import net.minecraft.server.v1_13_R2.Particles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -30,6 +34,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.Random;
 import java.util.logging.Level;
 
 public class Core extends JavaPlugin {
@@ -58,10 +64,18 @@ public class Core extends JavaPlugin {
 
         saveDefaultConfig();
 
+        consoleLog = new ConsoleLog(this);
+
         Version version = new Version(this);
         version.chceckVersion();
 
-        consoleLog = new ConsoleLog(this);
+        //init all storages
+        combatStorage = new CombatStorage();
+        dropsStorage = new Drops();
+        pmsStorage = new Pms();
+        rtpsStorage = new Rtps();
+        tpaStorage = new TpaStorage();
+        usersStorage = new Users(this);
 
         config = new Config(this);
         kits = new Kits(this);
@@ -74,14 +88,6 @@ public class Core extends JavaPlugin {
         }
 
         combatManager = new CombatManager(this);
-
-        //init all storages
-        combatStorage = new CombatStorage();
-        dropsStorage = new Drops();
-        pmsStorage = new Pms();
-        rtpsStorage = new Rtps();
-        tpaStorage = new TpaStorage();
-        usersStorage = new Users(this);
 
         commandManager = new CommandManager(this);
 
@@ -127,13 +133,15 @@ public class Core extends JavaPlugin {
             meta.setLore(Config.STONEGENERATOR_DESCRIPTION);
             item.setItemMeta(meta);
 
-            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "iocjow98345cj9673498yjw"), item)
+            ShapedRecipe stoneGenerator = new ShapedRecipe(new NamespacedKey(plugin, "stonegenerator"), item)
                     .shape("RIR", "ISI", "RPR")
                     .setIngredient('R', Material.REDSTONE)
                     .setIngredient('I', Material.IRON_INGOT)
                     .setIngredient('S', Material.STONE)
                     .setIngredient('P', Material.PISTON);
-            plugin.getServer().addRecipe(recipe);
+
+            plugin.getServer().addRecipe(stoneGenerator);
+
 
         }
     }
@@ -152,6 +160,7 @@ public class Core extends JavaPlugin {
             }
 
         }
+
 
     }
 
@@ -213,7 +222,6 @@ public class Core extends JavaPlugin {
         commandManager.registerCommand(new EnderchestCMD(this));
         commandManager.registerCommand(new SethomeCMD(this));
         commandManager.registerCommand(new HomeCMD(this));
-        commandManager.registerCommand(new DragondeathCMD(this));
         commandManager.registerCommand(new SunCMD(this));
         commandManager.registerCommand(new DelhomeCMD(this));
         commandManager.registerCommand(new TpahereCMD(this));
@@ -238,6 +246,19 @@ public class Core extends JavaPlugin {
         commandManager.registerCommand(new GcCMD(this));
 
         commandManager.registerCommand(new KitCMD(this));
+    }
+
+    public static String generateRandomString(int lenth){
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        Random random = new Random();
+        StringBuilder buffer = new StringBuilder(lenth);
+        for (int i = 0; i < lenth; i++) {
+            int randomLimitedInt = leftLimit + (int)
+                    (random.nextFloat() * (rightLimit - leftLimit + 1));
+            buffer.append((char) randomLimitedInt);
+        }
+        return  buffer.toString().toUpperCase();
     }
 
     public Connection getConnection() throws SQLException {

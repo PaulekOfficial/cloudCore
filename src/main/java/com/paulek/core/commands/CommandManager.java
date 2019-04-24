@@ -30,6 +30,7 @@ public class CommandManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        f.setAccessible(false);
     }
 
     private Core core;

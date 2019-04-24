@@ -30,19 +30,14 @@ public class Users implements Runnable {
 
         this.core = Objects.requireNonNull(core, "Core");
 
+        SimpleModule userDeserializerModule = new SimpleModule("UserDeserializer", new Version(1, 0, 0, null, null, null));
+        userDeserializerModule.addDeserializer(User.class, new UserDeserializer(this.core));
+
         SimpleModule locationSerializerModule = new SimpleModule("LocationSerializer", new Version(1, 0, 0, null, null, null));
         locationSerializerModule.addSerializer(Location.class, new LocationSerializer());
 
-        SimpleModule locationDeserializerModule = new SimpleModule("LocationDeserializer", new Version(1, 0, 0, null, null, null));
-        locationDeserializerModule.addDeserializer(Location.class, new LocationDeserializer());
-
-        SimpleModule skinDeserializerModule = new SimpleModule("SkinDeserializer", new Version(1, 0, 0, null, null, null));
-        locationDeserializerModule.addDeserializer(Skin.class, new SkinDeserializer(core));
-
         mapper.registerModule(locationSerializerModule);
-        mapper.registerModule(locationDeserializerModule);
-        mapper.registerModule(skinDeserializerModule);
-
+        mapper.registerModule(userDeserializerModule);
         File directory = new File(core.getPlugin().getDataFolder(), "users");
 
         if (!directory.exists()) {

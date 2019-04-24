@@ -9,13 +9,15 @@ import java.util.logging.Level;
 public class Version {
 
     private Plugin plugin;
-    private String a = plugin.getServer().getClass().getPackage().getName();
-    private String version = a.substring(a.lastIndexOf('.') + 1);
+    private String a;
+    private String version;
     private Core core;
 
     public Version(Core core) {
         this.core = Objects.requireNonNull(core, "Core");
-        plugin = core.getPlugin();
+        this.plugin = core.getPlugin();
+        this.a = plugin.getServer().getClass().getPackage().getName();
+        this.version = a.substring(a.lastIndexOf('.') + 1);
     }
 
     public String getVersion() {

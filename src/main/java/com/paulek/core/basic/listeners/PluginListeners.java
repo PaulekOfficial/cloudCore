@@ -27,7 +27,7 @@ public class PluginListeners implements Listener {
     private Core core;
 
     public PluginListeners(Core core) {
-        core = Objects.requireNonNull(core, "Core");
+        this.core = Objects.requireNonNull(core, "Core");
     }
 
     @EventHandler
