@@ -1,0 +1,50 @@
+turbodrop-info-title: true
+title-interval: 3
+gui-layout:
+  "Falbanki":
+    slots: 1-10 #Alternatywnie 1, 2, 3, 4, 5, 6 itp
+    item: "DIAMOND_CHESTPLATE 1 name:$aKit_vip lore:$cNajlepszy_kit_na_swiecie~$cA_tu_druga_linijka fire_protection:4 durability:10"
+    action: none #Dostępne akcje none(nic), drop-item(wyświetla item do wydropienia), turbodrop, disable-stone(Przycisk do wyłączani dropu stowna), exit
+turbodrop-gui:
+  name: "$6$lTurbodrop"
+  item: "GOlDEN_PICKAXE 1 lore:$aZdobądz_wiekszy_drop fire_protection:4 durability:10"
+  cost: "EMERALD 10000" #lub kasa czyli $100
+  duration: 10m #Dostępne s, m, h, d
+exit-gui:
+  name: "$cWyjście z menu"
+  item: "BARRIER 1"
+disable-stone-gui:
+  name: "$aWyłącz drop cooblestone"
+  item: "COBBLESTONE 1"
+drop-normal:
+  - ==: StoneDrop
+    name: "Diamęt"
+    message: "$aZdobyłeś {amount} diamętów!"
+    canDisable: true
+    material: DIAMOND
+    tools:
+      - DIAMOND_PICKAXE
+      - GOLDEN_PICKAXE
+      - STONE_PICKAXE
+    exp: 10
+    permission: "drop.diamond"
+    chance: 5.91
+    fortune: true
+    amount: 1-2
+    height: <=30
+drop-turbo:
+  - ==: StoneDrop
+    name: "Diamęt"
+    message: "$aZdobyłeś {amount} diamętów!"
+    canDisable: true
+    material: DIAMOND
+    tools:
+      - DIAMOND_PICKAXE
+      - GOLDEN_PICKAXE
+      - STONE_PICKAXE
+    exp: 10
+    permission: "drop.diamond"
+    chance: 8.91
+    fortune: true
+    amount: 1-4
+    height: <=30

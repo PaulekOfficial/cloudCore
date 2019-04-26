@@ -186,6 +186,12 @@ public class Lang {
     public static String ERROR_KIT_NOPLAYER = "$ePlayer is offinle";
     public static String INFO_KIT_GRANTED = "$aPrzyznano ci kit {kit}!";
     public static String KIT_NOACCES = "$cBrak dostepu do tego kitu!";
+    public static String DROP_TURBO_TITLE = "$a$lT $c$lU $r$lR $3$lB $6$lO";
+    public static String DROP_TURBO_SUBTITLE = "{message}";
+    public static String DROP_TURBO_BOSS_TITLE = "$6$lTurbodrop";
+    public static String DROP_TURBO_BOSS_BARCOLOR = "YELLOW";
+    public static String DROP_TURBO_CHAT = "$6Turbodrop $azostal przedluzony o {time} {message}";
+    public static String ERROR_DROP_TURBO_BADTIMESYNTAX = "$cZly format czasowy, przyklad poprawnego formatu 1d, 1h, 1m, 1s";
     private static File file;
     private static FileConfiguration c = null;
     private Core core;

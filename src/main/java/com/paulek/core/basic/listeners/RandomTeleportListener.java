@@ -20,7 +20,7 @@ public class RandomTeleportListener implements Listener {
     private Core core;
 
     public RandomTeleportListener(Core core) {
-        core = Objects.requireNonNull(core, "Core");
+        this.core = Objects.requireNonNull(core, "Core");
     }
 
     @EventHandler
@@ -39,8 +39,6 @@ public class RandomTeleportListener implements Listener {
                     Bukkit.getScheduler().runTask(core.getPlugin(), new Runnable() {
                         @Override
                         public void run() {
-
-
                             Location totp = Util.randomTeleport(loc.getWorld());
 
                             loc.getWorld().loadChunk(totp.getBlockX(), totp.getBlockZ());

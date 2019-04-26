@@ -1,4 +1,4 @@
-name: clCore
+name: cloudCore
 author: PaulekOfficial
 version: ${project.version}
 main: com.paulek.core.Core

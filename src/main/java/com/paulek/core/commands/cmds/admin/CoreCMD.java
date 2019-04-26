@@ -20,6 +20,7 @@ public class CoreCMD extends Command {
                 getCore().getConfiguration().reloadConfig();
                 getCore().getLang().reloadLang();
                 getCore().getKits().reload();
+                getCore().getDrops().reload();
                 sender.sendMessage(Util.fixColor(Lang.INFO_CORE_RELOAD));
             }
             if (args[0].equalsIgnoreCase("stop")) {

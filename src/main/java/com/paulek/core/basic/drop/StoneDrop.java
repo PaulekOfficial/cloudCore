@@ -20,7 +20,7 @@ public class StoneDrop implements ConfigurationSerializable {
     private String message;
     private boolean canDisable;
     private ItemStack material;
-    private List<ItemStack> tools = new ArrayList<>();
+    private List<ItemStack> tools;
     private int exp;
     private String permission;
     private double chance;
@@ -68,7 +68,7 @@ public class StoneDrop implements ConfigurationSerializable {
         amount = (String) map.get("amount");
         height = (String) map.get("height");
 
-        return new StoneDrop(name, message, canDisable, material, tools, exp, permission, chance, false, amount, height);
+        return new StoneDrop(name, message, canDisable, material, tools, exp, permission, chance, fortune, amount, height);
     }
 
     public boolean canDrop(Player player) {
@@ -85,45 +85,32 @@ public class StoneDrop implements ConfigurationSerializable {
     }
 
     public boolean correctHight(Double height) {
+        if (this.height.contains(">=")) {
+            String[] values = this.height.split(">=");
+
+            return (Integer.parseInt((values[0].equalsIgnoreCase("")) ? "0" : values[0]) >= height && height >= Integer.parseInt(values[1]));
+        }
+        if (this.height.contains("<=")) {
+            String[] values = this.height.split("<=");
+
+            return (Integer.parseInt((values[0].equalsIgnoreCase("")) ? "0" : values[0]) <= height && height <= Integer.parseInt(values[1]));
+        }
+        if (this.height.contains("=")) {
+
+            return Double.parseDouble(this.height.replace("=", "")) == (height);
+
+        }
         if (this.height.contains(">")) {
             String[] values = this.height.split(">");
 
-            if (Integer.valueOf(values[0]) > height && height > Integer.valueOf(values[1])) {
-                return true;
-            }
+            return (Integer.parseInt((values[0].equalsIgnoreCase("")) ? "0" : values[0]) > height && height > Integer.parseInt(values[1]));
 
         }
         if (this.height.contains("<")) {
             String[] values = this.height.split("<");
 
-            if (Integer.valueOf(values[0]) < height && height < Integer.valueOf(values[1])) {
-                return true;
-            }
-
+            return  (Integer.parseInt((values[0].equalsIgnoreCase("")) ? "0" : values[0]) < height && height < Integer.parseInt(values[1]));
         }
-        if (this.height.contains(">=")) {
-            String[] values = this.height.split(">=");
-
-            if (Integer.valueOf(values[0]) >= height && height >= Integer.valueOf(values[1])) {
-                return true;
-            }
-
-        }
-        if (this.height.contains("<=")) {
-            String[] values = this.height.split("<=");
-
-            if (Integer.valueOf(values[0]) <= height && height <= Integer.valueOf(values[1])) {
-                return true;
-            }
-
-        }
-        if (this.height.contains("=")) {
-
-            return Double.valueOf(this.height.replace("=", "")).equals(height);
-
-        }
-
-
         return false;
     }
 

@@ -1,6 +1,7 @@
 package com.paulek.core.basic.listeners;
 
 import com.paulek.core.Core;
+import com.paulek.core.basic.drop.DropMask;
 import com.paulek.core.commands.cmds.admin.VanishCMD;
 import com.paulek.core.commands.cmds.user.SpawnCMD;
 import com.paulek.core.commands.cmds.user.TpacceptCMD;
@@ -8,8 +9,12 @@ import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
@@ -28,6 +33,7 @@ public class PluginListeners implements Listener {
 
     public PluginListeners(Core core) {
         this.core = Objects.requireNonNull(core, "Core");
+        loadGroups();
     }
 
     @EventHandler
@@ -154,7 +160,26 @@ public class PluginListeners implements Listener {
         }
     }
 
-    public void loadGroups() {
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event){
+
+        Player player = event.getPlayer();
+        Block block = event.getBlock();
+        ItemStack tool = player.getItemInHand();
+
+        DropMask dropMask = core.getDrops().getMask(block.getType().name());
+
+        if(dropMask != null) {
+
+            dropMask.breakBlock(player, tool, block);
+            if(dropMask.isDropped()){
+                event.setDropItems(false);
+            }
+
+        }
+    }
+
+    private void loadGroups() {
 
         for (String s : Config.CHAT_FORMATING) {
 

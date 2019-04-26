@@ -54,27 +54,44 @@ public class UserDeserializer extends StdDeserializer<User> {
         return user;
     }
 
+    private Map<String, Boolean> deserializeDrops(JsonNode node){
+
+        Map<String, Boolean> map = new HashMap<>();
+
+        Iterator i = node.fieldNames();
+
+        while (i.hasNext()){
+
+            String field = node.get((String) i.next()).asText();
+
+            map.put(field, node.get(field).asBoolean());
+
+        }
+
+        return map;
+    }
+
     private UserSettings deserializeUserSettings(JsonNode node){
 
         boolean socialspy = node.get("socialspy").asBoolean();
         boolean vanish = node.get("vanish").asBoolean();
         boolean tptoogle = node.get("tptoogle").asBoolean();
         boolean tps = node.get("tps").asBoolean();
+        Map<String, Boolean> drops = (node.get("drops") == null) ? new HashMap<>() : deserializeDrops((node.get("drops")));
 
-        return new UserSettings(socialspy, vanish, tptoogle, tps);
+        return new UserSettings(socialspy, vanish, tptoogle, tps, drops);
     }
 
     private Map<String, Location> deserializeHomes(JsonNode node){
 
         Map<String, Location> map = new HashMap<>();
 
-        Iterator i = node.fieldNames();
-
+        Iterator i = node.fields();
         while(i.hasNext()){
 
-            String field = node.get((String) i.next()).asText();
+            Map.Entry entry = (Map.Entry) i.next();
 
-            JsonNode homeNode = node.get(field);
+            JsonNode homeNode = (JsonNode) entry.getValue();
 
             String world = homeNode.get("world").asText();
             double x = homeNode.get("x").asDouble();
@@ -83,7 +100,7 @@ public class UserDeserializer extends StdDeserializer<User> {
             float yaw = homeNode.get("yaw").asLong();
             float pitch = homeNode.get("pitch").asLong();
 
-            map.put(field, new Location(Bukkit.getWorld(world), x, y ,z , yaw, pitch));
+            map.put(entry.getKey().toString(), new Location(Bukkit.getWorld(world), x, y ,z , yaw, pitch));
 
         }
 
@@ -94,18 +111,17 @@ public class UserDeserializer extends StdDeserializer<User> {
 
         Map<String, Timestamp> map = new HashMap<>();
 
-        Iterator i = node.fieldNames();
+        Iterator i = node.fields();
 
         while(i.hasNext()){
 
-            String field = node.get((String) i.next()).asText();
+            Map.Entry entry = (Map.Entry) i.next();
 
-            JsonNode timestampNode = node.get(field);
+            JsonNode timestampNode = (JsonNode) entry.getValue();
 
             long endTime = timestampNode.get("endTime").asLong();
             String className = timestampNode.get("className").asText();
-
-            map.put(field, new Timestamp(className, endTime));
+            map.put(entry.getKey().toString(), new Timestamp(className, endTime));
 
         }
 

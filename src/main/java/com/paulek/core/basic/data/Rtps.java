@@ -12,6 +12,9 @@ public class Rtps {
     private List<Location> buttons = new ArrayList<Location>();
     private List<String> but = new ArrayList<String>();
 
+    public Rtps(){
+        loadButtons();
+    }
 
     public List getList() {
         return buttons;
@@ -56,7 +59,6 @@ public class Rtps {
                         loc.getBlockZ();
                 but.add(tosave);
             }
-            int size = buttons.size();
         }
     }
 

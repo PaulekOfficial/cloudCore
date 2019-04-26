@@ -4,6 +4,7 @@ import com.paulek.core.basic.CombatManager;
 import com.paulek.core.basic.MySQL;
 import com.paulek.core.basic.User;
 import com.paulek.core.basic.data.*;
+import com.paulek.core.basic.drop.StoneDrop;
 import com.paulek.core.basic.listeners.*;
 import com.paulek.core.commands.CommandManager;
 import com.paulek.core.commands.cmds.admin.*;
@@ -11,17 +12,16 @@ import com.paulek.core.commands.cmds.user.*;
 import com.paulek.core.common.ConsoleLog;
 import com.paulek.core.common.Version;
 import com.paulek.core.common.io.Config;
+import com.paulek.core.common.io.Drops;
 import com.paulek.core.common.io.Kits;
 import com.paulek.core.common.io.Lang;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
-import net.minecraft.server.v1_13_R2.DragonControllerDying;
-import net.minecraft.server.v1_13_R2.EntityEnderDragon;
-import net.minecraft.server.v1_13_R2.Particles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
@@ -52,11 +52,15 @@ public class Core extends JavaPlugin {
     private CombatManager combatManager;
     private CommandManager commandManager;
     private CombatStorage combatStorage;
-    private Drops dropsStorage;
+    private Drops drops;
     private Pms pmsStorage;
     private Rtps rtpsStorage;
     private TpaStorage tpaStorage;
     private Users usersStorage;
+
+    static {
+        ConfigurationSerialization.registerClass(StoneDrop.class, "StoneDrop");
+    }
 
     @Override
     public void onEnable() {
@@ -71,7 +75,12 @@ public class Core extends JavaPlugin {
 
         //init all storages
         combatStorage = new CombatStorage();
-        dropsStorage = new Drops();
+        drops = new Drops(this);
+
+//        //TODO FOR RESTS
+//        drops.addDropMask(Material.STONE.name(), new BlockMask(this));
+//        drops.getDrops().add(new StoneDrop("diamond", "$bMasz diaksa heheheheh", true, new ItemStack(Material.DIAMOND, 1), Arrays.asList(new ItemStack(Material.DIAMOND_PICKAXE, 1), new ItemStack(Material.IRON_PICKAXE, 1), new ItemStack(Material.GOLDEN_PICKAXE, 1)), 10, "drop.diamond", 7.91, true, "1-2", "<=30"));
+
         pmsStorage = new Pms();
         rtpsStorage = new Rtps();
         tpaStorage = new TpaStorage();
@@ -161,6 +170,26 @@ public class Core extends JavaPlugin {
 
         }
 
+        Iterator i = plugin.getServer().recipeIterator();
+
+        while(i.hasNext()){
+
+            Recipe recipe = (Recipe) i.next();
+
+            if(recipe instanceof ShapedRecipe){
+
+                ShapedRecipe shapedRecipe = (ShapedRecipe) recipe;
+
+                if(shapedRecipe.getKey().getKey().equalsIgnoreCase("stonegenerator")){
+                    i.remove();
+                }
+
+            }
+
+        }
+
+        Bukkit.getScheduler().cancelTasks(plugin);
+
 
     }
 
@@ -244,8 +273,8 @@ public class Core extends JavaPlugin {
         if (Config.WHITELIST_ENABLE) commandManager.registerCommand(new WhitelistCMD(this));
 
         commandManager.registerCommand(new GcCMD(this));
-
         commandManager.registerCommand(new KitCMD(this));
+        commandManager.registerCommand(new TurboDropCMD(this));
     }
 
     public static String generateRandomString(int lenth){
@@ -281,8 +310,8 @@ public class Core extends JavaPlugin {
         return combatStorage;
     }
 
-    public Drops getDropsStorage() {
-        return dropsStorage;
+    public Drops getDrops() {
+        return drops;
     }
 
     public Pms getPmsStorage() {

@@ -60,7 +60,18 @@ public class DropUtil {
             world.dropItemNaturally(location, item);
 
         }
-        player.setExp(player.getExp() + exp);
+        player.giveExp((int) player.getExp() + exp);
+
+    }
+
+    public static void drop(List<ItemStack> items, int exp, Player player, Location location) {
+        World world = location.getWorld();
+        for (ItemStack item : items) {
+
+            world.dropItemNaturally(location, item);
+
+        }
+        player.giveExp((int) player.getExp() + exp);
 
     }
 
