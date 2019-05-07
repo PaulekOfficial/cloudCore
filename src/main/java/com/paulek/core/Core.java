@@ -73,28 +73,28 @@ public class Core extends JavaPlugin {
         Version version = new Version(this);
         version.chceckVersion();
 
-        //init all storages
-        combatStorage = new CombatStorage();
-        drops = new Drops(this);
-
 //        //TODO FOR RESTS
 //        drops.addDropMask(Material.STONE.name(), new BlockMask(this));
 //        drops.getDrops().add(new StoneDrop("diamond", "$bMasz diaksa heheheheh", true, new ItemStack(Material.DIAMOND, 1), Arrays.asList(new ItemStack(Material.DIAMOND_PICKAXE, 1), new ItemStack(Material.IRON_PICKAXE, 1), new ItemStack(Material.GOLDEN_PICKAXE, 1)), 10, "drop.diamond", 7.91, true, "1-2", "<=30"));
-
-        pmsStorage = new Pms();
-        rtpsStorage = new Rtps();
-        tpaStorage = new TpaStorage();
-        usersStorage = new Users(this);
 
         config = new Config(this);
         kits = new Kits(this);
         lang = new Lang(this);
 
-        if (!Config.ENABLED) {
+        if (!Config.ENABLED || !plugin.isEnabled()) {
             consoleLog.log("Warning! Core disabled in config!", Level.WARNING);
             this.getPluginLoader().disablePlugin(this);
             return;
         }
+
+        //init all storages
+        combatStorage = new CombatStorage();
+        drops = new Drops(this);
+
+        pmsStorage = new Pms();
+        rtpsStorage = new Rtps();
+        tpaStorage = new TpaStorage();
+        usersStorage = new Users(this);
 
         combatManager = new CombatManager(this);
 

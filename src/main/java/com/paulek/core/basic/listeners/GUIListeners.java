@@ -8,12 +8,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.inventory.InventoryView;
 
 public class GUIListeners implements Listener {
 
     @EventHandler
     public void onInvOpen(InventoryClickEvent event) {
-        GUIWindow gui = GUIWindow.getGuiWindowMap(event.getInventory().getName());
+        GUIWindow gui = GUIWindow.getGuiWindowMap(event.getView().getTitle());
         if (gui != null) {
             GUIItem item = gui.getItem(event.getSlot());
             if (item != null) {
@@ -25,7 +26,7 @@ public class GUIListeners implements Listener {
 
     @EventHandler
     public void onInvClose(InventoryCloseEvent event) {
-        GUIWindow gui = GUIWindow.getGuiWindowMap(event.getInventory().getName());
+        GUIWindow gui = GUIWindow.getGuiWindowMap(event.getView().getTitle());
         if (gui != null) {
             gui.callClose(event);
         }
@@ -33,7 +34,7 @@ public class GUIListeners implements Listener {
 
     @EventHandler
     public void onInvOpen(InventoryOpenEvent event) {
-        GUIWindow gui = GUIWindow.getGuiWindowMap(event.getInventory().getName());
+        GUIWindow gui = GUIWindow.getGuiWindowMap(event.getView().getTitle());
         if (gui != null) {
             gui.callOpen(event);
         }
@@ -41,7 +42,7 @@ public class GUIListeners implements Listener {
 
     @EventHandler
     public void onInvInteract(InventoryInteractEvent event) {
-        GUIWindow gui = GUIWindow.getGuiWindowMap(event.getInventory().getName());
+        GUIWindow gui = GUIWindow.getGuiWindowMap(event.getView().getTitle());
         if (gui != null) {
             if (gui.isCancellInteract()) event.setCancelled(true);
         }

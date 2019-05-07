@@ -1,16 +1,23 @@
 package com.paulek.core.basic.gui.menu;
 
 import com.paulek.core.basic.gui.GUIItem;
+import com.paulek.core.basic.gui.GUIWindow;
 import org.bukkit.inventory.Inventory;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiMenu {
 
-    //Key is the slot and value a GuiItem
-    private Map<Integer, GUIItem> items;
+    private GUIWindow guiWindow;
+    private List<GuiMenuItem> items = new ArrayList<>();
+
+    public GuiMenu(String name, int rows){
+        guiWindow = new GUIWindow(name, rows);
+    }
 
     public Inventory buildMenu(){
-        return null;
+        return guiWindow.getInventory();
     }
+
 }

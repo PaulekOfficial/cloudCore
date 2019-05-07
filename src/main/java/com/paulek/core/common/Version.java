@@ -25,8 +25,8 @@ public class Version {
     }
 
     public void chceckVersion() {
-        if (!version.contains("v1_13")) {
-            core.getConsoleLog().log("Error! Plugin writen to 1.13ś Version! Pleace change Version!", Level.WARNING);
+        if (!version.contains("v1_14")) {
+            core.getConsoleLog().log("Error! Plugin writen to 1.14 Version! Pleace change Version!", Level.WARNING);
             core.getConsoleLog().log("ShutingDown clCore!", Level.INFO);
             plugin.getPluginLoader().disablePlugin(plugin);
         } else {

@@ -33,12 +33,13 @@ public class RandomTeleportListener implements Listener {
 
 
             if ((action == Action.RIGHT_CLICK_BLOCK) && ((clickedb.getType() == Material.OAK_BUTTON) || (clickedb.getType() == Material.STONE_BUTTON))) {
-                Location loc = clickedb.getLocation();
-                Player player = e.getPlayer();
-                if (core.getRtpsStorage().getList().contains(loc)) {
-                    Bukkit.getScheduler().runTask(core.getPlugin(), new Runnable() {
-                        @Override
-                        public void run() {
+                Bukkit.getScheduler().runTask(core.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        Location loc = clickedb.getLocation();
+                        Player player = e.getPlayer();
+                        if (core.getRtpsStorage().getList().contains(loc)) {
+
                             Location totp = Util.randomTeleport(loc.getWorld());
 
                             loc.getWorld().loadChunk(totp.getBlockX(), totp.getBlockZ());
@@ -51,8 +52,8 @@ public class RandomTeleportListener implements Listener {
                                     .replace("{z}", String.valueOf(locafter.getBlockZ()));
                             Util.sendActionbar(player, message);
                         }
-                    });
-                }
+                    }
+                });
             }
 
         }

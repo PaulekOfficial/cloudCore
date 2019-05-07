@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.paulek.core.Core;
-import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
@@ -79,8 +79,6 @@ public class Skin {
 
         WorldType worldType = WorldType.getType(player.getWorld().getWorldType().getName());
 
-        EnumDifficulty enumDifficulty = EnumDifficulty.getById(player.getWorld().getDifficulty().getValue());
-
         DimensionManager dimension;
 
         switch (player.getWorld().getEnvironment()) {
@@ -102,7 +100,7 @@ public class Skin {
 
         PacketPlayOutPlayerInfo packetPlayOutPlayerInfo_add = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) player).getHandle());
 
-        PacketPlayOutRespawn packetPlayOutRespawn = new PacketPlayOutRespawn(dimension, enumDifficulty, worldType, enumGamemode);
+        PacketPlayOutRespawn packetPlayOutRespawn = new PacketPlayOutRespawn(dimension, worldType, enumGamemode);
 
         Location loc = player.getLocation();
 

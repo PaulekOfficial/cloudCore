@@ -17,6 +17,10 @@ public class GUIItem {
         return itemStack;
     }
 
+    public void setInventoryClickEvent(GUIEvent<InventoryClickEvent> inventoryClickEvent) {
+        this.inventoryClickEvent = inventoryClickEvent;
+    }
+
     public void invClick(InventoryClickEvent e) {
         if (inventoryClickEvent != null && e != null) this.inventoryClickEvent.event(e);
     }

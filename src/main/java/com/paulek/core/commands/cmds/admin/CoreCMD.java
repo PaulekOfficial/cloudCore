@@ -4,7 +4,7 @@ import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
-import net.minecraft.server.v1_13_R2.MinecraftServer;
+import net.minecraft.server.v1_14_R1.MinecraftServer;
 import org.bukkit.command.CommandSender;
 
 public class CoreCMD extends Command {

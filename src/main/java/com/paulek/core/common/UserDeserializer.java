@@ -39,7 +39,7 @@ public class UserDeserializer extends StdDeserializer<User> {
         JsonNode node = codec.readTree(jsonParser);
         user.setUuid(UUID.fromString(node.get("uuid").asText()));
         user.setLastAccountName(node.get("lastAccountName").asText());
-        user.setSkin(deserializeSkin(node.get("skin")));
+        user.setSkin((node.get("skin").asText().equalsIgnoreCase("null") ? null : deserializeSkin(node.get("skin"))));
         user.setLogoutlocation((node.get("logoutlocation").asText().equalsIgnoreCase("null")) ? null : deserializeLocation(node.get("logoutlocation")));
         user.setLastlocation((node.get("lastlocation").asText().equalsIgnoreCase("null")) ? null : deserializeLocation(node.get("lastlocation")));
         user.setIpAddres((node.get("ipAddres").asText().equalsIgnoreCase("null")) ? null : InetAddress.getByName(node.get("ipAddres").asText()));
