@@ -26,12 +26,10 @@ public class GuiMenuItem {
                 actionData = actionData.replace("{player-executor}", null);
 
                 Bukkit.dispatchCommand(consoleCommandSender, actionData);
-            }
-            if(action.equals(GuiAction.SEND_TEXT)){
+            } else if(action.equals(GuiAction.SEND_TEXT)){
                 actionData = actionData.replace("{player-executor}", null);
                 //send player text
-            }
-            if(action.equals(GuiAction.NONE)){
+            } else /*(action.equals(GuiAction.NONE))*/{
                 //do nothing
             }
 

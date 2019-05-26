@@ -5,7 +5,18 @@ import com.paulek.core.basic.Warrior;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.bukkit.internal.WGMetadata;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import com.sk89q.worldguard.protection.regions.RegionContainer;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -148,7 +159,18 @@ public class CombatListeners implements Listener {
 
         Entity attack = event.getDamager();
         Entity damaged = event.getEntity();
+        Location location = attack.getLocation();
         boolean test = true;
+
+        RegionContainer regionContainer = core.getWorldGuard().getPlatform().getRegionContainer();
+        RegionManager regionManager = regionContainer.get(BukkitAdapter.adapt(location.getWorld()));
+        ApplicableRegionSet applicableRegionSet = regionManager.getApplicableRegions(BlockVector3.at(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+
+
+        for(ProtectedRegion region : applicableRegionSet.getRegions()){
+
+        }
+
 
         if (!Config.COMBAT_ONCREATIVE) {
             if (attack instanceof Player) {
@@ -163,7 +185,9 @@ public class CombatListeners implements Listener {
 
         }
 
-        if (event.isCancelled()) test = false;
+        if (event.isCancelled()){
+            test = false;
+        }
 
         if (test) {
             if (Config.COMBAT_MOBDAMAGE) {

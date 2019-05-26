@@ -15,6 +15,7 @@ import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Drops;
 import com.paulek.core.common.io.Kits;
 import com.paulek.core.common.io.Lang;
+import com.sk89q.worldguard.WorldGuard;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -57,6 +58,7 @@ public class Core extends JavaPlugin {
     private Rtps rtpsStorage;
     private TpaStorage tpaStorage;
     private Users usersStorage;
+    private WorldGuard worldGuard;
 
     static {
         ConfigurationSerialization.registerClass(StoneDrop.class, "StoneDrop");
@@ -101,7 +103,7 @@ public class Core extends JavaPlugin {
         commandManager = new CommandManager(this);
 
 
-        //Valut permissions initialization
+        //Valut initialization
         if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
             RegisteredServiceProvider<Permission> serviceProvider_permission = this.getServer().getServicesManager().getRegistration(Permission.class);
             if (serviceProvider_permission != null) permission = serviceProvider_permission.getProvider();
@@ -110,6 +112,16 @@ public class Core extends JavaPlugin {
             consoleLog.info("Valut detected!");
         } else {
             consoleLog.log("Warning! Valut not detected! disabling plugin...", Level.WARNING);
+            this.getPluginLoader().disablePlugin(this);
+            return;
+        }
+
+        //WorldGuard initialization
+        if (this.getServer().getPluginManager().getPlugin("WorldGuard") != null) {
+            worldGuard = WorldGuard.getInstance();
+            consoleLog.info("WorldGuard detected!");
+        } else {
+            consoleLog.log("Warning! WorldGuard not detected! disabling plugin...", Level.WARNING);
             this.getPluginLoader().disablePlugin(this);
             return;
         }
@@ -340,5 +352,9 @@ public class Core extends JavaPlugin {
 
     public ConsoleLog getConsoleLog() {
         return consoleLog;
+    }
+
+    public WorldGuard getWorldGuard() {
+        return worldGuard;
     }
 }
