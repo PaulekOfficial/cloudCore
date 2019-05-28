@@ -1,12 +1,24 @@
 package com.paulek.core.basic.event;
 
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class PlayerRandomTeleportEvent extends Event {
 
-    public PlayerRandomTeleportEvent() {
-        super();
+    private static final HandlerList handlers = new HandlerList();
+
+    private Player player;
+    private World world;
+    private int maxLocX;
+    private int maxLocZ;
+
+    public PlayerRandomTeleportEvent(Player player, World world, int maxLocX, int maxLocZ) {
+        this.player = player;
+        this.world = world;
+        this.maxLocX = maxLocX;
+        this.maxLocZ = maxLocZ;
     }
 
     public PlayerRandomTeleportEvent(boolean isAsync) {
@@ -20,6 +32,22 @@ public class PlayerRandomTeleportEvent extends Event {
 
     @Override
     public HandlerList getHandlers() {
-        return null;
+        return handlers;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public int getMaxLocX() {
+        return maxLocX;
+    }
+
+    public int getMaxLocZ() {
+        return maxLocZ;
     }
 }

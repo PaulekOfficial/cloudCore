@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.TeleportUtil;
+import com.paulek.core.common.LocationUtil;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
@@ -33,7 +33,7 @@ public class WorldCMD extends Command {
 
                 Location location = world.getSpawnLocation();
 
-                new TeleportUtil(location, (Player) sender);
+                new LocationUtil(location, (Player) sender);
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_WORLD_TELEPORTED));
 
@@ -63,7 +63,7 @@ public class WorldCMD extends Command {
 
                 Location location = world.getSpawnLocation();
 
-                new TeleportUtil(location, player);
+                new LocationUtil(location, player);
 
                 player.sendMessage(Util.fixColor(Lang.INFO_WORLD_TELEPORTED));
                 sender.sendMessage(Util.fixColor(Lang.INFO_WORLD_PLAYERTELEPORTED));

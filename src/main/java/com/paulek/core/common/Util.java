@@ -10,9 +10,6 @@ import net.minecraft.server.v1_14_R1.IChatBaseComponent;
 import net.minecraft.server.v1_14_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_14_R1.PacketPlayOutTitle;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -159,21 +156,6 @@ public class Util {
         PacketPlayOutChat packetPlayOutChat = new PacketPlayOutChat(iChatBaseComponent, ChatMessageType.GAME_INFO);
 
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutChat);
-    }
-
-    public static Location randomTeleport(World world) {
-        Random RAND = new Random();
-        int x = (Config.RTP_MAXVALUES_X * -1) + RAND.nextInt(Config.RTP_MAXVALUES_X -
-                (Config.RTP_MAXVALUES_X * -1) + 1);
-        int z = (Config.RTP_MAXVALUES_Z * -1) + RAND.nextInt(Config.RTP_MAXVALUES_Z - (Config.RTP_MAXVALUES_Z * -1) + 1);
-        int y = world.getHighestBlockYAt(x, z);
-        if ((world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.OCEAN) || (world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.DEEP_OCEAN)
-                || (world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.FROZEN_OCEAN)) {
-            randomTeleport(world);
-        }
-        Location loc = new Location(world, x, y, z);
-        int yfix = world.getHighestBlockYAt(loc);
-        return new Location(world, x, yfix, z);
     }
 
     public static void sendTitle(Player player, String messageA, String messageB, int a, int b, int c) {

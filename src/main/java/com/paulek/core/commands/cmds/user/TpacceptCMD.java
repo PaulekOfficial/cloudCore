@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.TeleportUtil;
+import com.paulek.core.common.LocationUtil;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
@@ -59,7 +59,7 @@ public class TpacceptCMD extends Command {
                     public void run() {
 
                         if (Bukkit.getPlayer(to_teleport.getUniqueId()) != null)
-                            new TeleportUtil(location, to_teleport);
+                            new LocationUtil(location, to_teleport);
 
                         if (Bukkit.getPlayer(to_teleport.getUniqueId()) != null)
                             to_teleport.sendMessage(Util.fixColor(Lang.INFO_TPA_TELEPORT));
@@ -95,7 +95,7 @@ public class TpacceptCMD extends Command {
                 id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
                     public void run() {
 
-                        if (Bukkit.getPlayer(player1.getUniqueId()) != null) new TeleportUtil(location, player1);
+                        if (Bukkit.getPlayer(player1.getUniqueId()) != null) new LocationUtil(location, player1);
 
                         if (Bukkit.getPlayer(player1.getUniqueId()) != null)
                             player1.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_TELEPORT));

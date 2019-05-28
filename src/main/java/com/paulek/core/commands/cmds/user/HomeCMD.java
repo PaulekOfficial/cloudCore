@@ -3,7 +3,7 @@ package com.paulek.core.commands.cmds.user;
 import com.paulek.core.Core;
 import com.paulek.core.basic.User;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.TeleportUtil;
+import com.paulek.core.common.LocationUtil;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
@@ -48,7 +48,7 @@ public class HomeCMD extends Command {
 
                         id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
                             public void run() {
-                                new TeleportUtil(user.getHome(args[0]), player);
+                                new LocationUtil(user.getHome(args[0]), player);
 
                                 sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORT));
                             }
@@ -57,7 +57,7 @@ public class HomeCMD extends Command {
                         to_teleport.put(player.getUniqueId(), id.getTaskId());
 
                     } else {
-                        new TeleportUtil(user.getHome(args[0]), player);
+                        new LocationUtil(user.getHome(args[0]), player);
 
                         sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORT));
                     }

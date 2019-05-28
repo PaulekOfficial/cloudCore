@@ -2,19 +2,19 @@ package com.paulek.core.basic.listeners;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.Warrior;
+import com.paulek.core.basic.data.CombatStorage;
+import com.paulek.core.basic.event.PlayerCombatStartEvent;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.bukkit.internal.WGMetadata;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -155,12 +155,35 @@ public class CombatListeners implements Listener {
     }
 
     @EventHandler
+    public void onPlayerCombatStart(PlayerCombatStartEvent event){
+
+        CombatStorage combatStorage = core.getCombatStorage();
+
+        if(combatStorage.isMarked(event.getAttacked().getUniqueId())){
+            combatStorage.changeTimeMilisrs(event.getAttacked().getUniqueId(), System.currentTimeMillis());
+        }
+        combatStorage.addMarkedWarrior(new Warrior(event.getAttacked().getUniqueId(), event.getAttacked().getDisplayName()));
+        if (Config.COMBAT_CHATMESSAGE) {
+            event.getAttacked().sendMessage(Util.fixColor(Lang.INFO_COMBAT_CHAT));
+        }
+        if(event.getAttacker() instanceof Player){
+            if(combatStorage.isMarked((event.getAttacker().getUniqueId()))){
+                combatStorage.changeTimeMilisrs(event.getAttacker().getUniqueId(), System.currentTimeMillis());
+            }
+            combatStorage.addMarkedWarrior(new Warrior(event.getAttacker().getUniqueId(), ((Player) event.getAttacker()).getDisplayName()));
+            if (Config.COMBAT_CHATMESSAGE) {
+                event.getAttacker().sendMessage(Util.fixColor(Lang.INFO_COMBAT_CHAT));
+            }
+        }
+
+    }
+
+    @EventHandler
     public void onDamageEntity(org.bukkit.event.entity.EntityDamageByEntityEvent event) {
 
-        Entity attack = event.getDamager();
-        Entity damaged = event.getEntity();
-        Location location = attack.getLocation();
-        boolean test = true;
+        Entity attacker = event.getDamager();
+        Entity attacked = event.getEntity();
+        Location location = attacker.getLocation();
 
         RegionContainer regionContainer = core.getWorldGuard().getPlatform().getRegionContainer();
         RegionManager regionManager = regionContainer.get(BukkitAdapter.adapt(location.getWorld()));
@@ -168,94 +191,52 @@ public class CombatListeners implements Listener {
 
 
         for(ProtectedRegion region : applicableRegionSet.getRegions()){
-
+            if(region.getFlags().get(Flags.PVP).equals(false)){
+                event.setCancelled(true);
+                return;
+            }
         }
 
-
         if (!Config.COMBAT_ONCREATIVE) {
-            if (attack instanceof Player) {
-                Player damager = (Player) attack;
+            if (attacker instanceof Player) {
+                Player damager = (Player) attacker;
                 if (damager.getGameMode() == GameMode.CREATIVE) {
                     damager.sendMessage(Util.fixColor(Lang.ERROR_COMBAT_CREATIVE));
                     event.setCancelled(true);
-                    test = false;
                     return;
                 }
             }
 
         }
 
-        if (event.isCancelled()){
-            test = false;
-        }
-
-        if (test) {
-            if (Config.COMBAT_MOBDAMAGE) {
-                if ((damaged instanceof Player) && (attack instanceof Monster)) {
-                    Player player = (Player) damaged;
-                    if (core.getCombatStorage().isMarked(player.getUniqueId())) {
-                        core.getCombatStorage().changeTimeMilisrs(player.getUniqueId(), System.currentTimeMillis());
-                        return;
-                    }
-                    core.getCombatStorage().addMarkedWarrior(new Warrior(player.getUniqueId(), player.getDisplayName()));
-                    if (Config.COMBAT_CHATMESSAGE) {
-                        player.sendMessage(Util.fixColor(Lang.INFO_COMBAT_CHAT));
-                    }
-                }
-            }
-
-            if ((attack instanceof Player) && (damaged instanceof Player)) {
-                Player player = (Player) damaged;
-                Player damager = (Player) attack;
-                if (core.getCombatStorage().isMarked(player.getUniqueId()) && core.getCombatStorage().isMarked(damager.getUniqueId())) {
-                    core.getCombatStorage().changeTimeMilisrs(player.getUniqueId(), System.currentTimeMillis());
-                    core.getCombatStorage().changeTimeMilisrs(damager.getUniqueId(), System.currentTimeMillis());
-                    return;
-                }
-
-                core.getCombatStorage().addMarkedWarrior(new Warrior(player.getUniqueId(), player.getDisplayName()));
-                core.getCombatStorage().addMarkedWarrior(new Warrior(damager.getUniqueId(), damager.getDisplayName()));
-                if (Config.COMBAT_CHATMESSAGE) {
-                    player.sendMessage(Util.fixColor(Lang.INFO_COMBAT_CHAT));
-                    damager.sendMessage(Util.fixColor(Lang.INFO_COMBAT_CHAT));
-                }
-
-            }
-            if (((event.getDamager() instanceof Projectile)) && ((event.getEntity() instanceof Player)) &&
-                    ((((Projectile) event.getDamager()).getShooter() instanceof Player))) {
-                Player damage = null;
-                Player shotted = null;
-                Entity damager = event.getDamager();
-                if (event.getDamager() instanceof Arrow) {
-                    shotted = ((Player) event.getEntity()).getPlayer();
-                    damage = (Player) ((Projectile) damager).getShooter();
-                }
-                if (event.getDamager() instanceof ThrownPotion) {
-                    shotted = ((Player) event.getEntity()).getPlayer();
-                    damage = (Player) ((Projectile) damager).getShooter();
-                }
-                if (event.getDamager() instanceof Snowball) {
-                    shotted = ((Player) event.getEntity()).getPlayer();
-                    damage = (Player) ((Projectile) damager).getShooter();
-                }
-                if (event.getDamager() instanceof Egg) {
-                    shotted = ((Player) event.getEntity()).getPlayer();
-                    damage = (Player) ((Projectile) damager).getShooter();
-                }
-
-                if (shotted != null)
-                    core.getCombatStorage().addMarkedWarrior(new Warrior(shotted.getUniqueId(), shotted.getDisplayName()));
-                core.getCombatStorage().addMarkedWarrior(new Warrior(damage.getUniqueId(), damage.getDisplayName()));
-                shotted.setLastDamage(0.5F);
-
-                if (Config.COMBAT_CHATMESSAGE) {
-                    shotted.sendMessage(Util.fixColor(Lang.INFO_COMBAT_CHAT));
-                    damager.sendMessage(Util.fixColor(Lang.INFO_COMBAT_CHAT));
-                }
-
+        if (Config.COMBAT_MOBDAMAGE) {
+            if ((attacked instanceof Player) && (attacker instanceof Monster)) {
+                Player player = (Player) attacked;
+                Bukkit.getPluginManager().callEvent(new PlayerCombatStartEvent(player, attacker));
             }
         }
 
+        if ((attacker instanceof Player) && (attacked instanceof Player)) {
+            Player player = (Player) attacked;
+            Bukkit.getPluginManager().callEvent(new PlayerCombatStartEvent(player, attacker));
+        }
+            if (((attacker instanceof Projectile)) && ((attacked instanceof Player)) && ((((Projectile) attacker).getShooter() instanceof Player))) {
+            if (attacker instanceof Arrow) {
+                Player player = (Player) attacked;
+                Bukkit.getPluginManager().callEvent(new PlayerCombatStartEvent(player, attacker));
+            }
+            if (attacker instanceof ThrownPotion) {
+                Player player = (Player) attacked;
+                Bukkit.getPluginManager().callEvent(new PlayerCombatStartEvent(player, attacker));
+            }
+            if (attacker instanceof Snowball) {
+                Player player = (Player) attacked;
+                Bukkit.getPluginManager().callEvent(new PlayerCombatStartEvent(player, attacker));
+            }
+            if (attacker instanceof Egg) {
+                Player player = (Player) attacked;
+                Bukkit.getPluginManager().callEvent(new PlayerCombatStartEvent(player, attacker));
+            }
+        }
     }
-
 }

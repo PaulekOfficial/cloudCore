@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.TeleportUtil;
+import com.paulek.core.common.LocationUtil;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
@@ -30,7 +30,7 @@ public class TpaCMD extends Command {
             if (Bukkit.getPlayer(args[0]) != null) {
                 final Player player = Bukkit.getPlayer(args[0]);
 
-                if (TeleportUtil.hasPlayerTpToogle(player, getCore())) return false;
+                if (LocationUtil.hasPlayerTpToogle(player, getCore())) return false;
 
                 BukkitTask id;
 

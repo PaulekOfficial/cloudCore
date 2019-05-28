@@ -5,12 +5,16 @@ import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class TeleportUtil {
+import java.util.Random;
 
-    public TeleportUtil(Location location, Player player) {
+public class LocationUtil {
+
+    public LocationUtil(Location location, Player player) {
 
         if (Config.TP_SAFELOCATION) {
 
@@ -21,6 +25,21 @@ public class TeleportUtil {
 
         player.teleport(location);
 
+    }
+
+    public static Location randomLocation(World world, int maxX, int maxZ) {
+        Random RAND = new Random();
+        int x = (maxX * -1) + RAND.nextInt(maxX -
+                (maxX * -1) + 1);
+        int z = (maxZ * -1) + RAND.nextInt(maxZ - (maxZ * -1) + 1);
+        int y = world.getHighestBlockYAt(x, z);
+        if ((world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.OCEAN) || (world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.DEEP_OCEAN)
+                || (world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.FROZEN_OCEAN)) {
+            randomLocation(world, maxX, maxZ);
+        }
+        Location loc = new Location(world, x, y, z);
+        int yfix = world.getHighestBlockYAt(loc);
+        return new Location(world, x, yfix, z);
     }
 
     public static boolean hasPlayerTpToogle(Player player, Core core) {

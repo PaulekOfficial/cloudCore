@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.TeleportUtil;
+import com.paulek.core.common.LocationUtil;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
@@ -27,7 +27,7 @@ public class TpCMD extends Command {
                 if (Bukkit.getPlayerExact(args[0]) != null) {
                     player = Bukkit.getPlayerExact(args[0]);
 
-                    if (TeleportUtil.hasPlayerTpToogle(player, getCore())) return false;
+                    if (LocationUtil.hasPlayerTpToogle(player, getCore())) return false;
 
                     ((Player) sender).teleport(player.getLocation());
                     sender.sendMessage(Util.fixColor(Lang.INFO_TP_INFO.replace("{player}", player.getDisplayName())));
@@ -44,7 +44,7 @@ public class TpCMD extends Command {
             if ((Bukkit.getPlayerExact(args[0]) != null) && (Bukkit.getPlayerExact(args[1]) != null)) {
                 player1 = Bukkit.getPlayerExact(args[0]);
 
-                if (TeleportUtil.hasPlayerTpToogle(player1, getCore())) return false;
+                if (LocationUtil.hasPlayerTpToogle(player1, getCore())) return false;
 
                 player2 = Bukkit.getPlayerExact(args[1]);
                 player1.teleport(player2.getLocation());

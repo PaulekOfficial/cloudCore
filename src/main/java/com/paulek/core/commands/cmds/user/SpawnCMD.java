@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.TeleportUtil;
+import com.paulek.core.common.LocationUtil;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
@@ -97,6 +97,6 @@ public class SpawnCMD extends Command {
         Location location = new Location(Bukkit.getWorld(Config.SPAWN_WORLD), Config.SPAWN_BLOCK_X, Config.SPAWN_BLOCK_Y, Config.SPAWN_BLOCK_Z);
         location.setYaw((float) Config.SPAWN_YAW);
 
-        new TeleportUtil(location, player);
+        new LocationUtil(location, player);
     }
 }
