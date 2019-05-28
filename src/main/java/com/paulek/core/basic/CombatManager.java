@@ -1,10 +1,12 @@
 package com.paulek.core.basic;
 
 import com.paulek.core.Core;
+import com.paulek.core.basic.event.PlayerCombatEndEvent;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -37,16 +39,20 @@ public class CombatManager implements Runnable {
 
             String a = message.replace("{coldown}", Long.toString(coldown));
 
-            if ((Bukkit.getPlayer(p.getNick()) != null)) Util.sendActionbar(Bukkit.getPlayer(p.getNick()), a);
+            if ((Bukkit.getPlayer(p.getNick()) != null)){
+                Player player = Bukkit.getPlayer(p.getNick());
+                Util.sendActionbar(player, a);
+            }
 
             if (coldown <= 0) {
                 i.remove();
 
-                if ((Bukkit.getPlayer(p.getNick()) != null))
-                    Util.sendActionbar(Bukkit.getPlayer(p.getNick()), end_combat);
-
-                if ((Bukkit.getPlayer(p.getNick()) != null)) if (Config.COMBAT_CHATMESSAGE)
-                    Bukkit.getPlayer(p.getNick()).sendMessage(Util.fixColor(Lang.INFO_COMBAT_ENDCHAT));
+                if ((Bukkit.getPlayer(p.getNick()) != null)){
+                    Player player = Bukkit.getPlayer(p.getNick());
+                    Util.sendActionbar(player, end_combat);
+                    if (Config.COMBAT_CHATMESSAGE) player.sendMessage(Util.fixColor(Lang.INFO_COMBAT_ENDCHAT));
+                    Bukkit.getPluginManager().callEvent(new PlayerCombatEndEvent(player));
+                }
 
             }
 

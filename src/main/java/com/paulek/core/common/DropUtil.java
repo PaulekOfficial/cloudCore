@@ -52,18 +52,6 @@ public class DropUtil {
         return getRandomInteger(Integer.valueOf(strings[0]), Integer.valueOf(strings[1]));
     }
 
-    public static void dropToPlayer(List<ItemStack> items, int exp, Player player) {
-        Location location = player.getLocation();
-        World world = location.getWorld();
-        for (ItemStack item : items) {
-
-            world.dropItemNaturally(location, item);
-
-        }
-        player.giveExp((int) player.getExp() + exp);
-
-    }
-
     public static void drop(List<ItemStack> items, int exp, Player player, Location location) {
         World world = location.getWorld();
         for (ItemStack item : items) {
