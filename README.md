@@ -1,2 +1,2 @@
 # clCore
-Plugin constituting basic modules for the proper functioning of the server
+Nie wspierane - zostanie usunięte z dniem 4.06.2019r.
