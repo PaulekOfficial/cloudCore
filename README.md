@@ -9,7 +9,7 @@ CloudCore jest to plugin słynnego w Polsce formatu "core", jest to coś na wzó
 
 Instalacja
 ---------
-* [Pobieranie]()
+* [Pobieranie](https://github.com/PaulekOfficial/cloudCore/releases)
 * Plugin do poprawnego działania wymaga pluginów takich jak [Valut](https://www.spigotmc.org/resources/vault.34315/), [WorldGuard](https://dev.bukkit.org/projects/worldguard), [WorldEdit](https://dev.bukkit.org/projects/worldedit)
 * Wrzuć plik cloudCore.jar do folderu plugins w spowim serwerze.
 * Uruchom swój serwer z silnikiem Bukkit/Spigot/Paperspigot i odczekaj chwilkę czasu, aż wygenerują się configi.
