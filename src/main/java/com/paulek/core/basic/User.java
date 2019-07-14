@@ -19,25 +19,20 @@ public class User {
 
     private UUID uuid;
     private String lastAccountName;
-    private Skin skin;
     private Location logoutlocation;
     private Location lastlocation;
     private InetAddress ipAddres;
-    private Map<String, Timestamp> timestamps = new HashMap<>();
-    private boolean afk;
-    private Long afkSince;
-    private String afkResson;
     private Map<String, Location> homes = new HashMap<>();
     private long lastActivity;
-    private UserSettings settings;
+    private boolean socialSpy;
+    private boolean vanish;
+    private boolean tpToogle;
+    private boolean tpsMonitor;
 
     private Core core;
 
     @JsonIgnore
     private boolean uptodate = true;
-
-    //W przyszłości coś ekonomi :P
-    private Long money;
 
     public User(Core core) {
         this.core = Objects.requireNonNull(core, "Core");
@@ -54,74 +49,21 @@ public class User {
             lastlocation = onlinePlayer.getLocation();
             ipAddres = onlinePlayer.getAddress().getAddress();
             lastActivity = System.currentTimeMillis();
-            settings = new UserSettings();
-
-            if (Config.SKINS_ENABLE && (!Bukkit.getServer().getOnlineMode())) {
-                applySkin(lastAccountName, onlinePlayer);
-            }
 
         } else if (Bukkit.getOfflinePlayer(uuid) != null) {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
             lastAccountName = offlinePlayer.getName();
             lastActivity = System.currentTimeMillis();
-            settings = new UserSettings();
         }
 
-    }
-
-    private void applySkin(String lastAccountName, Player onlinePlayer) {
-        Bukkit.getScheduler().runTaskAsynchronously(core.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                Skin skin = Util.getPremiumSkin(lastAccountName, core);
-                if (skin != null) {
-                    setSkin(skin);
-                    skin.applySkinForPlayers(onlinePlayer);
-                    skin.updateSkinForPlayer(onlinePlayer);
-                }
-            }
-        });
-    }
-
-    public void setTimeStamp(String key, Timestamp o) {
-        this.timestamps.put(key, o);
-    }
-
-    public void removeTimestamp(String name) {
-        this.timestamps.remove(name);
-    }
-
-    public void addTimestamp(String name, Timestamp timestamp) {
-        this.timestamps.put(name, timestamp);
-    }
-
-    public Timestamp getTimeStamp(String key) {
-        return this.timestamps.get(key);
-    }
-
-    public Map<String, Timestamp> getTimestamps() {
-        return timestamps;
     }
 
     public UUID getUuid() {
         return uuid;
     }
 
-    public Skin getSkin() {
-        return skin;
-    }
-
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
-    }
-
-    public void setTimestamps(Map<String, Timestamp> timestamps) {
-        this.timestamps = timestamps;
-    }
-
-    public void setSkin(Skin skin) {
-        this.skin = skin;
-        uptodate = false;
     }
 
     public Location getLogoutlocation() {
@@ -130,7 +72,6 @@ public class User {
 
     public void setLogoutlocation(Location logoutlocation) {
         this.logoutlocation = logoutlocation;
-        uptodate = false;
     }
 
     public Location getLastlocation() {
@@ -139,7 +80,6 @@ public class User {
 
     public void setLastlocation(Location lastlocation) {
         this.lastlocation = lastlocation;
-        uptodate = false;
     }
 
     public InetAddress getIpAddres() {
@@ -148,34 +88,6 @@ public class User {
 
     public void setIpAddres(InetAddress ipAddres) {
         this.ipAddres = ipAddres;
-        uptodate = false;
-    }
-
-    public boolean isAfk() {
-        return afk;
-    }
-
-    public void setAfk(boolean afk) {
-        this.afk = afk;
-        uptodate = false;
-    }
-
-    public Long getAfkSince() {
-        return afkSince;
-    }
-
-    public void setAfkSince(Long afkSince) {
-        this.afkSince = afkSince;
-        uptodate = false;
-    }
-
-    public String getAfkResson() {
-        return afkResson;
-    }
-
-    public void setAfkResson(String afkResson) {
-        this.afkResson = afkResson;
-        uptodate = false;
     }
 
     public long getLastActivity() {
@@ -184,25 +96,6 @@ public class User {
 
     public void setLastActivity(long lastActivity) {
         this.lastActivity = lastActivity;
-        uptodate = false;
-    }
-
-    public Long getMoney() {
-        return money;
-    }
-
-    public void setMoney(Long money) {
-        this.money = money;
-        uptodate = false;
-    }
-
-    public UserSettings getSettings() {
-        return settings;
-    }
-
-    public void setSettings(UserSettings settings) {
-        this.settings = settings;
-        uptodate = false;
     }
 
     public String getLastAccountName() {
@@ -228,7 +121,6 @@ public class User {
 
     public void removeHome(String homeName) {
         homes.remove(homeName);
-        uptodate = false;
     }
 
     @JsonIgnore
@@ -247,6 +139,5 @@ public class User {
 
     public void setHomes(Map<String, Location> homes) {
         this.homes = homes;
-        uptodate = false;
     }
 }

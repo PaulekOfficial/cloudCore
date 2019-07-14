@@ -5,6 +5,7 @@ import com.paulek.core.basic.Kit;
 import com.paulek.core.common.ConsoleLog;
 import com.paulek.core.common.Util;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -14,6 +15,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
+
+//TODO Rewrite tej całej klasy
 public class Kits {
 
     private Map<String, Kit> kits = new HashMap<>();
@@ -69,7 +72,7 @@ public class Kits {
 
                 String itemName = "";
                 int amount = 1;
-                Map<Enchantment, Integer> enchants = new HashMap();
+                Map<Enchantment, Integer> enchants = new HashMap<>();
                 List<String> lore = new ArrayList<>();
                 Material itemMaterial;
                 short durability = 0;
@@ -106,9 +109,11 @@ public class Kits {
                         elementRead = true;
                     }
 
+
+
                     if (s.contains(":") && !elementRead) {
                         String[] enchantment = s.split(":");
-                        Enchantment e = Enchantment.getByName(enchantment[0].toUpperCase());
+                        Enchantment e = Enchantment.getByKey(NamespacedKey.minecraft(enchantment[0].toLowerCase()));
                         if (e != null) enchants.put(e, Integer.valueOf(enchantment[1]));
                     }
 

@@ -3,11 +3,13 @@ package com.paulek.core.basic;
 public class Timestamp {
 
     private long endTime;
+    private String serviceName;
     private String className;
 
-    public Timestamp(String className, long endTime) {
+    public Timestamp(String serviceName, String className, long endTime) {
         this.className = className;
         this.endTime = endTime;
+        this.serviceName = serviceName;
     }
 
     public boolean applicable() {
@@ -64,7 +66,7 @@ public class Timestamp {
         return className;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public String getServiceName() {
+        return serviceName;
     }
 }

@@ -1,7 +1,7 @@
 package com.paulek.core;
 
 import com.paulek.core.basic.CombatManager;
-import com.paulek.core.basic.MySQL;
+import com.paulek.core.basic.database.MySQL;
 import com.paulek.core.basic.User;
 import com.paulek.core.basic.data.*;
 import com.paulek.core.basic.drop.StoneDrop;
