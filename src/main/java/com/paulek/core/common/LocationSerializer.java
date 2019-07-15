@@ -1,33 +1,82 @@
 package com.paulek.core.common;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
-public class LocationSerializer extends StdSerializer<Location> {
+public class LocationSerializer {
 
-    public LocationSerializer() {
-        this(null);
+    public static String locationToString(Location location){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(location.getWorld().getUID().toString());
+        stringBuilder.append("#");
+        stringBuilder.append(location.getX());
+        stringBuilder.append("#");
+        stringBuilder.append(location.getY());
+        stringBuilder.append("#");
+        stringBuilder.append(location.getX());
+        stringBuilder.append("#");
+        stringBuilder.append(location.getYaw());
+        stringBuilder.append("#");
+        stringBuilder.append(location.getPitch());
+        return stringBuilder.toString();
     }
 
-    public LocationSerializer(Class<Location> t) {
-        super(t);
+    public static Location locationFromString(String location){
+
+        if (location.equalsIgnoreCase("") || location == null) return null;
+
+        String[] splittedString = location.split("#");
+        World world = Bukkit.getWorld(UUID.fromString(splittedString[0]));
+        double x = Double.parseDouble(splittedString[1]);
+        double y = Double.parseDouble(splittedString[2]);
+        double z = Double.parseDouble(splittedString[3]);
+        float yaw = Float.parseFloat(splittedString[4]);
+        float pitch = Float.parseFloat(splittedString[5]);
+        return new Location(world, x, y, z, yaw, pitch);
     }
 
-    @Override
-    public void serialize(Location location, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        jsonGenerator.writeStartObject();
-
-        jsonGenerator.writeStringField("world", location.getWorld().getName());
-        jsonGenerator.writeObjectField("x", location.getX());
-        jsonGenerator.writeObjectField("y", location.getY());
-        jsonGenerator.writeObjectField("z", location.getZ());
-        jsonGenerator.writeObjectField("yaw", location.getYaw());
-        jsonGenerator.writeObjectField("pitch", location.getPitch());
-
-        jsonGenerator.writeEndObject();
+    public static String locationMapToString(Map<String, Location> locationMap){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(String key : locationMap.keySet()){
+            stringBuilder.append(key);
+            stringBuilder.append("#");
+            stringBuilder.append(locationToString(locationMap.get(key)));
+            stringBuilder.append("%");
+        }
+        return stringBuilder.toString();
     }
+
+    public static Map<String, Location> locationMapFormString(String string){
+        Map<String, Location> map = new HashMap<>();
+
+        if(string.equalsIgnoreCase("") || string == null) return map;
+
+        String[] splittedStringPhaseOne = string.split("%");
+
+        for(String dataPack : splittedStringPhaseOne){
+
+            String[] splittedStringPhaseTwo = dataPack.split("#");
+
+            String name = splittedStringPhaseTwo[0];
+            World world = Bukkit.getWorld(UUID.fromString(splittedStringPhaseTwo[1]));
+            double x = Double.parseDouble(splittedStringPhaseTwo[2]);
+            double y = Double.parseDouble(splittedStringPhaseTwo[3]);
+            double z = Double.parseDouble(splittedStringPhaseTwo[4]);
+            float yaw = Float.parseFloat(splittedStringPhaseTwo[5]);
+            float pitch = Float.parseFloat(splittedStringPhaseTwo[6]);
+
+            Location location = new Location(world, x, y, z, yaw, pitch);
+
+            map.put(name, location);
+        }
+
+        return map;
+    }
+
+
 }

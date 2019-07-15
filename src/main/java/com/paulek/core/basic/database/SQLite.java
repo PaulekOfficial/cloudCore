@@ -25,11 +25,13 @@ public class SQLite extends Database{
 
         Properties properties = new Properties();
 
-        DriverDataSource driverDataSource = new DriverDataSource("jdbc:sqlite:" + databaseFile.getAbsolutePath(), "org.sqlite.SQLiteDataSource", properties, null, null);
+        DriverDataSource driverDataSource = new DriverDataSource("jdbc:sqlite:" + databaseFile.getAbsolutePath(), "org.sqlite.JDBC", properties, null, null);
 
         hikariConfig.setDataSource(driverDataSource);
 
         dataSource = new HikariDataSource(hikariConfig);
+
+        dataSource.getConnectionTestQuery();
     }
 
     @Override

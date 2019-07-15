@@ -1,7 +1,6 @@
 package com.paulek.core.basic.listeners;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.User;
 import com.paulek.core.basic.drop.DropMask;
 import com.paulek.core.commands.cmds.admin.VanishCMD;
 import com.paulek.core.commands.cmds.user.SpawnCMD;
@@ -15,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -78,7 +76,7 @@ public class PluginListeners implements Listener {
 
             if (Config.COMBAT_BRODCASTLOGOUT) {
 
-                String s = Util.fixColor(Lang.INFO_COMBAT_BRODCASTLOGOUT).replace("{player}", event.getPlayer().getName()).replace("{health}", Double.toString((int) event.getPlayer().getHealth()) + "♥");
+                String s = Util.fixColor(Lang.INFO_COMBAT_BRODCASTLOGOUT).replace("{player}", event.getPlayer().getName()).replace("{health}", (int) event.getPlayer().getHealth() + "♥");
 
                 Bukkit.broadcastMessage(s);
 

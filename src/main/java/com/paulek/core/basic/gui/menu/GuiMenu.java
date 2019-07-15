@@ -1,6 +1,5 @@
 package com.paulek.core.basic.gui.menu;
 
-import com.paulek.core.basic.gui.GUIItem;
 import com.paulek.core.basic.gui.GUIWindow;
 import org.bukkit.inventory.Inventory;
 

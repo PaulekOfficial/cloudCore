@@ -1,4 +1,4 @@
-package com.paulek.core.basic.data;
+package com.paulek.core.basic.data.databaseStorage;
 
 import java.util.HashMap;
 import java.util.Map;

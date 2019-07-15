@@ -1,8 +1,12 @@
 package com.paulek.core.basic.listeners;
 
 import com.paulek.core.Core;
+import com.paulek.core.basic.Skin;
 import com.paulek.core.basic.User;
-import com.paulek.core.basic.data.Users;
+import com.paulek.core.common.Util;
+import com.paulek.core.common.io.Config;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -10,7 +14,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 public class UserListeners implements Listener {
 
@@ -31,7 +37,40 @@ public class UserListeners implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
 
-        core.getUsersStorage().loadUser(event.getPlayer().getUniqueId());
+        core.getUsersStorage().checkPlayer(event.getPlayer());
+
+        Bukkit.getScheduler().runTaskLaterAsynchronously(core.getPlugin(), run ->{
+            UUID fakeUUID = event.getPlayer().getUniqueId();
+            String nick = event.getPlayer().getDisplayName();
+            if(!core.isOnlineMode() && Config.SKINS_ENABLE){
+
+                if(core.getSkinsStorage().getSkin(fakeUUID) == null){
+
+                    Skin skin = Util.getPremiumSkin(nick, core);
+
+                    if(skin == null) return;
+
+                    skin.updateSkinForPlayer(Bukkit.getPlayer(fakeUUID));
+                    skin.applySkinForPlayers(Bukkit.getPlayer(fakeUUID));
+                    skin.setDirty(true);
+
+                    core.getSkinsStorage().addSkin(fakeUUID, skin);
+
+                    return;
+                }
+
+                Skin skin = core.getSkinsStorage().getSkin(fakeUUID);
+                if(skin.getLastUpdate().isAfter(LocalDateTime.now())){
+                    Skin newSkin = Util.getPremiumSkin(nick, core);
+                    if(newSkin != null){
+                        skin = newSkin;
+                        skin.setDirty(true);
+                    }
+                }
+                skin.updateSkinForPlayer(Bukkit.getPlayer(fakeUUID));
+                skin.applySkinForPlayers(Bukkit.getPlayer(fakeUUID));
+            }
+        }, 20*2);
 
     }
 
@@ -41,7 +80,7 @@ public class UserListeners implements Listener {
         if (core.getUsersStorage().getUser(event.getPlayer().getUniqueId()) != null) {
 
             core.getUsersStorage().getUser(event.getPlayer().getUniqueId()).setLogoutlocation(event.getPlayer().getLocation());
-            core.getUsersStorage().getUser(event.getPlayer().getUniqueId()).setLastActivity(System.currentTimeMillis());
+            core.getUsersStorage().getUser(event.getPlayer().getUniqueId()).setLastActivity(LocalDateTime.now());
 
         }
 

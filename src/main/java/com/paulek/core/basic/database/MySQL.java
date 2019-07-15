@@ -35,7 +35,7 @@ public class MySQL extends Database{
         link.append(port);
         link.append("/");
         link.append(database);
-        link.append("?useUnicode=true&useSSL=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+        link.append("?useUnicode=true&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
 
         config.setJdbcUrl(link.toString());
         config.setUsername(user);
@@ -44,6 +44,8 @@ public class MySQL extends Database{
         config.setConnectionTimeout(30000);
 
         this.dataSource = new HikariDataSource(config);
+
+        dataSource.getConnectionTestQuery();
     }
 
     @Override

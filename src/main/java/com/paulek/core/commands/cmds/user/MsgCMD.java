@@ -39,7 +39,7 @@ public class MsgCMD extends Command {
                 sender.sendMessage(message.replace("{from}", sender.getName()));
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     UUID ue = p.getUniqueId();
-                    if (getCore().getUsersStorage().getUser(ue).getSettings().isSocialspy()) {
+                    if (getCore().getUsersStorage().getUser(ue).isSocialSpy()) {
                         String m = Util.fixColor(Lang.INFO_MSG_SPYFORMAT.replace("{from}", sender.getName()).replace("{to}", send.getDisplayName()).replace("{message}", s));
                         p.sendMessage(m);
                     }

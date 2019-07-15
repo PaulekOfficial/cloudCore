@@ -1,7 +1,6 @@
 package com.paulek.core.common.io;
 
 import com.paulek.core.Core;
-import com.paulek.core.common.ConsoleLog;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.lang.reflect.Field;

@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.UUID;
@@ -19,18 +20,20 @@ public class Skin {
     private String name;
     private String value;
     private String signature;
-    private Long lastUpdate;
+    private LocalDateTime lastUpdate;
     private Core core;
+    private boolean dirty;
 
 
     @JsonIgnore
-    public Skin(String nick, String value, String signature, Long lastUpdate, Core core) {
+    public Skin(String nick, String value, String signature, LocalDateTime lastUpdate, Core core) {
 
         this.name = nick;
         this.value = value;
         this.signature = signature;
         this.lastUpdate = lastUpdate;
         this.core = Objects.requireNonNull(core, "Core");
+        this.dirty = false;
 
     }
 
@@ -40,7 +43,7 @@ public class Skin {
         this.name = name;
         this.value = value;
         this.signature = signature;
-        this.lastUpdate = System.currentTimeMillis();
+        this.lastUpdate = LocalDateTime.now();
         this.core = Objects.requireNonNull(core, "Core");
 
     }
@@ -159,11 +162,19 @@ public class Skin {
         this.signature = signature;
     }
 
-    public Long getLastUpdate() {
+    public LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(Long lastUpdate) {
+    public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
     }
 }

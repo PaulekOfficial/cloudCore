@@ -2,7 +2,6 @@ package com.paulek.core.common.io;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.Kit;
-import com.paulek.core.common.ConsoleLog;
 import com.paulek.core.common.Util;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

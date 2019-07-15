@@ -2,7 +2,6 @@ package com.paulek.core.commands.tabcomplate.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.TabCompleter;
-import com.paulek.core.common.io.Kits;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;

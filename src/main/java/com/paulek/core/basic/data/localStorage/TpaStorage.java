@@ -1,4 +1,4 @@
-package com.paulek.core.basic.data;
+package com.paulek.core.basic.data.localStorage;
 
 import org.bukkit.Bukkit;
 

@@ -1,9 +1,18 @@
 package com.paulek.core;
 
 import com.paulek.core.basic.CombatManager;
-import com.paulek.core.basic.database.MySQL;
 import com.paulek.core.basic.User;
-import com.paulek.core.basic.data.*;
+import com.paulek.core.basic.data.StorageManager;
+import com.paulek.core.basic.data.databaseStorage.Skins;
+import com.paulek.core.basic.data.databaseStorage.Timestamps;
+import com.paulek.core.basic.data.databaseStorage.Users;
+import com.paulek.core.basic.data.localStorage.CombatStorage;
+import com.paulek.core.basic.data.localStorage.Pms;
+import com.paulek.core.basic.data.localStorage.Rtps;
+import com.paulek.core.basic.data.localStorage.TpaStorage;
+import com.paulek.core.basic.database.Database;
+import com.paulek.core.basic.database.MySQL;
+import com.paulek.core.basic.database.SQLite;
 import com.paulek.core.basic.drop.StoneDrop;
 import com.paulek.core.basic.listeners.*;
 import com.paulek.core.commands.CommandManager;
@@ -32,8 +41,10 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Random;
@@ -46,7 +57,6 @@ public class Core extends JavaPlugin {
     private Permission permission = null;
     private ConsoleLog consoleLog;
     private Chat chat = null;
-    private MySQL mysql;
     private Config config;
     private Kits kits;
     private Lang lang;
@@ -57,8 +67,15 @@ public class Core extends JavaPlugin {
     private Pms pmsStorage;
     private Rtps rtpsStorage;
     private TpaStorage tpaStorage;
+    private Timestamps timestamps;
     private Users usersStorage;
     private WorldGuard worldGuard;
+    private Database database;
+    private StorageManager storageManager;
+    private Skins skinsStorage;
+    private String updateMethod;
+
+    private boolean onlineMode;
 
     static {
         ConfigurationSerialization.registerClass(StoneDrop.class, "StoneDrop");
@@ -75,6 +92,8 @@ public class Core extends JavaPlugin {
         Version version = new Version(this);
         version.chceckVersion();
 
+        onlineMode = Bukkit.getOnlineMode();
+
 //        //TODO FOR RESTS
 //        drops.addDropMask(Material.STONE.name(), new BlockMask(this));
 //        drops.getDrops().add(new StoneDrop("diamond", "$bMasz diaksa heheheheh", true, new ItemStack(Material.DIAMOND, 1), Arrays.asList(new ItemStack(Material.DIAMOND_PICKAXE, 1), new ItemStack(Material.IRON_PICKAXE, 1), new ItemStack(Material.GOLDEN_PICKAXE, 1)), 10, "drop.diamond", 7.91, true, "1-2", "<=30"));
@@ -89,6 +108,70 @@ public class Core extends JavaPlugin {
             return;
         }
 
+        //init database
+        if(Config.STORAGETYPE.equalsIgnoreCase("MySQL")){
+            MySQL mySQL = new MySQL(Config.MYSQL_HOST, Config.MYSQL_PORT, Config.MYSQL_DATABASE, Config.MYSQL_USER, Config.MYSQL_PASSWORD);
+            mySQL.init();
+            database = mySQL;
+
+            try(Connection connection = database.getConnection()){
+
+                PreparedStatement usersTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_users` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `lastAccountName` TEXT NOT NULL , `logoutLocation` LONGTEXT NOT NULL , `lastLocation` LONGTEXT NOT NULL , `ipAddres` MEDIUMTEXT NOT NULL , `homes` LONGTEXT NOT NULL , `lastActivity` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `socialSpy` TINYINT NOT NULL , `vanish` TINYINT NOT NULL , `tpToogle` TINYINT NOT NULL , `tpsMonitor` TINYINT NOT NULL , PRIMARY KEY (`id`))");
+
+                PreparedStatement timestampsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_timestamps` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `serviceName` TEXT NOT NULL , `className` TEXT NOT NULL , `startTime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `endTime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `expired` TINYINT NOT NULL , PRIMARY KEY (`id`))");
+
+                PreparedStatement skinsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_skins` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `name` LONGTEXT NOT NULL , `value` LONGTEXT NOT NULL , `signature` LONGTEXT NOT NULL , `lastUpdate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`))");
+
+                usersTabele.executeUpdate();
+                usersTabele.close();
+
+                timestampsTabele.executeUpdate();
+                usersTabele.close();
+
+                skinsTabele.executeUpdate();
+                skinsTabele.close();
+                updateMethod = "ON DUPLICATE KEY UPDATE";
+
+            } catch (SQLException exception){
+                exception.printStackTrace();
+            }
+        } else {
+            File databaseFile = new File(plugin.getDataFolder(), "database.db");
+
+            if(!databaseFile.exists()){
+                try {
+                    databaseFile.createNewFile();
+                } catch (IOException exception){
+                    exception.printStackTrace();
+                }
+            }
+            SQLite sqLite = new SQLite(databaseFile);
+            sqLite.init();
+            database = sqLite;
+
+            try(Connection connection = database.getConnection()){
+
+                PreparedStatement usersTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_users` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `uuid` TEXT NOT NULL , `lastAccountName` TEXT NOT NULL , `logoutLocation` LONGTEXT NOT NULL , `lastLocation` LONGTEXT NOT NULL , `ipAddres` MEDIUMTEXT NOT NULL , `homes` LONGTEXT NOT NULL , `lastActivity` TIMESTAMP NOT NULL , `socialSpy` TINYINT NOT NULL , `vanish` TINYINT NOT NULL , `tpToogle` TINYINT NOT NULL , `tpsMonitor` TINYINT NOT NULL)");
+
+                PreparedStatement timestampsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_timestamps` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `uuid` TEXT NOT NULL , `serviceName` TEXT NOT NULL , `className` TEXT NOT NULL , `startTime` TIMESTAMP NOT NULL , `endTime` TIMESTAMP NOT NULL , `expired` TINYINT NOT NULL)");
+
+                PreparedStatement skinsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_skins` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `uuid` TEXT NOT NULL , `name` LONGTEXT NOT NULL , `value` LONGTEXT NOT NULL , `signature` LONGTEXT NOT NULL , `lastUpdate` TIMESTAMP NOT NULL)");
+
+                usersTabele.executeUpdate();
+                usersTabele.close();
+
+                timestampsTabele.executeUpdate();
+                usersTabele.close();
+
+                skinsTabele.executeUpdate();
+                skinsTabele.close();
+                updateMethod = "ON CONFLICT(id) DO UPDATE SET";
+
+            } catch (SQLException exception){
+                exception.printStackTrace();
+            }
+        }
+
         //init all storages
         combatStorage = new CombatStorage();
         drops = new Drops(this);
@@ -97,10 +180,21 @@ public class Core extends JavaPlugin {
         rtpsStorage = new Rtps();
         tpaStorage = new TpaStorage();
         usersStorage = new Users(this);
+        usersStorage.init();
+        timestamps = new Timestamps(this);
+        timestamps.init();
+        skinsStorage = new Skins(this);
+        skinsStorage.init();
 
         combatManager = new CombatManager(this);
 
         commandManager = new CommandManager(this);
+
+        storageManager = new StorageManager(this, database);
+        storageManager.addManagedStorage(timestamps);
+        storageManager.addManagedStorage(usersStorage);
+        storageManager.addManagedStorage(skinsStorage);
+        storageManager.init();
 
 
         //Valut initialization
@@ -171,15 +265,9 @@ public class Core extends JavaPlugin {
     public void onDisable() {
 
         for (User u : usersStorage.getUsers().values()) {
-
-            if (!u.isUptodate()) {
-                try {
-                    usersStorage.saveUserData(u);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            if (!u.isDirty()) {
+                usersStorage.saveAllToDatabase(database);
             }
-
         }
 
         Iterator i = plugin.getServer().recipeIterator();
@@ -302,10 +390,6 @@ public class Core extends JavaPlugin {
         return  buffer.toString().toUpperCase();
     }
 
-    public Connection getConnection() throws SQLException {
-        return mysql.getConnection();
-    }
-
     public Config getConfiguration() {
         return config;
     }
@@ -356,5 +440,25 @@ public class Core extends JavaPlugin {
 
     public WorldGuard getWorldGuard() {
         return worldGuard;
+    }
+
+    public Timestamps getTimestamps() {
+        return timestamps;
+    }
+
+    public Database getDatabase() {
+        return database;
+    }
+
+    public boolean isOnlineMode() {
+        return onlineMode;
+    }
+
+    public Skins getSkinsStorage() {
+        return skinsStorage;
+    }
+
+    public String getUpdateMethod() {
+        return updateMethod;
     }
 }

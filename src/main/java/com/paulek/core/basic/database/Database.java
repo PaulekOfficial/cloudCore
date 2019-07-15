@@ -1,7 +1,5 @@
 package com.paulek.core.basic.database;
 
-import com.zaxxer.hikari.HikariDataSource;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 

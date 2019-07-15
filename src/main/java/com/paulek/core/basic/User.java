@@ -2,14 +2,10 @@ package com.paulek.core.basic;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paulek.core.Core;
-import com.paulek.core.common.Util;
-import com.paulek.core.common.io.Config;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.net.InetAddress;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -23,7 +19,7 @@ public class User {
     private Location lastlocation;
     private InetAddress ipAddres;
     private Map<String, Location> homes = new HashMap<>();
-    private long lastActivity;
+    private LocalDateTime lastActivity;
     private boolean socialSpy;
     private boolean vanish;
     private boolean tpToogle;
@@ -32,30 +28,21 @@ public class User {
     private Core core;
 
     @JsonIgnore
-    private boolean uptodate = true;
+    private boolean dirty = true;
 
-    public User(Core core) {
-        this.core = Objects.requireNonNull(core, "Core");
-    }
-
-    @JsonIgnore
-    public User(UUID uuid, Core core) {
+    public User(UUID uuid, String lastAccountName, Location logoutlocation, Location lastlocation, InetAddress ipAddres, Map<String, Location> homes, LocalDateTime lastActivity, boolean socialSpy, boolean vanish, boolean tpToogle, boolean tpsMonitor, Core core) {
         this.uuid = uuid;
+        this.lastAccountName = lastAccountName;
+        this.logoutlocation = logoutlocation;
+        this.lastlocation = lastlocation;
+        this.ipAddres = ipAddres;
+        this.homes = homes;
+        this.lastActivity = lastActivity;
+        this.socialSpy = socialSpy;
+        this.vanish = vanish;
+        this.tpToogle = tpToogle;
+        this.tpsMonitor = tpsMonitor;
         this.core = Objects.requireNonNull(core, "Core");
-
-        if (Bukkit.getPlayer(uuid) != null) {
-            final Player onlinePlayer = Bukkit.getPlayer(uuid);
-            lastAccountName = onlinePlayer.getDisplayName();
-            lastlocation = onlinePlayer.getLocation();
-            ipAddres = onlinePlayer.getAddress().getAddress();
-            lastActivity = System.currentTimeMillis();
-
-        } else if (Bukkit.getOfflinePlayer(uuid) != null) {
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
-            lastAccountName = offlinePlayer.getName();
-            lastActivity = System.currentTimeMillis();
-        }
-
     }
 
     public UUID getUuid() {
@@ -90,11 +77,11 @@ public class User {
         this.ipAddres = ipAddres;
     }
 
-    public long getLastActivity() {
+    public LocalDateTime getLastActivity() {
         return lastActivity;
     }
 
-    public void setLastActivity(long lastActivity) {
+    public void setLastActivity(LocalDateTime lastActivity) {
         this.lastActivity = lastActivity;
     }
 
@@ -124,13 +111,13 @@ public class User {
     }
 
     @JsonIgnore
-    public boolean isUptodate() {
-        return uptodate;
+    public boolean isDirty() {
+        return dirty;
     }
 
     @JsonIgnore
-    public void setUptodate(boolean uptodate) {
-        this.uptodate = uptodate;
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
     }
 
     public Map<String, Location> getHomes() {
@@ -139,5 +126,37 @@ public class User {
 
     public void setHomes(Map<String, Location> homes) {
         this.homes = homes;
+    }
+
+    public boolean isSocialSpy() {
+        return socialSpy;
+    }
+
+    public boolean isVanish() {
+        return vanish;
+    }
+
+    public boolean isTpToogle() {
+        return tpToogle;
+    }
+
+    public boolean isTpsMonitor() {
+        return tpsMonitor;
+    }
+
+    public void setSocialSpy(boolean socialSpy) {
+        this.socialSpy = socialSpy;
+    }
+
+    public void setVanish(boolean vanish) {
+        this.vanish = vanish;
+    }
+
+    public void setTpToogle(boolean tpToogle) {
+        this.tpToogle = tpToogle;
+    }
+
+    public void setTpsMonitor(boolean tpsMonitor) {
+        this.tpsMonitor = tpsMonitor;
     }
 }

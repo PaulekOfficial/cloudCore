@@ -43,10 +43,7 @@ public class LocationUtil {
     }
 
     public static boolean hasPlayerTpToogle(Player player, Core core) {
-        if (core.getUsersStorage().getUser(player.getUniqueId()).getSettings().isTptoogle()) {
-            return true;
-        }
-        return false;
+        return core.getUsersStorage().getUser(player.getUniqueId()).isTpToogle();
     }
 
     public Location safeLocation(Location location) {

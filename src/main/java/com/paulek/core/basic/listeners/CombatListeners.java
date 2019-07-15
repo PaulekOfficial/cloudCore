@@ -2,7 +2,7 @@ package com.paulek.core.basic.listeners;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.Warrior;
-import com.paulek.core.basic.data.CombatStorage;
+import com.paulek.core.basic.data.localStorage.CombatStorage;
 import com.paulek.core.basic.event.PlayerCombatStartEvent;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;

@@ -1,7 +1,6 @@
 package com.paulek.core.basic.drop.mask;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.UserSettings;
 import com.paulek.core.basic.drop.DropMask;
 import com.paulek.core.basic.drop.StoneDrop;
 import com.paulek.core.common.DropUtil;
@@ -29,14 +28,12 @@ public class BlockMask extends DropMask {
 
         Block block = (Block) object;
 
-        UserSettings userSettings = core.getUsersStorage().getUser(player.getUniqueId()).getSettings();
-
         setDropped(false);
 
         List<ItemStack> toDrop = new ArrayList<>();
         for (StoneDrop drop : core.getDrops().getDrops()) {
 
-            if (drop.canDrop(player) && drop.correctTool(tool) && drop.correctHight(block.getLocation().getY()) && DropUtil.getChance(drop.getChance(player)) && userSettings.canDrop(drop.getName())) {
+            if (drop.canDrop(player) && drop.correctTool(tool) && drop.correctHight(block.getLocation().getY()) && DropUtil.getChance(drop.getChance(player)) /**&& userSettings.canDrop(drop.getName())*/) {
 
                 int amount = drop.getRandomAmount();
                 int exp = drop.getExp();

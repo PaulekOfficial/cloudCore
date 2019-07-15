@@ -26,33 +26,33 @@ public class TptoggleCMD extends Command {
 
         if (args.length == 1) {
 
-            if (user.getSettings().isTptoogle()) {
-                user.getSettings().setTptoogle(false);
+            if (user.isTpToogle()) {
+                user.setTpToogle(false);
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPTOGGLE_DISABLED));
             } else {
-                user.getSettings().setTptoogle(true);
+                user.setTpToogle(true);
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPTOGGLE_ENABLED));
             }
 
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("on")) {
 
-                if (user.getSettings().isTptoogle()) {
+                if (user.isTpToogle()) {
                     sender.sendMessage(Util.fixColor(Lang.ERROR_TPTOGGLE_ENABLED));
                     return false;
                 }
 
-                user.getSettings().setTptoogle(true);
+                user.setTpToogle(true);
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPTOGGLE_ENABLED));
 
             } else if (args[0].equalsIgnoreCase("off")) {
 
-                if (!user.getSettings().isTptoogle()) {
+                if (!user.isTpToogle()) {
                     sender.sendMessage(Util.fixColor(Lang.ERROR_TPTOGGLE_DISABLED));
                     return false;
                 }
 
-                user.getSettings().setTptoogle(false);
+                user.setTpToogle(false);
                 sender.sendMessage(Util.fixColor(Lang.INFO_TPTOGGLE_DISABLED));
 
             } else {

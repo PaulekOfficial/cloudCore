@@ -1,40 +1,45 @@
 package com.paulek.core.basic;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.UUID;
+
 public class Timestamp {
 
-    private long endTime;
+    private UUID uuid;
     private String serviceName;
     private String className;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private boolean dirty;
 
-    public Timestamp(String serviceName, String className, long endTime) {
+    public Timestamp(UUID uuid, String serviceName, String className, LocalDateTime startTime, LocalDateTime endTime) {
+        this.uuid = uuid;
         this.className = className;
+        this.startTime = startTime;
         this.endTime = endTime;
         this.serviceName = serviceName;
+        this.dirty = false;
     }
 
     public boolean applicable() {
-        if (endTime >= System.currentTimeMillis()) {
-            return true;
-        }
+        return endTime.isAfter(LocalDateTime.now());
 
-        return false;
     }
 
     public String timeLeft() {
 
-        int timeLeft = (int) ((endTime - System.currentTimeMillis()) / 1000L);
+        LocalDateTime fromTemp = LocalDateTime.from(LocalDateTime.now());
+        LocalDateTime toTemp = endTime;
 
-        int days = timeLeft / (24 * 60 * 60);
+        long days = fromTemp.until(toTemp, ChronoUnit.DAYS);
+        fromTemp = fromTemp.plus(days, ChronoUnit.DAYS);
 
-        timeLeft -= days * 24 * 60 * 60;
+        long hours = fromTemp.until(toTemp, ChronoUnit.HOURS);
+        fromTemp = fromTemp.plus(hours, ChronoUnit.HOURS);
 
-        int hours = timeLeft / (60 * 60);
-
-        timeLeft -= hours * 60 * 60;
-
-        int minutes = timeLeft / 60;
-
-        timeLeft -= minutes * 60;
+        long minutes = fromTemp.until(toTemp, ChronoUnit.MINUTES);
+        fromTemp = fromTemp.plus(minutes, ChronoUnit.MINUTES);
 
         StringBuilder time = new StringBuilder();
 
@@ -50,17 +55,19 @@ public class Timestamp {
             time.append(minutes);
             time.append("min ");
         }
-        time.append(timeLeft);
+        time.append(fromTemp.until(toTemp, ChronoUnit.SECONDS));
         time.append("sec");
 
         return time.toString();
     }
 
-
-    public long getEndTime() {
-        return endTime;
+    public UUID getUuid() {
+        return uuid;
     }
 
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
 
     public String getClassName() {
         return className;
@@ -68,5 +75,17 @@ public class Timestamp {
 
     public String getServiceName() {
         return serviceName;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
     }
 }

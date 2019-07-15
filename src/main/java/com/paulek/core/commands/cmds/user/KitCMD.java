@@ -16,6 +16,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,15 +78,15 @@ public class KitCMD extends Command {
 
                 User user = getCore().getUsersStorage().getUser(player.getUniqueId());
 
-                if (user.getTimeStamp(kitName) != null) {
+                if (getCore().getTimestamps().getTimestamp(user.getUuid(), kitName, "kit") != null) {
 
-                    Timestamp timestamp = user.getTimeStamp(kitName);
+                    Timestamp timestamp = getCore().getTimestamps().getTimestamp(user.getUuid(), kitName, "kit");
                     if (timestamp.getClassName().equalsIgnoreCase("kit")) {
                         if (timestamp.applicable()) {
                             sender.sendMessage(Util.fixColor(Lang.ERROR_KIT_WAIT.replace("{time}", timestamp.timeLeft())));
                             return false;
                         } else {
-                            user.removeTimestamp(kitName);
+                            getCore().getTimestamps().removeTimestamp(user.getUuid(), kitName);
                         }
 
                     }
@@ -105,7 +107,7 @@ public class KitCMD extends Command {
                 player.sendMessage(Util.fixColor(Lang.INFO_KIT_SUCCES.replace("{kit}", kitName)));
 
                 if (!player.hasPermission("core.cmd.kit.nocooldown"))
-                    user.addTimestamp(kitName, new Timestamp("kit", System.currentTimeMillis() + (kit.getCooldown() * 1000L)));
+                    getCore().getTimestamps().addTimestamp(new Timestamp(player.getUniqueId(), kitName, "kit", LocalDateTime.now() ,LocalDateTime.now().plus(kit.getCooldown(), ChronoUnit.SECONDS)));
 
                 return false;
             }
@@ -135,8 +137,8 @@ public class KitCMD extends Command {
                         List<String> lore = new ArrayList<>();
 
                         Timestamp timestamp = null;
-                        if (user.getTimeStamp(kitName) != null) {
-                            timestamp = user.getTimeStamp(kitName);
+                        if (getCore().getTimestamps().getTimestamp(player.getUniqueId(), kitName, "kit") != null) {
+                            timestamp = getCore().getTimestamps().getTimestamp(player.getUniqueId(), kitName, "kit");
                         }
 
                         String availability = Lang.INFO_KIT_YES;
@@ -171,7 +173,7 @@ public class KitCMD extends Command {
                             player.sendMessage(Util.fixColor(Lang.INFO_KIT_SUCCES.replace("{kit}", kit.getName())));
 
                             if (!player.hasPermission("core.kit.nocooldown"))
-                                user.addTimestamp(kitName, new Timestamp("kit", System.currentTimeMillis() + (kit.getCooldown() * 1000L)));
+                                getCore().getTimestamps().addTimestamp(new Timestamp(player.getUniqueId(), kitName, "kit", LocalDateTime.now(), LocalDateTime.now().plus((kit.getCooldown() * 1000L), ChronoUnit.MILLIS)));
 
                         });
                         if (timestamp != null) {
