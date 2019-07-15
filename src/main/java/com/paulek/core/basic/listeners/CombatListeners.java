@@ -10,7 +10,9 @@ import com.paulek.core.common.io.Lang;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.association.RegionAssociable;
 import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
@@ -189,6 +191,9 @@ public class CombatListeners implements Listener {
         RegionManager regionManager = regionContainer.get(BukkitAdapter.adapt(location.getWorld()));
         ApplicableRegionSet applicableRegionSet = regionManager.getApplicableRegions(BlockVector3.at(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
 
+        if (applicableRegionSet.queryState(null, Flags.PVP) == StateFlag.State.DENY){
+            return;
+        }
 
         for(ProtectedRegion region : applicableRegionSet.getRegions()){
             if(region.getFlags().get(Flags.PVP).equals(false)){
