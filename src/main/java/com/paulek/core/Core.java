@@ -30,10 +30,8 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -174,7 +172,7 @@ public class Core extends JavaPlugin {
 
         //init all storages
         combatStorage = new CombatStorage();
-        drops = new Drops(this);
+        //drops = new Drops(this);
 
         pmsStorage = new Pms();
         rtpsStorage = new Rtps();
@@ -248,7 +246,7 @@ public class Core extends JavaPlugin {
             meta.setLore(Config.STONEGENERATOR_DESCRIPTION);
             item.setItemMeta(meta);
 
-            ShapedRecipe stoneGenerator = new ShapedRecipe(new NamespacedKey(plugin, "stonegenerator"), item)
+            ShapedRecipe stoneGenerator = new ShapedRecipe(item)
                     .shape("RIR", "ISI", "RPR")
                     .setIngredient('R', Material.REDSTONE)
                     .setIngredient('I', Material.IRON_INGOT)
@@ -268,24 +266,6 @@ public class Core extends JavaPlugin {
             if (!u.isDirty()) {
                 usersStorage.saveAllToDatabase(database);
             }
-        }
-
-        Iterator i = plugin.getServer().recipeIterator();
-
-        while(i.hasNext()){
-
-            Recipe recipe = (Recipe) i.next();
-
-            if(recipe instanceof ShapedRecipe){
-
-                ShapedRecipe shapedRecipe = (ShapedRecipe) recipe;
-
-                if(shapedRecipe.getKey().getKey().equalsIgnoreCase("stonegenerator")){
-                    i.remove();
-                }
-
-            }
-
         }
 
         Bukkit.getScheduler().cancelTasks(plugin);

@@ -3,6 +3,7 @@ package com.paulek.core.commands.cmds.admin;
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
+import com.paulek.core.common.XMaterial;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
@@ -31,8 +32,8 @@ public class RandomCMD extends Command {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
                 return false;
             }
-            if ((player.getTargetBlock((Set<Material>) null, 1).getType() == Material.LEGACY_WOOD_BUTTON) || (player.getTargetBlock((Set<Material>) null, 5).getType() == Material.STONE_BUTTON)) {
-                Location loc = player.getTargetBlock((Set<Material>) null, 1).getLocation();
+            if ((player.getTargetBlock(null, 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(null, 5).getType() == Material.STONE_BUTTON)) {
+                Location loc = player.getTargetBlock(null, 1).getLocation();
                 if (getCore().getRtpsStorage().getList().contains(loc)) {
                     getCore().getRtpsStorage().removeFromList(loc);
                     Config.RTP_BUTTONLIST = null;
@@ -53,8 +54,8 @@ public class RandomCMD extends Command {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
                 return false;
             }
-            if ((player.getTargetBlock((Set<Material>) null, 1).getType() == Material.LEGACY_WOOD_BUTTON) || (player.getTargetBlock((Set<Material>) null, 5).getType() == Material.STONE_BUTTON)) {
-                Location loc = player.getTargetBlock((Set<Material>) null, 1).getLocation();
+            if ((player.getTargetBlock(null, 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(null, 5).getType() == Material.STONE_BUTTON)) {
+                Location loc = player.getTargetBlock(null, 1).getLocation();
                 if (getCore().getRtpsStorage().getList().contains(loc)) {
                     sender.sendMessage(Util.fixColor(Lang.ERROR_RANDOMTP_EXIST));
                     return false;

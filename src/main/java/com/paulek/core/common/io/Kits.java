@@ -2,9 +2,9 @@ package com.paulek.core.common.io;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.Kit;
+import com.paulek.core.common.EnchantUtils;
 import com.paulek.core.common.Util;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -112,7 +112,7 @@ public class Kits {
 
                     if (s.contains(":") && !elementRead) {
                         String[] enchantment = s.split(":");
-                        Enchantment e = Enchantment.getByKey(NamespacedKey.minecraft(enchantment[0].toLowerCase()));
+                        Enchantment e = EnchantUtils.getEnchantment(enchantment[0].toLowerCase());
                         if (e != null) enchants.put(e, Integer.valueOf(enchantment[1]));
                     }
 

@@ -4,6 +4,7 @@ import com.paulek.core.Core;
 import com.paulek.core.basic.event.PlayerRandomTeleportEvent;
 import com.paulek.core.common.LocationUtil;
 import com.paulek.core.common.Util;
+import com.paulek.core.common.XMaterial;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
@@ -33,7 +34,7 @@ public class RandomTeleportListener implements Listener {
             Block clickedb = e.getClickedBlock();
 
 
-            if ((action == Action.RIGHT_CLICK_BLOCK) && ((clickedb.getType() == Material.OAK_BUTTON) || (clickedb.getType() == Material.STONE_BUTTON))) {
+            if ((action == Action.RIGHT_CLICK_BLOCK) && ((clickedb.getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (clickedb.getType() == Material.STONE_BUTTON))) {
                 Location loc = clickedb.getLocation();
 
                 if (core.getRtpsStorage().getList().contains(loc)) {
@@ -48,14 +49,17 @@ public class RandomTeleportListener implements Listener {
 
     @EventHandler
     public void onPlayerRandomTp(PlayerRandomTeleportEvent event){
-            Bukkit.getScheduler().runTask(core, run ->{
-                Location totp = LocationUtil.randomLocation(event.getWorld(), event.getMaxLocX(), event.getMaxLocZ());
+            Bukkit.getScheduler().runTask(core, new Runnable() {
+                        @Override
+                        public void run() {
+                            Location totp = LocationUtil.randomLocation(event.getWorld(), event.getMaxLocX(), event.getMaxLocZ());
 
-                event.getPlayer().teleport(totp);
+                            event.getPlayer().teleport(totp);
 
-                Location locafter = event.getPlayer().getLocation();
-                String message = Util.fixColor(Lang.INFO_RANDOMTP_TELEPORTED).replace("{x}", String.valueOf(locafter.getBlockX())).replace("{y}", String.valueOf(locafter.getBlockY())).replace("{z}", String.valueOf(locafter.getBlockZ()));
-                Util.sendActionbar(event.getPlayer(), message);
+                            Location locafter = event.getPlayer().getLocation();
+                            String message = Util.fixColor(Lang.INFO_RANDOMTP_TELEPORTED).replace("{x}", String.valueOf(locafter.getBlockX())).replace("{y}", String.valueOf(locafter.getBlockY())).replace("{z}", String.valueOf(locafter.getBlockZ()));
+                            Util.sendActionbar(event.getPlayer(), message);
+                        }
             });
     }
 

@@ -163,20 +163,21 @@ public class PluginListeners implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event){
 
-        Player player = event.getPlayer();
-        Block block = event.getBlock();
-        ItemStack tool = player.getItemInHand();
-
-        DropMask dropMask = core.getDrops().getMask(block.getType().name());
-
-        if(dropMask != null) {
-
-            dropMask.breakBlock(player, tool, block);
-            if(dropMask.isDropped()){
-                event.setDropItems(false);
-            }
-
-        }
+//        Player player = event.getPlayer();
+//        Block block = event.getBlock();
+//        ItemStack tool = player.getItemInHand();
+//
+//        DropMask dropMask = core.getDrops().getMask(block.getType().name());
+//
+//        if(dropMask != null) {
+//
+//            dropMask.breakBlock(player, tool, block);
+//            //TODO Drop items
+//            //if(dropMask.isDropped()){
+//            //    event.setDropItems(false);
+//            //}
+//
+//        }
     }
 
     private void loadGroups() {

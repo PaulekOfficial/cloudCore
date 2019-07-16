@@ -194,8 +194,11 @@ public class KitCMD extends Command {
                 });
 
                 gui.register();
-                Bukkit.getScheduler().runTask(getCore().getPlugin(), runnable ->{
-                    gui.openInventory(player);
+                Bukkit.getScheduler().runTask(getCore().getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        gui.openInventory(player);
+                    }
                 });
             }
         });

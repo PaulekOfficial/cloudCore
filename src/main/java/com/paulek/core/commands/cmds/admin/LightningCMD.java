@@ -9,6 +9,8 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.HashSet;
+
 public class LightningCMD extends Command {
 
     public LightningCMD(Core core) {

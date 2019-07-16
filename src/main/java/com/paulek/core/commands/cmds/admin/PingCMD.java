@@ -2,15 +2,15 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.common.NmsUtils;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
-import net.minecraft.server.v1_14_R1.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class PingCMD extends Command {
 
@@ -32,9 +32,13 @@ public class PingCMD extends Command {
 
             Player player = (Player) sender;
 
-            EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+            try {
 
-            if (getPlayerPing(player, sender)) return false;
+                if (getPlayerPing(player, sender)) return false;
+
+            } catch (Exception e){
+                e.printStackTrace();
+            }
 
         } else if (args.length == 1) {
 
@@ -42,7 +46,13 @@ public class PingCMD extends Command {
 
                 Player player = Bukkit.getPlayer(args[0]);
 
-                if (getPlayerPing(player, sender)) return false;
+                try {
+
+                    if (getPlayerPing(player, sender)) return false;
+
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
 
             } else {
 
@@ -58,8 +68,13 @@ public class PingCMD extends Command {
         return false;
     }
 
-    private boolean getPlayerPing(Player player, CommandSender sender) {
-        EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+    private boolean getPlayerPing(Player player, CommandSender sender) throws Exception{
+
+        Object craftPlayer = NmsUtils.getNMSPlayer(player);
+
+        Method getHandle = NmsUtils.getNMSMethod(craftPlayer.getClass(), "getHandle", null);
+
+        Object entityPlayer = getHandle.invoke(craftPlayer);
 
         try {
 

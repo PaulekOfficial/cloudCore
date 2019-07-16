@@ -4,7 +4,6 @@ import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
-import net.minecraft.server.v1_14_R1.MinecraftServer;
 import org.bukkit.command.CommandSender;
 
 public class CoreCMD extends Command {
@@ -31,7 +30,6 @@ public class CoreCMD extends Command {
             sender.sendMessage("§e§l           CloudLandCore");
             sender.sendMessage("§e§lcreated by PaulekOfficial");
             sender.sendMessage("§e§lversion: " + getCore().getVersion());
-            sender.sendMessage("§e§lactual tps: " + MinecraftServer.TPS);
             sender.sendMessage("§e§lType /core reload | to reload!");
             sender.sendMessage("§e§lType /core stop | to stop the serwer!");
         }

@@ -39,36 +39,39 @@ public class UserListeners implements Listener {
 
         core.getUsersStorage().checkPlayer(event.getPlayer());
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(core.getPlugin(), run ->{
-            UUID fakeUUID = event.getPlayer().getUniqueId();
-            String nick = event.getPlayer().getDisplayName();
-            if(!core.isOnlineMode() && Config.SKINS_ENABLE){
+        Bukkit.getScheduler().runTaskLaterAsynchronously(core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                UUID fakeUUID = event.getPlayer().getUniqueId();
+                String nick = event.getPlayer().getDisplayName();
+                if (!core.isOnlineMode() && Config.SKINS_ENABLE) {
 
-                if(core.getSkinsStorage().getSkin(fakeUUID) == null){
+                    if (core.getSkinsStorage().getSkin(fakeUUID) == null) {
 
-                    Skin skin = Util.getPremiumSkin(nick, core);
+                        Skin skin = Util.getPremiumSkin(nick, core);
 
-                    if(skin == null) return;
+                        if (skin == null) return;
 
+                        skin.updateSkinForPlayer(Bukkit.getPlayer(fakeUUID));
+                        skin.applySkinForPlayers(Bukkit.getPlayer(fakeUUID));
+                        skin.setDirty(true);
+
+                        core.getSkinsStorage().addSkin(fakeUUID, skin);
+
+                        return;
+                    }
+
+                    Skin skin = core.getSkinsStorage().getSkin(fakeUUID);
+                    if (skin.getLastUpdate().isAfter(LocalDateTime.now())) {
+                        Skin newSkin = Util.getPremiumSkin(nick, core);
+                        if (newSkin != null) {
+                            skin = newSkin;
+                            skin.setDirty(true);
+                        }
+                    }
                     skin.updateSkinForPlayer(Bukkit.getPlayer(fakeUUID));
                     skin.applySkinForPlayers(Bukkit.getPlayer(fakeUUID));
-                    skin.setDirty(true);
-
-                    core.getSkinsStorage().addSkin(fakeUUID, skin);
-
-                    return;
                 }
-
-                Skin skin = core.getSkinsStorage().getSkin(fakeUUID);
-                if(skin.getLastUpdate().isAfter(LocalDateTime.now())){
-                    Skin newSkin = Util.getPremiumSkin(nick, core);
-                    if(newSkin != null){
-                        skin = newSkin;
-                        skin.setDirty(true);
-                    }
-                }
-                skin.updateSkinForPlayer(Bukkit.getPlayer(fakeUUID));
-                skin.applySkinForPlayers(Bukkit.getPlayer(fakeUUID));
             }
         }, 20*2);
 

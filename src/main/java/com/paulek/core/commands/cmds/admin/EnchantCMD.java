@@ -2,6 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.common.NmsUtils;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
@@ -9,7 +10,13 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import javax.management.modelmbean.InvalidTargetObjectTypeException;
+import java.lang.reflect.Method;
+import java.security.InvalidParameterException;
 
 public class EnchantCMD extends Command {
 
@@ -31,7 +38,7 @@ public class EnchantCMD extends Command {
 
             Player player = (Player) sender;
 
-            if (!player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
+            if (!getItemInHand(player.getInventory()).getType().equals(Material.AIR)) {
 
                 int lvl;
 
@@ -53,7 +60,7 @@ public class EnchantCMD extends Command {
 
                 Enchantment enchantment = Enchantment.getByName(args[0]);
 
-                ItemMeta itemMeta = player.getInventory().getItemInMainHand().getItemMeta();
+                ItemMeta itemMeta = getItemInHand(player.getInventory()).getItemMeta();
 
                 if (enchantment.getMaxLevel() < lvl && !unsafeEnchants) {
 
@@ -64,7 +71,7 @@ public class EnchantCMD extends Command {
 
                 itemMeta.addEnchant(enchantment, lvl, unsafeEnchants);
 
-                player.getInventory().getItemInMainHand().setItemMeta(itemMeta);
+                player.getInventory().getItemInHand().setItemMeta(itemMeta);
 
                 sender.sendMessage(Util.fixColor(Lang.INFO_ENCHANT_ENCHANTED));
 
@@ -93,5 +100,28 @@ public class EnchantCMD extends Command {
         }
 
         return false;
+    }
+
+    private ItemStack getItemInHand(Inventory inventory){
+
+        Method method = null;
+        try{
+            method = NmsUtils.getNMSMethod(inventory.getClass(), "getItemInMainHand", null);
+        } catch (NoSuchMethodException e){
+            try {
+                method = NmsUtils.getNMSMethod(inventory.getClass(), "getItemInHand", null);
+            } catch (NoSuchMethodException ex){
+                ex.printStackTrace();
+            }
+        }
+
+        if(method != null){
+            try {
+                return (ItemStack) method.invoke(inventory);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

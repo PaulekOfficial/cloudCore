@@ -25,7 +25,7 @@ public class SetSpawnCMD extends Command {
 
         Location location = ((Player) sender).getLocation();
 
-        location.getWorld().setSpawnLocation(location);
+        location.getWorld().setSpawnLocation(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 
         Config.SPAWN_WORLD = location.getWorld().getName();
         Config.SPAWN_BLOCK_X = location.getX();
