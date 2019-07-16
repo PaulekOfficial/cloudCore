@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 
@@ -20,10 +20,10 @@ public class CoreCMD extends Command {
                 getCore().getLang().reloadLang();
                 getCore().getKits().reload();
                 getCore().getDrops().reload();
-                sender.sendMessage(Util.fixColor(Lang.INFO_CORE_RELOAD));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_CORE_RELOAD));
             }
             if (args[0].equalsIgnoreCase("stop")) {
-                sender.sendMessage(Util.fixColor(Lang.INFO_CORE_DISABLEING));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_CORE_DISABLEING));
                 getCore().getPlugin().getServer().shutdown();
             }
         } else {

@@ -2,18 +2,12 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
-import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class JumpCMD extends Command {
 
@@ -33,7 +27,7 @@ public class JumpCMD extends Command {
 
         if (player.getTargetBlock(null, 200).isEmpty()) {
 
-            sender.sendMessage(Util.fixColor(Lang.ERROR_JUMP_AIR));
+            sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_JUMP_AIR));
 
             return false;
         }
@@ -42,7 +36,7 @@ public class JumpCMD extends Command {
 
         new LocationUtil(location, player);
 
-        sender.sendMessage(Util.fixColor(Lang.INFO_JUMP_YUP));
+        sender.sendMessage(ColorUtil.fixColor(Lang.INFO_JUMP_YUP));
 
         return false;
     }

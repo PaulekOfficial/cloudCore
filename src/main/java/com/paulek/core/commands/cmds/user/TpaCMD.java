@@ -2,8 +2,8 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
-import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
@@ -44,12 +44,12 @@ public class TpaCMD extends Command {
                 getCore().getTpaStorage().addTaskTpa(player.getUniqueId(), id.getTaskId());
                 getCore().getTpaStorage().addToAcceptTpa(player.getUniqueId(), ((Player) sender).getUniqueId());
 
-                sender.sendMessage(Util.fixColor(Lang.INFO_TPA_REQUEST.replace("{player}", player.getDisplayName())));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_REQUEST.replace("{player}", player.getDisplayName())));
 
-                player.sendMessage(Util.fixColor(Lang.INFO_TPA_REQUESTPLAYER.replace("{player}", ((Player) sender).getDisplayName())));
+                player.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_REQUESTPLAYER.replace("{player}", ((Player) sender).getDisplayName())));
 
             } else {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_TPA_NOPLAYER));
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPA_NOPLAYER));
             }
 
         } else {

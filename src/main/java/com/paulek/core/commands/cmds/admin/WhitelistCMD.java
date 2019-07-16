@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
@@ -22,7 +22,7 @@ public class WhitelistCMD extends Command {
 
                 if (args.length == 1) {
 
-                    sender.sendMessage(Util.fixColor(Lang.INFO_WHITELIST_MOTD.replace("{motd}", Config.WHITELIST_MOD)));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_WHITELIST_MOTD.replace("{motd}", Config.WHITELIST_MOD)));
 
                 } else {
 
@@ -39,7 +39,7 @@ public class WhitelistCMD extends Command {
                     getCore().getConfiguration().saveConfig();
                     getCore().getConfiguration().reloadConfig();
 
-                    sender.sendMessage(Util.fixColor(Lang.INFO_WHITELIST_SETMOTD.replace("{motd}", stringBuilder.toString())));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_WHITELIST_SETMOTD.replace("{motd}", stringBuilder.toString())));
 
                 }
 
@@ -55,11 +55,11 @@ public class WhitelistCMD extends Command {
                             getCore().getConfiguration().saveConfig();
                             getCore().getConfiguration().reloadConfig();
 
-                            sender.sendMessage(Util.fixColor(Lang.INFO_WHITELIST_ON));
+                            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_WHITELIST_ON));
 
                         } else {
 
-                            sender.sendMessage(Util.fixColor(Lang.ERROR_WHITELIST_ON));
+                            sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_WHITELIST_ON));
 
                             return false;
                         }
@@ -72,11 +72,11 @@ public class WhitelistCMD extends Command {
                             getCore().getConfiguration().saveConfig();
                             getCore().getConfiguration().reloadConfig();
 
-                            sender.sendMessage(Util.fixColor(Lang.INFO_WHITELIST_OFF));
+                            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_WHITELIST_OFF));
 
                         } else {
 
-                            sender.sendMessage(Util.fixColor(Lang.ERROR_WHITELIST_OFF));
+                            sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_WHITELIST_OFF));
 
                             return false;
                         }
@@ -106,10 +106,10 @@ public class WhitelistCMD extends Command {
                         getCore().getConfiguration().saveConfig();
                         getCore().getConfiguration().reloadConfig();
 
-                        sender.sendMessage(Util.fixColor(Lang.INFO_WHITELIST_ADD));
+                        sender.sendMessage(ColorUtil.fixColor(Lang.INFO_WHITELIST_ADD));
 
                     } else {
-                        sender.sendMessage(Util.fixColor(Lang.ERROR_WHITELIST_CONTAINS));
+                        sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_WHITELIST_CONTAINS));
                         return false;
                     }
 

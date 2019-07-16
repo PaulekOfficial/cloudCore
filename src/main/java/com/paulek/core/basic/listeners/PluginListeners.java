@@ -1,20 +1,16 @@
 package com.paulek.core.basic.listeners;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.drop.DropMask;
 import com.paulek.core.commands.cmds.admin.VanishCMD;
 import com.paulek.core.commands.cmds.user.SpawnCMD;
 import com.paulek.core.commands.cmds.user.TpacceptCMD;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
@@ -76,7 +72,7 @@ public class PluginListeners implements Listener {
 
             if (Config.COMBAT_BRODCASTLOGOUT) {
 
-                String s = Util.fixColor(Lang.INFO_COMBAT_BRODCASTLOGOUT).replace("{player}", event.getPlayer().getName()).replace("{health}", (int) event.getPlayer().getHealth() + "♥");
+                String s = ColorUtil.fixColor(Lang.INFO_COMBAT_BRODCASTLOGOUT).replace("{player}", event.getPlayer().getName()).replace("{health}", (int) event.getPlayer().getHealth() + "♥");
 
                 Bukkit.broadcastMessage(s);
 
@@ -92,7 +88,7 @@ public class PluginListeners implements Listener {
         if (Config.WHITELIST_ENABLE) {
             if (!Config.WHITELIST_ALLOWEDPLAYERS.contains(event.getName())) {
 
-                event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST, Util.fixColor(Config.WHITELIST_MOD));
+                event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST, ColorUtil.fixColor(Config.WHITELIST_MOD));
 
             }
         }
@@ -106,9 +102,9 @@ public class PluginListeners implements Listener {
                 String format;
                 if (core.getChat().getPrimaryGroup(event.getPlayer()) != null) {
                     if (!event.getPlayer().hasPermission("core.chat.color")) {
-                        format = Util.fixColor(groups_format.get(s).replace("{displayname}", core.getChat().getGroupPrefix(event.getPlayer().getWorld(), core.getPermission().getPrimaryGroup(event.getPlayer())) + event.getPlayer().getDisplayName())).replace("{message}", event.getMessage());
+                        format = ColorUtil.fixColor(groups_format.get(s).replace("{displayname}", core.getChat().getGroupPrefix(event.getPlayer().getWorld(), core.getPermission().getPrimaryGroup(event.getPlayer())) + event.getPlayer().getDisplayName())).replace("{message}", event.getMessage());
                     } else {
-                        format = Util.fixColor(groups_format.get(s).replace("{displayname}", core.getChat().getGroupPrefix(event.getPlayer().getWorld(), core.getPermission().getPrimaryGroup(event.getPlayer())) + event.getPlayer().getDisplayName()).replace("{message}", event.getMessage()));
+                        format = ColorUtil.fixColor(groups_format.get(s).replace("{displayname}", core.getChat().getGroupPrefix(event.getPlayer().getWorld(), core.getPermission().getPrimaryGroup(event.getPlayer())) + event.getPlayer().getDisplayName()).replace("{message}", event.getMessage()));
                     }
                     event.setFormat(format);
                 }
@@ -118,14 +114,14 @@ public class PluginListeners implements Listener {
         if (!core.isChatEnabled()) {
             if (!event.getPlayer().hasPermission("core.chat.writewhendisabled")) {
                 event.setCancelled(true);
-                event.getPlayer().sendMessage(Util.fixColor(Lang.ERROR_CHAT_DISABLEDTYPE));
+                event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_CHAT_DISABLEDTYPE));
                 return;
             }
         }
         if (!Config.CHAT_ENABLE) {
             if (!event.getPlayer().hasPermission("core.chat.disable")) {
                 event.setCancelled(true);
-                event.getPlayer().sendMessage(Util.fixColor(Lang.ERROR_CHAT_DISABLEDTYPE));
+                event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_CHAT_DISABLEDTYPE));
                 return;
             }
         }
@@ -142,7 +138,7 @@ public class PluginListeners implements Listener {
                 if (slowdon.containsKey(uuid)) {
                     if (((System.currentTimeMillis() - slowdon.get(uuid)) / 1000) < Config.CHAT_SLOWDOWN) {
                         event.setCancelled(true);
-                        event.getPlayer().sendMessage(Util.fixColor(Lang.ERROR_CHAT_SLOWDOWN));
+                        event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_CHAT_SLOWDOWN));
                     } else {
                         slowdon.put(uuid, System.currentTimeMillis());
                     }

@@ -2,8 +2,8 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
-import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -30,9 +30,9 @@ public class TpCMD extends Command {
                     if (LocationUtil.hasPlayerTpToogle(player, getCore())) return false;
 
                     ((Player) sender).teleport(player.getLocation());
-                    sender.sendMessage(Util.fixColor(Lang.INFO_TP_INFO.replace("{player}", player.getDisplayName())));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TP_INFO.replace("{player}", player.getDisplayName())));
                 } else {
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_TP_NOTONLINE));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TP_NOTONLINE));
                 }
             } else {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
@@ -48,9 +48,9 @@ public class TpCMD extends Command {
 
                 player2 = Bukkit.getPlayerExact(args[1]);
                 player1.teleport(player2.getLocation());
-                player1.sendMessage(Util.fixColor(Lang.INFO_TP_PLAYERTOPLAYER.replace("{player}", player1.getDisplayName()).replace("{target}", player2.getDisplayName())));
+                player1.sendMessage(ColorUtil.fixColor(Lang.INFO_TP_PLAYERTOPLAYER.replace("{player}", player1.getDisplayName()).replace("{target}", player2.getDisplayName())));
             } else {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_TP_NOTONLINE));
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TP_NOTONLINE));
             }
         }
         if (args.length == 3) {
@@ -69,9 +69,9 @@ public class TpCMD extends Command {
                     String a = Lang.INFO_TP_CORDINATES.replace("{x}", String.valueOf(loc.getX()));
                     a = a.replace("{y}", String.valueOf(loc.getY()));
                     a = a.replace("{z}", String.valueOf(loc.getZ()));
-                    player.sendMessage(Util.fixColor(a));
+                    player.sendMessage(ColorUtil.fixColor(a));
                 } catch (Exception e) {
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_TP_NOTCORDINATES));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TP_NOTCORDINATES));
                 }
             } else {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);

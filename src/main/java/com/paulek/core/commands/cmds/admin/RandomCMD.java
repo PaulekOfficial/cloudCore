@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.XMaterial;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
@@ -11,8 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Set;
 
 public class RandomCMD extends Command {
 
@@ -40,12 +38,12 @@ public class RandomCMD extends Command {
                     Config.RTP_BUTTONLIST = getCore().getRtpsStorage().getStringLoc();
                     getCore().getConfiguration().saveConfig();
                     getCore().getConfiguration().reloadConfig();
-                    sender.sendMessage(Util.fixColor(Lang.INFO_RANDOMTP_REMOVED));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_RANDOMTP_REMOVED));
                 } else {
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_RANDOMTP_NOTREMOVED));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_RANDOMTP_NOTREMOVED));
                 }
             } else {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_RANDOMTP_NOTLOOKING));
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_RANDOMTP_NOTLOOKING));
                 return false;
             }
         } else if (args[0].equalsIgnoreCase("setbutton")) {
@@ -57,7 +55,7 @@ public class RandomCMD extends Command {
             if ((player.getTargetBlock(null, 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(null, 5).getType() == Material.STONE_BUTTON)) {
                 Location loc = player.getTargetBlock(null, 1).getLocation();
                 if (getCore().getRtpsStorage().getList().contains(loc)) {
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_RANDOMTP_EXIST));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_RANDOMTP_EXIST));
                     return false;
                 }
                 Location button = new Location(Bukkit.getWorld(loc.getWorld().getName()), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
@@ -66,10 +64,10 @@ public class RandomCMD extends Command {
                 Config.RTP_BUTTONLIST = getCore().getRtpsStorage().getStringLoc();
                 getCore().getConfiguration().saveConfig();
                 getCore().getConfiguration().reloadConfig();
-                sender.sendMessage(Util.fixColor(Lang.INFO_RANDOMTP_CREATED));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_RANDOMTP_CREATED));
                 return true;
             } else {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_RANDOMTP_NOTLOOKING));
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_RANDOMTP_NOTLOOKING));
                 return false;
             }
         } else {

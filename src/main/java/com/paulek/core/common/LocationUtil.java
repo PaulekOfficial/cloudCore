@@ -64,7 +64,7 @@ public class LocationUtil {
     public boolean infoPlayerHasTpToogle(Player player, CommandSender sender, Core core) {
         if (hasPlayerTpToogle(player, core)) {
 
-            sender.sendMessage(Util.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
+            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
 
             return true;
         }

@@ -3,8 +3,8 @@ package com.paulek.core.basic.drop.mask;
 import com.paulek.core.Core;
 import com.paulek.core.basic.drop.DropMask;
 import com.paulek.core.basic.drop.StoneDrop;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.DropUtil;
-import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -49,7 +49,7 @@ public class BlockMask extends DropMask {
                 toDrop.add(itemStack);
                 if (drop.getMessage() != null) {
 
-                    player.sendMessage(Util.fixColor(drop.getMessage().replace("{amount}", String.valueOf(amount))));
+                    player.sendMessage(ColorUtil.fixColor(drop.getMessage().replace("{amount}", String.valueOf(amount))));
 
                 }
 

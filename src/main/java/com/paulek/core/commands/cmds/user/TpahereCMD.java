@@ -2,8 +2,8 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
-import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
@@ -46,11 +46,11 @@ public class TpahereCMD extends Command {
                 getCore().getTpaStorage().addTaskTpahere(p.getUniqueId(), id.getTaskId());
                 getCore().getTpaStorage().addToAcceptTpahere(p.getUniqueId(), player.getUniqueId());
 
-                sender.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_REQUEST));
-                p.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_REQUESTPLAYER));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_REQUEST));
+                p.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_REQUESTPLAYER));
 
             } else {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_TPAHERE_NOPLAYER));
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPAHERE_NOPLAYER));
             }
 
         }

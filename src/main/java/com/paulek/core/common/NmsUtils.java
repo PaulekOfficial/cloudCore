@@ -1,5 +1,6 @@
 package com.paulek.core.common;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
@@ -10,6 +11,73 @@ import java.lang.reflect.Method;
 public class NmsUtils {
 
     //Inspired by https://github.com/rlf/bukkit-utils/blob/master/src/main/java/dk/lockfuglsang/minecraft/reflection/ReflectionUtil.java
+
+    public static String getNMSVersion() {
+        return nms().split("\\.")[3];
+    }
+
+    /**
+     * Returns the real packagename for the net.minecraft.server.
+     * @return the real packagename for the net.minecraft.server.
+     * @since 1.9
+     */
+    public static String nms() {
+        Object nmsServer = exec(Bukkit.getServer(), "getServer");
+        return nmsServer != null ? nmsServer.getClass().getPackage().getName() : "net.minecraft.server";
+    }
+
+    public static <T> T exec(Object obj, String methodName, Class[] argTypes, Object... args) {
+        if (obj == null) {
+            return null;
+        }
+        Class<?> aClass = obj.getClass();
+        try {
+            Method method = getMethod(aClass, methodName, argTypes);
+            boolean wasAccessible = method.isAccessible();
+            method.setAccessible(true);
+            try {
+                return (T) method.invoke(obj, args);
+            } finally {
+                method.setAccessible(wasAccessible);
+            }
+        } catch (NoSuchMethodException | AbstractMethodError e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Method getMethod(Class<?> aClass, String methodName, Class... argTypes) throws NoSuchMethodException {
+        try {
+            // Declared gives access to non-public
+            return aClass.getDeclaredMethod(methodName, argTypes);
+        } catch (NoSuchMethodException e) {
+            return aClass.getMethod(methodName, argTypes);
+        }
+    }
+
+    /**
+     * Uses reflection to execute the named method on the supplied class giving the arguments.
+     * Sinks all exceptions, but log an entry and returns <code>null</code>
+     *
+     * @param obj        The object on which to invoke the method
+     * @param methodName The name of the method to invoke
+     * @param args       The arguments to supply to the method
+     * @return <code>null</code> or the return-object from the method.
+     * @since 1.8
+     */
+    public static <T> T exec(Object obj, String methodName, Object... args) {
+        if (obj == null) {
+            return null;
+        }
+        Class[] argTypes = new Class[args.length];
+        int ix = 0;
+        for (Object arg : args) {
+            argTypes[ix++] = arg != null ? arg.getClass() : null;
+        }
+        return exec(obj, methodName, argTypes, args);
+    }
 
     public static void sendPackets(Player player, Object packet) throws Exception{
         Object nmsPlayer = getNMSPlayer(player);
@@ -22,7 +90,7 @@ public class NmsUtils {
     }
 
     public static Class<?> getNMSClass(String className) throws ClassNotFoundException{
-        return Class.forName("net.minecraft.server." + "" + "." + className);
+        return Class.forName("net.minecraft.server." + getNMSVersion() + "." + className);
     }
 
     public static Class<?> getBukkitClass(String className) throws ClassNotFoundException{

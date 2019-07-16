@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Location;
@@ -37,7 +37,7 @@ public class SetSpawnCMD extends Command {
         getCore().getConfiguration().saveConfig();
         getCore().getConfiguration().reloadConfig();
 
-        sender.sendMessage(Util.fixColor(Lang.INFO_SPAWN_SET));
+        sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_SET));
 
         return false;
     }

@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -22,18 +22,18 @@ public class MsgspyCMD extends Command {
                 UUID uuid = ((Player) sender).getUniqueId();
                 if (!getCore().getUsersStorage().getUser(uuid).isSocialSpy()) {
                     getCore().getUsersStorage().getUser(uuid).setSocialSpy(true);
-                    sender.sendMessage(Util.fixColor(Lang.INFO_MSG_SPY));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_MSG_SPY));
                 } else {
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_MSG_ALREADY));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_MSG_ALREADY));
                 }
             }
             if (args[0].equalsIgnoreCase("off")) {
                 UUID uuid = ((Player) sender).getUniqueId();
                 if (getCore().getUsersStorage().getUser(uuid).isSocialSpy()) {
                     getCore().getUsersStorage().getUser(uuid).setSocialSpy(false);
-                    sender.sendMessage(Util.fixColor(Lang.INFO_MSG_DISABLE));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_MSG_DISABLE));
                 } else {
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_MSG_ALREADYNO));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_MSG_ALREADYNO));
                 }
             }
         } else {

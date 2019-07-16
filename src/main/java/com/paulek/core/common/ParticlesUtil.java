@@ -1,10 +1,9 @@
 package com.paulek.core.common;
 
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-
-import java.lang.reflect.Method;
 
 public class ParticlesUtil {
 
@@ -17,11 +16,7 @@ public class ParticlesUtil {
     }
 
     public static void sendParticles12(World world, Object particle, Location var2, int var3, double var4, double var6, double var8, Object var10) throws Exception{
-
-        Method spawnParticle = NmsUtils.getNMSMethod(world.getClass(), "spawnParticle", particle.getClass(), var2.getClass(), Integer.TYPE, Double.TYPE, Double.TYPE, Double.TYPE, var10.getClass());
-
-        spawnParticle.invoke(world, particle, var2, var3, var4, var6, var8, var10);
-
+        world.spawnParticle((Particle)particle, var2, var3, var4, var6, var8, var10);
     }
 
 }

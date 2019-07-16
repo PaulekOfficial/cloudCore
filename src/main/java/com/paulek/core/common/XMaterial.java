@@ -1,10 +1,6 @@
 package com.paulek.core.common;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public enum XMaterial {
 

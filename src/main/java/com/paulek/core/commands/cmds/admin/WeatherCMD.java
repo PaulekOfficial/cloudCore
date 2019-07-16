@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -25,18 +25,18 @@ public class WeatherCMD extends Command {
                 World world = Bukkit.getWorld(args[1]);
                 if (args[0].equalsIgnoreCase("clear")) {
                     world.setStorm(false);
-                    sender.sendMessage(Util.fixColor(Lang.INFO_WEATHER_CLEAR));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_WEATHER_CLEAR));
                 } else if (args[0].equalsIgnoreCase("rain")) {
                     world.setStorm(true);
-                    sender.sendMessage(Util.fixColor(Lang.INFO_WEATHER_STORM));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_WEATHER_STORM));
                 } else if (args[0].equalsIgnoreCase("sun")) {
                     world.setStorm(false);
-                    sender.sendMessage(Util.fixColor(Lang.INFO_WEATHER_CLEAR));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_WEATHER_CLEAR));
                 } else {
-                    sender.sendMessage(Util.fixColor(this.getUsage()));
+                    sender.sendMessage(ColorUtil.fixColor(this.getUsage()));
                 }
             } catch (Exception e) {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_WEATHER_NOWORLD));
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_WEATHER_NOWORLD));
             }
         }
         if (args.length == 1) {
@@ -44,15 +44,15 @@ public class WeatherCMD extends Command {
                 Player player = (Player) sender;
                 if (args[0].equalsIgnoreCase("clear")) {
                     player.getWorld().setStorm(false);
-                    sender.sendMessage(Util.fixColor(Lang.INFO_WEATHER_CLEAR));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_WEATHER_CLEAR));
                 } else if (args[0].equalsIgnoreCase("rain")) {
                     player.getWorld().setStorm(true);
-                    sender.sendMessage(Util.fixColor(Lang.INFO_WEATHER_STORM));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_WEATHER_STORM));
                 } else if (args[0].equalsIgnoreCase("sun")) {
                     player.getWorld().setStorm(false);
-                    sender.sendMessage(Util.fixColor(Lang.INFO_WEATHER_CLEAR));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_WEATHER_CLEAR));
                 } else {
-                    sender.sendMessage(Util.fixColor(this.getUsage()));
+                    sender.sendMessage(ColorUtil.fixColor(this.getUsage()));
                 }
             } else {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);

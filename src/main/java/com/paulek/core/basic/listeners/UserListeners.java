@@ -6,7 +6,6 @@ import com.paulek.core.basic.User;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;

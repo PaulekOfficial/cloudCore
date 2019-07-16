@@ -35,14 +35,14 @@ public class VanishCMD extends Command {
 //                        public void run() {
 //                            for(Player player : Bukkit.getOnlinePlayers()){
 //                                player.hidePlayer(p);
-//                                Util.sendActionbar(p, Util.fixColor(Lang.INFO_VANISH_ACTIONBAR));
+//                                Util.sendActionbar(p, ColorUtil.fixColor(Lang.INFO_VANISH_ACTIONBAR));
 //                            }
 //                        }
 //                    },20, 20);
 //                    list.put(uuid, id);
 //                    Users.getUser(uuid).setVanish(true);
 //                    p.getLocation().getWorld().spawnParticle(Particle.SMOKE_LARGE, p.getLocation(), 500, 20, 20 , 20);
-//                    p.sendMessage(Util.fixColor(Lang.INFO_VANISH_VANISHED));
+//                    p.sendMessage(ColorUtil.fixColor(Lang.INFO_VANISH_VANISHED));
 //                } else {
 //                    p.getLocation().getWorld().spawnParticle(Particle.SMOKE_LARGE, p.getLocation(), 500, 20, 20 , 20);
 //                    list.get(uuid).cancel();
@@ -51,7 +51,7 @@ public class VanishCMD extends Command {
 //                    for (Player player : Bukkit.getOnlinePlayers()) {
 //                        player.showPlayer(p);
 //                    }
-//                    p.sendMessage(Util.fixColor(Lang.INFO_VANISH_VISIBLE));
+//                    p.sendMessage(ColorUtil.fixColor(Lang.INFO_VANISH_VISIBLE));
 //                }
 //            } else if(args[0] != null){
 //                String nick = args[0];
@@ -63,13 +63,13 @@ public class VanishCMD extends Command {
 //                            public void run() {
 //                                for(Player player : Bukkit.getOnlinePlayers()){
 //                                    player.hidePlayer(p);
-//                                    Util.sendActionbar(p, Util.fixColor(Lang.INFO_VANISH_ACTIONBAR));
+//                                    Util.sendActionbar(p, ColorUtil.fixColor(Lang.INFO_VANISH_ACTIONBAR));
 //                                }
 //                            }
 //                        },20, 20);
 //                        list.put(uuid, id);
 //                        Users.getUser(uuid).setVanish(true);
-//                        player.sendMessage(Util.fixColor(Lang.INFO_VANISH_VANISHED));
+//                        player.sendMessage(ColorUtil.fixColor(Lang.INFO_VANISH_VANISHED));
 //                        p.getLocation().getWorld().spawnParticle(Particle.SMOKE_LARGE, p.getLocation(), 500, 20, 20 , 20);
 //                    } else {
 //                        list.get(uuid).cancel();
@@ -78,11 +78,11 @@ public class VanishCMD extends Command {
 //                        for (Player d : Bukkit.getOnlinePlayers()) {
 //                            d.showPlayer(player);
 //                        }
-//                        player.sendMessage(Util.fixColor(Lang.INFO_VANISH_VISIBLE));
+//                        player.sendMessage(ColorUtil.fixColor(Lang.INFO_VANISH_VISIBLE));
 //                        p.getLocation().getWorld().spawnParticle(Particle.SMOKE_LARGE, p.getLocation(), 500, 20, 20 , 20);
 //                    }
 //                } else {
-//                    p.sendMessage(Util.fixColor(Lang.ERROR_VANISH_PLAYEROFFINLE));
+//                    p.sendMessage(ColorUtil.fixColor(Lang.ERROR_VANISH_PLAYEROFFINLE));
 //                }
 //            } else {
 //                sender.sendMessage(getUsage());

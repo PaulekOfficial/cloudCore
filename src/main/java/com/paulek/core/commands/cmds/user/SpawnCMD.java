@@ -2,8 +2,8 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
-import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
@@ -42,7 +42,7 @@ public class SpawnCMD extends Command {
 
                 teleportSpawn(player);
 
-                sender.sendMessage(Util.fixColor(Lang.INFO_SPAWN_TELEPORT));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_TELEPORT));
 
                 return false;
             } else {
@@ -56,13 +56,13 @@ public class SpawnCMD extends Command {
 
                         teleportSpawn(player);
 
-                        sender.sendMessage(Util.fixColor(Lang.INFO_SPAWN_TELEPORT));
+                        sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_TELEPORT));
                     }
                 }, Config.SPAWN_DETLY * 20);
 
                 in_detly.put(((Player) sender).getUniqueId(), id.getTaskId());
 
-                sender.sendMessage(Util.fixColor(Lang.INFO_SPAWN_DETY));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_DETY));
 
                 return false;
             }
@@ -74,17 +74,17 @@ public class SpawnCMD extends Command {
 
                     teleportSpawn(player);
 
-                    player.sendMessage(Util.fixColor(Lang.INFO_SPAWN_PLAYERTELEPORTED));
+                    player.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_PLAYERTELEPORTED));
 
                     return false;
                 } else {
 
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_SPAWN_PLAYEROFFINLE));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SPAWN_PLAYEROFFINLE));
 
                     return false;
                 }
             } else {
-                sender.sendMessage(Util.fixColor(getPermissionMessage()));
+                sender.sendMessage(ColorUtil.fixColor(getPermissionMessage()));
             }
         } else {
             sender.sendMessage(getUsage());

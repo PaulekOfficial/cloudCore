@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
@@ -44,11 +44,11 @@ public class BackCMD extends Command {
 
                 player.teleport(location);
 
-                sender.sendMessage(Util.fixColor(Lang.INFO_BACK_TELEPORTED));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_BACK_TELEPORTED));
                 return false;
             }
 
-            sender.sendMessage(Util.fixColor(Lang.INFO_BACK_WAIT));
+            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_BACK_WAIT));
 
             BukkitTask id;
 
@@ -58,14 +58,14 @@ public class BackCMD extends Command {
 
                     player.teleport(location);
 
-                    sender.sendMessage(Util.fixColor(Lang.INFO_BACK_TPDONE));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_BACK_TPDONE));
                 }
             }, Config.BACK_DETLY * 20);
 
             to_teleport.put(player.getUniqueId(), id.getTaskId());
 
         } else {
-            sender.sendMessage(Util.fixColor(Lang.ERROR_BACK_NOHISTORY));
+            sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_BACK_NOHISTORY));
             return false;
         }
 

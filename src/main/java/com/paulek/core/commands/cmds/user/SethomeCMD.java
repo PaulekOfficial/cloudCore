@@ -3,7 +3,7 @@ package com.paulek.core.commands.cmds.user;
 import com.paulek.core.Core;
 import com.paulek.core.basic.User;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Location;
@@ -56,7 +56,7 @@ public class SethomeCMD extends Command {
                 if (!sender.hasPermission("core.cmd.home.bypasslimit")) {
                     if (user.getHomes().size() >= amount) {
 
-                        sender.sendMessage(Util.fixColor(Lang.ERROR_HOME_CANNOTSET));
+                        sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_HOME_CANNOTSET));
 
                         return false;
                     }
@@ -64,9 +64,9 @@ public class SethomeCMD extends Command {
 
                 if (user.getHome(args[0]) == null) {
                     user.addHome(args[0], location);
-                    sender.sendMessage(Util.fixColor(Lang.INFO_HOME_SET.replace("{name}", args[0])));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_SET.replace("{name}", args[0])));
                 } else {
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_HOME_EXIST));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_HOME_EXIST));
                 }
 
             } else if (args.length == 0) {
@@ -79,7 +79,7 @@ public class SethomeCMD extends Command {
 
                 user.addHome("home", location);
 
-                sender.sendMessage(Util.fixColor(Lang.INFO_HOME_SETNONAME));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_SETNONAME));
             } else {
                 sender.sendMessage(getUsage());
             }

@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -24,7 +24,7 @@ public class AnvilCMD extends Command {
 
             player.openInventory(Bukkit.createInventory(player, InventoryType.ANVIL));
 
-            player.sendMessage(Util.fixColor(Lang.INFO_ANVIL_OPENED));
+            player.sendMessage(ColorUtil.fixColor(Lang.INFO_ANVIL_OPENED));
         } else {
             sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
         }

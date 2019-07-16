@@ -29,7 +29,7 @@ public class SkinCMD extends Command {
 //                            if (Config.SKINS_HIDENONPREMIUM) {
 //
 //                                if(Config.SKINS_SKINSFORNONPREMIUM.size() == 0){
-//                                    sender.sendMessage(Util.fixColor(Lang.INFO_SKIN_CLEAR));
+//                                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SKIN_CLEAR));
 //                                    return false;
 //                                }
 //
@@ -46,7 +46,7 @@ public class SkinCMD extends Command {
 //                                Users.getUser(player.getUniqueId()).setSignature("");
 //                                SkinUtil.applySkin(player, skin);
 //
-//                                sender.sendMessage(Util.fixColor(Lang.INFO_SKIN_CLEAR));
+//                                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SKIN_CLEAR));
 //
 //                            } else {
 //
@@ -57,7 +57,7 @@ public class SkinCMD extends Command {
 //                                Users.getUser(player.getUniqueId()).setSignature(" ");
 //                                SkinUtil.applySkin(player, skin);
 //
-//                                sender.sendMessage(Util.fixColor(Lang.INFO_SKIN_CLEAR));
+//                                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SKIN_CLEAR));
 //                            }
 //                        } else {
 //
@@ -68,7 +68,7 @@ public class SkinCMD extends Command {
 //                            Users.getUser(player.getUniqueId()).setSkinSenility(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 2);
 //                            SkinUtil.applySkin(player, skin);
 //
-//                            sender.sendMessage(Util.fixColor(Lang.INFO_SKIN_CLEAR));
+//                            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SKIN_CLEAR));
 //
 //                        }
 //
@@ -93,7 +93,7 @@ public class SkinCMD extends Command {
 //
 //                            } catch (Exception e){
 //                                safe = false;
-//                                sender.sendMessage(Util.fixColor(Lang.ERROR_SKIN_ERROR));
+//                                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SKIN_ERROR));
 //                            }
 //                            if(safe) {
 //                                SkinUtil.applySkin(player, skin);
@@ -101,10 +101,10 @@ public class SkinCMD extends Command {
 //                                Users.getUser(player.getUniqueId()).setSkin(skin.getValue());
 //                                Users.getUser(player.getUniqueId()).setSignature(skin.getSignature());
 //
-//                                sender.sendMessage(Util.fixColor(Lang.INFO_SKIN_CHANGED));
+//                                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SKIN_CHANGED));
 //                            }
 //                        } else {
-//                            sender.sendMessage(Util.fixColor(Lang.ERROR_SKIN_NOTPREMIUM));
+//                            sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SKIN_NOTPREMIUM));
 //                        }
 //
 //                    } else {

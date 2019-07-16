@@ -2,8 +2,8 @@ package com.paulek.core.common.io;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.Kit;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.EnchantUtils;
-import com.paulek.core.common.Util;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -53,16 +53,16 @@ public class Kits {
 
             ConfigurationSection kitConfiguration = cs.getConfigurationSection(kit);
 
-            String name = Util.fixColor(kitConfiguration.getString("menu-name"));
+            String name = ColorUtil.fixColor(kitConfiguration.getString("menu-name"));
             String[] material = kitConfiguration.getString("gui-item").split(":");
             ItemStack guiItem = new ItemStack(Material.getMaterial(material[0]), 1);
             if (material.length == 2)
                 guiItem = new ItemStack(Material.getMaterial(material[0]), 1, Short.valueOf(material[1]));
             ItemMeta im = guiItem.getItemMeta();
-            im.setDisplayName(Util.fixColor(name));
+            im.setDisplayName(ColorUtil.fixColor(name));
             guiItem.setItemMeta(im);
             String permission = kitConfiguration.getString("permission");
-            String description = Util.fixColor(kitConfiguration.getString("description"));
+            String description = ColorUtil.fixColor(kitConfiguration.getString("description"));
             int cooldown = kitConfiguration.getInt("cooldown");
             boolean showInGui = kitConfiguration.getBoolean("show-in-gui");
             List<ItemStack> content = new ArrayList<>();
@@ -91,14 +91,14 @@ public class Kits {
 
                     if (s.contains("name:") && !elementRead) {
                         String kitName = s.replace("name:", "");
-                        itemName = Util.fixColor(kitName.replace("_", " "));
+                        itemName = ColorUtil.fixColor(kitName.replace("_", " "));
                         elementRead = true;
                     }
 
                     if (s.contains("lore:") && !elementRead) {
                         String[] kitLore = s.replace("lore:", "").split("~");
                         for (String klore : kitLore) {
-                            lore.add(Util.fixColor(klore.replace("_", " ")));
+                            lore.add(ColorUtil.fixColor(klore.replace("_", " ")));
                         }
                         elementRead = true;
                     }
@@ -131,7 +131,7 @@ public class Kits {
             }
 
             kits.put(kit, new Kit(name, permission, guiItem, content, true, showInGui, cooldown, description));
-            core.getConsoleLog().info("Loaded kit: " + Util.fixColor(name));
+            core.getConsoleLog().info("Loaded kit: " + ColorUtil.fixColor(name));
 
         }
 

@@ -3,7 +3,7 @@ package com.paulek.core.commands.cmds.user;
 import com.paulek.core.Core;
 import com.paulek.core.basic.User;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,11 +28,11 @@ public class DelhomeCMD extends Command {
 
                     user.removeHome("home");
 
-                    sender.sendMessage(Util.fixColor(Lang.INFO_HOME_DELETED));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_DELETED));
 
                 } else {
 
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_HOME_DELHOME));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_HOME_DELHOME));
 
                 }
 
@@ -42,11 +42,11 @@ public class DelhomeCMD extends Command {
 
                     user.removeHome(args[0]);
 
-                    sender.sendMessage(Util.fixColor(Lang.INFO_HOME_DELETED));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_DELETED));
 
                 } else {
 
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_HOME_DELNAMEDHOME));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_HOME_DELNAMEDHOME));
 
                 }
 

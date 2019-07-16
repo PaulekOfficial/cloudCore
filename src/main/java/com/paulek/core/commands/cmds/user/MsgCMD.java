@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -34,18 +34,18 @@ public class MsgCMD extends Command {
                 for (int i = 1; i != args.length; i++) {
                     s += args[i] + " ";
                 }
-                String message = Util.fixColor(Lang.INFO_MSG_FORMAT).replace("{message}", s);
+                String message = ColorUtil.fixColor(Lang.INFO_MSG_FORMAT).replace("{message}", s);
                 send.sendMessage(message.replace("{from}", sender.getName()));
                 sender.sendMessage(message.replace("{from}", sender.getName()));
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     UUID ue = p.getUniqueId();
                     if (getCore().getUsersStorage().getUser(ue).isSocialSpy()) {
-                        String m = Util.fixColor(Lang.INFO_MSG_SPYFORMAT.replace("{from}", sender.getName()).replace("{to}", send.getDisplayName()).replace("{message}", s));
+                        String m = ColorUtil.fixColor(Lang.INFO_MSG_SPYFORMAT.replace("{from}", sender.getName()).replace("{to}", send.getDisplayName()).replace("{message}", s));
                         p.sendMessage(m);
                     }
                 }
             } else {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_MSG_PLAYEROFF));
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_MSG_PLAYEROFF));
             }
         } else {
             sender.sendMessage(getUsage());

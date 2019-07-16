@@ -3,7 +3,7 @@ package com.paulek.core.commands.cmds.user;
 import com.paulek.core.Core;
 import com.paulek.core.basic.Warrior;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
@@ -36,7 +36,7 @@ public class CombatCMD extends Command {
 
                         if (coldown > 0) {
 
-                            String str = Util.fixColor(Lang.INFO_COMBAT_COMMAND.replace("{time}", "$c" + coldown + "/" + timetoend).replace("{check}", "$c" + no));
+                            String str = ColorUtil.fixColor(Lang.INFO_COMBAT_COMMAND.replace("{time}", "$c" + coldown + "/" + timetoend).replace("{check}", "$c" + no));
 
                             player.sendMessage(str);
 
@@ -50,7 +50,7 @@ public class CombatCMD extends Command {
                 return false;
             }
 
-            String str = Util.fixColor(Lang.INFO_COMBAT_COMMAND.replace("{time}", "$a0/" + timetoend).replace("{check}", "$a" + yes));
+            String str = ColorUtil.fixColor(Lang.INFO_COMBAT_COMMAND.replace("{time}", "$a0/" + timetoend).replace("{check}", "$a" + yes));
 
             player.sendMessage(str);
         } else {

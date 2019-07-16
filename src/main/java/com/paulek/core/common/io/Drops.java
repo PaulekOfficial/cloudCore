@@ -4,6 +4,7 @@ import com.paulek.core.Core;
 import com.paulek.core.basic.drop.DropMask;
 import com.paulek.core.basic.drop.StoneDrop;
 import com.paulek.core.basic.drop.mask.BlockMask;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -70,7 +71,7 @@ public class Drops {
                         turboMessage += turboMessages[i] + " ";
 
                         for(Player player : Bukkit.getOnlinePlayers()){
-                            Util.sendTitle(player, Util.fixColor(turboMessage), Util.fixColor(Lang.DROP_TURBO_SUBTITLE.replace("{message}", message)), 0, 20*5, 40);
+                            Util.sendTitle(player, ColorUtil.fixColor(turboMessage), ColorUtil.fixColor(Lang.DROP_TURBO_SUBTITLE.replace("{message}", message)), 0, 20*5, 40);
                         }
 
                         try{
@@ -83,7 +84,7 @@ public class Drops {
                 }
             });
         } else {
-            Bukkit.broadcastMessage(Util.fixColor(Lang.DROP_TURBO_CHAT.replace("{message}", message).replace("{time}", orginalTime)));
+            Bukkit.broadcastMessage(ColorUtil.fixColor(Lang.DROP_TURBO_CHAT.replace("{message}", message).replace("{time}", orginalTime)));
         }
 
         if(turboMode == 1){
@@ -104,7 +105,7 @@ public class Drops {
 
             turboMode = 1;
 
-            BossBar bossBar = core.getServer().createBossBar(Util.fixColor(Lang.DROP_TURBO_BOSS_TITLE), BarColor.valueOf(Lang.DROP_TURBO_BOSS_BARCOLOR), BarStyle.SOLID);
+            BossBar bossBar = core.getServer().createBossBar(ColorUtil.fixColor(Lang.DROP_TURBO_BOSS_TITLE), BarColor.valueOf(Lang.DROP_TURBO_BOSS_BARCOLOR), BarStyle.SOLID);
             bossBar.setProgress(1.0);
 
             for (Player player : Bukkit.getOnlinePlayers()) {

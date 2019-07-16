@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -22,7 +22,7 @@ public class WorkbenchCMD extends Command {
 
             player.openWorkbench(player.getLocation(), true);
 
-            player.sendMessage(Util.fixColor(Lang.INFO_WORKBENCH_OPENED));
+            player.sendMessage(ColorUtil.fixColor(Lang.INFO_WORKBENCH_OPENED));
         } else {
             sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
         }

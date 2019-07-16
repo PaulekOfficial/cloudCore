@@ -3,7 +3,7 @@ package com.paulek.core.commands.cmds.admin;
 import com.paulek.core.Core;
 import com.paulek.core.basic.User;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,32 +28,32 @@ public class TptoggleCMD extends Command {
 
             if (user.isTpToogle()) {
                 user.setTpToogle(false);
-                sender.sendMessage(Util.fixColor(Lang.INFO_TPTOGGLE_DISABLED));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPTOGGLE_DISABLED));
             } else {
                 user.setTpToogle(true);
-                sender.sendMessage(Util.fixColor(Lang.INFO_TPTOGGLE_ENABLED));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPTOGGLE_ENABLED));
             }
 
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("on")) {
 
                 if (user.isTpToogle()) {
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_TPTOGGLE_ENABLED));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPTOGGLE_ENABLED));
                     return false;
                 }
 
                 user.setTpToogle(true);
-                sender.sendMessage(Util.fixColor(Lang.INFO_TPTOGGLE_ENABLED));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPTOGGLE_ENABLED));
 
             } else if (args[0].equalsIgnoreCase("off")) {
 
                 if (!user.isTpToogle()) {
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_TPTOGGLE_DISABLED));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPTOGGLE_DISABLED));
                     return false;
                 }
 
                 user.setTpToogle(false);
-                sender.sendMessage(Util.fixColor(Lang.INFO_TPTOGGLE_DISABLED));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPTOGGLE_DISABLED));
 
             } else {
                 sender.sendMessage(getUsage());

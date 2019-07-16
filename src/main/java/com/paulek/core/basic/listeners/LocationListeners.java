@@ -4,7 +4,7 @@ import com.paulek.core.commands.cmds.user.BackCMD;
 import com.paulek.core.commands.cmds.user.HomeCMD;
 import com.paulek.core.commands.cmds.user.SpawnCMD;
 import com.paulek.core.commands.cmds.user.TpacceptCMD;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -29,7 +29,7 @@ public class LocationListeners implements Listener {
 
                 SpawnCMD.getIn_detly().remove(uuid);
 
-                event.getPlayer().sendMessage(Util.fixColor(Lang.ERROR_SPAWN_ABORT));
+                event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_SPAWN_ABORT));
 
             }
         }
@@ -42,7 +42,7 @@ public class LocationListeners implements Listener {
 
                 BackCMD.getTo_teleport().remove(uuid);
 
-                event.getPlayer().sendMessage(Util.fixColor(Lang.ERROR_BACK_ABORT));
+                event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_BACK_ABORT));
             }
         }
 
@@ -56,7 +56,7 @@ public class LocationListeners implements Listener {
 
                 TpacceptCMD.getTo_teleport().remove(uuid);
 
-                event.getPlayer().sendMessage(Util.fixColor(Lang.ERROR_TPA_ABORT));
+                event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_TPA_ABORT));
 
             }
         }
@@ -70,7 +70,7 @@ public class LocationListeners implements Listener {
 
                 HomeCMD.getTo_teleport().remove(uuid);
 
-                event.getPlayer().sendMessage(Util.fixColor(Lang.ERROR_HOME_ABORT));
+                event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_HOME_ABORT));
 
             }
         }

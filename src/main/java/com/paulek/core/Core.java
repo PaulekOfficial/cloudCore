@@ -44,7 +44,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.logging.Level;
 
@@ -72,6 +71,7 @@ public class Core extends JavaPlugin {
     private StorageManager storageManager;
     private Skins skinsStorage;
     private String updateMethod;
+    private Version version;
 
     private boolean onlineMode;
 
@@ -87,7 +87,7 @@ public class Core extends JavaPlugin {
 
         consoleLog = new ConsoleLog(this);
 
-        Version version = new Version(this);
+        version = new Version(this);
         version.chceckVersion();
 
         onlineMode = Bukkit.getOnlineMode();
@@ -278,7 +278,7 @@ public class Core extends JavaPlugin {
     }
 
     public String getVersion() {
-        return plugin.getDescription().getVersion();
+        return version.getVersion();
     }
 
     public Chat getChat() {

@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -28,25 +28,25 @@ public class TpadenyCMD extends Command {
             if (getCore().getTpaStorage().getToAcceptTpahere(uuid) != null) {
 
                 if (Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpahere(uuid)) != null)
-                    Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpahere(uuid)).sendMessage(Util.fixColor(Lang.INFO_TPADENY_REJECTED));
+                    Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpahere(uuid)).sendMessage(ColorUtil.fixColor(Lang.INFO_TPADENY_REJECTED));
 
                 getCore().getTpaStorage().removeToAcceptTpahere(uuid);
                 getCore().getTpaStorage().cancelTaskTpahere(uuid);
 
-                sender.sendMessage(Util.fixColor(Lang.INFO_TPADENY_DENY));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPADENY_DENY));
 
             } else if (getCore().getTpaStorage().getToAcceptTpa(uuid) != null) {
 
                 if (Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpa(uuid)) != null)
-                    Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpa(uuid)).sendMessage(Util.fixColor(Lang.INFO_TPADENY_REJECTED));
+                    Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpa(uuid)).sendMessage(ColorUtil.fixColor(Lang.INFO_TPADENY_REJECTED));
 
                 getCore().getTpaStorage().removeToAcceptTpa(uuid);
                 getCore().getTpaStorage().cancelTaskTpa(uuid);
 
-                sender.sendMessage(Util.fixColor(Lang.INFO_TPADENY_DENY));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPADENY_DENY));
 
             } else {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_TPADENY_NOTHING));
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPADENY_NOTHING));
             }
 
         } else {

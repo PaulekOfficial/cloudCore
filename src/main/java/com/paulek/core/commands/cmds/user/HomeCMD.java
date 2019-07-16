@@ -3,8 +3,8 @@ package com.paulek.core.commands.cmds.user;
 import com.paulek.core.Core;
 import com.paulek.core.basic.User;
 import com.paulek.core.commands.Command;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
-import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
@@ -42,7 +42,7 @@ public class HomeCMD extends Command {
 
                     if (!sender.hasPermission("core.detly.bypass")) {
 
-                        sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORTING));
+                        sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_TELEPORTING));
 
                         BukkitTask id;
 
@@ -50,7 +50,7 @@ public class HomeCMD extends Command {
                             public void run() {
                                 new LocationUtil(user.getHome(args[0]), player);
 
-                                sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORT));
+                                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_TELEPORT));
                             }
                         }, Config.HOME_DETLY * 20);
 
@@ -59,12 +59,12 @@ public class HomeCMD extends Command {
                     } else {
                         new LocationUtil(user.getHome(args[0]), player);
 
-                        sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORT));
+                        sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_TELEPORT));
                     }
 
 
                 } else {
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_HOME_NOTEXIST.replace("{name}", args[0])));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_HOME_NOTEXIST.replace("{name}", args[0])));
                 }
 
             } else if (args.length == 0) {
@@ -79,7 +79,7 @@ public class HomeCMD extends Command {
 
                     }
 
-                    sender.sendMessage(Util.fixColor(Lang.INFO_HOME_MOREHOMES.replace("{homes}", s)));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_MOREHOMES.replace("{homes}", s)));
                     return false;
 
                 }
@@ -88,7 +88,7 @@ public class HomeCMD extends Command {
 
                     if (!sender.hasPermission("core.detly.bypass")) {
 
-                        sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORTING));
+                        sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_TELEPORTING));
 
                         BukkitTask id;
 
@@ -96,7 +96,7 @@ public class HomeCMD extends Command {
                             public void run() {
                                 player.teleport(user.getHome("home"));
 
-                                sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORT));
+                                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_TELEPORT));
                             }
                         }, Config.HOME_DETLY * 20);
 
@@ -105,11 +105,11 @@ public class HomeCMD extends Command {
                     } else {
                         player.teleport(user.getHome("home"));
 
-                        sender.sendMessage(Util.fixColor(Lang.INFO_HOME_TELEPORT));
+                        sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_TELEPORT));
                     }
 
                 } else {
-                    sender.sendMessage(Util.fixColor(Lang.INFO_HOME_DEFAULTNOTEXIST));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_DEFAULTNOTEXIST));
                 }
 
             } else {

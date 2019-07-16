@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 
@@ -18,14 +18,14 @@ public class TurboDropCMD extends Command {
     public boolean execute(CommandSender sender, String[] args) {
 
         if(args.length < 1){
-            sender.sendMessage(Util.fixColor(getUsage()));
+            sender.sendMessage(ColorUtil.fixColor(getUsage()));
             return true;
         }
 
         int duration = getTimeInSecounds(args[0]);
 
         if(duration == -1){
-            sender.sendMessage(Util.fixColor(Lang.ERROR_DROP_TURBO_BADTIMESYNTAX));
+            sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_DROP_TURBO_BADTIMESYNTAX));
             return true;
         }
 

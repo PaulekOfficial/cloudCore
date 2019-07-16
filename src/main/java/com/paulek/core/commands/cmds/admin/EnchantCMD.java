@@ -2,8 +2,8 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.NmsUtils;
-import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Material;
@@ -14,9 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import javax.management.modelmbean.InvalidTargetObjectTypeException;
 import java.lang.reflect.Method;
-import java.security.InvalidParameterException;
 
 public class EnchantCMD extends Command {
 
@@ -46,14 +44,14 @@ public class EnchantCMD extends Command {
                     lvl = Integer.valueOf(args[1]);
                 } catch (Exception e) {
 
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_ENCHANT_NOTNUMBER));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_ENCHANT_NOTNUMBER));
 
                     return false;
                 }
 
                 if (Enchantment.getByName(args[0].toUpperCase()) == null && !args[0].toUpperCase().equalsIgnoreCase("ALL")) {
 
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_ENCHANT_NOTFOUND));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_ENCHANT_NOTFOUND));
 
                     return false;
                 }
@@ -64,7 +62,7 @@ public class EnchantCMD extends Command {
 
                 if (enchantment.getMaxLevel() < lvl && !unsafeEnchants) {
 
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_ENCHANT_UNSAFE));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_ENCHANT_UNSAFE));
 
                     return false;
                 }
@@ -73,11 +71,11 @@ public class EnchantCMD extends Command {
 
                 player.getInventory().getItemInHand().setItemMeta(itemMeta);
 
-                sender.sendMessage(Util.fixColor(Lang.INFO_ENCHANT_ENCHANTED));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_ENCHANT_ENCHANTED));
 
             } else {
 
-                sender.sendMessage(Util.fixColor(Lang.ERROR_ENCHANT_ITEMAIR));
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_ENCHANT_ITEMAIR));
 
                 return false;
             }
@@ -93,7 +91,7 @@ public class EnchantCMD extends Command {
 
             }
 
-            sender.sendMessage(Util.fixColor(Lang.INFO_ENCHANT_LIST.replace("{list}", enchamtment_list.toString())));
+            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_ENCHANT_LIST.replace("{list}", enchamtment_list.toString())));
 
             sender.sendMessage(getUsage());
 

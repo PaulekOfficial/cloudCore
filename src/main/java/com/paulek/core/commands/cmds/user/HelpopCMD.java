@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -17,7 +17,7 @@ public class HelpopCMD extends Command {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(Util.fixColor(this.getUsage()));
+            sender.sendMessage(ColorUtil.fixColor(this.getUsage()));
             return false;
         }
         String message = "";
@@ -26,10 +26,10 @@ public class HelpopCMD extends Command {
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.hasPermission("core.helpop.recive")) {
-                p.sendMessage(Util.fixColor(Lang.INFO_HELPOP_FORMAT.replace("{player}", sender.getName()).replace("{message}", message)));
+                p.sendMessage(ColorUtil.fixColor(Lang.INFO_HELPOP_FORMAT.replace("{player}", sender.getName()).replace("{message}", message)));
             }
         }
-        sender.sendMessage(Util.fixColor(Lang.INFO_HELPOP_SENDED));
+        sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HELPOP_SENDED));
         return false;
     }
 }

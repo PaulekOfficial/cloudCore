@@ -2,8 +2,8 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
-import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
@@ -44,9 +44,9 @@ public class TpacceptCMD extends Command {
 
                 final Player to_teleport = Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpa(uuid));
 
-                sender.sendMessage(Util.fixColor(Lang.INFO_TPA_ACCEPT));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_ACCEPT));
 
-                to_teleport.sendMessage(Util.fixColor(Lang.INFO_TPA_ACCEPTED));
+                to_teleport.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_ACCEPTED));
 
                 getCore().getTpaStorage().cancelTaskTpa(to_teleport.getUniqueId());
                 getCore().getTpaStorage().removeToAcceptTpa(uuid);
@@ -62,7 +62,7 @@ public class TpacceptCMD extends Command {
                             new LocationUtil(location, to_teleport);
 
                         if (Bukkit.getPlayer(to_teleport.getUniqueId()) != null)
-                            to_teleport.sendMessage(Util.fixColor(Lang.INFO_TPA_TELEPORT));
+                            to_teleport.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_TELEPORT));
 
                         to_teleport_map.remove(to_teleport.getUniqueId());
 
@@ -72,7 +72,7 @@ public class TpacceptCMD extends Command {
                 to_teleport_map.put(to_teleport.getUniqueId(), id.getTaskId());
 
             } else {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_TPA_NOPLAYER));
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPA_NOPLAYER));
             }
 
         } else if (getCore().getTpaStorage().getToAcceptTpahere(uuid) != null) {
@@ -81,9 +81,9 @@ public class TpacceptCMD extends Command {
 
                 final Player player1 = Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpahere(uuid));
 
-                sender.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_ACCEPTED));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_ACCEPTED));
 
-                player1.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_ACCEPT));
+                player1.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_ACCEPT));
 
                 getCore().getTpaStorage().cancelTaskTpahere(player.getUniqueId());
                 getCore().getTpaStorage().removeToAcceptTpahere(uuid);
@@ -98,7 +98,7 @@ public class TpacceptCMD extends Command {
                         if (Bukkit.getPlayer(player1.getUniqueId()) != null) new LocationUtil(location, player1);
 
                         if (Bukkit.getPlayer(player1.getUniqueId()) != null)
-                            player1.sendMessage(Util.fixColor(Lang.INFO_TPAHERE_TELEPORT));
+                            player1.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_TELEPORT));
 
                         to_teleport_map.remove(player1.getUniqueId());
 
@@ -107,11 +107,11 @@ public class TpacceptCMD extends Command {
 
                 to_teleport_map.put(player1.getUniqueId(), id.getTaskId());
             } else {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_TPAHERE_NOPLAYER));
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPAHERE_NOPLAYER));
             }
 
         } else {
-            sender.sendMessage(Util.fixColor(Lang.ERROR_TPACCEPT_NOTHINGTOACCEPT));
+            sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPACCEPT_NOTHINGTOACCEPT));
         }
 
         return false;

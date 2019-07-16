@@ -4,13 +4,12 @@ import com.paulek.core.Core;
 import com.paulek.core.basic.Warrior;
 import com.paulek.core.basic.data.localStorage.CombatStorage;
 import com.paulek.core.basic.event.PlayerCombatStartEvent;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.association.RegionAssociable;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -50,7 +49,7 @@ public class CombatListeners implements Listener {
                         (event.getAction().equals(Action.LEFT_CLICK_BLOCK) && event.getClickedBlock().getType().equals(Material.ENDER_CHEST)) ||
                         (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getClickedBlock().getType().equals(Material.ENDER_CHEST))) {
 
-                    event.getPlayer().sendMessage(Util.fixColor(Lang.ERROR_COMBAT_CHESTDISABLED));
+                    event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_COMBAT_CHESTDISABLED));
 
                     event.setCancelled(true);
 
@@ -75,7 +74,7 @@ public class CombatListeners implements Listener {
                 }
 
                 if (!found) {
-                    event.getPlayer().sendMessage(Util.fixColor(Lang.ERROR_COMBAT_COMMANDDISABLED));
+                    event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_COMBAT_COMMANDDISABLED));
                     event.setCancelled(true);
                 }
             }
@@ -121,7 +120,7 @@ public class CombatListeners implements Listener {
         if (Config.COMBAT_DISABLEBREAKING) {
 
             if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
-                event.getPlayer().sendMessage(Util.fixColor(Lang.ERROR_COMBAT_BREAKDISABLED));
+                event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_COMBAT_BREAKDISABLED));
 
                 event.setCancelled(true);
             }
@@ -148,7 +147,7 @@ public class CombatListeners implements Listener {
                 }
 
                 if (!allow) {
-                    event.getPlayer().sendMessage(Util.fixColor(Lang.ERROR_COMBAT_PLACE));
+                    event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_COMBAT_PLACE));
                     event.setCancelled(true);
                 }
             }
@@ -166,7 +165,7 @@ public class CombatListeners implements Listener {
         }
         combatStorage.addMarkedWarrior(new Warrior(event.getAttacked().getUniqueId(), event.getAttacked().getDisplayName()));
         if (Config.COMBAT_CHATMESSAGE) {
-            event.getAttacked().sendMessage(Util.fixColor(Lang.INFO_COMBAT_CHAT));
+            event.getAttacked().sendMessage(ColorUtil.fixColor(Lang.INFO_COMBAT_CHAT));
         }
         if(event.getAttacker() instanceof Player){
             if(combatStorage.isMarked((event.getAttacker().getUniqueId()))){
@@ -174,7 +173,7 @@ public class CombatListeners implements Listener {
             }
             combatStorage.addMarkedWarrior(new Warrior(event.getAttacker().getUniqueId(), ((Player) event.getAttacker()).getDisplayName()));
             if (Config.COMBAT_CHATMESSAGE) {
-                event.getAttacker().sendMessage(Util.fixColor(Lang.INFO_COMBAT_CHAT));
+                event.getAttacker().sendMessage(ColorUtil.fixColor(Lang.INFO_COMBAT_CHAT));
             }
         }
 
@@ -206,7 +205,7 @@ public class CombatListeners implements Listener {
             if (attacker instanceof Player) {
                 Player damager = (Player) attacker;
                 if (damager.getGameMode() == GameMode.CREATIVE) {
-                    damager.sendMessage(Util.fixColor(Lang.ERROR_COMBAT_CREATIVE));
+                    damager.sendMessage(ColorUtil.fixColor(Lang.ERROR_COMBAT_CREATIVE));
                     event.setCancelled(true);
                     return;
                 }

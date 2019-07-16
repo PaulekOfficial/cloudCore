@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -31,9 +31,9 @@ public class FlyCMD extends Command {
                     if (Bukkit.getPlayerExact(args[0]) != null) {
                         player = Bukkit.getPlayerExact(args[0]);
                         setPlayersFlight(player);
-                        sender.sendMessage(Util.fixColor(Lang.INFO_FLY_SETONFOR.replace("{player}", player.getDisplayName())));
+                        sender.sendMessage(ColorUtil.fixColor(Lang.INFO_FLY_SETONFOR.replace("{player}", player.getDisplayName())));
                     } else {
-                        sender.sendMessage(Util.fixColor(Lang.ERROR_FLY_NOTONLINE));
+                        sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_FLY_NOTONLINE));
                     }
                 } else {
                     sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
@@ -41,7 +41,7 @@ public class FlyCMD extends Command {
             } else {
                 String error = "$3$lCORE $c-> $cYou dont have permisions ($4{perm}$c) to this!";
                 error = error.replace("{perm}", "core.command.fly.other");
-                error = Util.fixColor(error);
+                error = ColorUtil.fixColor(error);
                 sender.sendMessage(error);
             }
         }
@@ -54,10 +54,10 @@ public class FlyCMD extends Command {
     private void setPlayersFlight(Player player) {
         if (player.getAllowFlight()) {
             player.setAllowFlight(false);
-            player.sendMessage(Util.fixColor(Lang.INFO_FLY_SETOFF));
+            player.sendMessage(ColorUtil.fixColor(Lang.INFO_FLY_SETOFF));
         } else {
             player.setAllowFlight(true);
-            player.sendMessage(Util.fixColor(Lang.INFO_FLY_SETON));
+            player.sendMessage(ColorUtil.fixColor(Lang.INFO_FLY_SETON));
         }
     }
 }

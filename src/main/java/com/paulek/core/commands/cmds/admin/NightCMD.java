@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -19,9 +19,9 @@ public class NightCMD extends Command {
             try {
                 long time = 18000;
                 ((Player) sender).getWorld().setTime(time);
-                sender.sendMessage(Util.fixColor(Lang.INFO_TIME_SET.replace("{world}", ((Player) sender).getWorld().getName()).replace("{time}", String.valueOf(time))));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TIME_SET.replace("{world}", ((Player) sender).getWorld().getName()).replace("{time}", String.valueOf(time))));
             } catch (Exception e) {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_THATSNOTANUMBER));
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_THATSNOTANUMBER));
             }
         } else {
             sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);

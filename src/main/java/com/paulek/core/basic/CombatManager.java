@@ -14,8 +14,8 @@ import java.util.Objects;
 public class CombatManager implements Runnable {
 
     private long timetoend = Config.COMBAT_TIME;
-    private String message = Util.fixColor(Lang.INFO_COMBAT_ACTIONBAR);
-    private String end_combat = Util.fixColor(Lang.INFO_COMBAT_ENDEDACTION);
+    private String message = ColorUtil.fixColor(Lang.INFO_COMBAT_ACTIONBAR);
+    private String end_combat = ColorUtil.fixColor(Lang.INFO_COMBAT_ENDEDACTION);
 
     private Core core;
 
@@ -50,7 +50,7 @@ public class CombatManager implements Runnable {
                 if ((Bukkit.getPlayer(p.getNick()) != null)){
                     Player player = Bukkit.getPlayer(p.getNick());
                     Util.sendActionbar(player, end_combat);
-                    if (Config.COMBAT_CHATMESSAGE) player.sendMessage(Util.fixColor(Lang.INFO_COMBAT_ENDCHAT));
+                    if (Config.COMBAT_CHATMESSAGE) player.sendMessage(ColorUtil.fixColor(Lang.INFO_COMBAT_ENDCHAT));
                     Bukkit.getPluginManager().callEvent(new PlayerCombatEndEvent(player));
                 }
 

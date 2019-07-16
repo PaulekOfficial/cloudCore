@@ -9,33 +9,18 @@ import net.minecraft.server.v1_14_R1.ChatMessageType;
 import net.minecraft.server.v1_14_R1.IChatBaseComponent;
 import net.minecraft.server.v1_14_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_14_R1.PacketPlayOutTitle;
-import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Util {
 
     private static String PROFILE_API = "https://api.mojang.com/users/profiles/minecraft/";
     private static String SKIN_API = "https://sessionserver.mojang.com/session/minecraft/profile/";
-
-    public static String fixColor(String string) {
-        return ChatColor.translateAlternateColorCodes('$', string);
-    }
-
-    public static List<String> fixColors(List<String> string) {
-        List<String> arrayList = new ArrayList<>();
-        for (String line : string) {
-            arrayList.add(ChatColor.translateAlternateColorCodes('$', line));
-        }
-        return arrayList;
-    }
 
     public static void copy(InputStream in, File file) {
         try {

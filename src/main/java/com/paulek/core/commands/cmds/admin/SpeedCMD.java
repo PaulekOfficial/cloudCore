@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -33,7 +33,7 @@ public class SpeedCMD extends Command {
 
                     } catch (Exception e) {
 
-                        sender.sendMessage(Util.fixColor(Lang.ERROR_SPEED_NOTAVALUE));
+                        sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SPEED_NOTAVALUE));
 
                         return false;
                     }
@@ -60,17 +60,17 @@ public class SpeedCMD extends Command {
 
                     } catch (Exception e) {
 
-                        sender.sendMessage(Util.fixColor(Lang.ERROR_SPEED_NOTAVALUE));
+                        sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SPEED_NOTAVALUE));
 
                         return false;
                     }
 
                     if (setPlayerSpeed(player, a, sender)) return false;
 
-                    sender.sendMessage(Util.fixColor(Lang.INFO_SPEED_PLAYERCHANGED));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPEED_PLAYERCHANGED));
 
                 } else {
-                    sender.sendMessage(Util.fixColor(Lang.ERROR_SPEED_NOPLAYER));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SPEED_NOPLAYER));
                 }
 
             } else {
@@ -85,7 +85,7 @@ public class SpeedCMD extends Command {
     private boolean setPlayerSpeed(Player player, double a, CommandSender sender) {
         if (a > 10) {
 
-            sender.sendMessage(Util.fixColor(Lang.ERROR_SPEED_VALUE));
+            sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SPEED_VALUE));
 
             return true;
         }
@@ -94,10 +94,10 @@ public class SpeedCMD extends Command {
 
         if (player.isFlying()) {
             player.setFlySpeed((float) a);
-            sender.sendMessage(Util.fixColor(Lang.INFO_SPEED_CHANGED));
+            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPEED_CHANGED));
         } else {
             player.setWalkSpeed((float) a);
-            sender.sendMessage(Util.fixColor(Lang.INFO_SPEED_CHANGED));
+            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPEED_CHANGED));
         }
         return false;
     }

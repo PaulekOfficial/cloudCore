@@ -2,7 +2,7 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -49,7 +49,7 @@ public class GcCMD extends Command {
         messageToSend = messageToSend.replace("{tasks}", tasks.toString());
         messageToSend = messageToSend.replace("/n", System.lineSeparator());
 
-        sender.sendMessage(Util.fixColor(messageToSend));
+        sender.sendMessage(ColorUtil.fixColor(messageToSend));
 
         return false;
     }

@@ -1,7 +1,7 @@
 package com.paulek.core.commands;
 
 import com.paulek.core.Core;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 
@@ -32,7 +32,7 @@ public abstract class Command extends org.bukkit.command.Command {
         if ((this.getPermisions() != null || this.getPermisions().equals("")) && (!sender.hasPermission(permisions))) {
             String error = "$3$lCORE $c-> $cYou dont have permisions ($4{perm}$c) to this!";
             error = error.replace("{perm}", this.getPermisions());
-            error = Util.fixColor(error);
+            error = ColorUtil.fixColor(error);
             sender.sendMessage(error);
             return false;
         }
@@ -41,7 +41,7 @@ public abstract class Command extends org.bukkit.command.Command {
 
     @Override
     public String getUsage() {
-        return Util.fixColor(Lang.USAGE.replace("{usage}", usage));
+        return ColorUtil.fixColor(Lang.USAGE.replace("{usage}", usage));
     }
 
     public String getPermisions() {

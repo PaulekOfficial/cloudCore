@@ -2,8 +2,8 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.NmsUtils;
-import com.paulek.core.common.Util;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -25,7 +25,7 @@ public class PingCMD extends Command {
 
             if (sender instanceof Player) {
 
-                sender.sendMessage(Util.fixColor(Lang.INFO_PING_FORMAT.replace("{player}", sender.getName()).replace("{ping}", "0")));
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_PING_FORMAT.replace("{player}", sender.getName()).replace("{ping}", "0")));
 
                 return false;
             }
@@ -56,7 +56,7 @@ public class PingCMD extends Command {
 
             } else {
 
-                sender.sendMessage(Util.fixColor(Lang.ERROR_PING_PLAYEROFFINLE));
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_PING_PLAYEROFFINLE));
 
                 return false;
             }
@@ -82,11 +82,11 @@ public class PingCMD extends Command {
 
             String ping_string = String.valueOf(ping.getInt(entityPlayer));
 
-            sender.sendMessage(Util.fixColor(Lang.INFO_PING_FORMAT.replace("{player}", player.getDisplayName()).replace("{ping}", ping_string)));
+            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_PING_FORMAT.replace("{player}", player.getDisplayName()).replace("{ping}", ping_string)));
 
         } catch (Exception e) {
 
-            sender.sendMessage(Util.fixColor(Lang.ERROR_PING_GET));
+            sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_PING_GET));
 
             return true;
         }

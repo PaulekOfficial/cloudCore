@@ -7,7 +7,7 @@ import com.paulek.core.basic.User;
 import com.paulek.core.basic.gui.GUIItem;
 import com.paulek.core.basic.gui.GUIWindow;
 import com.paulek.core.commands.Command;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -40,7 +40,7 @@ public class KitCMD extends Command {
             String name = args[0];
 
             if (getCore().getKits().getKits().get(name) == null) {
-                sender.sendMessage(Util.fixColor(Lang.ERROR_KIT_NOKIT));
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_KIT_NOKIT));
                 return false;
             }
 
@@ -53,12 +53,12 @@ public class KitCMD extends Command {
 
                 gui.openInventory(player2);
 
-                player2.sendMessage(Util.fixColor(Lang.INFO_KIT_GRANTED.replace("{kit}", name)));
+                player2.sendMessage(ColorUtil.fixColor(Lang.INFO_KIT_GRANTED.replace("{kit}", name)));
 
                 return false;
 
             }
-            sender.sendMessage(Util.fixColor(Lang.ERROR_KIT_NOPLAYER));
+            sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_KIT_NOPLAYER));
 
             return false;
         }
@@ -83,7 +83,7 @@ public class KitCMD extends Command {
                     Timestamp timestamp = getCore().getTimestamps().getTimestamp(user.getUuid(), kitName, "kit");
                     if (timestamp.getClassName().equalsIgnoreCase("kit")) {
                         if (timestamp.applicable()) {
-                            sender.sendMessage(Util.fixColor(Lang.ERROR_KIT_WAIT.replace("{time}", timestamp.timeLeft())));
+                            sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_KIT_WAIT.replace("{time}", timestamp.timeLeft())));
                             return false;
                         } else {
                             getCore().getTimestamps().removeTimestamp(user.getUuid(), kitName);
@@ -96,7 +96,7 @@ public class KitCMD extends Command {
                 Kit kit = getCore().getKits().getKits().get(kitName);
 
                 if (!player.hasPermission(kit.getPermission())) {
-                    sender.sendMessage(Util.fixColor(Lang.KIT_NOACCES));
+                    sender.sendMessage(ColorUtil.fixColor(Lang.KIT_NOACCES));
                     return false;
                 }
 
@@ -104,14 +104,14 @@ public class KitCMD extends Command {
 
                 gui.openInventory(player);
 
-                player.sendMessage(Util.fixColor(Lang.INFO_KIT_SUCCES.replace("{kit}", kitName)));
+                player.sendMessage(ColorUtil.fixColor(Lang.INFO_KIT_SUCCES.replace("{kit}", kitName)));
 
                 if (!player.hasPermission("core.cmd.kit.nocooldown"))
                     getCore().getTimestamps().addTimestamp(new Timestamp(player.getUniqueId(), kitName, "kit", LocalDateTime.now() ,LocalDateTime.now().plus(kit.getCooldown(), ChronoUnit.SECONDS)));
 
                 return false;
             }
-            player.sendMessage(Util.fixColor(Lang.ERROR_KIT_NOKIT));
+            player.sendMessage(ColorUtil.fixColor(Lang.ERROR_KIT_NOKIT));
 
             return false;
         }
@@ -122,7 +122,7 @@ public class KitCMD extends Command {
 
                 User user = getCore().getUsersStorage().getUser(player.getUniqueId());
 
-                GUIWindow gui = new GUIWindow(Util.fixColor(Lang.INFO_KIT_GUINAME), getVaildRows(getCore().getKits().getKits().size()));
+                GUIWindow gui = new GUIWindow(ColorUtil.fixColor(Lang.INFO_KIT_GUINAME), getVaildRows(getCore().getKits().getKits().size()));
 
                 int slot = 0;
                 for (String kitName : getCore().getKits().getKits().keySet()) {
@@ -159,7 +159,7 @@ public class KitCMD extends Command {
 
                         }
 
-                        itemMeta.setLore(Util.fixColors(lore));
+                        itemMeta.setLore(ColorUtil.fixColors(lore));
                         itemStack.setItemMeta(itemMeta);
 
                         final String finalTimeLeft = timeLeft;
@@ -170,7 +170,7 @@ public class KitCMD extends Command {
 
                             kitWindow.openInventory(player);
 
-                            player.sendMessage(Util.fixColor(Lang.INFO_KIT_SUCCES.replace("{kit}", kit.getName())));
+                            player.sendMessage(ColorUtil.fixColor(Lang.INFO_KIT_SUCCES.replace("{kit}", kit.getName())));
 
                             if (!player.hasPermission("core.kit.nocooldown"))
                                 getCore().getTimestamps().addTimestamp(new Timestamp(player.getUniqueId(), kitName, "kit", LocalDateTime.now(), LocalDateTime.now().plus((kit.getCooldown() * 1000L), ChronoUnit.MILLIS)));
@@ -179,7 +179,7 @@ public class KitCMD extends Command {
                         if (timestamp != null) {
                             if (timestamp.applicable()) {
                                 item = new GUIItem(itemStack, event -> {
-                                    player.sendMessage(Util.fixColor(Lang.ERROR_KIT_WAIT.replace("{time}", finalTimeLeft)));
+                                    player.sendMessage(ColorUtil.fixColor(Lang.ERROR_KIT_WAIT.replace("{time}", finalTimeLeft)));
                                 });
                             }
                         }
@@ -208,7 +208,7 @@ public class KitCMD extends Command {
 
     private GUIWindow getKitWindow(Kit kit, Player player) {
 
-        GUIWindow gui = new GUIWindow(Util.fixColor(kit.getName()), getVaildRows(kit.getItems().size()));
+        GUIWindow gui = new GUIWindow(ColorUtil.fixColor(kit.getName()), getVaildRows(kit.getItems().size()));
         gui.setCancellOpen(false);
         gui.setCancellInteract(false);
 

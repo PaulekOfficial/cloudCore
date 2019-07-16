@@ -2,6 +2,7 @@ package com.paulek.core.basic.listeners;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.event.PlayerRandomTeleportEvent;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
 import com.paulek.core.common.Util;
 import com.paulek.core.common.XMaterial;
@@ -57,7 +58,7 @@ public class RandomTeleportListener implements Listener {
                             event.getPlayer().teleport(totp);
 
                             Location locafter = event.getPlayer().getLocation();
-                            String message = Util.fixColor(Lang.INFO_RANDOMTP_TELEPORTED).replace("{x}", String.valueOf(locafter.getBlockX())).replace("{y}", String.valueOf(locafter.getBlockY())).replace("{z}", String.valueOf(locafter.getBlockZ()));
+                            String message = ColorUtil.fixColor(Lang.INFO_RANDOMTP_TELEPORTED).replace("{x}", String.valueOf(locafter.getBlockX())).replace("{y}", String.valueOf(locafter.getBlockY())).replace("{z}", String.valueOf(locafter.getBlockZ()));
                             Util.sendActionbar(event.getPlayer(), message);
                         }
             });
