@@ -102,6 +102,10 @@ public class ReflectionUtils {
         return Class.forName("org.bukkit." + className);
     }
 
+    public static Class<?> getCraftBukkitClass(String className) throws ClassNotFoundException{
+        return Class.forName("org.bukkit.craftbukkit." + getNMSVersion() + "." + className);
+    }
+
     public static <T> T getField(Object obj, String fieldName) {
         try {
             Field field = getFieldInternal(obj, fieldName);

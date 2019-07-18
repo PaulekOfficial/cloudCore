@@ -3,16 +3,16 @@ package com.paulek.core.basic;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.paulek.core.Core;
-import net.minecraft.server.v1_14_R1.*;
+import com.paulek.core.common.ReflectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class Skin {
 
@@ -47,85 +47,210 @@ public class Skin {
 
     public void applySkinForPlayers(Player player) {
 
-        GameProfile gameProfile = ((CraftPlayer) player).getProfile();
+        try {
 
-        gameProfile.getProperties().clear();
+            Object craftPlayer = ReflectionUtils.getNMSPlayer(player);
+            Method getProfile = ReflectionUtils.getMethod(craftPlayer.getClass(), "getProfile");
 
-        gameProfile.getProperties().put("textures", getProperty());
+            GameProfile gameProfile = (GameProfile) getProfile.invoke(craftPlayer);
 
-        Bukkit.getScheduler().runTask(core.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                for (Player p : Bukkit.getOnlinePlayers()) {
+            gameProfile.getProperties().clear();
 
-                    p.hidePlayer(player);
-                    p.showPlayer(player);
+            gameProfile.getProperties().put("textures", getProperty());
 
+            Bukkit.getScheduler().runTask(core.getPlugin(), new Runnable() {
+                @Override
+                public void run() {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+
+                        p.hidePlayer(player);
+                        p.showPlayer(player);
+
+                    }
                 }
-            }
-        });
+            });
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
     public void updateSkinForPlayer(Player player) {
+        Bukkit.getScheduler().runTaskAsynchronously(core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                try {
 
-        UUID uuid = player.getUniqueId();
+                    String version = ReflectionUtils.getNMSVersion();
 
-        if (Bukkit.getPlayer(uuid) == null) return;
+                    Object craftPlayer = ReflectionUtils.getNMSPlayer(player);
 
-        EnumGamemode enumGamemode = EnumGamemode.getById(player.getGameMode().getValue());
+                    Class worldTypeClass = ReflectionUtils.getNMSClass("WorldType");
+                    Class packetPlayOutPlayerInfoClass = ReflectionUtils.getNMSClass("PacketPlayOutPlayerInfo");
+                    Class enumPlayerInfoAction = ReflectionUtils.getNMSClass("PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
+                    Class packetPlayOutRespawnClass = ReflectionUtils.getNMSClass("PacketPlayOutRespawn");
+                    Class packetPlayOutPositionClass = ReflectionUtils.getNMSClass("PacketPlayOutPosition");
+                    Class craftItemStackClass = ReflectionUtils.getCraftBukkitClass("inventory.CraftItemStack");
+                    Class playOutEntityEquipmentClass = ReflectionUtils.getNMSClass("PacketPlayOutEntityEquipment");
+                    Class itemStackClass = ReflectionUtils.getNMSClass("ItemStack");
 
-        WorldType worldType = WorldType.getType(player.getWorld().getWorldType().getName());
+                    Method getType = ReflectionUtils.getMethod(worldTypeClass, "getType", String.class);
+                    Method asNMSCopy = ReflectionUtils.getMethod(craftItemStackClass, "asNMSCopy", ItemStack.class);
 
-        DimensionManager dimension;
+                    Object dimension;
+                    if(version.contains("1_13") || version.contains("1_14")) {
+                        Class dimensionManagerClass = ReflectionUtils.getNMSClass("DimensionManager");
+                        Method a = ReflectionUtils.getMethod(dimensionManagerClass, "a", Integer.TYPE);
 
-        switch (player.getWorld().getEnvironment()) {
-            case NORMAL:
-                dimension = DimensionManager.OVERWORLD;
-                break;
-            case THE_END:
-                dimension = DimensionManager.THE_END;
-                break;
-            case NETHER:
-                dimension = DimensionManager.NETHER;
-                break;
-            default:
-                dimension = DimensionManager.OVERWORLD;
-                break;
-        }
+                        switch (player.getWorld().getEnvironment()) {
+                            case THE_END:
+                                dimension = a.invoke(null, 2);
+                                break;
+                            case NETHER:
+                                dimension = a.invoke(null, 0);
+                                break;
+                            default:
+                                dimension = a.invoke(null, 1);
+                                break;
+                        }
 
-        PacketPlayOutPlayerInfo packetPlayOutPlayerInfo_remove = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer) player).getHandle());
+                    } else {
+                        switch (player.getWorld().getEnvironment()) {
+                            case THE_END:
+                                dimension = 1;
+                                break;
+                            case NETHER:
+                                dimension = -1;
+                                break;
+                            default:
+                                dimension = 0;
+                                break;
+                        }
+                    }
 
-        PacketPlayOutPlayerInfo packetPlayOutPlayerInfo_add = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) player).getHandle());
+                    Object enumGamemode;
 
-        PacketPlayOutRespawn packetPlayOutRespawn = new PacketPlayOutRespawn(dimension, worldType, enumGamemode);
+                    if(version.contains("1_13") || version.contains("1_14")) {
+                        Class enumGamemodeClass = ReflectionUtils.getNMSClass("EnumGamemode");
+                        Method getById = ReflectionUtils.getMethod(enumGamemodeClass, "getById", Integer.TYPE);
 
-        Location loc = player.getLocation();
+                        enumGamemode = getById.invoke(null, player.getGameMode().getValue());
+                    } else {
+                        Class enumGamemodeClass = ReflectionUtils.getNMSClass("WorldSettings$EnumGamemode");
+                        Method getById = ReflectionUtils.getMethod(enumGamemodeClass, "getById", Integer.TYPE);
 
-        PacketPlayOutPosition packetPlayOutPosition = new PacketPlayOutPosition(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch(), new HashSet<>(), 0);
+                        enumGamemode = getById.invoke(null, player.getGameMode().getValue());
+                    }
 
-        Bukkit.getScheduler().runTaskLater(core.getPlugin(), () -> {
+                    Object worldType = getType.invoke(null, player.getWorld().getWorldType().getName());
+                    Object removePlayerEnum = enumPlayerInfoAction.getEnumConstants()[4];
+                    Object addPlayerEnum = enumPlayerInfoAction.getEnumConstants()[0];
 
-            boolean fly = player.isFlying();
+                    List<Object> players = new ArrayList<>();
+                    players.add(craftPlayer);
+                    Iterable<?> iterablePlayers = players;
 
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutPlayerInfo_remove);
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutPlayerInfo_add);
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutRespawn);
+                    Object packetPlayOutPlayerInfo_remove = ReflectionUtils.newInstance(packetPlayOutPlayerInfoClass.getName(), new Class<?>[]{enumPlayerInfoAction, Iterable.class}, removePlayerEnum, iterablePlayers);
+                    Object packetPlayOutPlayerInfo_add = ReflectionUtils.newInstance(packetPlayOutPlayerInfoClass.getName(), new Class<?>[]{enumPlayerInfoAction, Iterable.class}, addPlayerEnum, iterablePlayers);
 
-            if (player.isFlying()) player.setFlying(true);
+                    Object packetPlayOutRespawn;
+                    if(version.contains("1_13") || version.contains("1_14")) {
+                        Class dimensionManagerClass = ReflectionUtils.getNMSClass("DimensionManager");
+                        Class enumGamemodeClass = ReflectionUtils.getNMSClass("EnumGamemode");
+                        packetPlayOutRespawn = ReflectionUtils.newInstance(packetPlayOutRespawnClass.getName(), new Class<?>[]{dimensionManagerClass, worldTypeClass, enumGamemodeClass}, dimension, worldType, enumGamemode);
+                    } else {
+                        Class enumDifficultyClass = ReflectionUtils.getNMSClass("EnumDifficulty");
+                        Method getDifficultyById = ReflectionUtils.getMethod(enumDifficultyClass, "getById", Integer.TYPE);
+                        Object enumDifficulty = getDifficultyById.invoke(null, player.getWorld().getDifficulty().getValue());
+                        Class enumGamemodeClass = ReflectionUtils.getNMSClass("WorldSettings$EnumGamemode");
 
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutPosition);
+                        packetPlayOutRespawn = ReflectionUtils.newInstance(packetPlayOutRespawnClass.getName(), new Class<?>[]{Integer.TYPE, enumDifficultyClass, worldTypeClass, enumGamemodeClass}, dimension, enumDifficulty, worldType, enumGamemode);
+                    }
 
-            ((CraftPlayer) player).updateScaledHealth();
+                    Location loc = player.getLocation();
 
-            player.updateInventory();
+                    Object packetPlayOutPosition;
+                    if(version.contains("1_13") || version.contains("1_14")) {
+                        packetPlayOutPosition = ReflectionUtils.newInstance(packetPlayOutPositionClass.getName(), new Class<?>[]{Double.TYPE, Double.TYPE, Double.TYPE, Float.TYPE, Float.TYPE, Set.class, Integer.TYPE}, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch(), new HashSet<>(), 0);
+                    } else {
+                        packetPlayOutPosition = ReflectionUtils.newInstance(packetPlayOutPositionClass.getName(), new Class<?>[]{Double.TYPE, Double.TYPE, Double.TYPE, Float.TYPE, Float.TYPE, Set.class}, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch(), new HashSet<>());
+                    }
 
-            ((CraftPlayer) player).getHandle().triggerHealthUpdate();
+                    List<Object> hands = new ArrayList<>();
+                    Object playOutEntityEquipmentHelmet = null;
+                    Object playOutEntityEquipmentChestplate = null;
+                    Object playOutEntityEquipmentLeggings = null;
+                    Object playOutEntityEquipmentBoots = null;
 
-            if (fly) player.setFlying(true);
+                    PlayerInventory playerInventory = player.getInventory();
 
-        }, 20);
+                    if (version.contains("1_8") || version.contains("1_9")) {
 
+                        hands.add(ReflectionUtils.newInstance(playOutEntityEquipmentClass.getName(), new Class<?>[]{Integer.TYPE, Integer.TYPE, itemStackClass}, player.getEntityId(), 0, asNMSCopy.invoke(null, playerInventory.getItemInHand())));
+
+                        playOutEntityEquipmentHelmet = ReflectionUtils.newInstance(playOutEntityEquipmentClass.getName(), new Class<?>[]{Integer.TYPE, Integer.TYPE, itemStackClass}, player.getEntityId(), 4, asNMSCopy.invoke(null, playerInventory.getHelmet()));
+
+                        playOutEntityEquipmentChestplate = ReflectionUtils.newInstance(playOutEntityEquipmentClass.getName(), new Class<?>[]{Integer.TYPE, Integer.TYPE, itemStackClass}, player.getEntityId(), 3, asNMSCopy.invoke(null, playerInventory.getChestplate()));
+
+                        playOutEntityEquipmentLeggings = ReflectionUtils.newInstance(playOutEntityEquipmentClass.getName(), new Class<?>[]{Integer.TYPE, Integer.TYPE, itemStackClass}, player.getEntityId(), 2, asNMSCopy.invoke(null, playerInventory.getLeggings()));
+
+                        playOutEntityEquipmentBoots = ReflectionUtils.newInstance(playOutEntityEquipmentClass.getName(), new Class<?>[]{Integer.TYPE, Integer.TYPE, itemStackClass}, player.getEntityId(), 1, asNMSCopy.invoke(null, playerInventory.getBoots()));
+
+                    } else {
+
+                        Class enumItemSlotClass = ReflectionUtils.getNMSClass("EnumItemSlot");
+
+                        hands.add(ReflectionUtils.newInstance(playOutEntityEquipmentClass.getName(), new Class<?>[]{Integer.TYPE, enumItemSlotClass, itemStackClass}, player.getEntityId(), enumItemSlotClass.getEnumConstants()[0], asNMSCopy.invoke(null, playerInventory.getItemInMainHand())));
+                        hands.add(ReflectionUtils.newInstance(playOutEntityEquipmentClass.getName(), new Class<?>[]{Integer.TYPE, enumItemSlotClass, itemStackClass}, player.getEntityId(), enumItemSlotClass.getEnumConstants()[1], asNMSCopy.invoke(null, playerInventory.getItemInOffHand())));
+
+                        playOutEntityEquipmentHelmet = ReflectionUtils.newInstance(playOutEntityEquipmentClass.getName(), new Class<?>[]{Integer.TYPE, enumItemSlotClass, itemStackClass}, player.getEntityId(), enumItemSlotClass.getEnumConstants()[5], asNMSCopy.invoke(null, playerInventory.getHelmet()));
+
+                        playOutEntityEquipmentChestplate = ReflectionUtils.newInstance(playOutEntityEquipmentClass.getName(), new Class<?>[]{Integer.TYPE, enumItemSlotClass, itemStackClass}, player.getEntityId(), enumItemSlotClass.getEnumConstants()[4], asNMSCopy.invoke(null, playerInventory.getChestplate()));
+
+                        playOutEntityEquipmentLeggings = ReflectionUtils.newInstance(playOutEntityEquipmentClass.getName(), new Class<?>[]{Integer.TYPE, enumItemSlotClass, itemStackClass}, player.getEntityId(), enumItemSlotClass.getEnumConstants()[3], asNMSCopy.invoke(null, playerInventory.getLeggings()));
+
+                        playOutEntityEquipmentBoots = ReflectionUtils.newInstance(playOutEntityEquipmentClass.getName(), new Class<?>[]{Integer.TYPE, enumItemSlotClass, itemStackClass}, player.getEntityId(), enumItemSlotClass.getEnumConstants()[2], asNMSCopy.invoke(null, playerInventory.getBoots()));
+
+                    }
+
+                    boolean fly = player.isFlying();
+
+                    ReflectionUtils.sendPackets(player, packetPlayOutPlayerInfo_remove);
+                    ReflectionUtils.sendPackets(player, packetPlayOutPlayerInfo_add);
+                    ReflectionUtils.sendPackets(player, packetPlayOutRespawn);
+
+                    if (player.isFlying()) player.setFlying(true);
+
+                    ReflectionUtils.sendPackets(player, packetPlayOutPosition);
+
+                    if(version.contains("1_13") || version.contains("1_14")) {
+                        Method updateScaledHealth = ReflectionUtils.getMethod(craftPlayer.getClass(), "updateScaledHealth");
+                        updateScaledHealth.invoke(craftPlayer);
+                    }
+
+                    for (Object hand : hands) {
+                        ReflectionUtils.sendPackets(player, hand);
+                    }
+
+                    ReflectionUtils.sendPackets(player, playOutEntityEquipmentHelmet);
+                    ReflectionUtils.sendPackets(player, playOutEntityEquipmentChestplate);
+                    ReflectionUtils.sendPackets(player, playOutEntityEquipmentLeggings);
+                    ReflectionUtils.sendPackets(player, playOutEntityEquipmentBoots);
+
+                    player.updateInventory();
+
+                    if(version.contains("1_13") || version.contains("1_14")) {
+                        Method triggerHealthUpdate = ReflectionUtils.getMethod(craftPlayer.getClass(), "triggerHealthUpdate");
+                        triggerHealthUpdate.invoke(craftPlayer);
+                    }
+
+                    if (fly) player.setFlying(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public Property getProperty() {

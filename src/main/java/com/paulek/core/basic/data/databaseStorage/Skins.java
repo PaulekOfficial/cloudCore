@@ -59,6 +59,10 @@ public class Skins extends Storage {
         }
     }
 
+    public Map<UUID, Skin> getPlayerSkins() {
+        return playerSkins;
+    }
+
     @Override
     public void loadFromDatabase(Database database) {
         try(Connection connection = database.getConnection()){
