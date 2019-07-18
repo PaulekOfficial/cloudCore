@@ -2,8 +2,9 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import com.paulek.core.common.ActionBarUtil;
 import com.paulek.core.common.ColorUtil;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.TitleUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -27,7 +28,7 @@ public class BrodcastCMD extends Command {
                         s = s + args[i] + " ";
                     }
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        Util.sendTitle(p, ColorUtil.fixColor(Lang.INFO_BRODCAST_TITLE), ColorUtil.fixColor(s), 5, 60, 5);
+                        TitleUtil.sendTitle(p, ColorUtil.fixColor(Lang.INFO_BRODCAST_TITLE), ColorUtil.fixColor(s), 5, 60, 5);
                     }
                 } else {
                     sender.sendMessage(getUsage());
@@ -42,7 +43,7 @@ public class BrodcastCMD extends Command {
                         s = s + args[i] + " ";
                     }
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        Util.sendActionbar(p, ColorUtil.fixColor(s));
+                        ActionBarUtil.sendActionbar(p, ColorUtil.fixColor(s));
                     }
                 } else {
                     sender.sendMessage(getUsage());

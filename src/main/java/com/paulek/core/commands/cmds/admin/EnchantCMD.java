@@ -3,7 +3,7 @@ package com.paulek.core.commands.cmds.admin;
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
-import com.paulek.core.common.NmsUtils;
+import com.paulek.core.common.ReflectionUtils;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Material;
@@ -104,10 +104,10 @@ public class EnchantCMD extends Command {
 
         Method method = null;
         try{
-            method = NmsUtils.getNMSMethod(inventory.getClass(), "getItemInMainHand", null);
+            method = ReflectionUtils.getMethod(inventory.getClass(), "getItemInMainHand", null);
         } catch (NoSuchMethodException e){
             try {
-                method = NmsUtils.getNMSMethod(inventory.getClass(), "getItemInHand", null);
+                method = ReflectionUtils.getMethod(inventory.getClass(), "getItemInHand", null);
             } catch (NoSuchMethodException ex){
                 ex.printStackTrace();
             }

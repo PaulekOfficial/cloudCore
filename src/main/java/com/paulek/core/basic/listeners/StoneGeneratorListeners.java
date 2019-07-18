@@ -2,8 +2,8 @@ package com.paulek.core.basic.listeners;
 
 import com.paulek.core.Core;
 import com.paulek.core.common.ColorUtil;
-import com.paulek.core.common.NmsUtils;
 import com.paulek.core.common.ParticlesUtil;
+import com.paulek.core.common.ReflectionUtils;
 import com.paulek.core.common.XMaterial;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
@@ -93,24 +93,28 @@ public class StoneGeneratorListeners implements Listener {
 
         if(version.contains("1_12") || version.contains("1_13") ||version.contains("1_14")) {
 
-            Class particleClass = NmsUtils.getBukkitClass("Particle");
-            Class dustClass = NmsUtils.getBukkitClass("Particle$DustOptions");
+            Class particleClass = ReflectionUtils.getBukkitClass("Particle");
+            Class dustClass = ReflectionUtils.getBukkitClass("Particle$DustOptions");
             Field field = particleClass.getDeclaredField("dataType");
             Object particle = particleClass.getEnumConstants()[29];
             field.setAccessible(true);
+
             Field modifyField = Field.class.getDeclaredField("modifiers");
             modifyField.setAccessible(true);
             modifyField.set(field, field.getModifiers() & ~Modifier.FINAL);
+            modifyField.setAccessible(false);
+
+            field.setAccessible(true);
             field.set(particleClass, dustClass);
+
             field.setAccessible(false);
-            Object dustOptions = NmsUtils.newInstance(dustClass.getName(), Color.GRAY, 10);
+            Object dustOptions = ReflectionUtils.newInstance(dustClass.getName(), Color.GRAY, 10);
             ParticlesUtil.sendParticles12(world, particle, location, 10, 5, 5, 5, dustOptions);
             return;
-
         }
 
-        Object enumParticle = NmsUtils.getNMSClass("EnumParticle");
-        Field particle = NmsUtils.getField(enumParticle, "REDSTONE");
+        Object enumParticle = ReflectionUtils.getNMSClass("EnumParticle");
+        Field particle = ReflectionUtils.getField(enumParticle, "REDSTONE");
         ParticlesUtil.sendParticles18(player, particle, true, location.getBlockX(), location.getBlockY(), location.getBlockZ(), 5.0F, 5.0F, 5.0F, 5, 5, null);
 
     }

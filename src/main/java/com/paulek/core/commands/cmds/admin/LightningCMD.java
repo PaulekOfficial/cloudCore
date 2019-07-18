@@ -6,8 +6,11 @@ import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.HashSet;
 
 public class LightningCMD extends Command {
 
@@ -47,7 +50,7 @@ public class LightningCMD extends Command {
 
             Player player = (Player) sender;
 
-            Location location = player.getTargetBlock(null, 2000).getLocation();
+            Location location = player.getTargetBlock(new HashSet<Material>(), 2000).getLocation();
 
             location.getWorld().strikeLightning(location);
 

@@ -19,12 +19,13 @@ import com.paulek.core.commands.CommandManager;
 import com.paulek.core.commands.cmds.admin.*;
 import com.paulek.core.commands.cmds.user.*;
 import com.paulek.core.common.ConsoleLog;
+import com.paulek.core.common.ReflectionUtils;
 import com.paulek.core.common.Version;
+import com.paulek.core.common.XMaterial;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Drops;
 import com.paulek.core.common.io.Kits;
 import com.paulek.core.common.io.Lang;
-import com.sk89q.worldguard.WorldGuard;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -41,6 +42,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -66,7 +69,7 @@ public class Core extends JavaPlugin {
     private TpaStorage tpaStorage;
     private Timestamps timestamps;
     private Users usersStorage;
-    private WorldGuard worldGuard;
+    private Object worldGuard;
     private Database database;
     private StorageManager storageManager;
     private Skins skinsStorage;
@@ -209,12 +212,24 @@ public class Core extends JavaPlugin {
         }
 
         //WorldGuard initialization
-        if (this.getServer().getPluginManager().getPlugin("WorldGuard") != null) {
-            worldGuard = WorldGuard.getInstance();
+        if (plugin.getServer().getPluginManager().getPlugin("WorldGuard") != null) {
+            try{
+                Class worldGuardClass = Class.forName("com.sk89q.worldguard.WorldGuard");
+                Method getInstance = ReflectionUtils.getMethod(worldGuardClass, "getInstance");
+                worldGuard = getInstance.invoke(null, null);
+            } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e){
+                try {
+                    Class worldGuardClass = Class.forName("com.sk89q.worldguard.bukkit.WorldGuardPlugin");
+                    Method getInstance = ReflectionUtils.getMethod(worldGuardClass, "inst");
+                    worldGuard = getInstance.invoke(null, null);
+                } catch (Exception ex){
+                    ex.printStackTrace();
+                }
+            }
             consoleLog.info("WorldGuard detected!");
         } else {
             consoleLog.log("Warning! WorldGuard not detected! disabling plugin...", Level.WARNING);
-            this.getPluginLoader().disablePlugin(this);
+            plugin.getPluginLoader().disablePlugin(plugin);
             return;
         }
 
@@ -240,7 +255,7 @@ public class Core extends JavaPlugin {
 
         if (Config.STONEGENERATOR_ENABLE) {
 
-            ItemStack item = new ItemStack(Material.END_STONE);
+            ItemStack item = new ItemStack(XMaterial.END_STONE.parseMaterial());
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(Config.STONEGENERATOR_GENERATORNAME);
             meta.setLore(Config.STONEGENERATOR_DESCRIPTION);
@@ -251,7 +266,7 @@ public class Core extends JavaPlugin {
                     .setIngredient('R', Material.REDSTONE)
                     .setIngredient('I', Material.IRON_INGOT)
                     .setIngredient('S', Material.STONE)
-                    .setIngredient('P', Material.PISTON);
+                    .setIngredient('P', XMaterial.PISTON.parseMaterial());
 
             plugin.getServer().addRecipe(stoneGenerator);
 
@@ -418,7 +433,7 @@ public class Core extends JavaPlugin {
         return consoleLog;
     }
 
-    public WorldGuard getWorldGuard() {
+    public Object getWorldGuard() {
         return worldGuard;
     }
 

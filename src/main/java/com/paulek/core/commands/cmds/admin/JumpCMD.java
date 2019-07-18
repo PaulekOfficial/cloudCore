@@ -6,8 +6,11 @@ import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.HashSet;
 
 public class JumpCMD extends Command {
 
@@ -25,14 +28,14 @@ public class JumpCMD extends Command {
 
         Player player = (Player) sender;
 
-        if (player.getTargetBlock(null, 200).isEmpty()) {
+        if (player.getTargetBlock(new HashSet<Material>(), 200).isEmpty()) {
 
             sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_JUMP_AIR));
 
             return false;
         }
 
-        Location location = player.getTargetBlock(null, 500).getLocation();
+        Location location = player.getTargetBlock(new HashSet<Material>(), 500).getLocation();
 
         new LocationUtil(location, player);
 

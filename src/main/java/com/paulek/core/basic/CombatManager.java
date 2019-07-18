@@ -2,7 +2,8 @@ package com.paulek.core.basic;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.event.PlayerCombatEndEvent;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.ActionBarUtil;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
@@ -41,7 +42,7 @@ public class CombatManager implements Runnable {
 
             if ((Bukkit.getPlayer(p.getNick()) != null)){
                 Player player = Bukkit.getPlayer(p.getNick());
-                Util.sendActionbar(player, a);
+                ActionBarUtil.sendActionbar(player, a);
             }
 
             if (coldown <= 0) {
@@ -49,7 +50,7 @@ public class CombatManager implements Runnable {
 
                 if ((Bukkit.getPlayer(p.getNick()) != null)){
                     Player player = Bukkit.getPlayer(p.getNick());
-                    Util.sendActionbar(player, end_combat);
+                    ActionBarUtil.sendActionbar(player, end_combat);
                     if (Config.COMBAT_CHATMESSAGE) player.sendMessage(ColorUtil.fixColor(Lang.INFO_COMBAT_ENDCHAT));
                     Bukkit.getPluginManager().callEvent(new PlayerCombatEndEvent(player));
                 }

@@ -12,6 +12,8 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.HashSet;
+
 public class RandomCMD extends Command {
 
     public RandomCMD(Core core) {
@@ -30,8 +32,8 @@ public class RandomCMD extends Command {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
                 return false;
             }
-            if ((player.getTargetBlock(null, 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(null, 5).getType() == Material.STONE_BUTTON)) {
-                Location loc = player.getTargetBlock(null, 1).getLocation();
+            if ((player.getTargetBlock(new HashSet<Material>(), 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(new HashSet<Material>(), 5).getType() == Material.STONE_BUTTON)) {
+                Location loc = player.getTargetBlock(new HashSet<Material>(), 1).getLocation();
                 if (getCore().getRtpsStorage().getList().contains(loc)) {
                     getCore().getRtpsStorage().removeFromList(loc);
                     Config.RTP_BUTTONLIST = null;
@@ -52,8 +54,8 @@ public class RandomCMD extends Command {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
                 return false;
             }
-            if ((player.getTargetBlock(null, 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(null, 5).getType() == Material.STONE_BUTTON)) {
-                Location loc = player.getTargetBlock(null, 1).getLocation();
+            if ((player.getTargetBlock(new HashSet<Material>(), 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(new HashSet<Material>(), 5).getType() == Material.STONE_BUTTON)) {
+                Location loc = player.getTargetBlock(new HashSet<Material>(), 1).getLocation();
                 if (getCore().getRtpsStorage().getList().contains(loc)) {
                     sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_RANDOMTP_EXIST));
                     return false;

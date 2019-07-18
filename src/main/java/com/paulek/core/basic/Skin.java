@@ -1,6 +1,5 @@
 package com.paulek.core.basic;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.paulek.core.Core;
@@ -25,7 +24,6 @@ public class Skin {
     private boolean dirty;
 
 
-    @JsonIgnore
     public Skin(String nick, String value, String signature, LocalDateTime lastUpdate, Core core) {
 
         this.name = nick;
@@ -37,7 +35,6 @@ public class Skin {
 
     }
 
-    @JsonIgnore
     public Skin(String name, String value, String signature, Core core) {
 
         this.name = name;
@@ -48,7 +45,6 @@ public class Skin {
 
     }
 
-    @JsonIgnore
     public void applySkinForPlayers(Player player) {
 
         GameProfile gameProfile = ((CraftPlayer) player).getProfile();
@@ -71,7 +67,6 @@ public class Skin {
 
     }
 
-    @JsonIgnore
     public void updateSkinForPlayer(Player player) {
 
         UUID uuid = player.getUniqueId();
@@ -133,7 +128,6 @@ public class Skin {
 
     }
 
-    @JsonIgnore
     public Property getProperty() {
         return new Property(name, value, signature);
     }

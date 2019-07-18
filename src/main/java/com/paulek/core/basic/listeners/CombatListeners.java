@@ -5,20 +5,10 @@ import com.paulek.core.basic.Warrior;
 import com.paulek.core.basic.data.localStorage.CombatStorage;
 import com.paulek.core.basic.event.PlayerCombatStartEvent;
 import com.paulek.core.common.ColorUtil;
+import com.paulek.core.common.ReflectionUtils;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import com.sk89q.worldguard.protection.regions.RegionContainer;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,6 +17,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 public class CombatListeners implements Listener {
@@ -186,24 +179,12 @@ public class CombatListeners implements Listener {
         Entity attacked = event.getEntity();
         Location location = attacker.getLocation();
 
-        RegionContainer regionContainer = core.getWorldGuard().getPlatform().getRegionContainer();
-        RegionManager regionManager = regionContainer.get(BukkitAdapter.adapt(location.getWorld()));
-        ApplicableRegionSet applicableRegionSet = regionManager.getApplicableRegions(BlockVector3.at(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
-
-        if (applicableRegionSet.queryState(null, Flags.PVP) == StateFlag.State.DENY){
-            return;
-        }
-
-        for(ProtectedRegion region : applicableRegionSet.getRegions()){
-            if(region.getFlags().get(Flags.PVP).equals(false)){
-                event.setCancelled(true);
-                return;
-            }
-        }
-
         if (!Config.COMBAT_ONCREATIVE) {
             if (attacker instanceof Player) {
                 Player damager = (Player) attacker;
+                if(!canDamage(location)){
+                    return;
+                }
                 if (damager.getGameMode() == GameMode.CREATIVE) {
                     damager.sendMessage(ColorUtil.fixColor(Lang.ERROR_COMBAT_CREATIVE));
                     event.setCancelled(true);
@@ -216,31 +197,124 @@ public class CombatListeners implements Listener {
         if (Config.COMBAT_MOBDAMAGE) {
             if ((attacked instanceof Player) && (attacker instanceof Monster)) {
                 Player player = (Player) attacked;
+                if(!canDamage(location)){
+                    return;
+                }
                 Bukkit.getPluginManager().callEvent(new PlayerCombatStartEvent(player, attacker));
             }
         }
 
         if ((attacker instanceof Player) && (attacked instanceof Player)) {
             Player player = (Player) attacked;
+            if(!canDamage(location)){
+                return;
+            }
             Bukkit.getPluginManager().callEvent(new PlayerCombatStartEvent(player, attacker));
         }
             if (((attacker instanceof Projectile)) && ((attacked instanceof Player)) && ((((Projectile) attacker).getShooter() instanceof Player))) {
             if (attacker instanceof Arrow) {
                 Player player = (Player) attacked;
+                if(!canDamage(location)){
+                    return;
+                }
                 Bukkit.getPluginManager().callEvent(new PlayerCombatStartEvent(player, attacker));
             }
             if (attacker instanceof ThrownPotion) {
                 Player player = (Player) attacked;
+                if(!canDamage(location)){
+                    return;
+                }
                 Bukkit.getPluginManager().callEvent(new PlayerCombatStartEvent(player, attacker));
             }
             if (attacker instanceof Snowball) {
                 Player player = (Player) attacked;
+                if(!canDamage(location)){
+                    return;
+                }
                 Bukkit.getPluginManager().callEvent(new PlayerCombatStartEvent(player, attacker));
             }
             if (attacker instanceof Egg) {
                 Player player = (Player) attacked;
+                if(!canDamage(location)){
+                    return;
+                }
                 Bukkit.getPluginManager().callEvent(new PlayerCombatStartEvent(player, attacker));
             }
         }
+    }
+
+    private boolean canDamage(Location location){
+
+        //New wg
+        try {
+            Object worldGuard = core.getWorldGuard();
+
+            Class regionContainerClass = Class.forName("com.sk89q.worldguard.protection.regions.RegionContainer");
+            Class worldGuardPlatformClass = Class.forName("com.sk89q.worldguard.internal.platform.WorldGuardPlatform");
+            Class bukkitAdapterClass = Class.forName("com.sk89q.worldedit.bukkit.BukkitAdapter");
+            Class applicableRegionSetClass = Class.forName("com.sk89q.worldguard.protection.ApplicableRegionSet");
+            Class blockVector3Class = Class.forName("com.sk89q.worldedit.math.BlockVector3");
+            Class regionAssociableClass = Class.forName("com.sk89q.worldguard.protection.association.RegionAssociable");
+            Class stateFlagArrayClass = Class.forName("[Lcom.sk89q.worldguard.protection.flags.StateFlag;");
+            Class flagsClass = Class.forName("com.sk89q.worldguard.protection.flags.Flags");
+
+            Method getPlatform = ReflectionUtils.getMethod(regionContainerClass, "getPlatform");
+            Method getRegionContainer = ReflectionUtils.getMethod(worldGuardPlatformClass, "getRegionContainer");
+            Method adapt = ReflectionUtils.getMethod(bukkitAdapterClass, "adapt", World.class);
+            Method get = ReflectionUtils.getMethod(regionContainerClass, "get", bukkitAdapterClass);
+            Method at = ReflectionUtils.getMethod(blockVector3Class, "at", Double.TYPE, Double.TYPE, Double.TYPE);
+            Method getApplicableRegions = ReflectionUtils.getMethod(regionContainerClass, "getApplicableRegions", blockVector3Class);
+            Method queryState = ReflectionUtils.getMethod(applicableRegionSetClass, "queryState", regionAssociableClass, stateFlagArrayClass);
+
+            Object worldGuardPlatform = getPlatform.invoke(worldGuard, null);
+            Object regionContainer = getRegionContainer.invoke(worldGuardPlatform, null);
+            Object adaptedWorld = adapt.invoke(null, location.getWorld());
+            Object regionManager = get.invoke(regionContainer, adaptedWorld);
+            Object blockVector3 = at.invoke(null, location.getX(), location.getY(), location.getY());
+            Object applicableRegionSet = getApplicableRegions.invoke(regionManager, blockVector3);
+            Object denyState = Class.forName("com.sk89q.worldguard.protection.flags.StateFlag$State").getEnumConstants()[1];
+
+            Field field = flagsClass.getField("PVP");
+
+            Object pvpFlag = field.get(null);
+
+            Object flagsArray = Array.newInstance(stateFlagArrayClass, 1);
+            Array.set(flagsArray, 0, pvpFlag);
+
+            if (queryState.invoke(applicableRegionSet, null, flagsArray) == denyState) {
+                return false;
+            }
+
+        } catch (Exception e) {
+            //Old wg
+            try {
+                Object worldGuard = core.getWorldGuard();
+                Class regionManagerClass = Class.forName("com.sk89q.worldguard.protection.managers.RegionManager");
+                Class defaultFlagClass = Class.forName("com.sk89q.worldguard.protection.flags.DefaultFlag");
+
+                Method getRegionManager = ReflectionUtils.getMethod(worldGuard.getClass(), "getRegionManager", World.class);
+                Method getApplicableRegions = ReflectionUtils.getMethod(regionManagerClass, "getApplicableRegions", Location.class);
+                Method queryState = ReflectionUtils.getMethod(Class.forName("com.sk89q.worldguard.protection.ApplicableRegionSet"), "queryState", Class.forName("com.sk89q.worldguard.protection.association.RegionAssociable"), Class.forName("[Lcom.sk89q.worldguard.protection.flags.StateFlag;"));
+
+                Object regionManager = getRegionManager.invoke(worldGuard, location.getWorld());
+                Object applicableRegionSet = getApplicableRegions.invoke(regionManager, location);
+
+                Object denyState = Class.forName("com.sk89q.worldguard.protection.flags.StateFlag$State").getEnumConstants()[1];
+
+                Field field = defaultFlagClass.getField("PVP");
+                Object defaultFlagPvp = field.get(null);
+
+                Object stateFlagArray = Array.newInstance(Class.forName("com.sk89q.worldguard.protection.flags.StateFlag"), 1);
+                Array.set(stateFlagArray, 0, defaultFlagPvp);
+
+                if (queryState.invoke(applicableRegionSet, null, stateFlagArray) == denyState) {
+                    return false;
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return true;
     }
 }

@@ -7,8 +7,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
-public class NmsUtils {
+public class ReflectionUtils {
 
     //Inspired by https://github.com/rlf/bukkit-utils/blob/master/src/main/java/dk/lockfuglsang/minecraft/reflection/ReflectionUtil.java
 
@@ -48,6 +49,10 @@ public class NmsUtils {
         return null;
     }
 
+    public static Method getFirstMethod(Class<?> aClass, String methodName){
+        return Arrays.stream(aClass.getDeclaredMethods()).filter(m -> m.getName().equalsIgnoreCase(methodName)).findFirst().orElse(null);
+    }
+
     public static Method getMethod(Class<?> aClass, String methodName, Class... argTypes) throws NoSuchMethodException {
         try {
             // Declared gives access to non-public
@@ -82,7 +87,7 @@ public class NmsUtils {
     public static void sendPackets(Player player, Object packet) throws Exception{
         Object nmsPlayer = getNMSPlayer(player);
         Object connection = nmsPlayer.getClass().getField("playerConnection").get(nmsPlayer);
-        getNMSMethod(connection.getClass(), "sendPacket", getNMSClass("Packet")).invoke(nmsPlayer, packet);
+        getMethod(connection.getClass(), "sendPacket", getNMSClass("Packet")).invoke(connection, packet);
     }
 
     public static Object getNMSPlayer(Player player) throws Exception{
@@ -95,10 +100,6 @@ public class NmsUtils {
 
     public static Class<?> getBukkitClass(String className) throws ClassNotFoundException{
         return Class.forName("org.bukkit." + className);
-    }
-
-    public static Method getNMSMethod(Class aClass, String methodName, Class... argTypes) throws NoSuchMethodException{
-        return aClass.getDeclaredMethod(methodName, argTypes);
     }
 
     public static <T> T getField(Object obj, String fieldName) {

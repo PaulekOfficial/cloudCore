@@ -5,7 +5,7 @@ import com.paulek.core.basic.drop.DropMask;
 import com.paulek.core.basic.drop.StoneDrop;
 import com.paulek.core.basic.drop.mask.BlockMask;
 import com.paulek.core.common.ColorUtil;
-import com.paulek.core.common.Util;
+import com.paulek.core.common.TitleUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
@@ -71,7 +71,7 @@ public class Drops {
                         turboMessage += turboMessages[i] + " ";
 
                         for(Player player : Bukkit.getOnlinePlayers()){
-                            Util.sendTitle(player, ColorUtil.fixColor(turboMessage), ColorUtil.fixColor(Lang.DROP_TURBO_SUBTITLE.replace("{message}", message)), 0, 20*5, 40);
+                            TitleUtil.sendTitle(player, ColorUtil.fixColor(turboMessage), ColorUtil.fixColor(Lang.DROP_TURBO_SUBTITLE.replace("{message}", message)), 0, 20*5, 40);
                         }
 
                         try{

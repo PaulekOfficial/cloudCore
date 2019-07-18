@@ -1,6 +1,5 @@
 package com.paulek.core.basic;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paulek.core.Core;
 import org.bukkit.Location;
 
@@ -27,7 +26,6 @@ public class User {
 
     private Core core;
 
-    @JsonIgnore
     private boolean dirty = true;
 
     public User(UUID uuid, String lastAccountName, Location logoutlocation, Location lastlocation, InetAddress ipAddres, Map<String, Location> homes, LocalDateTime lastActivity, boolean socialSpy, boolean vanish, boolean tpToogle, boolean tpsMonitor, Core core) {
@@ -110,12 +108,10 @@ public class User {
         homes.remove(homeName);
     }
 
-    @JsonIgnore
     public boolean isDirty() {
         return dirty;
     }
 
-    @JsonIgnore
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
     }

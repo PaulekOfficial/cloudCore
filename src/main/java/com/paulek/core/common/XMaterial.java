@@ -6,6 +6,7 @@ public enum XMaterial {
 
 
     END_STONE(0, "END_STONE", "ENDER_STONE"),
+    PISTON(0, "PISTON", "PISTON_BASE"),
     LEGACY_WOOD_BUTTON(0, "LEGACY_WOOD_BUTTON", "WOOD_BUTTON");
 
     private int data;

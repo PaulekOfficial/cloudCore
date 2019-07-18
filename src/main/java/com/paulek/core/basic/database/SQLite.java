@@ -2,12 +2,10 @@ package com.paulek.core.basic.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import com.zaxxer.hikari.util.DriverDataSource;
 
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class SQLite extends Database{
 
@@ -21,17 +19,21 @@ public class SQLite extends Database{
     @Override
     public void init(){
 
-        HikariConfig hikariConfig = new HikariConfig();
+        try{
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
 
-        Properties properties = new Properties();
-
-        DriverDataSource driverDataSource = new DriverDataSource("jdbc:sqlite:" + databaseFile.getAbsolutePath(), "org.sqlite.JDBC", properties, null, null);
-
-        hikariConfig.setDataSource(driverDataSource);
-
-        dataSource = new HikariDataSource(hikariConfig);
-
-        dataSource.getConnectionTestQuery();
+        HikariConfig config = new HikariConfig();
+        config.setPoolName("cloudCorePool");
+        config.setDriverClassName("org.sqlite.JDBC");
+        config.setJdbcUrl("jdbc:sqlite:" + databaseFile.getAbsolutePath());
+        config.setConnectionTestQuery("SELECT 1");
+        config.setMaxLifetime(60000); // 60 Sec
+        config.setIdleTimeout(45000); // 45 Sec
+        config.setMaximumPoolSize(50); // 50 Connections (including idle connections)
+        dataSource = new HikariDataSource(config);
     }
 
     @Override

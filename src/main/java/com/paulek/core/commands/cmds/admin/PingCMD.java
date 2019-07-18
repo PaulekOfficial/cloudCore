@@ -3,7 +3,7 @@ package com.paulek.core.commands.cmds.admin;
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
-import com.paulek.core.common.NmsUtils;
+import com.paulek.core.common.ReflectionUtils;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -70,9 +70,9 @@ public class PingCMD extends Command {
 
     private boolean getPlayerPing(Player player, CommandSender sender) throws Exception{
 
-        Object craftPlayer = NmsUtils.getNMSPlayer(player);
+        Object craftPlayer = ReflectionUtils.getNMSPlayer(player);
 
-        Method getHandle = NmsUtils.getNMSMethod(craftPlayer.getClass(), "getHandle", null);
+        Method getHandle = ReflectionUtils.getMethod(craftPlayer.getClass(), "getHandle", null);
 
         Object entityPlayer = getHandle.invoke(craftPlayer);
 

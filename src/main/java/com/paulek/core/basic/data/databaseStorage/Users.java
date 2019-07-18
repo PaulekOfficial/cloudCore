@@ -4,7 +4,7 @@ import com.paulek.core.Core;
 import com.paulek.core.basic.User;
 import com.paulek.core.basic.data.Storage;
 import com.paulek.core.basic.database.Database;
-import com.paulek.core.common.LocationSerializer;
+import com.paulek.core.common.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -68,10 +68,10 @@ public class Users extends Storage {
 
                     UUID uuid = UUID.fromString(resultSet.getString("uuid"));
                     String lastAccountName = resultSet.getString("lastAccountName");
-                    Location logoutlocation = LocationSerializer.locationFromString(resultSet.getString("logoutLocation"));
-                    Location lastlocation = LocationSerializer.locationFromString(resultSet.getString("lastLocation"));
+                    Location logoutlocation = LocationUtil.locationFromString(resultSet.getString("logoutLocation"));
+                    Location lastlocation = LocationUtil.locationFromString(resultSet.getString("lastLocation"));
                     InetAddress ipAddres = InetAddress.getByName(resultSet.getString("ipAddres"));
-                    Map<String, Location> homes = LocationSerializer.locationMapFormString(resultSet.getString("homes"));
+                    Map<String, Location> homes = LocationUtil.locationMapFormString(resultSet.getString("homes"));
                     LocalDateTime lastActivity = resultSet.getTimestamp("lastActivity").toLocalDateTime();
                     boolean socialSpy = resultSet.getBoolean("socialSpy");
                     boolean vanish = resultSet.getBoolean("vanish");
@@ -103,10 +103,10 @@ public class Users extends Storage {
 
             preparedStatement.setString(1, user.getUuid().toString());
             preparedStatement.setString(2, user.getLastAccountName());
-            preparedStatement.setString(3, LocationSerializer.locationToString(user.getLogoutlocation()));
-            preparedStatement.setString(4, LocationSerializer.locationToString(user.getLastlocation()));
+            preparedStatement.setString(3, LocationUtil.locationToString(user.getLogoutlocation()));
+            preparedStatement.setString(4, LocationUtil.locationToString(user.getLastlocation()));
             preparedStatement.setString(5, user.getIpAddres().getHostAddress());
-            preparedStatement.setString(6, LocationSerializer.locationMapToString(user.getHomes()));
+            preparedStatement.setString(6, LocationUtil.locationMapToString(user.getHomes()));
             preparedStatement.setTimestamp(7, Timestamp.valueOf(user.getLastActivity()));
             preparedStatement.setBoolean(8, user.isSocialSpy());
             preparedStatement.setBoolean(9, user.isVanish());
@@ -114,10 +114,10 @@ public class Users extends Storage {
             preparedStatement.setBoolean(11, user.isTpsMonitor());
 
             preparedStatement.setString(12, user.getLastAccountName());
-            preparedStatement.setString(13, LocationSerializer.locationToString(user.getLogoutlocation()));
-            preparedStatement.setString(14, LocationSerializer.locationToString(user.getLastlocation()));
+            preparedStatement.setString(13, LocationUtil.locationToString(user.getLogoutlocation()));
+            preparedStatement.setString(14, LocationUtil.locationToString(user.getLastlocation()));
             preparedStatement.setString(15, user.getIpAddres().getHostAddress());
-            preparedStatement.setString(16, LocationSerializer.locationMapToString(user.getHomes()));
+            preparedStatement.setString(16, LocationUtil.locationMapToString(user.getHomes()));
             preparedStatement.setTimestamp(17, Timestamp.valueOf(user.getLastActivity()));
             preparedStatement.setBoolean(18, user.isSocialSpy());
             preparedStatement.setBoolean(19, user.isVanish());
