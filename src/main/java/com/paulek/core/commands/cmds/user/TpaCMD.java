@@ -39,7 +39,7 @@ public class TpaCMD extends Command {
                         getCore().getTpaStorage().removeToAcceptTpa(player.getUniqueId());
                         getCore().getTpaStorage().cancelTaskTpa(player.getUniqueId());
                     }
-                }, Config.TPA_WAITINGTIME * 20);
+                }, getCore().getConfiguration().teleportDelay * 20);
 
                 getCore().getTpaStorage().addTaskTpa(player.getUniqueId(), id.getTaskId());
                 getCore().getTpaStorage().addToAcceptTpa(player.getUniqueId(), ((Player) sender).getUniqueId());

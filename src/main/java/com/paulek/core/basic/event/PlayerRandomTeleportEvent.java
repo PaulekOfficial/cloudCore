@@ -13,12 +13,16 @@ public class PlayerRandomTeleportEvent extends Event {
     private World world;
     private int maxLocX;
     private int maxLocZ;
+    private int centerLocX;
+    private int centerLocZ;
 
-    public PlayerRandomTeleportEvent(Player player, World world, int maxLocX, int maxLocZ) {
+    public PlayerRandomTeleportEvent(Player player, World world, int maxLocX, int maxLocZ, int centerLocX, int centerLocZ) {
         this.player = player;
         this.world = world;
         this.maxLocX = maxLocX;
         this.maxLocZ = maxLocZ;
+        this.centerLocX = centerLocX;
+        this.centerLocZ = centerLocZ;
     }
 
     public PlayerRandomTeleportEvent(boolean isAsync) {
@@ -53,5 +57,13 @@ public class PlayerRandomTeleportEvent extends Event {
 
     public int getMaxLocZ() {
         return maxLocZ;
+    }
+
+    public int getCenterLocX() {
+        return centerLocX;
+    }
+
+    public int getCenterLocZ() {
+        return centerLocZ;
     }
 }

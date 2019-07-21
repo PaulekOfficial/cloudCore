@@ -59,7 +59,7 @@ public class TpacceptCMD extends Command {
                     public void run() {
 
                         if (Bukkit.getPlayer(to_teleport.getUniqueId()) != null)
-                            new LocationUtil(location, to_teleport);
+                            new LocationUtil(location, to_teleport, getCore());
 
                         if (Bukkit.getPlayer(to_teleport.getUniqueId()) != null)
                             to_teleport.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_TELEPORT));
@@ -67,7 +67,7 @@ public class TpacceptCMD extends Command {
                         to_teleport_map.remove(to_teleport.getUniqueId());
 
                     }
-                }, Config.TPA_DETLY * 20);
+                }, getCore().getConfiguration().teleportDelay * 20);
 
                 to_teleport_map.put(to_teleport.getUniqueId(), id.getTaskId());
 
@@ -95,7 +95,7 @@ public class TpacceptCMD extends Command {
                 id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
                     public void run() {
 
-                        if (Bukkit.getPlayer(player1.getUniqueId()) != null) new LocationUtil(location, player1);
+                        if (Bukkit.getPlayer(player1.getUniqueId()) != null) new LocationUtil(location, player1, getCore());
 
                         if (Bukkit.getPlayer(player1.getUniqueId()) != null)
                             player1.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_TELEPORT));
@@ -103,7 +103,7 @@ public class TpacceptCMD extends Command {
                         to_teleport_map.remove(player1.getUniqueId());
 
                     }
-                }, Config.TPA_DETLY * 20);
+                }, getCore().getConfiguration().teleportDelay * 20);
 
                 to_teleport_map.put(player1.getUniqueId(), id.getTaskId());
             } else {

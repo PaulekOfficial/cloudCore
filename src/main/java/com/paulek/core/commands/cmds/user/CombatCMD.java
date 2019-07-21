@@ -11,12 +11,15 @@ import org.bukkit.entity.Player;
 
 public class CombatCMD extends Command {
 
-    private long timetoend = Config.COMBAT_TIME;
-    private String yes = Lang.INFO_COMBAT_YES;
-    private String no = Lang.INFO_COMBAT_NO;
+    private long timetoend;
+    private String yes;
+    private String no;
 
     public CombatCMD(Core core) {
         super("combat", "checks you combat status", "/combat", "core.cmd.combat", new String[]{"walka", "bicie"}, core);
+        timetoend = core.getConfiguration().combatTime;
+        yes = Lang.INFO_COMBAT_YES;
+        no = Lang.INFO_COMBAT_NO;
     }
 
     //TODO Dodać opcję teleportacji gracza po stringu

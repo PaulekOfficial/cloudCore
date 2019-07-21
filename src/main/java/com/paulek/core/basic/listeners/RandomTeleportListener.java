@@ -28,21 +28,16 @@ public class RandomTeleportListener implements Listener {
 
     @EventHandler
     public void onInteract(org.bukkit.event.player.PlayerInteractEvent e) {
-
-        if (Config.RTP_ENABLE) {
-
-            Action action = e.getAction();
-            Block clickedb = e.getClickedBlock();
+        Action action = e.getAction();
+        Block clickedb = e.getClickedBlock();
 
 
-            if ((action == Action.RIGHT_CLICK_BLOCK) && ((clickedb.getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (clickedb.getType() == Material.STONE_BUTTON))) {
-                Location loc = clickedb.getLocation();
+        if ((action == Action.RIGHT_CLICK_BLOCK) && ((clickedb.getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (clickedb.getType() == Material.STONE_BUTTON))) {
+            Location loc = clickedb.getLocation();
 
-                if (core.getRtpsStorage().getList().contains(loc)) {
-                    PlayerRandomTeleportEvent playerRandomTeleportEvent = new PlayerRandomTeleportEvent(e.getPlayer(), loc.getWorld(), Config.RTP_MAXVALUES_X, Config.RTP_MAXVALUES_X);
-                    Bukkit.getPluginManager().callEvent(playerRandomTeleportEvent);
-                }
-
+            if (core.getRtpsStorage().getList().contains(loc)) {
+                PlayerRandomTeleportEvent playerRandomTeleportEvent = new PlayerRandomTeleportEvent(e.getPlayer(), loc.getWorld(), core.getConfiguration().rtpMaxX, core.getConfiguration().rtpMaxZ, core.getConfiguration().rtpCenterX, core.getConfiguration().rtpCenterZ);
+                Bukkit.getPluginManager().callEvent(playerRandomTeleportEvent);
             }
 
         }
@@ -53,7 +48,7 @@ public class RandomTeleportListener implements Listener {
             Bukkit.getScheduler().runTask(core, new Runnable() {
                         @Override
                         public void run() {
-                            Location totp = LocationUtil.randomLocation(event.getWorld(), event.getMaxLocX(), event.getMaxLocZ());
+                            Location totp = LocationUtil.randomLocation(event.getWorld(), event.getMaxLocX() + event.getCenterLocX(), event.getMaxLocZ() + event.getCenterLocZ());
 
                             event.getPlayer().teleport(totp);
 

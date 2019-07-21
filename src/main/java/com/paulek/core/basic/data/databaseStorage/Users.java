@@ -138,6 +138,14 @@ public class Users extends Storage {
         loadFromDatabase(core.getDatabase());
     }
 
+    @Override
+    public void reload(Database database) {
+        saveDirtyObjects(database);
+        users = null;
+        users = new HashMap<>();
+        loadFromDatabase(database);
+    }
+
     public Map<UUID, User> getUsers() {
         return users;
     }

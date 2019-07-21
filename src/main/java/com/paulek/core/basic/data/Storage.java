@@ -14,4 +14,6 @@ public abstract class Storage {
 
     public abstract void saveAllToDatabase(Database database);
 
+    public abstract void reload(Database database);
+
 }

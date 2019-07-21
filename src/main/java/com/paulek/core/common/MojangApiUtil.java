@@ -17,22 +17,6 @@ public class MojangApiUtil {
 
         String uuid = getPremiumUuid(nick);
 
-        if (Config.SKINS_HIDENONPREMIUM) {
-
-            if (uuid == null) {
-
-                Random random = new Random();
-
-                String randomPremiumNick = Config.SKINS_SKINSFORNONPREMIUM.get(random.nextInt(Config.SKINS_SKINSFORNONPREMIUM.size()));
-
-                uuid = getPremiumUuid(randomPremiumNick);
-
-            }
-
-        } else if (uuid == null) {
-            return null;
-        }
-
         String json = Util.readWebsite(SKIN_API + uuid + "?unsigned=false");
 
         if (json == null) return null;

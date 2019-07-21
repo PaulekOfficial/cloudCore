@@ -20,15 +20,19 @@ import java.util.UUID;
 
 public class PluginListeners implements Listener {
 
-    private List<String> cenzored = Config.CHAT_BLACKLISTEDWORDS;
-    private String replacecenzor = Config.CHAT_CENZOREDREPLACE;
-    private HashMap<UUID, Long> slowdon = new HashMap<UUID, Long>();
-    private HashMap<String, String> groups_format = new HashMap<String, String>();
+    private List<String> cenzored;
+    private String replacecenzor;
+    private HashMap<UUID, Long> slowdon;
+    private HashMap<String, String> groups_format;
 
     private Core core;
 
     public PluginListeners(Core core) {
         this.core = Objects.requireNonNull(core, "Core");
+        cenzored = core.getConfiguration().chatCenzoredList;
+        replacecenzor = core.getConfiguration().chatCenzorReplace;
+        slowdon = new HashMap<UUID, Long>();
+        groups_format = new HashMap<String, String>();
         loadGroups();
     }
 
@@ -70,7 +74,7 @@ public class PluginListeners implements Listener {
         if (core.getCombatStorage().isMarked(uuid)) {
             core.getCombatStorage().unmark(uuid);
 
-            if (Config.COMBAT_BRODCASTLOGOUT) {
+            if (core.getConfiguration().combatAnnouncement) {
 
                 String s = ColorUtil.fixColor(Lang.INFO_COMBAT_BRODCASTLOGOUT).replace("{player}", event.getPlayer().getName()).replace("{health}", (int) event.getPlayer().getHealth() + "♥");
 
@@ -78,20 +82,21 @@ public class PluginListeners implements Listener {
 
             }
 
-            if (Config.COMBAT_KILLONLOGOUT) event.getPlayer().setHealth(0.0);
+            if (core.getConfiguration().combatKillOnQuit) event.getPlayer().setHealth(0.0);
 
         }
     }
 
     @EventHandler
     public void onPreLogin(org.bukkit.event.player.AsyncPlayerPreLoginEvent event) {
-        if (Config.WHITELIST_ENABLE) {
-            if (!Config.WHITELIST_ALLOWEDPLAYERS.contains(event.getName())) {
-
-                event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST, ColorUtil.fixColor(Config.WHITELIST_MOD));
-
-            }
-        }
+        //TODO Whitelist
+//        if (Config.WHITELIST_ENABLE) {
+//            if (!Config.WHITELIST_ALLOWEDPLAYERS.contains(event.getName())) {
+//
+//                event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST, ColorUtil.fixColor(Config.WHITELIST_MOD));
+//
+//            }
+//        }
     }
 
     @EventHandler
@@ -118,7 +123,7 @@ public class PluginListeners implements Listener {
                 return;
             }
         }
-        if (!Config.CHAT_ENABLE) {
+        if (!core.getConfiguration().chatModuleEnabled) {
             if (!event.getPlayer().hasPermission("core.chat.disable")) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_CHAT_DISABLEDTYPE));
@@ -126,17 +131,17 @@ public class PluginListeners implements Listener {
             }
         }
 
-        if (Config.CHAT_ENABLE_NOUPPERCASE) {
+        if (core.getConfiguration().combatAnnouncement) {
             if (!event.getPlayer().hasPermission("core.chat.nouppercase")) {
                 event.setMessage(event.getMessage().toLowerCase());
             }
         }
 
-        if (Config.SLOWDOWN_ENABLED) {
+        if (core.getConfiguration().chatSlowdown > 0) {
             if (!event.getPlayer().hasPermission("core.chat.noslowdown")) {
                 UUID uuid = event.getPlayer().getUniqueId();
                 if (slowdon.containsKey(uuid)) {
-                    if (((System.currentTimeMillis() - slowdon.get(uuid)) / 1000) < Config.CHAT_SLOWDOWN) {
+                    if (((System.currentTimeMillis() - slowdon.get(uuid)) / 1000) < core.getConfiguration().chatSlowdown) {
                         event.setCancelled(true);
                         event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_CHAT_SLOWDOWN));
                     } else {
@@ -147,7 +152,7 @@ public class PluginListeners implements Listener {
                 }
             }
         }
-        if (Config.CENZOR_ENABLED) {
+        if (core.getConfiguration().chatCenzor) {
             if (!event.getPlayer().hasPermission("core.chat.nocenzor")) {
                 for (String s : cenzored) {
                     event.setMessage(event.getMessage().replaceAll(s, replacecenzor));
@@ -178,11 +183,11 @@ public class PluginListeners implements Listener {
 
     private void loadGroups() {
 
-        for (String s : Config.CHAT_FORMATING) {
+        for (String s : core.getConfiguration().chatFormating.keySet()) {
 
-            String[] a = s.split(" ");
+            String format = core.getConfiguration().chatFormating.get(s);
 
-            groups_format.put(a[0], s.replaceAll(a[0], "").replaceFirst(" ", ""));
+            groups_format.put(s, format);
 
         }
 

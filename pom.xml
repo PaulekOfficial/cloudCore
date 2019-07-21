@@ -49,10 +49,20 @@
             <id>sk89q-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
+        <repository>
+            <id>panda-lang</id>
+            <url>https://repo.panda-lang.org/</url>
+        </repository>
     </repositories>
 
 
     <dependencies>
+        <!-- Diorite-Configs -->
+        <dependency>
+            <groupId>org.diorite</groupId>
+            <artifactId>diorite-config-minimal</artifactId>
+            <version>1.2</version>
+        </dependency>
         <!--Spigot API-->
         <dependency>
             <groupId>org.spigotmc</groupId>

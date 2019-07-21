@@ -54,6 +54,8 @@ public class Lang {
     public static String INFO_BACK_TELEPORTED = "$eYou have been teleported to the last place you stay";
     public static String INFO_BACK_TPDONE = "$eTeleported!";
     public static String ERROR_SPAWN_PLAYEROFFINLE = "$cError! This player is offinle";
+    public static String ERROR_SPAWN_NOTSET = "$cBlad! Spawn nie jest ustawiony";
+    public static String ERROR_SPAWN_NAMEDNOTSET = "$cBlad! Spawn o nazwie {name} nie jest ustawiony";
     public static String INFO_SPAWN_PLAYERTELEPORTED = "$aYou have been teleported to spawn!";
     public static String INFO_SPAWN_SET = "$eSpawn localization set!";
     public static String INFO_SPAWN_TELEPORT = "$eTeleported!";

@@ -37,55 +37,18 @@ public class SpawnCMD extends Command {
                 return false;
             }
 
-            if (sender.hasPermission("core.cmd.spawn.cooldownbypass")) {
-                Player player = (Player) sender;
+            spawnMethod(((Player)sender).getDisplayName(), "default", sender);
 
-                teleportSpawn(player);
-
-                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_TELEPORT));
-
-                return false;
-            } else {
-
-                BukkitTask id;
-
-                id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
-                    public void run() {
-
-                        Player player = (Player) sender;
-
-                        teleportSpawn(player);
-
-                        sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_TELEPORT));
-                    }
-                }, Config.SPAWN_DETLY * 20);
-
-                in_detly.put(((Player) sender).getUniqueId(), id.getTaskId());
-
-                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_DETY));
-
-                return false;
-            }
         } else if (args.length == 1) {
-            if (sender.hasPermission("core.cmd.spawn.admin")) {
-                if (Bukkit.getPlayer(args[0]) != null) {
 
-                    Player player = Bukkit.getPlayer(args[0]);
+            spawnMethod(null, args[0], sender);
 
-                    teleportSpawn(player);
+        } else if(args.length == 2) {
+            String spawnName = args[0];
+            String playerName = args[1];
 
-                    player.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_PLAYERTELEPORTED));
+            return spawnMethod(playerName, spawnName, sender);
 
-                    return false;
-                } else {
-
-                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SPAWN_PLAYEROFFINLE));
-
-                    return false;
-                }
-            } else {
-                sender.sendMessage(ColorUtil.fixColor(getPermissionMessage()));
-            }
         } else {
             sender.sendMessage(getUsage());
         }
@@ -93,10 +56,85 @@ public class SpawnCMD extends Command {
         return false;
     }
 
-    private void teleportSpawn(Player player) {
-        Location location = new Location(Bukkit.getWorld(Config.SPAWN_WORLD), Config.SPAWN_BLOCK_X, Config.SPAWN_BLOCK_Y, Config.SPAWN_BLOCK_Z);
-        location.setYaw((float) Config.SPAWN_YAW);
+    private boolean spawnMethod(String playerName, String spawnName, CommandSender sender){
 
-        new LocationUtil(location, player);
+        boolean isPlayer = false;
+
+        if(sender instanceof Player){
+            Player a = Bukkit.getPlayer(playerName);
+            if(a != null && playerName.equalsIgnoreCase("") && spawnName.equalsIgnoreCase("")){
+                sender.sendMessage(ColorUtil.fixColor(getPermissionMessage()));
+                return false;
+            }
+        }
+
+        if(!sender.hasPermission("core.cmd.spawn." + spawnName)){
+            sender.sendMessage(ColorUtil.fixColor(getPermissionMessage()));
+            return false;
+        }
+
+        Location location = getCore().getSpawnsStorage().getSpawn(spawnName);
+
+        Player player = Bukkit.getPlayer(playerName);
+
+        if(player == null){
+            player = Bukkit.getPlayer(spawnName);
+            if(player == null) {
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SPAWN_PLAYEROFFINLE));
+                return false;
+            }
+            isPlayer = true;
+        }
+
+        if(!isPlayer) {
+            if (location == null) {
+                if (!spawnName.equalsIgnoreCase("default")) {
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SPAWN_NAMEDNOTSET.replace("{name}", spawnName)));
+                    return false;
+                } else {
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SPAWN_NOTSET));
+                    return false;
+                }
+            }
+        } else {
+            if(location == null){
+                location = getCore().getSpawnsStorage().getSpawn("default");
+                if(location == null){
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SPAWN_NOTSET));
+                    return false;
+                }
+            }
+        }
+
+        if(isPlayer && !sender.hasPermission("core.spawn.admin")){
+            sender.sendMessage(ColorUtil.fixColor(getPermissionMessage()));
+            return false;
+        }
+
+        if(sender.hasPermission("core.cmd.spawn.cooldownbypass")){
+            new LocationUtil(location, player, getCore());
+
+            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_TELEPORT));
+            return false;
+        }
+
+        final Location finalLocation = location;
+        final Player finalPlayer = player;
+
+        BukkitTask id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
+            @Override
+            public void run(){
+                new LocationUtil(finalLocation, finalPlayer, getCore());
+
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_TELEPORT));
+            }
+        }, getCore().getConfiguration().spawnDelay * 20);
+
+        in_detly.put(((Player) sender).getUniqueId(), id.getTaskId());
+
+        sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_DETY));
+
+        return true;
     }
+
 }

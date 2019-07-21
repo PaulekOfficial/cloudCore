@@ -4,6 +4,7 @@ import com.paulek.core.basic.CombatManager;
 import com.paulek.core.basic.User;
 import com.paulek.core.basic.data.StorageManager;
 import com.paulek.core.basic.data.databaseStorage.Skins;
+import com.paulek.core.basic.data.databaseStorage.Spawns;
 import com.paulek.core.basic.data.databaseStorage.Timestamps;
 import com.paulek.core.basic.data.databaseStorage.Users;
 import com.paulek.core.basic.data.localStorage.CombatStorage;
@@ -18,10 +19,7 @@ import com.paulek.core.basic.listeners.*;
 import com.paulek.core.commands.CommandManager;
 import com.paulek.core.commands.cmds.admin.*;
 import com.paulek.core.commands.cmds.user.*;
-import com.paulek.core.common.ConsoleLog;
-import com.paulek.core.common.ReflectionUtils;
-import com.paulek.core.common.Version;
-import com.paulek.core.common.XMaterial;
+import com.paulek.core.common.*;
 import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Drops;
 import com.paulek.core.common.io.Kits;
@@ -29,7 +27,6 @@ import com.paulek.core.common.io.Lang;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
@@ -73,6 +70,7 @@ public class Core extends JavaPlugin {
     private Database database;
     private StorageManager storageManager;
     private Skins skinsStorage;
+    private Spawns spawnsStorage;
     private String updateMethod;
     private Version version;
 
@@ -86,7 +84,7 @@ public class Core extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
-        saveDefaultConfig();
+
 
         consoleLog = new ConsoleLog(this);
 
@@ -99,19 +97,28 @@ public class Core extends JavaPlugin {
 //        drops.addDropMask(Material.STONE.name(), new BlockMask(this));
 //        drops.getDrops().add(new StoneDrop("diamond", "$bMasz diaksa heheheheh", true, new ItemStack(Material.DIAMOND, 1), Arrays.asList(new ItemStack(Material.DIAMOND_PICKAXE, 1), new ItemStack(Material.IRON_PICKAXE, 1), new ItemStack(Material.GOLDEN_PICKAXE, 1)), 10, "drop.diamond", 7.91, true, "1-2", "<=30"));
 
-        config = new Config(this);
+        File configFile = new File(this.getDataFolder(), "config.yml");
+
+        config = ConfigUtil.loadConfig(configFile, Config.class);
         kits = new Kits(this);
         lang = new Lang(this);
 
-        if (!Config.ENABLED || !plugin.isEnabled()) {
+        if (!config.enabled || !plugin.isEnabled()) {
             consoleLog.log("Warning! Core disabled in config!", Level.WARNING);
             this.getPluginLoader().disablePlugin(this);
             return;
         }
 
         //init database
-        if(Config.STORAGETYPE.equalsIgnoreCase("MySQL")){
-            MySQL mySQL = new MySQL(Config.MYSQL_HOST, Config.MYSQL_PORT, Config.MYSQL_DATABASE, Config.MYSQL_USER, Config.MYSQL_PASSWORD);
+        if(config.storageType.toLowerCase().equalsIgnoreCase("mysql")){
+
+            String host = config.mysql.get("host");
+            String port = config.mysql.get("port");
+            String databaseName = config.mysql.get("database-name");
+            String user = config.mysql.get("user");
+            String password = config.mysql.get("password");
+
+            MySQL mySQL = new MySQL(host, port, databaseName, user, password);
             mySQL.init();
             database = mySQL;
 
@@ -123,6 +130,8 @@ public class Core extends JavaPlugin {
 
                 PreparedStatement skinsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_skins` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `name` LONGTEXT NOT NULL , `value` LONGTEXT NOT NULL , `signature` LONGTEXT NOT NULL , `lastUpdate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`))");
 
+                PreparedStatement spawnsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_spawns` ( `id` INT NOT NULL AUTO_INCREMENT , `name` INT NOT NULL , `world` TEXT NOT NULL ,`x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL , `pitch` FLOAT NOT NULL , `yaw` FLOAT NOT NULL , PRIMARY KEY (`id`))");
+
                 usersTabele.executeUpdate();
                 usersTabele.close();
 
@@ -131,6 +140,9 @@ public class Core extends JavaPlugin {
 
                 skinsTabele.executeUpdate();
                 skinsTabele.close();
+
+                spawnsTabele.executeUpdate();
+                spawnsTabele.close();
                 updateMethod = "ON DUPLICATE KEY UPDATE";
 
             } catch (SQLException exception){
@@ -158,6 +170,8 @@ public class Core extends JavaPlugin {
 
                 PreparedStatement skinsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_skins` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `uuid` TEXT NOT NULL , `name` LONGTEXT NOT NULL , `value` LONGTEXT NOT NULL , `signature` LONGTEXT NOT NULL , `lastUpdate` TIMESTAMP NOT NULL)");
 
+                PreparedStatement spawnsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_spawns` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `name` INT NOT NULL , `world` TEXT NOT NULL ,`x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL , `pitch` FLOAT NOT NULL , `yaw` FLOAT NOT NULL)");
+
                 usersTabele.executeUpdate();
                 usersTabele.close();
 
@@ -166,6 +180,9 @@ public class Core extends JavaPlugin {
 
                 skinsTabele.executeUpdate();
                 skinsTabele.close();
+
+                spawnsTabele.executeUpdate();
+                spawnsTabele.close();
                 updateMethod = "ON CONFLICT(id) DO UPDATE SET";
 
             } catch (SQLException exception){
@@ -186,6 +203,8 @@ public class Core extends JavaPlugin {
         timestamps.init();
         skinsStorage = new Skins(this);
         skinsStorage.init();
+        spawnsStorage = new Spawns(this);
+        spawnsStorage.init();
 
         combatManager = new CombatManager(this);
 
@@ -236,29 +255,16 @@ public class Core extends JavaPlugin {
         registerListeners();
         registerCommands();
 
-        //Spawn initialization
-        if (Config.FIRSTCONFIGURATION) {
-            Location world_dafault_spawn = Bukkit.getWorld("world").getSpawnLocation();
-
-            Config.SPAWN_WORLD = world_dafault_spawn.getWorld().getName();
-            Config.SPAWN_BLOCK_X = world_dafault_spawn.getX();
-            Config.SPAWN_BLOCK_Z = world_dafault_spawn.getZ();
-            Config.SPAWN_BLOCK_Y = world_dafault_spawn.getY();
-            Config.SPAWN_YAW = world_dafault_spawn.getYaw();
-
-            Config.FIRSTCONFIGURATION = false;
-        }
-
-        if (Config.COMBAT_ENABLED) {
+        if (config.combatlogEnabled) {
             Bukkit.getScheduler().runTaskTimer(this, combatManager, 20, 20);
         }
 
-        if (Config.STONEGENERATOR_ENABLE) {
+        if (config.generatorEnabled) {
 
             ItemStack item = new ItemStack(XMaterial.END_STONE.parseMaterial());
             ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(Config.STONEGENERATOR_GENERATORNAME);
-            meta.setLore(Config.STONEGENERATOR_DESCRIPTION);
+            meta.setDisplayName(ColorUtil.fixColor(config.genertorName));
+            meta.setLore(ColorUtil.fixColors(config.generatorLore));
             item.setItemMeta(meta);
 
             ShapedRecipe stoneGenerator = new ShapedRecipe(item)
@@ -307,11 +313,11 @@ public class Core extends JavaPlugin {
     private void registerListeners() {
         consoleLog.info("Registering Listeners...");
         PluginManager pluginManager = plugin.getServer().getPluginManager();
-        pluginManager.registerEvents(new CombatListeners(this), this);
-        pluginManager.registerEvents(new EasterEggListeners(), this);
+        if(config.combatlogEnabled) pluginManager.registerEvents(new CombatListeners(this), this);
+        if(config.easteregg) pluginManager.registerEvents(new EasterEggListeners(), this);
         pluginManager.registerEvents(new PluginListeners(this), this);
-        pluginManager.registerEvents(new RandomTeleportListener(this), this);
-        pluginManager.registerEvents(new StoneGeneratorListeners(this), this);
+        if(config.rtpEnabled) pluginManager.registerEvents(new RandomTeleportListener(this), this);
+        if (config.generatorEnabled) pluginManager.registerEvents(new StoneGeneratorListeners(this), this);
         pluginManager.registerEvents(new UserListeners(this), this);
         pluginManager.registerEvents(new GUIListeners(), this);
     }
@@ -329,13 +335,11 @@ public class Core extends JavaPlugin {
         commandManager.registerCommand(new SpawnCMD(this));
         commandManager.registerCommand(new BackCMD(this));
         commandManager.registerCommand(new SetSpawnCMD(this));
-        commandManager.registerCommand(new TpacceptCMD(this));
-        commandManager.registerCommand(new TpaCMD(this));
         commandManager.registerCommand(new CombatCMD(this));
         commandManager.registerCommand(new DayCMD(this));
         commandManager.registerCommand(new NightCMD(this));
 
-        if (Config.RTP_ENABLE) commandManager.registerCommand(new RandomCMD(this));
+        if (config.rtpEnabled) commandManager.registerCommand(new RandomCMD(this));
 
         commandManager.registerCommand(new VanishCMD(this));
         commandManager.registerCommand(new MsgCMD(this));
@@ -348,10 +352,15 @@ public class Core extends JavaPlugin {
         commandManager.registerCommand(new HomeCMD(this));
         commandManager.registerCommand(new SunCMD(this));
         commandManager.registerCommand(new DelhomeCMD(this));
-        commandManager.registerCommand(new TpahereCMD(this));
-        commandManager.registerCommand(new TpadenyCMD(this));
 
-        if (Config.SKINS_ENABLE) commandManager.registerCommand(new SkinCMD(this));
+        if(config.tpaEnabled){
+            commandManager.registerCommand(new TpacceptCMD(this));
+            commandManager.registerCommand(new TpaCMD(this));
+            commandManager.registerCommand(new TpahereCMD(this));
+            commandManager.registerCommand(new TpadenyCMD(this));
+        }
+
+        if (config.skinsEnabled) commandManager.registerCommand(new SkinCMD(this));
 
         commandManager.registerCommand(new SpeedCMD(this));
         commandManager.registerCommand(new WorkbenchCMD(this));
@@ -365,24 +374,11 @@ public class Core extends JavaPlugin {
         commandManager.registerCommand(new PingCMD(this));
         commandManager.registerCommand(new WorldCMD(this));
 
-        if (Config.WHITELIST_ENABLE) commandManager.registerCommand(new WhitelistCMD(this));
+        //if (Config.WHITELIST_ENABLE) commandManager.registerCommand(new WhitelistCMD(this));
 
         commandManager.registerCommand(new GcCMD(this));
         commandManager.registerCommand(new KitCMD(this));
         commandManager.registerCommand(new TurboDropCMD(this));
-    }
-
-    public static String generateRandomString(int lenth){
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
-        Random random = new Random();
-        StringBuilder buffer = new StringBuilder(lenth);
-        for (int i = 0; i < lenth; i++) {
-            int randomLimitedInt = leftLimit + (int)
-                    (random.nextFloat() * (rightLimit - leftLimit + 1));
-            buffer.append((char) randomLimitedInt);
-        }
-        return  buffer.toString().toUpperCase();
     }
 
     public Config getConfiguration() {
@@ -455,5 +451,9 @@ public class Core extends JavaPlugin {
 
     public String getUpdateMethod() {
         return updateMethod;
+    }
+
+    public Spawns getSpawnsStorage() {
+        return spawnsStorage;
     }
 }

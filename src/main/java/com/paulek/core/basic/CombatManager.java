@@ -14,14 +14,17 @@ import java.util.Objects;
 
 public class CombatManager implements Runnable {
 
-    private long timetoend = Config.COMBAT_TIME;
-    private String message = ColorUtil.fixColor(Lang.INFO_COMBAT_ACTIONBAR);
-    private String end_combat = ColorUtil.fixColor(Lang.INFO_COMBAT_ENDEDACTION);
+    private long timetoend;
+    private String message;
+    private String end_combat;
 
     private Core core;
 
     public CombatManager(Core core) {
         this.core = Objects.requireNonNull(core, "Core");
+        timetoend = core.getConfiguration().generatorDelay;
+        message = ColorUtil.fixColor(Lang.INFO_COMBAT_ACTIONBAR);
+        end_combat = ColorUtil.fixColor(Lang.INFO_COMBAT_ENDEDACTION);
     }
 
     public void run() {
@@ -51,7 +54,7 @@ public class CombatManager implements Runnable {
                 if ((Bukkit.getPlayer(p.getNick()) != null)){
                     Player player = Bukkit.getPlayer(p.getNick());
                     ActionBarUtil.sendActionbar(player, end_combat);
-                    if (Config.COMBAT_CHATMESSAGE) player.sendMessage(ColorUtil.fixColor(Lang.INFO_COMBAT_ENDCHAT));
+                    if (core.getConfiguration().combatChat) player.sendMessage(ColorUtil.fixColor(Lang.INFO_COMBAT_ENDCHAT));
                     Bukkit.getPluginManager().callEvent(new PlayerCombatEndEvent(player));
                 }
 

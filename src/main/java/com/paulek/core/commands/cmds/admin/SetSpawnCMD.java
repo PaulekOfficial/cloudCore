@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class SetSpawnCMD extends Command {
 
     public SetSpawnCMD(Core core) {
-        super("setspawn", "sets spawn", "/setspawn", "core.cmd.setspawn", new String[]{}, core);
+        super("setspawn", "sets spawn", "/setspawn {name}", "core.cmd.setspawn", new String[]{}, core);
     }
 
     @Override
@@ -23,19 +23,20 @@ public class SetSpawnCMD extends Command {
             return false;
         }
 
+        if (args.length > 1){
+            sender.sendMessage(ColorUtil.fixColor(getUsage()));
+        }
+
+        if(args.length == 1){
+            Location location = ((Player) sender).getLocation();
+            String name = args[0];
+            getCore().getSpawnsStorage().addNewSpawn(name, location);
+            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_SET));
+        }
+
         Location location = ((Player) sender).getLocation();
 
-        location.getWorld().setSpawnLocation(location.getBlockX(), location.getBlockY(), location.getBlockZ());
-
-        Config.SPAWN_WORLD = location.getWorld().getName();
-        Config.SPAWN_BLOCK_X = location.getX();
-        Config.SPAWN_BLOCK_Z = location.getZ();
-        Config.SPAWN_BLOCK_Y = location.getY();
-        Config.SPAWN_YAW = location.getYaw();
-
-
-        getCore().getConfiguration().saveConfig();
-        getCore().getConfiguration().reloadConfig();
+        getCore().getSpawnsStorage().addNewSpawn("default", location);
 
         sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_SET));
 

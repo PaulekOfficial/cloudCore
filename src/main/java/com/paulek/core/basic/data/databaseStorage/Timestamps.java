@@ -132,4 +132,12 @@ public class Timestamps extends Storage {
             exception.printStackTrace();
         }
     }
+
+    @Override
+    public void reload(Database database) {
+        saveDirtyObjects(database);
+        userTimestamps = null;
+        userTimestamps = new ArrayList<>();
+        loadFromDatabase(database);
+    }
 }

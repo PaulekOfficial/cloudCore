@@ -122,6 +122,16 @@ public class ReflectionUtils {
         return null;
     }
 
+    public static Constructor<?> getConstructor(Class<?> clazz, Class<?>... arguments) {
+        for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
+            if (Arrays.equals(constructor.getParameterTypes(), arguments)) {
+                return constructor;
+            }
+        }
+
+        return null;
+    }
+
     public static <T> void setField(Object obj, String fieldName, T field) {
         try {
             Field declaredField = getFieldInternal(obj, fieldName);

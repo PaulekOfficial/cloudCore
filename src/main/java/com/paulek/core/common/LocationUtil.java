@@ -10,16 +10,17 @@ import org.bukkit.block.Biome;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class LocationUtil {
 
-    public LocationUtil(Location location, Player player) {
+    private Core core;
 
-        if (Config.TP_SAFELOCATION) {
+    public LocationUtil(Location location, Player player, Core core) {
+
+        this.core = Objects.requireNonNull(core, "Core");
+
+        if (core.getConfiguration().teleportSafety) {
 
             player.teleport(safeLocation(location));
 

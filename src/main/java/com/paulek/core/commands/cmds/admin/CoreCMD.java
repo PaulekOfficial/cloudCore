@@ -16,10 +16,12 @@ public class CoreCMD extends Command {
     public boolean execute(CommandSender sender, String[] args) {
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase("reload")) {
-                getCore().getConfiguration().reloadConfig();
                 getCore().getLang().reloadLang();
                 getCore().getKits().reload();
-                getCore().getDrops().reload();
+                getCore().getUsersStorage().reload(getCore().getDatabase());
+                getCore().getSkinsStorage().reload(getCore().getDatabase());
+                getCore().getTimestamps().reload(getCore().getDatabase());
+                //getCore().getDrops().reload();
                 sender.sendMessage(ColorUtil.fixColor(Lang.INFO_CORE_RELOAD));
             }
             if (args[0].equalsIgnoreCase("stop")) {

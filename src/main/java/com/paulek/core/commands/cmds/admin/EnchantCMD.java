@@ -18,10 +18,11 @@ import java.lang.reflect.Method;
 
 public class EnchantCMD extends Command {
 
-    private boolean unsafeEnchants = Config.ENCHANT_UNSAFE;
+    private boolean unsafeEnchants;
 
     public EnchantCMD(Core core) {
         super("enchant", "enchant a item in your hand", "/enchant {enchantment type} {lvl}", "core.cmd.enchant", new String[]{}, core);
+        unsafeEnchants = core.getConfiguration().unsafeEnchantments;
     }
 
     @Override

@@ -4,9 +4,14 @@ import com.paulek.core.Core;
 import com.paulek.core.basic.Skin;
 import com.paulek.core.basic.data.Storage;
 import com.paulek.core.basic.database.Database;
+import com.paulek.core.common.MojangApiUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class Skins extends Storage {
@@ -38,6 +43,28 @@ public class Skins extends Storage {
 
         for(UUID uuid : playerSkins.keySet()){
             Skin skin = playerSkins.get(uuid);
+
+            LocalDateTime fromDate = skin.getLastUpdate();
+            LocalDateTime toDate = LocalDateTime.now();
+
+            LocalDateTime tempDate = LocalDateTime.from(fromDate);
+
+            long years = tempDate.until(toDate, ChronoUnit.YEARS);
+            tempDate = tempDate.plusYears(years);
+
+            long months = tempDate.until(toDate, ChronoUnit.MONTHS);
+            tempDate = tempDate.plusMonths(months);
+
+            long days = tempDate.until(toDate, ChronoUnit.DAYS);
+
+            if(years > 0 || months > 0 || days >= 20){
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+                Skin newSkin = MojangApiUtil.getPremiumSkin(offlinePlayer.getName(), core);
+                if(newSkin != null){
+                    skin = newSkin;
+                }
+            }
+
             if(skin.isDirty()){
                 List<Object> list = new ArrayList<>();
                 list.add(uuid);
@@ -117,5 +144,13 @@ public class Skins extends Storage {
         } catch (SQLException exception){
             exception.printStackTrace();
         }
+    }
+
+    @Override
+    public void reload(Database database) {
+        saveDirtyObjects(database);
+        playerSkins = null;
+        playerSkins = new HashMap<>();
+        loadFromDatabase(database);
     }
 }
