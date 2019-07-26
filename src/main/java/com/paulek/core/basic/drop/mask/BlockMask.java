@@ -57,7 +57,7 @@ public class BlockMask extends DropMask {
 
                 setDropped(true);
 
-                if (Config.DROP_HARDCORE) break;
+                //if (Config.DROP_HARDCORE) break;
             }
 
         }

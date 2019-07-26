@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
@@ -105,13 +106,13 @@ public class Skin {
 
                         switch (player.getWorld().getEnvironment()) {
                             case THE_END:
-                                dimension = a.invoke(null, 2);
+                                dimension = a.invoke(null, 1);
                                 break;
                             case NETHER:
-                                dimension = a.invoke(null, 0);
+                                dimension = a.invoke(null, -1);
                                 break;
                             default:
-                                dimension = a.invoke(null, 1);
+                                dimension = a.invoke(null, 0);
                                 break;
                         }
 
@@ -184,6 +185,7 @@ public class Skin {
                     Object playOutEntityEquipmentBoots = null;
 
                     PlayerInventory playerInventory = player.getInventory();
+                    Vector vector = player.getVelocity();
 
                     if (version.contains("1_8") || version.contains("1_9")) {
 
@@ -220,14 +222,12 @@ public class Skin {
                     ReflectionUtils.sendPackets(player, packetPlayOutPlayerInfo_add);
                     ReflectionUtils.sendPackets(player, packetPlayOutRespawn);
 
-                    if (player.isFlying()) player.setFlying(true);
-
                     ReflectionUtils.sendPackets(player, packetPlayOutPosition);
 
-                    if(version.contains("1_13") || version.contains("1_14")) {
-                        Method updateScaledHealth = ReflectionUtils.getMethod(craftPlayer.getClass(), "updateScaledHealth");
-                        updateScaledHealth.invoke(craftPlayer);
-                    }
+//                    if(version.contains("1_13") || version.contains("1_14")) {
+//                        Method updateScaledHealth = ReflectionUtils.getMethod(craftPlayer.getClass(), "updateScaledHealth");
+//                        updateScaledHealth.invoke(craftPlayer);
+//                    }
 
                     for (Object hand : hands) {
                         ReflectionUtils.sendPackets(player, hand);
@@ -239,13 +239,14 @@ public class Skin {
                     ReflectionUtils.sendPackets(player, playOutEntityEquipmentBoots);
 
                     player.updateInventory();
+                    player.setVelocity(vector);
+                    player.setFlying(fly);
 
                     if(version.contains("1_13") || version.contains("1_14")) {
                         Method triggerHealthUpdate = ReflectionUtils.getMethod(craftPlayer.getClass(), "triggerHealthUpdate");
                         triggerHealthUpdate.invoke(craftPlayer);
                     }
 
-                    if (fly) player.setFlying(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

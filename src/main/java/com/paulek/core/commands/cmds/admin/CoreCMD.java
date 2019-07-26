@@ -16,6 +16,7 @@ public class CoreCMD extends Command {
     public boolean execute(CommandSender sender, String[] args) {
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase("reload")) {
+                getCore().getRtpsStorage().reload(getCore().getDatabase());
                 getCore().getLang().reloadLang();
                 getCore().getKits().reload();
                 getCore().getUsersStorage().reload(getCore().getDatabase());

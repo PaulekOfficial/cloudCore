@@ -59,7 +59,7 @@ public class TpacceptCMD extends Command {
                     public void run() {
 
                         if (Bukkit.getPlayer(to_teleport.getUniqueId()) != null)
-                            new LocationUtil(location, to_teleport, getCore());
+                            LocationUtil.safeTeleport(getCore().getConfiguration(), location, to_teleport);
 
                         if (Bukkit.getPlayer(to_teleport.getUniqueId()) != null)
                             to_teleport.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_TELEPORT));
@@ -95,7 +95,9 @@ public class TpacceptCMD extends Command {
                 id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
                     public void run() {
 
-                        if (Bukkit.getPlayer(player1.getUniqueId()) != null) new LocationUtil(location, player1, getCore());
+                        if (Bukkit.getPlayer(player1.getUniqueId()) != null){
+                            LocationUtil.safeTeleport(getCore().getConfiguration(), location, player1);
+                        }
 
                         if (Bukkit.getPlayer(player1.getUniqueId()) != null)
                             player1.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_TELEPORT));

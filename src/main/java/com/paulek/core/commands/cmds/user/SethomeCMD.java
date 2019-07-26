@@ -20,13 +20,11 @@ public class SethomeCMD extends Command {
         super("sethome", "sets a home", "/sethome {name}", "core.cmd.sethome", new String[]{}, core);
     }
 
-    public static void loadGroups() {
+    public void loadGroups() {
 
-        for (String s : Config.HOME_AMOUNT) {
+        for (String s : getCore().getConfiguration().homesAmount.keySet()) {
 
-            String[] a = s.split(" ");
-
-            groups_amount.put(a[0], Integer.valueOf(a[1]));
+            groups_amount.put(s, getCore().getConfiguration().homesAmount.get(s));
 
         }
 

@@ -34,12 +34,8 @@ public class RandomCMD extends Command {
             }
             if ((player.getTargetBlock(new HashSet<Material>(), 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(new HashSet<Material>(), 5).getType() == Material.STONE_BUTTON)) {
                 Location loc = player.getTargetBlock(new HashSet<Material>(), 1).getLocation();
-                if (getCore().getRtpsStorage().getList().contains(loc)) {
-                    getCore().getRtpsStorage().removeFromList(loc);
-                    Config.RTP_BUTTONLIST = null;
-                    Config.RTP_BUTTONLIST = getCore().getRtpsStorage().getStringLoc();
-                    getCore().getConfiguration().saveConfig();
-                    getCore().getConfiguration().reloadConfig();
+                if (getCore().getRtpsStorage().getButtons().contains(loc)) {
+                    getCore().getRtpsStorage().remove(loc);
                     sender.sendMessage(ColorUtil.fixColor(Lang.INFO_RANDOMTP_REMOVED));
                 } else {
                     sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_RANDOMTP_NOTREMOVED));
@@ -56,16 +52,12 @@ public class RandomCMD extends Command {
             }
             if ((player.getTargetBlock(new HashSet<Material>(), 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(new HashSet<Material>(), 5).getType() == Material.STONE_BUTTON)) {
                 Location loc = player.getTargetBlock(new HashSet<Material>(), 1).getLocation();
-                if (getCore().getRtpsStorage().getList().contains(loc)) {
+                if (getCore().getRtpsStorage().getButtons().contains(loc)) {
                     sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_RANDOMTP_EXIST));
                     return false;
                 }
                 Location button = new Location(Bukkit.getWorld(loc.getWorld().getName()), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-                getCore().getRtpsStorage().addToList(button);
-                Config.RTP_BUTTONLIST = null;
-                Config.RTP_BUTTONLIST = getCore().getRtpsStorage().getStringLoc();
-                getCore().getConfiguration().saveConfig();
-                getCore().getConfiguration().reloadConfig();
+                getCore().getRtpsStorage().add(button);
                 sender.sendMessage(ColorUtil.fixColor(Lang.INFO_RANDOMTP_CREATED));
                 return true;
             } else {

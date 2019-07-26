@@ -27,7 +27,9 @@ public class TpCMD extends Command {
                 if (Bukkit.getPlayerExact(args[0]) != null) {
                     player = Bukkit.getPlayerExact(args[0]);
 
-                    if (LocationUtil.hasPlayerTpToogle(player, getCore())) return false;
+                    if (LocationUtil.isUserTpToogle(player, getCore())){
+                        return false;
+                    }
 
                     ((Player) sender).teleport(player.getLocation());
                     sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TP_INFO.replace("{player}", player.getDisplayName())));
@@ -44,7 +46,9 @@ public class TpCMD extends Command {
             if ((Bukkit.getPlayerExact(args[0]) != null) && (Bukkit.getPlayerExact(args[1]) != null)) {
                 player1 = Bukkit.getPlayerExact(args[0]);
 
-                if (LocationUtil.hasPlayerTpToogle(player1, getCore())) return false;
+                if (LocationUtil.isUserTpToogle(player1, getCore())){
+                    return false;
+                }
 
                 player2 = Bukkit.getPlayerExact(args[1]);
                 player1.teleport(player2.getLocation());

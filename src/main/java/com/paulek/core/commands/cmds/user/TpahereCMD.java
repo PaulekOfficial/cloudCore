@@ -32,7 +32,7 @@ public class TpahereCMD extends Command {
             if (Bukkit.getPlayer(args[0]) != null) {
                 final Player p = Bukkit.getPlayer(args[0]);
 
-                if (LocationUtil.hasPlayerTpToogle(player, getCore())) return false;
+                if (LocationUtil.isUserTpToogle(player, getCore())) return false;
 
                 BukkitTask id;
 
@@ -41,7 +41,7 @@ public class TpahereCMD extends Command {
                         getCore().getTpaStorage().removeToAcceptTpahere(p.getUniqueId());
                         getCore().getTpaStorage().cancelTaskTpahere(p.getUniqueId());
                     }
-                }, Config.TPA_WAITINGTIME * 20);
+                }, getCore().getConfiguration().tpaRejectTime * 20);
 
                 getCore().getTpaStorage().addTaskTpahere(p.getUniqueId(), id.getTaskId());
                 getCore().getTpaStorage().addToAcceptTpahere(p.getUniqueId(), player.getUniqueId());

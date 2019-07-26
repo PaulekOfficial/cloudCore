@@ -15,6 +15,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.Objects;
 
@@ -35,11 +36,21 @@ public class RandomTeleportListener implements Listener {
         if ((action == Action.RIGHT_CLICK_BLOCK) && ((clickedb.getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (clickedb.getType() == Material.STONE_BUTTON))) {
             Location loc = clickedb.getLocation();
 
-            if (core.getRtpsStorage().getList().contains(loc)) {
+            if (core.getRtpsStorage().getButtons().contains(loc)) {
                 PlayerRandomTeleportEvent playerRandomTeleportEvent = new PlayerRandomTeleportEvent(e.getPlayer(), loc.getWorld(), core.getConfiguration().rtpMaxX, core.getConfiguration().rtpMaxZ, core.getConfiguration().rtpCenterX, core.getConfiguration().rtpCenterZ);
                 Bukkit.getPluginManager().callEvent(playerRandomTeleportEvent);
             }
 
+        }
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event){
+        if(core.getConfiguration().rtpOnFirstJoin) {
+            if (!event.getPlayer().hasPlayedBefore()) {
+                PlayerRandomTeleportEvent playerRandomTeleportEvent = new PlayerRandomTeleportEvent(event.getPlayer(), event.getPlayer().getLocation().getWorld(), core.getConfiguration().rtpMaxX, core.getConfiguration().rtpMaxZ, core.getConfiguration().rtpCenterX, core.getConfiguration().rtpCenterZ);
+                Bukkit.getPluginManager().callEvent(playerRandomTeleportEvent);
+            }
         }
     }
 
@@ -49,6 +60,14 @@ public class RandomTeleportListener implements Listener {
                         @Override
                         public void run() {
                             Location totp = LocationUtil.randomLocation(event.getWorld(), event.getMaxLocX() + event.getCenterLocX(), event.getMaxLocZ() + event.getCenterLocZ());
+
+                            while(true){
+                                if(core.getConfiguration().rtpBiomsBlackList.contains(totp.getChunk().getChunkSnapshot().getBiome(totp.getBlockX(), totp.getBlockZ()).name())){
+                                    totp = LocationUtil.randomLocation(event.getWorld(), event.getMaxLocX() + event.getCenterLocX(), event.getMaxLocZ() + event.getCenterLocZ());
+                                } else {
+                                    break;
+                                }
+                            }
 
                             event.getPlayer().teleport(totp);
 

@@ -112,7 +112,7 @@ public class SpawnCMD extends Command {
         }
 
         if(sender.hasPermission("core.cmd.spawn.cooldownbypass")){
-            new LocationUtil(location, player, getCore());
+            LocationUtil.safeTeleport(getCore().getConfiguration(), location, player);
 
             sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_TELEPORT));
             return false;
@@ -124,7 +124,7 @@ public class SpawnCMD extends Command {
         BukkitTask id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
             @Override
             public void run(){
-                new LocationUtil(finalLocation, finalPlayer, getCore());
+                LocationUtil.safeTeleport(getCore().getConfiguration(), finalLocation, finalPlayer);
 
                 sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_TELEPORT));
             }

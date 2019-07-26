@@ -33,7 +33,7 @@ public class WorldCMD extends Command {
 
                 Location location = world.getSpawnLocation();
 
-                new LocationUtil(location, (Player) sender);
+                LocationUtil.safeTeleport(getCore().getConfiguration(), location, (Player) sender);
 
                 sender.sendMessage(ColorUtil.fixColor(Lang.INFO_WORLD_TELEPORTED));
 
@@ -63,7 +63,7 @@ public class WorldCMD extends Command {
 
                 Location location = world.getSpawnLocation();
 
-                new LocationUtil(location, player);
+                LocationUtil.safeTeleport(getCore().getConfiguration(), location, player);
 
                 player.sendMessage(ColorUtil.fixColor(Lang.INFO_WORLD_TELEPORTED));
                 sender.sendMessage(ColorUtil.fixColor(Lang.INFO_WORLD_PLAYERTELEPORTED));

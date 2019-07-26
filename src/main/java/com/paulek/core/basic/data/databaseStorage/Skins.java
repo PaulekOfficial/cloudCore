@@ -5,6 +5,7 @@ import com.paulek.core.basic.Skin;
 import com.paulek.core.basic.data.Storage;
 import com.paulek.core.basic.database.Database;
 import com.paulek.core.common.MojangApiUtil;
+import com.paulek.core.common.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -47,17 +48,7 @@ public class Skins extends Storage {
             LocalDateTime fromDate = skin.getLastUpdate();
             LocalDateTime toDate = LocalDateTime.now();
 
-            LocalDateTime tempDate = LocalDateTime.from(fromDate);
-
-            long years = tempDate.until(toDate, ChronoUnit.YEARS);
-            tempDate = tempDate.plusYears(years);
-
-            long months = tempDate.until(toDate, ChronoUnit.MONTHS);
-            tempDate = tempDate.plusMonths(months);
-
-            long days = tempDate.until(toDate, ChronoUnit.DAYS);
-
-            if(years > 0 || months > 0 || days >= 20){
+            if(TimeUtils.compareLocalDateTimeInSecounds(fromDate, toDate) >= core.getConfiguration().skinsRefreshment){
                 OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
                 Skin newSkin = MojangApiUtil.getPremiumSkin(offlinePlayer.getName(), core);
                 if(newSkin != null){

@@ -30,7 +30,7 @@ public class TpaCMD extends Command {
             if (Bukkit.getPlayer(args[0]) != null) {
                 final Player player = Bukkit.getPlayer(args[0]);
 
-                if (LocationUtil.hasPlayerTpToogle(player, getCore())) return false;
+                if (LocationUtil.isUserTpToogle(player, getCore())) return false;
 
                 BukkitTask id;
 
@@ -39,7 +39,7 @@ public class TpaCMD extends Command {
                         getCore().getTpaStorage().removeToAcceptTpa(player.getUniqueId());
                         getCore().getTpaStorage().cancelTaskTpa(player.getUniqueId());
                     }
-                }, getCore().getConfiguration().teleportDelay * 20);
+                }, getCore().getConfiguration().tpaRejectTime * 20);
 
                 getCore().getTpaStorage().addTaskTpa(player.getUniqueId(), id.getTaskId());
                 getCore().getTpaStorage().addToAcceptTpa(player.getUniqueId(), ((Player) sender).getUniqueId());

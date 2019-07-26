@@ -60,7 +60,7 @@ public class BackCMD extends Command {
 
                     sender.sendMessage(ColorUtil.fixColor(Lang.INFO_BACK_TPDONE));
                 }
-            }, Config.BACK_DETLY * 20);
+            }, getCore().getConfiguration().teleportDelay * 20);
 
             to_teleport.put(player.getUniqueId(), id.getTaskId());
 

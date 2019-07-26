@@ -37,7 +37,7 @@ public class JumpCMD extends Command {
 
         Location location = player.getTargetBlock(new HashSet<Material>(), 500).getLocation();
 
-        new LocationUtil(location, player);
+        player.teleport(location);
 
         sender.sendMessage(ColorUtil.fixColor(Lang.INFO_JUMP_YUP));
 

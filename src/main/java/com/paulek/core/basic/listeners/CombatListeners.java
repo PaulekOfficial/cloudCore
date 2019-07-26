@@ -33,7 +33,7 @@ public class CombatListeners implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
 
-        if (Config.COMBAT_DISABLECHESTS) {
+        if (!core.getConfiguration().combatAllowChests) {
 
             if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
 
@@ -55,12 +55,12 @@ public class CombatListeners implements Listener {
     @EventHandler
     public void onCommand(org.bukkit.event.player.PlayerCommandPreprocessEvent event) {
 
-        if (Config.COMBAT_DISABLECOMMAND) {
+        if (!core.getConfiguration().combatAllowCommands) {
 
             if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
                 boolean found = false;
 
-                for (String s : Config.COMBAT_IGNORED_COMMANDS) {
+                for (String s : core.getConfiguration().combatCommandsAllowed) {
                     if (event.getMessage().contains(s)) {
                         found = true;
                     }
@@ -87,11 +87,11 @@ public class CombatListeners implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        if (Config.COMBAT_DISCARD) {
+        if (core.getConfiguration().comabtRejected) {
 
             if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
 
-                Material m = Material.matchMaterial(Config.COMBAT_DISCARDBLOCK);
+                Material m = Material.matchMaterial(core.getConfiguration().comabtRejectedBlock);
 
                 if (m == null) m = Material.REDSTONE_BLOCK;
 
@@ -110,7 +110,7 @@ public class CombatListeners implements Listener {
     @EventHandler
     public void onBroke(org.bukkit.event.block.BlockBreakEvent event) {
 
-        if (Config.COMBAT_DISABLEBREAKING) {
+        if (!core.getConfiguration().combatAllowBlockBreak) {
 
             if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
                 event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_COMBAT_BREAKDISABLED));
@@ -123,12 +123,12 @@ public class CombatListeners implements Listener {
     @EventHandler
     public void onPlace(org.bukkit.event.block.BlockPlaceEvent event) {
 
-        if (Config.COMBAT_DISABLEPLEACING) {
+        if (!core.getConfiguration().combatAllowBlockPlace) {
 
             if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
                 boolean allow = false;
 
-                for (String s : Config.COMBAT_IGNORED_BLOCKS) {
+                for (String s : core.getConfiguration().combatBlocksAllowed) {
                     Material m = Material.matchMaterial(s);
 
                     if (m != null) {
@@ -157,7 +157,7 @@ public class CombatListeners implements Listener {
             combatStorage.changeTimeMilisrs(event.getAttacked().getUniqueId(), System.currentTimeMillis());
         }
         combatStorage.addMarkedWarrior(new Warrior(event.getAttacked().getUniqueId(), event.getAttacked().getDisplayName()));
-        if (Config.COMBAT_CHATMESSAGE) {
+        if (core.getConfiguration().combatChat) {
             event.getAttacked().sendMessage(ColorUtil.fixColor(Lang.INFO_COMBAT_CHAT));
         }
         if(event.getAttacker() instanceof Player){
@@ -165,7 +165,7 @@ public class CombatListeners implements Listener {
                 combatStorage.changeTimeMilisrs(event.getAttacker().getUniqueId(), System.currentTimeMillis());
             }
             combatStorage.addMarkedWarrior(new Warrior(event.getAttacker().getUniqueId(), ((Player) event.getAttacker()).getDisplayName()));
-            if (Config.COMBAT_CHATMESSAGE) {
+            if (core.getConfiguration().combatChat) {
                 event.getAttacker().sendMessage(ColorUtil.fixColor(Lang.INFO_COMBAT_CHAT));
             }
         }
@@ -179,7 +179,7 @@ public class CombatListeners implements Listener {
         Entity attacked = event.getEntity();
         Location location = attacker.getLocation();
 
-        if (!Config.COMBAT_ONCREATIVE) {
+        if (!core.getConfiguration().combatAllowCreative) {
             if (attacker instanceof Player) {
                 Player damager = (Player) attacker;
                 if(!canDamage(location)){
@@ -194,7 +194,7 @@ public class CombatListeners implements Listener {
 
         }
 
-        if (Config.COMBAT_MOBDAMAGE) {
+        if (core.getConfiguration().combatMob) {
             if ((attacked instanceof Player) && (attacker instanceof Monster)) {
                 Player player = (Player) attacked;
                 if(!canDamage(location)){

@@ -43,7 +43,7 @@ public class CombatManager implements Runnable {
 
             String a = message.replace("{coldown}", Long.toString(coldown));
 
-            if ((Bukkit.getPlayer(p.getNick()) != null)){
+            if ((Bukkit.getPlayer(p.getNick()) != null) && core.getConfiguration().combatActionbar){
                 Player player = Bukkit.getPlayer(p.getNick());
                 ActionBarUtil.sendActionbar(player, a);
             }

@@ -76,7 +76,7 @@ public class StoneDrop implements ConfigurationSerializable {
     }
 
     public double getChance(Player player) {
-        if (Config.DROP_VIP_ENABLE && player.hasPermission("core.drop.vip")) return chance * Config.DROP_VIP_MULTIPLIER;
+        //if (Config.DROP_VIP_ENABLE && player.hasPermission("core.drop.vip")) return chance * Config.DROP_VIP_MULTIPLIER;
         return chance;
     }
 

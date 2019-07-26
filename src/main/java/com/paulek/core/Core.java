@@ -9,7 +9,7 @@ import com.paulek.core.basic.data.databaseStorage.Timestamps;
 import com.paulek.core.basic.data.databaseStorage.Users;
 import com.paulek.core.basic.data.localStorage.CombatStorage;
 import com.paulek.core.basic.data.localStorage.Pms;
-import com.paulek.core.basic.data.localStorage.Rtps;
+import com.paulek.core.basic.data.databaseStorage.Rtps;
 import com.paulek.core.basic.data.localStorage.TpaStorage;
 import com.paulek.core.basic.database.Database;
 import com.paulek.core.basic.database.MySQL;
@@ -44,7 +44,6 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Random;
 import java.util.logging.Level;
 
 public class Core extends JavaPlugin {
@@ -97,6 +96,10 @@ public class Core extends JavaPlugin {
 //        drops.addDropMask(Material.STONE.name(), new BlockMask(this));
 //        drops.getDrops().add(new StoneDrop("diamond", "$bMasz diaksa heheheheh", true, new ItemStack(Material.DIAMOND, 1), Arrays.asList(new ItemStack(Material.DIAMOND_PICKAXE, 1), new ItemStack(Material.IRON_PICKAXE, 1), new ItemStack(Material.GOLDEN_PICKAXE, 1)), 10, "drop.diamond", 7.91, true, "1-2", "<=30"));
 
+        if(!this.getDataFolder().exists()){
+            this.getDataFolder().mkdir();
+        }
+
         File configFile = new File(this.getDataFolder(), "config.yml");
 
         config = ConfigUtil.loadConfig(configFile, Config.class);
@@ -132,6 +135,8 @@ public class Core extends JavaPlugin {
 
                 PreparedStatement spawnsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_spawns` ( `id` INT NOT NULL AUTO_INCREMENT , `name` INT NOT NULL , `world` TEXT NOT NULL ,`x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL , `pitch` FLOAT NOT NULL , `yaw` FLOAT NOT NULL , PRIMARY KEY (`id`))");
 
+                PreparedStatement buttonsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_buttons` ( `id` INT NOT NULL AUTO_INCREMENT , `world` TEXT NOT NULL , `x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL , PRIMARY KEY (`id`))");
+
                 usersTabele.executeUpdate();
                 usersTabele.close();
 
@@ -143,6 +148,9 @@ public class Core extends JavaPlugin {
 
                 spawnsTabele.executeUpdate();
                 spawnsTabele.close();
+
+                buttonsTabele.executeUpdate();
+                buttonsTabele.close();
                 updateMethod = "ON DUPLICATE KEY UPDATE";
 
             } catch (SQLException exception){
@@ -172,6 +180,8 @@ public class Core extends JavaPlugin {
 
                 PreparedStatement spawnsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_spawns` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `name` INT NOT NULL , `world` TEXT NOT NULL ,`x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL , `pitch` FLOAT NOT NULL , `yaw` FLOAT NOT NULL)");
 
+                PreparedStatement buttonsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_buttons` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `world` TEXT NOT NULL , `x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL)");
+
                 usersTabele.executeUpdate();
                 usersTabele.close();
 
@@ -183,6 +193,9 @@ public class Core extends JavaPlugin {
 
                 spawnsTabele.executeUpdate();
                 spawnsTabele.close();
+
+                buttonsTabele.executeUpdate();
+                buttonsTabele.close();
                 updateMethod = "ON CONFLICT(id) DO UPDATE SET";
 
             } catch (SQLException exception){
@@ -195,18 +208,20 @@ public class Core extends JavaPlugin {
         //drops = new Drops(this);
 
         pmsStorage = new Pms();
-        rtpsStorage = new Rtps();
-        tpaStorage = new TpaStorage();
+        if(config.rtpEnabled) rtpsStorage = new Rtps(this);
+        if(config.tpaEnabled) tpaStorage = new TpaStorage();
         usersStorage = new Users(this);
         usersStorage.init();
         timestamps = new Timestamps(this);
         timestamps.init();
-        skinsStorage = new Skins(this);
-        skinsStorage.init();
+        if(config.skinsEnabled) {
+            skinsStorage = new Skins(this);
+            skinsStorage.init();
+        }
         spawnsStorage = new Spawns(this);
         spawnsStorage.init();
 
-        combatManager = new CombatManager(this);
+        if(config.combatlogEnabled) combatManager = new CombatManager(this);
 
         commandManager = new CommandManager(this);
 
@@ -261,18 +276,23 @@ public class Core extends JavaPlugin {
 
         if (config.generatorEnabled) {
 
-            ItemStack item = new ItemStack(XMaterial.END_STONE.parseMaterial());
+            ItemStack item = new ItemStack(Material.matchMaterial(config.generatorBlock));
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(ColorUtil.fixColor(config.genertorName));
             meta.setLore(ColorUtil.fixColors(config.generatorLore));
             item.setItemMeta(meta);
 
             ShapedRecipe stoneGenerator = new ShapedRecipe(item)
-                    .shape("RIR", "ISI", "RPR")
-                    .setIngredient('R', Material.REDSTONE)
-                    .setIngredient('I', Material.IRON_INGOT)
-                    .setIngredient('S', Material.STONE)
-                    .setIngredient('P', XMaterial.PISTON.parseMaterial());
+                    .shape("ABC", "DEF", "GHI")
+                    .setIngredient('A', Material.matchMaterial(config.generatorCrafting.get(1)))
+                    .setIngredient('B', Material.matchMaterial(config.generatorCrafting.get(2)))
+                    .setIngredient('C', Material.matchMaterial(config.generatorCrafting.get(3)))
+                    .setIngredient('D', Material.matchMaterial(config.generatorCrafting.get(4)))
+                    .setIngredient('E', Material.matchMaterial(config.generatorCrafting.get(5)))
+                    .setIngredient('F', Material.matchMaterial(config.generatorCrafting.get(6)))
+                    .setIngredient('G', Material.matchMaterial(config.generatorCrafting.get(7)))
+                    .setIngredient('H', Material.matchMaterial(config.generatorCrafting.get(8)))
+                    .setIngredient('I', Material.matchMaterial(config.generatorCrafting.get(9)));
 
             plugin.getServer().addRecipe(stoneGenerator);
 
@@ -283,9 +303,13 @@ public class Core extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        for (User u : usersStorage.getUsers().values()) {
-            if (!u.isDirty()) {
-                usersStorage.saveAllToDatabase(database);
+        if(usersStorage != null) {
+            if(usersStorage.getUsers() != null) {
+                for (User u : usersStorage.getUsers().values()) {
+                    if (!u.isDirty()) {
+                        usersStorage.saveAllToDatabase(database);
+                    }
+                }
             }
         }
 
@@ -313,11 +337,27 @@ public class Core extends JavaPlugin {
     private void registerListeners() {
         consoleLog.info("Registering Listeners...");
         PluginManager pluginManager = plugin.getServer().getPluginManager();
-        if(config.combatlogEnabled) pluginManager.registerEvents(new CombatListeners(this), this);
-        if(config.easteregg) pluginManager.registerEvents(new EasterEggListeners(), this);
-        pluginManager.registerEvents(new PluginListeners(this), this);
-        if(config.rtpEnabled) pluginManager.registerEvents(new RandomTeleportListener(this), this);
-        if (config.generatorEnabled) pluginManager.registerEvents(new StoneGeneratorListeners(this), this);
+        if(config.chatModuleEnabled){
+            ChatListeners chatListeners = new ChatListeners(this);
+            chatListeners.loadGroups();
+            pluginManager.registerEvents(chatListeners, this);
+        }
+        if(config.skinsEnabled){
+            pluginManager.registerEvents(new SkinListeners(this), this);
+        }
+        if(config.combatlogEnabled){
+            pluginManager.registerEvents(new CombatListeners(this), this);
+        }
+        if(config.easteregg){
+            pluginManager.registerEvents(new EasterEggListeners(this), this);
+        }
+        pluginManager.registerEvents(new StorageListeners(this), this);
+        if(config.rtpEnabled){
+            pluginManager.registerEvents(new RandomTeleportListener(this), this);
+        }
+        if (config.generatorEnabled) {
+            pluginManager.registerEvents(new StoneGeneratorListeners(this), this);
+        }
         pluginManager.registerEvents(new UserListeners(this), this);
         pluginManager.registerEvents(new GUIListeners(), this);
     }
@@ -348,7 +388,9 @@ public class Core extends JavaPlugin {
         commandManager.registerCommand(new BrodcastCMD(this));
         commandManager.registerCommand(new InvseeCMD(this));
         commandManager.registerCommand(new EnderchestCMD(this));
-        commandManager.registerCommand(new SethomeCMD(this));
+        SethomeCMD sethomeCMD = new SethomeCMD(this);
+        sethomeCMD.loadGroups();
+        commandManager.registerCommand(sethomeCMD);
         commandManager.registerCommand(new HomeCMD(this));
         commandManager.registerCommand(new SunCMD(this));
         commandManager.registerCommand(new DelhomeCMD(this));
@@ -360,7 +402,7 @@ public class Core extends JavaPlugin {
             commandManager.registerCommand(new TpadenyCMD(this));
         }
 
-        if (config.skinsEnabled) commandManager.registerCommand(new SkinCMD(this));
+        if (config.skinsEnabled && config.skinsCommand) commandManager.registerCommand(new SkinCMD(this));
 
         commandManager.registerCommand(new SpeedCMD(this));
         commandManager.registerCommand(new WorkbenchCMD(this));

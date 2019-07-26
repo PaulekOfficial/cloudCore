@@ -1,5 +1,6 @@
 package com.paulek.core.common;
 
+import com.paulek.core.common.io.Config;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class ColorUtil {
     public static List<String> fixColors(List<String> string) {
         List<String> arrayList = new ArrayList<>();
         for (String line : string) {
-            arrayList.add(ChatColor.translateAlternateColorCodes('$', line));
+            arrayList.add(ChatColor.translateAlternateColorCodes(Config.COLOR_MARK.toCharArray()[0], line));
         }
         return arrayList;
     }

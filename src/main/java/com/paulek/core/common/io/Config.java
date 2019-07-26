@@ -58,7 +58,7 @@ public class Config {
     @CfgComment("Jakiego znaku uzywac do tlumaczenia kolorow")
     @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
     @CfgName("color-mark")
-    public String colorMark = "$";
+    public static String COLOR_MARK = "$";
 
     @CfgComment("Maklymalna liczba znakow nicku gracza")
     @CfgName("max-nick-length")
@@ -269,6 +269,8 @@ public class Config {
     public boolean skinsNonPremium = true;
 
     @CfgComment("Lista nickow premium ktore beda wykorzystywane do przydzielania graczom non-premium")
+    @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
+    @CfgCollectionStyle(CfgCollectionStyle.CollectionStyle.ALWAYS_NEW_LINE)
     @CfgName("skins-list")
     public List<String> skinsList = Arrays.asList("skkf", "viv0", "set", "paulekofficial", "dbanaszewski");
 
@@ -351,6 +353,20 @@ public class Config {
     @CfgComment("         【1】【2】【3】")
     @CfgComment("         【4】【5】【6】")
     @CfgComment("         【7】【8】【9】")
+    @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
+    @CfgCollectionStyle(CfgCollectionStyle.CollectionStyle.ALWAYS_NEW_LINE)
+    @CfgName("generator-crafting")
+    public Map<Integer, String> generatorCrafting = ImmutableMap.<Integer, String>builder()
+            .put(1, "REDSTONE")
+            .put(2, "IRON_INGOT")
+            .put(3, "REDSTONE")
+            .put(4, "IRON_INGOT")
+            .put(5, "STONE")
+            .put(6, "IRON_INGOT")
+            .put(7, "REDSTONE")
+            .put(8, "PISTON")
+            .put(9, "REDSTONE")
+            .build();
 
     @CfgComment("Nazwa generatora po scraftowaniu go")
     @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
@@ -358,6 +374,8 @@ public class Config {
     public String genertorName = "$cGenerator stone";
 
     @CfgComment("Opis generatora po najechaniu na scraftowany blok")
+    @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
+    @CfgCollectionStyle(CfgCollectionStyle.CollectionStyle.ALWAYS_NEW_LINE)
     @CfgName("generator-lore")
     public List<String> generatorLore = Arrays.asList("$aPostaw ten blok generatora,", "$aPostaw na nim stone lub obsidian", "$aw zaleznosci co na generowac.", "$aCiesz sie twoim generatorem :D");
 

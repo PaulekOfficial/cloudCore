@@ -27,38 +27,43 @@ public class StoneGeneratorListeners implements Listener {
 
     @EventHandler
     public void onPlace(org.bukkit.event.block.BlockPlaceEvent event) throws Exception{
-
-        if (Config.STONEGENERATOR_ENABLE) {
-
-            Block block = event.getBlock();
-            Location loc = new Location(block.getWorld(), block.getX(), block.getY() - 1.0D, block.getZ());
-            Block sb = loc.getBlock();
+        Block block = event.getBlock();
+        Location loc = new Location(block.getWorld(), block.getX(), block.getY() - 1.0D, block.getZ());
+        Block sb = loc.getBlock();
+        if(core.getConfiguration().generatorStone && !core.getConfiguration().generatorOverride) {
             if ((block.getType() == Material.STONE) && (sb.getType() == XMaterial.END_STONE.parseMaterial())) {
-                sendParticles(sb.getWorld(), sb.getLocation(), event.getPlayer());
+//                sendParticles(sb.getWorld(), sb.getLocation(), event.getPlayer());
                 event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.INFO_STONEGENERATOR_PLACE));
             }
+        }
+        if(core.getConfiguration().generatorObsidian && !core.getConfiguration().generatorOverride) {
             if ((block.getType() == Material.OBSIDIAN) && (sb.getType() == XMaterial.END_STONE.parseMaterial())) {
-                sendParticles(sb.getWorld(), sb.getLocation(), event.getPlayer());
+//                sendParticles(sb.getWorld(), sb.getLocation(), event.getPlayer());
                 event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.INFO_STONEGENERATOR_PLACE));
             }
-
+        }
+        if(core.getConfiguration().generatorOverride){
+            if(block.getType().equals(Material.getMaterial(core.getConfiguration().generatorBlock))){
+                loc.setY(loc.getY() + 2.0D);
+                loc.getBlock().setType(Material.STONE);
+            }
         }
     }
 
     @EventHandler
     public void onBroke(org.bukkit.event.block.BlockBreakEvent event) {
 
-        if (Config.STONEGENERATOR_ENABLE) {
+        final Block block1 = event.getBlock();
+        Location loc1 = block1.getLocation();
+        Location stone1 = new Location(loc1.getWorld(), loc1.getX(), loc1.getY() - 1.0, loc1.getZ());
+        final Block sb1 = stone1.getBlock();
 
-            final Block block1 = event.getBlock();
-            Location loc1 = block1.getLocation();
-            Location stone1 = new Location(loc1.getWorld(), loc1.getX(), loc1.getY() - 1.0, loc1.getZ());
-            final Block sb1 = stone1.getBlock();
+        final Block block2 = event.getBlock();
+        Location loc2 = block1.getLocation();
+        Location stone2 = new Location(loc2.getWorld(), loc2.getX(), loc2.getY() - 1.0, loc2.getZ());
+        final Block sb2 = stone1.getBlock();
 
-            final Block block2 = event.getBlock();
-            Location loc2 = block1.getLocation();
-            Location stone2 = new Location(loc2.getWorld(), loc2.getX(), loc2.getY() - 1.0, loc2.getZ());
-            final Block sb2 = stone1.getBlock();
+        if(core.getConfiguration().generatorStone || core.getConfiguration().generatorOverride) {
 
             if ((block1.getType() == Material.STONE) && (sb1.getType() == XMaterial.END_STONE.parseMaterial())) {
 
@@ -68,9 +73,13 @@ public class StoneGeneratorListeners implements Listener {
                             block1.setType(Material.STONE);
                         }
                     }
-                }, Config.STONEGENERATOR_REGENERATETIME * 20);
+                }, core.getConfiguration().generatorDelay * 20);
 
             }
+
+        }
+
+        if(core.getConfiguration().generatorObsidian && !core.getConfiguration().generatorOverride) {
 
             if ((block2.getType() == Material.OBSIDIAN) && (sb2.getType() == XMaterial.END_STONE.parseMaterial())) {
 
@@ -80,9 +89,10 @@ public class StoneGeneratorListeners implements Listener {
                             block2.setType(Material.OBSIDIAN);
                         }
                     }
-                }, Config.STONEGENERATOR_REGENERATETIME * 20);
+                }, core.getConfiguration().generatorDelay * 20);
 
             }
+
         }
 
     }

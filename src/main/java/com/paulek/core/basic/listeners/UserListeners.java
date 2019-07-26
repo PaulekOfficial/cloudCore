@@ -35,66 +35,6 @@ public class UserListeners implements Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-
-        core.getUsersStorage().checkPlayer(event.getPlayer());
-
-
-        Bukkit.getScheduler().runTaskLaterAsynchronously(core.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                UUID fakeUUID = event.getPlayer().getUniqueId();
-                String nick = event.getPlayer().getDisplayName();
-                if (!core.isOnlineMode() && Config.SKINS_ENABLE) {
-
-                    if (core.getSkinsStorage().getSkin(fakeUUID) == null) {
-
-                        Skin skin = MojangApiUtil.getPremiumSkin(nick, core);
-
-                        if (skin == null){
-                            Random random = new Random();
-
-                            if(core.getSkinsStorage().getPlayerSkins().size() >= 60){
-                                Object[] skinArray = core.getSkinsStorage().getPlayerSkins().values().toArray();
-                                skin = (Skin) skinArray[random.nextInt(skinArray.length)];
-                            } else {
-                                while (true) {
-                                    String randomPremiumNick = Config.SKINS_SKINSFORNONPREMIUM.get(random.nextInt(Config.SKINS_SKINSFORNONPREMIUM.size()));
-                                    skin = MojangApiUtil.getPremiumSkin(randomPremiumNick, core);
-                                    if (skin != null) {
-                                        break;
-                                    }
-                                }
-                            }
-
-                        }
-
-                        skin.updateSkinForPlayer(Bukkit.getPlayer(fakeUUID));
-                        skin.applySkinForPlayers(Bukkit.getPlayer(fakeUUID));
-                        skin.setDirty(true);
-
-                        core.getSkinsStorage().addSkin(fakeUUID, skin);
-
-                        return;
-                    }
-
-                    Skin skin = core.getSkinsStorage().getSkin(fakeUUID);
-                    if (skin.getLastUpdate().isAfter(LocalDateTime.now())) {
-                        Skin newSkin = MojangApiUtil.getPremiumSkin(nick, core);
-                        if (newSkin != null) {
-                            skin = newSkin;
-                            skin.setDirty(true);
-                        }
-                    }
-                    skin.updateSkinForPlayer(Bukkit.getPlayer(fakeUUID));
-                    skin.applySkinForPlayers(Bukkit.getPlayer(fakeUUID));
-                }
-            }
-        }, 10);
-
-    }
-
-    @EventHandler
     public void onQuit(PlayerQuitEvent event) {
 
         if (core.getUsersStorage().getUser(event.getPlayer().getUniqueId()) != null) {

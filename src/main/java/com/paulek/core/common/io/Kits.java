@@ -15,7 +15,7 @@ import java.io.File;
 import java.util.*;
 
 
-//TODO Rewrite tej całej klasy
+//TODO Rewrite tej calej funkcji, chujowe to
 public class Kits {
 
     private Map<String, Kit> kits = new HashMap<>();

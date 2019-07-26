@@ -2,78 +2,30 @@ package com.paulek.core.common;
 
 import com.paulek.core.Core;
 import com.paulek.core.common.io.Config;
-import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Biome;
-import org.bukkit.command.CommandSender;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.*;
 
 public class LocationUtil {
 
-    private Core core;
+    public static Location randomLocation(World world, int maxX, int maxZ){
+        Random random = new Random();
 
-    public LocationUtil(Location location, Player player, Core core) {
+        double x = maxX * -1 + random.nextInt(maxX - (maxX * -1) + 1);
+        double z = maxZ * -1 + random.nextInt(maxZ - (maxZ * -1) + 1);
 
-        this.core = Objects.requireNonNull(core, "Core");
-
-        if (core.getConfiguration().teleportSafety) {
-
-            player.teleport(safeLocation(location));
-
-            return;
-        }
-
-        player.teleport(location);
-
+        return getSafeLocation(new Location(world, x, 255.0, z));
     }
 
-    public static Location randomLocation(World world, int maxX, int maxZ) {
-        Random RAND = new Random();
-        int x = (maxX * -1) + RAND.nextInt(maxX -
-                (maxX * -1) + 1);
-        int z = (maxZ * -1) + RAND.nextInt(maxZ - (maxZ * -1) + 1);
-        int y = world.getHighestBlockYAt(x, z);
-        if ((world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.OCEAN) || (world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.DEEP_OCEAN)
-                || (world.getBlockAt(new Location(world, x, y, z)).getBiome() == Biome.FROZEN_OCEAN)) {
-            randomLocation(world, maxX, maxZ);
-        }
-        Location loc = new Location(world, x, y, z);
-        int yfix = world.getHighestBlockYAt(loc);
-        return new Location(world, x, yfix, z);
-    }
-
-    public static boolean hasPlayerTpToogle(Player player, Core core) {
+    public static boolean isUserTpToogle(Player player, Core core) {
         return core.getUsersStorage().getUser(player.getUniqueId()).isTpToogle();
     }
 
-    public Location safeLocation(Location location) {
-
-        float y_one = Bukkit.getWorld(location.getWorld().getName()).getHighestBlockYAt(location);
-
-        Location to_fix = new Location(location.getWorld(), location.getX(), y_one, location.getZ(), location.getYaw(), location.getPitch());
-        to_fix.setDirection(location.getDirection());
-
-        float y_final = Bukkit.getWorld(to_fix.getWorld().getName()).getHighestBlockYAt(to_fix);
-
-        Location fixed = new Location(to_fix.getWorld(), to_fix.getX(), y_final, to_fix.getZ(), to_fix.getYaw(), to_fix.getPitch());
-        to_fix.setDirection(location.getDirection());
-
-        return fixed;
-    }
-
-    public boolean infoPlayerHasTpToogle(Player player, CommandSender sender, Core core) {
-        if (hasPlayerTpToogle(player, core)) {
-
-            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
-
-            return true;
-        }
-        return false;
-    }
 
     public static String locationToString(Location location){
         StringBuilder stringBuilder = new StringBuilder();
@@ -105,6 +57,111 @@ public class LocationUtil {
         return new Location(world, x, y, z, yaw, pitch);
     }
 
+    public static boolean isBlockDamaging(World world, double x, double y, double z){
+        Block upBlock = world.getBlockAt((int)Math.round(x), (int)Math.round(y) + 1, (int)Math.round(z));
+        Block middleBlock = world.getBlockAt((int)Math.round(x), (int)Math.round(y), (int)Math.round(z));
+        Block downBlock = world.getBlockAt((int)Math.round(x), (int)Math.round(y) - 1, (int)Math.round(z));
+
+        if(upBlock.getType() == Material.LAVA || upBlock.getType() == Material.LEGACY_LAVA && upBlock.getType() == Material.LEGACY_STATIONARY_LAVA){
+            return true;
+        }
+        if(middleBlock.getType() == Material.LAVA || middleBlock.getType() == Material.LEGACY_LAVA && middleBlock.getType() == Material.LEGACY_STATIONARY_LAVA){
+            return true;
+        }
+        if(downBlock.getType() == Material.LAVA || downBlock.getType() == Material.LEGACY_LAVA && downBlock.getType() == Material.LEGACY_STATIONARY_LAVA){
+            return true;
+        }
+
+
+        if(middleBlock.getType() == Material.FIRE){
+            return true;
+        }
+        if(downBlock.getType() == Material.FIRE){
+            return true;
+        }
+
+        if(downBlock.getType() == Material.LEGACY_BED_BLOCK){
+            return true;
+        }
+
+        return upBlock.getType() != Material.AIR;
+
+    }
+
+    public static boolean isBlockAproveAir(World world, double x, double y, double z){
+
+        return y > world.getMaxHeight();
+
+    }
+
+    public static boolean isBlockUnsafe(World world, double x, double y, double z){
+        if(isBlockDamaging(world, x, y, z)){
+            return true;
+        }
+        return isBlockAproveAir(world, x, y, z);
+    }
+
+    public static Location getSafeLocation(Location location){
+
+        World world = location.getWorld();
+        int x = (int) Math.round(location.getX());
+        int y = (int) Math.round(location.getY());
+        int z = (int) Math.round(location.getZ());
+
+        //Sprowadzenie gracza ponizej maksymalnej wysokosci swiata
+        while (isBlockAproveAir(world, x, y, z)){
+            y -= 1;
+            if(y < 0){
+                y = (int) Math.round(location.getY());
+                break;
+            }
+        }
+
+        //Przemieszczanie lokalizacje o kratke na ukos
+        if(isBlockUnsafe(world, x, y, z)){
+            x = Math.round(location.getX()) == x ? x - 1 : x + 1;
+            z = Math.round(location.getZ()) == z ? z - 1 : z + 1;
+        }
+
+        //Pierwsze pruby uzyskania bezpiecznej lokalizacji
+        int i = 0;
+        while (isBlockUnsafe(world, x, y, z)){
+
+            i++;
+
+            //Jezeli y jest wiekszy niz maksymalna wysokosc przemieszczamy sie o kratke w bok
+            if(y >= world.getMaxHeight()){
+                x += 1;
+                break;
+            }
+
+            x += VECTOR_BLOCKS[i].x;
+            y += VECTOR_BLOCKS[i].y;
+            z += VECTOR_BLOCKS[i].z;
+
+        }
+
+        //Chuj wie co to robi xd, tak maja w essentials a moja wersja nie dziala
+        while(isBlockUnsafe(world, x, y, z)){
+
+            y += 1;
+
+            if(y <= 1){
+                x += 1;
+
+                y = world.getHighestBlockYAt(x, z);
+
+                if (x - 48 > location.getBlockX()) {
+                    return null;
+                }
+
+            }
+
+        }
+
+        return new Location(world, x, y, z, location.getYaw(), location.getPitch());
+    }
+
     public static String locationMapToString(Map<String, Location> locationMap){
         StringBuilder stringBuilder = new StringBuilder();
         for(String key : locationMap.keySet()){
@@ -114,6 +171,18 @@ public class LocationUtil {
             stringBuilder.append("%");
         }
         return stringBuilder.toString();
+    }
+
+    public static void safeTeleport(Config config, Location location, Player player){
+        //if user godmode
+        if(config.teleportSafety){
+            if(isBlockUnsafe(location.getWorld(), location.getX(), location.getY(), location.getBlockZ())){
+                location = getSafeLocation(location);
+                player.teleport(location);
+                return;
+            }
+        }
+        player.teleport(location);
     }
 
     public static Map<String, Location> locationMapFormString(String string){
@@ -141,5 +210,33 @@ public class LocationUtil {
         }
 
         return map;
+    }
+
+    public static XVector[] VECTOR_BLOCKS;
+
+    static {
+        List<XVector> blocks = new ArrayList<>();
+        int radius = 5;
+        for(int x = -radius; x <= radius; x++){
+            for(int y = -radius; y <= radius; y++){
+                for (int z = -radius; z <=radius; z++){
+                    blocks.add(new XVector(x, y, z));
+                }
+            }
+        }
+        blocks.sort(Comparator.comparingDouble(vector -> (Math.pow(vector.x, 2) + Math.pow(vector.y, 2) + Math.pow(vector.z, 2))));
+        VECTOR_BLOCKS = blocks.toArray(new XVector[0]);
+    }
+
+    public static class XVector{
+        public double x;
+        public double y;
+        public double z;
+
+        public XVector(double x, double y, double z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
     }
 }

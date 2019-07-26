@@ -48,16 +48,16 @@ public class HomeCMD extends Command {
 
                         id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
                             public void run() {
-                                new LocationUtil(user.getHome(args[0]), player);
+                                LocationUtil.safeTeleport(getCore().getConfiguration(), user.getHome(args[0]), player);
 
                                 sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_TELEPORT));
                             }
-                        }, Config.HOME_DETLY * 20);
+                        }, getCore().getConfiguration().generatorDelay * 20);
 
                         to_teleport.put(player.getUniqueId(), id.getTaskId());
 
                     } else {
-                        new LocationUtil(user.getHome(args[0]), player);
+                        LocationUtil.safeTeleport(getCore().getConfiguration(), user.getHome(args[0]), player);
 
                         sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_TELEPORT));
                     }
@@ -98,7 +98,7 @@ public class HomeCMD extends Command {
 
                                 sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HOME_TELEPORT));
                             }
-                        }, Config.HOME_DETLY * 20);
+                        }, getCore().getConfiguration().generatorDelay * 20);
 
                         to_teleport.put(player.getUniqueId(), id.getTaskId());
 
