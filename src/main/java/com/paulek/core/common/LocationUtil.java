@@ -16,10 +16,10 @@ public class LocationUtil {
     public static Location randomLocation(World world, int maxX, int maxZ){
         Random random = new Random();
 
-        double x = maxX * -1 + random.nextInt(maxX - (maxX * -1) + 1);
-        double z = maxZ * -1 + random.nextInt(maxZ - (maxZ * -1) + 1);
+        int x = maxX * -1 + random.nextInt(maxX - (maxX * -1) + 1);
+        int z = maxZ * -1 + random.nextInt(maxZ - (maxZ * -1) + 1);
 
-        return getSafeLocation(new Location(world, x, 255.0, z));
+        return getSafeLocation(new Location(world, x, world.getHighestBlockYAt(x, z), z));
     }
 
     public static boolean isUserTpToogle(Player player, Core core) {

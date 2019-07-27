@@ -62,7 +62,7 @@ public class RandomTeleportListener implements Listener {
                             Location totp = LocationUtil.randomLocation(event.getWorld(), event.getMaxLocX() + event.getCenterLocX(), event.getMaxLocZ() + event.getCenterLocZ());
 
                             while(true){
-                                if(core.getConfiguration().rtpBiomsBlackList.contains(totp.getChunk().getChunkSnapshot().getBiome(totp.getBlockX(), totp.getBlockZ()).name())){
+                                if(core.getConfiguration().rtpBiomsBlackList.contains(totp.getWorld().getBiome(totp.getBlockX(), totp.getBlockZ()).name())){
                                     totp = LocationUtil.randomLocation(event.getWorld(), event.getMaxLocX() + event.getCenterLocX(), event.getMaxLocZ() + event.getCenterLocZ());
                                 } else {
                                     break;
