@@ -194,6 +194,12 @@ public class Lang {
     public static String DROP_TURBO_CHAT = "$6Turbodrop $azostal przedluzony o {time} {message}";
     public static String ERROR_DROP_TURBO_BADTIMESYNTAX = "$cZly format czasowy, przyklad poprawnego formatu 1d, 1h, 1m, 1s";
     public static String ERROR_JOIN_MAXNICKLETTER = "$cTwoj nick moze miec maksymalnie 15 znakow!";
+    public static String INFO_GOD_ENABLE = "$aTryb boga wlaczony!";
+    public static String INFO_GOD_ENABLEPLAYER = "$aTryb boga zostal wlaczony dla {PLAYER}";
+    public static String INFO_GOD_DISABLE = "$aTryb boga zostal wylaczony!";
+    public static String INFO_GOD_DISABLEPLAYER = "$aTryb boga zostal wylaczony dla {PLAYER}";
+    public static String ERROR_GOD_PLAYERNOTFOUND = "$cPodany gracz jest offinle lub nie istnieje!";
+    public static String ERROR_GOD_MUSTBEPLAYER = "$cWykonawca komendy musi byc graczem!";
     private static File file;
     private static FileConfiguration c = null;
     private Core core;

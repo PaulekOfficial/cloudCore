@@ -123,7 +123,7 @@ public class Core extends JavaPlugin {
 
             try(Connection connection = database.getConnection()){
 
-                PreparedStatement usersTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_users` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `lastAccountName` TEXT NOT NULL , `logoutLocation` LONGTEXT NOT NULL , `lastLocation` LONGTEXT NOT NULL , `ipAddres` MEDIUMTEXT NOT NULL , `homes` LONGTEXT NOT NULL , `lastActivity` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `socialSpy` TINYINT NOT NULL , `vanish` TINYINT NOT NULL , `tpToogle` TINYINT NOT NULL , `tpsMonitor` TINYINT NOT NULL , PRIMARY KEY (`id`))");
+                PreparedStatement usersTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_users` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `lastAccountName` TEXT NOT NULL , `logoutLocation` LONGTEXT NOT NULL , `lastLocation` LONGTEXT NOT NULL , `ipAddres` MEDIUMTEXT NOT NULL , `homes` LONGTEXT NOT NULL , `lastActivity` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `socialSpy` TINYINT NOT NULL , `vanish` TINYINT NOT NULL , `tpToogle` TINYINT NOT NULL , `tpsMonitor` TINYINT NOT NULL , `godMode` TINYINT NOT NULL , PRIMARY KEY (`id`))");
 
                 PreparedStatement timestampsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_timestamps` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `serviceName` TEXT NOT NULL , `className` TEXT NOT NULL , `startTime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `endTime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `expired` TINYINT NOT NULL , PRIMARY KEY (`id`))");
 
@@ -168,7 +168,7 @@ public class Core extends JavaPlugin {
 
             try(Connection connection = database.getConnection()){
 
-                PreparedStatement usersTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_users` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `uuid` TEXT NOT NULL , `lastAccountName` TEXT NOT NULL , `logoutLocation` LONGTEXT NOT NULL , `lastLocation` LONGTEXT NOT NULL , `ipAddres` MEDIUMTEXT NOT NULL , `homes` LONGTEXT NOT NULL , `lastActivity` TIMESTAMP NOT NULL , `socialSpy` TINYINT NOT NULL , `vanish` TINYINT NOT NULL , `tpToogle` TINYINT NOT NULL , `tpsMonitor` TINYINT NOT NULL)");
+                PreparedStatement usersTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_users` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `uuid` TEXT NOT NULL , `lastAccountName` TEXT NOT NULL , `logoutLocation` LONGTEXT NOT NULL , `lastLocation` LONGTEXT NOT NULL , `ipAddres` MEDIUMTEXT NOT NULL , `homes` LONGTEXT NOT NULL , `lastActivity` TIMESTAMP NOT NULL , `socialSpy` TINYINT NOT NULL , `vanish` TINYINT NOT NULL , `tpToogle` TINYINT NOT NULL , `tpsMonitor` TINYINT NOT NULL, `godMode` TINYINT NOT NULL)");
 
                 PreparedStatement timestampsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_timestamps` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `uuid` TEXT NOT NULL , `serviceName` TEXT NOT NULL , `className` TEXT NOT NULL , `startTime` TIMESTAMP NOT NULL , `endTime` TIMESTAMP NOT NULL , `expired` TINYINT NOT NULL)");
 
@@ -425,6 +425,8 @@ public class Core extends JavaPlugin {
         commandManager.registerCommand(new GcCMD(this));
         commandManager.registerCommand(new KitCMD(this));
         commandManager.registerCommand(new TurboDropCMD(this));
+
+        if(config.godmode) commandManager.registerCommand(new GodCMD(this));
     }
 
     public Config getConfiguration() {

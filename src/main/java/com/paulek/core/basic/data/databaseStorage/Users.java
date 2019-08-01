@@ -47,7 +47,7 @@ public class Users extends Storage {
 
     public void checkPlayer(Player player){
         if(!users.containsKey(player.getUniqueId())){
-            User user = new User(player.getUniqueId(), player.getDisplayName(), player.getLocation(), player.getLocation(), player.getAddress().getAddress(), new HashMap<>(), LocalDateTime.now(), false, false, false, false, core);
+            User user = new User(player.getUniqueId(), player.getDisplayName(), player.getLocation(), player.getLocation(), player.getAddress().getAddress(), new HashMap<>(), LocalDateTime.now(), false, false, false, false, false, core);
             user.setDirty(true);
             users.put(player.getUniqueId(), user);
             core.getConsoleLog().info("Created new " + user.getUuid().toString() + " user");
@@ -77,8 +77,9 @@ public class Users extends Storage {
                     boolean vanish = resultSet.getBoolean("vanish");
                     boolean tpToogle = resultSet.getBoolean("tpToogle");
                     boolean tpsMonitor = resultSet.getBoolean("tpsMonitor");
+                    boolean godMode = resultSet.getBoolean("godMode");
 
-                    User user = new User(uuid, lastAccountName, logoutlocation, lastlocation, ipAddres, homes, lastActivity, socialSpy, vanish, tpToogle, tpsMonitor, core);
+                    User user = new User(uuid, lastAccountName, logoutlocation, lastlocation, ipAddres, homes, lastActivity, socialSpy, vanish, tpToogle, tpsMonitor, godMode, core);
 
                     users.put(uuid, user);
 
@@ -99,7 +100,7 @@ public class Users extends Storage {
         User user = (User) object;
         try(Connection connection = database.getConnection()){
 
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO cloud_users (uuid, lastAccountName, logoutLocation, lastLocation, ipAddres, homes, lastActivity, socialSpy, vanish, tpToogle, tpsMonitor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " + core.getUpdateMethod() + " lastAccountName=?, logoutLocation=?, lastLocation=?, ipAddres=?, homes=?, lastActivity=?, socialSpy=?, vanish=?, tpToogle=?, tpsMonitor=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO cloud_users (uuid, lastAccountName, logoutLocation, lastLocation, ipAddres, homes, lastActivity, socialSpy, vanish, tpToogle, tpsMonitor, godMode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " + core.getUpdateMethod() + " lastAccountName=?, logoutLocation=?, lastLocation=?, ipAddres=?, homes=?, lastActivity=?, socialSpy=?, vanish=?, tpToogle=?, tpsMonitor=?, godMode=?");
 
             preparedStatement.setString(1, user.getUuid().toString());
             preparedStatement.setString(2, user.getLastAccountName());
@@ -112,17 +113,19 @@ public class Users extends Storage {
             preparedStatement.setBoolean(9, user.isVanish());
             preparedStatement.setBoolean(10, user.isTpToogle());
             preparedStatement.setBoolean(11, user.isTpsMonitor());
+            preparedStatement.setBoolean(12, user.isGodMode());
 
-            preparedStatement.setString(12, user.getLastAccountName());
-            preparedStatement.setString(13, LocationUtil.locationToString(user.getLogoutlocation()));
-            preparedStatement.setString(14, LocationUtil.locationToString(user.getLastlocation()));
-            preparedStatement.setString(15, user.getIpAddres().getHostAddress());
-            preparedStatement.setString(16, LocationUtil.locationMapToString(user.getHomes()));
-            preparedStatement.setTimestamp(17, Timestamp.valueOf(user.getLastActivity()));
-            preparedStatement.setBoolean(18, user.isSocialSpy());
-            preparedStatement.setBoolean(19, user.isVanish());
-            preparedStatement.setBoolean(20, user.isTpToogle());
-            preparedStatement.setBoolean(21, user.isTpsMonitor());
+            preparedStatement.setString(13, user.getLastAccountName());
+            preparedStatement.setString(14, LocationUtil.locationToString(user.getLogoutlocation()));
+            preparedStatement.setString(15, LocationUtil.locationToString(user.getLastlocation()));
+            preparedStatement.setString(16, user.getIpAddres().getHostAddress());
+            preparedStatement.setString(17, LocationUtil.locationMapToString(user.getHomes()));
+            preparedStatement.setTimestamp(18, Timestamp.valueOf(user.getLastActivity()));
+            preparedStatement.setBoolean(19, user.isSocialSpy());
+            preparedStatement.setBoolean(20, user.isVanish());
+            preparedStatement.setBoolean(21, user.isTpToogle());
+            preparedStatement.setBoolean(22, user.isTpsMonitor());
+            preparedStatement.setBoolean(23, user.isGodMode());
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
