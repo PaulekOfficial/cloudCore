@@ -298,6 +298,11 @@ public class Core extends JavaPlugin {
 
 
         }
+
+        if(!config.teleportSafetyWater){
+            LocationUtil.disallowLiquids();
+        }
+
     }
 
     @Override

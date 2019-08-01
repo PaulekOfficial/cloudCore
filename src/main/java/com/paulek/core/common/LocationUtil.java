@@ -13,6 +13,21 @@ import java.util.*;
 
 public class LocationUtil {
 
+    private static List<Material> illicitBlocks = new ArrayList<>();
+
+    static {
+        illicitBlocks.add(Material.LAVA);
+        illicitBlocks.add(Material.LEGACY_STATIONARY_LAVA);
+        illicitBlocks.add(Material.LEGACY_LAVA);
+        illicitBlocks.add(Material.FIRE);
+        illicitBlocks.add(Material.LEGACY_BED_BLOCK);
+    }
+
+    public static void disallowLiquids(){
+        illicitBlocks.add(Material.WATER);
+        illicitBlocks.add(Material.LEGACY_WATER);
+    }
+
     public static Location randomLocation(World world, int maxX, int maxZ){
         Random random = new Random();
 
@@ -62,25 +77,7 @@ public class LocationUtil {
         Block middleBlock = world.getBlockAt((int)Math.round(x), (int)Math.round(y), (int)Math.round(z));
         Block downBlock = world.getBlockAt((int)Math.round(x), (int)Math.round(y) - 1, (int)Math.round(z));
 
-        if(upBlock.getType() == Material.LAVA || upBlock.getType() == Material.LEGACY_LAVA && upBlock.getType() == Material.LEGACY_STATIONARY_LAVA){
-            return true;
-        }
-        if(middleBlock.getType() == Material.LAVA || middleBlock.getType() == Material.LEGACY_LAVA && middleBlock.getType() == Material.LEGACY_STATIONARY_LAVA){
-            return true;
-        }
-        if(downBlock.getType() == Material.LAVA || downBlock.getType() == Material.LEGACY_LAVA && downBlock.getType() == Material.LEGACY_STATIONARY_LAVA){
-            return true;
-        }
-
-
-        if(middleBlock.getType() == Material.FIRE){
-            return true;
-        }
-        if(downBlock.getType() == Material.FIRE){
-            return true;
-        }
-
-        if(downBlock.getType() == Material.LEGACY_BED_BLOCK){
+        if(illicitBlocks.contains(upBlock.getType()) || illicitBlocks.contains(upBlock.getType()) || illicitBlocks.contains(upBlock.getType())){
             return true;
         }
 

@@ -193,6 +193,7 @@ public class Lang {
     public static String DROP_TURBO_BOSS_BARCOLOR = "YELLOW";
     public static String DROP_TURBO_CHAT = "$6Turbodrop $azostal przedluzony o {time} {message}";
     public static String ERROR_DROP_TURBO_BADTIMESYNTAX = "$cZly format czasowy, przyklad poprawnego formatu 1d, 1h, 1m, 1s";
+    public static String ERROR_JOIN_MAXNICKLETTER = "$cTwoj nick moze miec maksymalnie 15 znakow!";
     private static File file;
     private static FileConfiguration c = null;
     private Core core;
