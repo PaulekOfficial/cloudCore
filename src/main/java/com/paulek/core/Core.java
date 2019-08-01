@@ -359,6 +359,9 @@ public class Core extends JavaPlugin {
         if (config.generatorEnabled) {
             pluginManager.registerEvents(new StoneGeneratorListeners(this), this);
         }
+        if(config.godmode) {
+            pluginManager.registerEvents(new GodModeListener(this), this);
+        }
         pluginManager.registerEvents(new UserListeners(this), this);
         pluginManager.registerEvents(new GUIListeners(), this);
     }

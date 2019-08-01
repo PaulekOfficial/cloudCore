@@ -26,7 +26,13 @@ public class UserListeners implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event){
 
         User user = core.getUsersStorage().getUser(event.getEntity().getUniqueId());
-        user.setLastlocation(event.getEntity().getLocation());
+
+        if (user != null) {
+
+            user.setLastlocation(event.getEntity().getLocation());
+            user.setDirty(true);
+
+        }
 
     }
 
@@ -49,10 +55,18 @@ public class UserListeners implements Listener {
             event.setQuitMessage(joinMessage.replace("{PLAYER}", event.getPlayer().getDisplayName()));
         }
 
-        if (core.getUsersStorage().getUser(event.getPlayer().getUniqueId()) != null) {
+        User user = core.getUsersStorage().getUser(event.getPlayer().getUniqueId());
 
-            core.getUsersStorage().getUser(event.getPlayer().getUniqueId()).setLogoutlocation(event.getPlayer().getLocation());
-            core.getUsersStorage().getUser(event.getPlayer().getUniqueId()).setLastActivity(LocalDateTime.now());
+        if (user != null) {
+
+            user.setLogoutlocation(event.getPlayer().getLocation());
+            user.setLastActivity(LocalDateTime.now());
+
+            if(core.getConfiguration().removeGodmodeOnDisconect && user.isGodMode()){
+                user.setGodMode(false);
+            }
+
+            user.setDirty(true);
 
         }
 
@@ -61,8 +75,11 @@ public class UserListeners implements Listener {
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
 
-        if (core.getUsersStorage().getUser(event.getPlayer().getUniqueId()) != null) {
-            core.getUsersStorage().getUser(event.getPlayer().getUniqueId()).setLastlocation(event.getFrom());
+        User user = core.getUsersStorage().getUser(event.getPlayer().getUniqueId());
+
+        if (user != null) {
+            user.setLastlocation(event.getFrom());
+            user.setDirty(true);
         }
 
     }

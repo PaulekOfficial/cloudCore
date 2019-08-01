@@ -1,39 +1,85 @@
 package com.paulek.core.basic.listeners;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.User;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.*;
+
+import java.util.Objects;
 
 public class GodModeListener implements Listener {
 
     private Core core;
 
+    public GodModeListener(Core core){
+        this.core = Objects.requireNonNull(core, "Core");
+    }
+
     @EventHandler
     public void onEntityDamageEvent(EntityDamageEvent event){
-        if(event.getEntity() instanceof Player){
-            User user = core.getUsersStorage().getUser(event.getEntity().getUniqueId());
-
-            if(user.isGodMode()){
-                event.setCancelled(true);
-            }
-
-        }
+        isGodMode(event.getEntity());
     }
 
     @EventHandler
     public void onEntityDamageByBlockEvent(EntityDamageByBlockEvent event){
-        if(event.getEntity() instanceof Player){
-            User user = core.getUsersStorage().getUser(event.getEntity().getUniqueId());
+        isGodMode(event.getEntity());
+    }
 
-            if(user.isGodMode()){
-                event.setCancelled(true);
+    @EventHandler
+    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event){
+        isGodMode(event.getEntity());
+    }
+
+    @EventHandler
+    public void onPotionSplashEvent(PotionSplashEvent event){
+        for(LivingEntity livingEntity : event.getAffectedEntities()){
+            if(isGodMode(livingEntity)){
+                event.setIntensity(livingEntity, 0D);
             }
-
         }
+    }
+
+    @EventHandler
+    public void onEntityRegainHealthEvent(EntityRegainHealthEvent event){
+        if(event.getRegainReason() == EntityRegainHealthEvent.RegainReason.SATIATED){
+            event.setCancelled(isGodMode(event.getEntity()));
+        }
+    }
+
+    @EventHandler
+    public void onFoodLevelChangeEvent(FoodLevelChangeEvent event){
+        event.setCancelled(isGodMode(event.getEntity()));
+    }
+
+    @EventHandler
+    public void onEntityCombustEvent(EntityCombustEvent event){
+        event.setCancelled(isGodMode(event.getEntity()));
+    }
+
+    @EventHandler
+    public void onEntityCombustByEntityEvent(EntityCombustByEntityEvent event){
+        event.setCancelled(isGodMode(event.getEntity()));
+    }
+
+    private boolean isGodMode(Entity entity){
+
+        if(core.getConfiguration().disabledWorldsForGodmode.contains(entity.getWorld().getName())){
+            return false;
+        }
+
+        if(entity instanceof Player && core.getUsersStorage().getUser(entity.getUniqueId()).isGodMode()){
+            Player player = (Player) entity;
+            player.setFireTicks(0);
+            player.setRemainingAir(player.getRemainingAir());
+            player.setHealth(20);
+            player.setFoodLevel(20);
+            player.setSaturation(10);
+            return true;
+        }
+        return false;
     }
 
 }
