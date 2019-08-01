@@ -1,9 +1,7 @@
 package com.paulek.core.basic.data.databaseStorage;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.data.Storage;
 import com.paulek.core.basic.database.Database;
-import com.paulek.core.common.io.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

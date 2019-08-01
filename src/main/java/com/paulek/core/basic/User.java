@@ -17,18 +17,19 @@ public class User {
     private Location logoutlocation;
     private Location lastlocation;
     private InetAddress ipAddres;
-    private Map<String, Location> homes = new HashMap<>();
+    private Map<String, Location> homes;
     private LocalDateTime lastActivity;
     private boolean socialSpy;
     private boolean vanish;
     private boolean tpToogle;
     private boolean tpsMonitor;
+    private boolean godMode;
 
     private Core core;
 
     private boolean dirty = true;
 
-    public User(UUID uuid, String lastAccountName, Location logoutlocation, Location lastlocation, InetAddress ipAddres, Map<String, Location> homes, LocalDateTime lastActivity, boolean socialSpy, boolean vanish, boolean tpToogle, boolean tpsMonitor, Core core) {
+    public User(UUID uuid, String lastAccountName, Location logoutlocation, Location lastlocation, InetAddress ipAddres, Map<String, Location> homes, LocalDateTime lastActivity, boolean socialSpy, boolean vanish, boolean tpToogle, boolean tpsMonitor, boolean godMode, Core core) {
         this.uuid = uuid;
         this.lastAccountName = lastAccountName;
         this.logoutlocation = logoutlocation;
@@ -40,6 +41,7 @@ public class User {
         this.vanish = vanish;
         this.tpToogle = tpToogle;
         this.tpsMonitor = tpsMonitor;
+        this.godMode = godMode;
         this.core = Objects.requireNonNull(core, "Core");
     }
 
@@ -114,6 +116,14 @@ public class User {
 
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
+    }
+
+    public boolean isGodMode() {
+        return godMode;
+    }
+
+    public void setGodMode(boolean godMode) {
+        this.godMode = godMode;
     }
 
     public Map<String, Location> getHomes() {

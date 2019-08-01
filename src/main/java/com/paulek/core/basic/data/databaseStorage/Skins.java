@@ -8,11 +8,9 @@ import com.paulek.core.common.MojangApiUtil;
 import com.paulek.core.common.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class Skins extends Storage {

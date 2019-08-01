@@ -1,13 +1,9 @@
 package com.paulek.core.basic.listeners;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.Skin;
 import com.paulek.core.basic.User;
 import com.paulek.core.common.ColorUtil;
-import com.paulek.core.common.MojangApiUtil;
-import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -17,8 +13,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
 
 public class UserListeners implements Listener {
 

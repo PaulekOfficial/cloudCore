@@ -2,7 +2,6 @@ package com.paulek.core.basic.drop;
 
 import com.paulek.core.common.DropUtil;
 import com.paulek.core.common.ItemUtil;
-import com.paulek.core.common.io.Config;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;

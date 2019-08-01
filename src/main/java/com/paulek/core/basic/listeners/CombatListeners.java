@@ -6,7 +6,6 @@ import com.paulek.core.basic.data.localStorage.CombatStorage;
 import com.paulek.core.basic.event.PlayerCombatStartEvent;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.ReflectionUtils;
-import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.*;
 import org.bukkit.entity.*;

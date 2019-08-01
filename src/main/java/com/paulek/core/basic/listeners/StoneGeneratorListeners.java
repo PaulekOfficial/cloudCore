@@ -5,7 +5,6 @@ import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.ParticlesUtil;
 import com.paulek.core.common.ReflectionUtils;
 import com.paulek.core.common.XMaterial;
-import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.*;
 import org.bukkit.block.Block;

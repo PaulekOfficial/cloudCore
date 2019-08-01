@@ -5,7 +5,6 @@ import com.paulek.core.basic.Skin;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.MojangApiUtil;
-import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

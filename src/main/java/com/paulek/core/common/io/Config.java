@@ -1,14 +1,13 @@
 package com.paulek.core.common.io;
 
 import com.google.common.collect.ImmutableMap;
-import com.paulek.core.Core;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.diorite.cfg.annotations.*;
 import org.diorite.cfg.annotations.defaults.CfgDelegateDefault;
-import org.diorite.cfg.annotations.defaults.CfgStringArrayDefault;
 
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @CfgClass(name = "Config")
 @CfgDelegateDefault("{new}")

@@ -1,12 +1,5 @@
 package com.paulek.core.commands.cmds.admin;
 
-import com.paulek.core.Core;
-import com.paulek.core.commands.Command;
-import com.paulek.core.common.ColorUtil;
-import com.paulek.core.common.io.Config;
-import com.paulek.core.common.io.Lang;
-import org.bukkit.command.CommandSender;
-
 //public class WhitelistCMD extends Command {
 //
 //    public WhitelistCMD(Core core) {

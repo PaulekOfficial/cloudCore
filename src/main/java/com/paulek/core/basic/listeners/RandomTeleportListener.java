@@ -6,7 +6,6 @@ import com.paulek.core.common.ActionBarUtil;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
 import com.paulek.core.common.XMaterial;
-import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

@@ -5,7 +5,6 @@ import com.paulek.core.basic.drop.DropMask;
 import com.paulek.core.basic.drop.StoneDrop;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.DropUtil;
-import com.paulek.core.common.io.Config;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
