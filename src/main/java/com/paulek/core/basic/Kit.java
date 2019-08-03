@@ -1,93 +1,100 @@
 package com.paulek.core.basic;
 
+import com.paulek.core.basic.drop.StoneDrop;
+import com.paulek.core.common.ItemUtil;
+import com.paulek.core.common.TimeUtils;
+import org.bukkit.Material;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Kit {
+@SerializableAs("Kit")
+public class Kit implements ConfigurationSerializable {
 
-    private ItemStack guiItem;
     private String name;
-    private String permission;
-    private boolean enabled;
+    private String message;
     private boolean showInGui;
-    private int cooldown;
-    private List<ItemStack> items;
-    private String description;
+    private Material material;
+    private ItemStack[] content;
+    private String permission;
+    private String timePeriod;
 
-
-    public Kit(String name, String permission, ItemStack guiItem, List<ItemStack> items, boolean enabled, boolean showInGui, int cooldown, String description) {
+    public Kit(String name, String message, boolean showInGui, Material material, ItemStack[] content, String permission, String timePeriod) {
         this.name = name;
-        this.permission = permission;
-        this.guiItem = guiItem;
-        this.items = items;
-        this.enabled = enabled;
+        this.message = message;
         this.showInGui = showInGui;
-        this.cooldown = cooldown;
-        this.description = description;
+        this.material = material;
+        this.content = content;
+        this.permission = permission;
+        this.timePeriod = timePeriod;
     }
 
-    public ItemStack getGuiItem() {
-        return guiItem;
+    public static Kit deserialize(Map<String, Object> map) {
+
+        String name = (String) map.get("name");
+        String message = (String) map.get("message");
+        boolean showInGui = (boolean) map.get("show-in-gui");
+        Material material = Material.valueOf((String) map.get("material"));
+        ItemStack[] content = ItemUtil.deserializeItemStackList((String[]) ((List<String>) map.get("items")).toArray());
+        String permission = (String) map.get("permission");
+        String timePeriod = (String) map.get("time-period");
+
+        return new Kit(name, message, showInGui, material, content, permission, timePeriod);
     }
 
-    public void setGuiItem(ItemStack guiItem) {
-        this.guiItem = guiItem;
+    //TODO serialize kit
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> map = new LinkedHashMap<>();
+
+        map.put("name", name);
+        map.put("message", message);
+        map.put("show-in-gui", showInGui);
+        map.put("material", material.name().toUpperCase());
+        map.put("items", null);
+        map.put("permission", permission);
+        map.put("time-period", timePeriod);
+
+        return map;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public boolean canAccess(Player player){
+        return player.hasPermission(permission);
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPermission() {
-        return permission;
-    }
-
-    public void setPermission(String permission) {
-        this.permission = permission;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public String getMessage() {
+        return message;
     }
 
     public boolean isShowInGui() {
         return showInGui;
     }
 
-    public void setShowInGui(boolean showInGui) {
-        this.showInGui = showInGui;
+    public Material getMaterial() {
+        return material;
     }
 
-    public int getCooldown() {
-        return cooldown;
+    public ItemStack[] getContent() {
+        return content;
     }
 
-    public void setCooldown(int cooldown) {
-        this.cooldown = cooldown;
+    public LocalDateTime getRenewTime(){
+        return LocalDateTime.now().plusSeconds(TimeUtils.periodStringToLong(timePeriod));
     }
 
-    public List<ItemStack> getItems() {
-        return items;
-    }
-
-    public void setItems(List<ItemStack> items) {
-        this.items = items;
+    public String getTimePeriod() {
+        return timePeriod;
     }
 }

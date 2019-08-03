@@ -1,10 +1,12 @@
 kits:
-  vip:
-    menu-name: "$aKit vip"
-    gui-item: DIAMOND_SWORD
-    permission: "kit.vip"
-    cooldown: 1000000
+  - ==: Kit
+    name: "Tools"
+    message: "$aOtrzymales zestaw tools!"
     show-in-gui: true
-    description: "A simple kit"
-    content:
-      - DIAMOND_CHESTPLATE 1 name:$aKit_vip lore:$cNajlepszy_kit_na_swiecie~$cA_tu_druga_linijka fire_protection:4 durability:10
+    material: STONE_PICKAXE
+    items:
+      - DIAMOND_PICKAXE 1 lore:$ccloudCore_najlepszy plugin~$aNawet_multiniowe_teksty_sa fire_protection:4 durability:10
+      - POTION 1 potion:6
+      - STONE_PICKAXE 1
+    permission: "core.kit.tools"
+    time-period: 20d

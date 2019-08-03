@@ -5,6 +5,25 @@ import java.time.temporal.ChronoUnit;
 
 public class TimeUtils {
 
+    public static long periodStringToLong(String string){
+
+        if(string.contains("s")){
+
+        } else if(string.contains("m")){
+            return Long.parseLong(string.replace("m", "")) * 60;
+        } else if(string.contains("h")){
+            return Long.parseLong(string.replace("h", "")) * 3600;
+        } else if (string.contains("d")){
+            return Long.parseLong(string.replace("d", "")) * 86400;
+        } else if(string.contains("M")){
+            return Long.parseLong(string.replace("M", "")) * 2592000;
+        } else if(string.contains("y")){
+            return Long.parseLong(string.replace("y", "")) * 31104000;
+        }
+
+        return 0L;
+    }
+
     public static Integer compareLocalDateTimeInSecounds(LocalDateTime fromDate, LocalDateTime toDate){
 
         LocalDateTime tempDate = LocalDateTime.from(fromDate);

@@ -26,9 +26,9 @@ public abstract class Command extends org.bukkit.command.Command {
         this.core = Objects.requireNonNull(core, "Core");
     }
 
-    public abstract boolean execute(final CommandSender sender, final String args[]);
+    public abstract boolean execute(final CommandSender sender, final String[] args);
 
-    public boolean execute(CommandSender sender, String label, String args[]) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if ((this.getPermisions() != null || this.getPermisions().equals("")) && (!sender.hasPermission(permisions))) {
             String error = "$3$lCORE $c-> $cYou dont have permisions ($4{perm}$c) to this!";
             error = error.replace("{perm}", this.getPermisions());
@@ -58,7 +58,4 @@ public abstract class Command extends org.bukkit.command.Command {
         return name;
     }
 
-    public Core getCore() {
-        return core;
-    }
 }

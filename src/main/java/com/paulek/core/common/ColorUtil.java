@@ -12,9 +12,9 @@ public class ColorUtil {
         return ChatColor.translateAlternateColorCodes('$', string);
     }
 
-    public static List<String> fixColors(List<String> string) {
+    public static List<String> fixColors(String... strings) {
         List<String> arrayList = new ArrayList<>();
-        for (String line : string) {
+        for (String line : strings) {
             arrayList.add(ChatColor.translateAlternateColorCodes(Config.COLOR_MARK.toCharArray()[0], line));
         }
         return arrayList;
