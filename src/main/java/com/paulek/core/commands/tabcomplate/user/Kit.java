@@ -19,7 +19,7 @@ public class Kit extends TabCompleter {
 
         for (String kit : getCore().getKits().getKits().keySet()) {
 
-            if (sender.hasPermission(getCore().getKits().getKits().get(kit).getPermission())) {
+            if (getCore().getKits().getKits().get(kit).canAccess(sender)) {
                 kits.add(kit);
             }
 

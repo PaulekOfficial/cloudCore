@@ -1,6 +1,7 @@
 package com.paulek.core;
 
 import com.paulek.core.basic.CombatManager;
+import com.paulek.core.basic.Kit;
 import com.paulek.core.basic.User;
 import com.paulek.core.basic.data.StorageManager;
 import com.paulek.core.basic.data.databaseStorage.*;
@@ -73,6 +74,7 @@ public class Core extends JavaPlugin {
 
     static {
         ConfigurationSerialization.registerClass(StoneDrop.class, "StoneDrop");
+        ConfigurationSerialization.registerClass(Kit.class,  "Kit");
     }
 
     @Override
@@ -100,6 +102,7 @@ public class Core extends JavaPlugin {
 
         config = ConfigUtil.loadConfig(configFile, Config.class);
         kits = new Kits(this);
+        kits.init();
         lang = new Lang(this);
 
         if (!config.enabled || !plugin.isEnabled()) {
@@ -275,7 +278,7 @@ public class Core extends JavaPlugin {
             ItemStack item = new ItemStack(Material.matchMaterial(config.generatorBlock));
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(ColorUtil.fixColor(config.genertorName));
-            meta.setLore(ColorUtil.fixColors(config.generatorLore));
+            meta.setLore(ColorUtil.fixColors((String[]) config.generatorLore.toArray()));
             item.setItemMeta(meta);
 
             ShapedRecipe stoneGenerator = new ShapedRecipe(item)

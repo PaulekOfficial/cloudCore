@@ -8,5 +8,6 @@ kits:
       - DIAMOND_PICKAXE 1 lore:$ccloudCore_najlepszy plugin~$aNawet_multiniowe_teksty_sa fire_protection:4 durability:10
       - POTION 1 potion:6
       - STONE_PICKAXE 1
+    description: "$cPodstawowy kit dla gracza!"
     permission: "core.kit.tools"
     time-period: 20d

@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="clCore:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/clCore_jar</output-path>
+    <root id="archive" name="clCore.jar">
+      <element id="module-output" name="clCore" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/diorite/diorite-config-minimal/1.2/diorite-config-minimal-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-simple/1.7.5/slf4j-simple-1.7.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/zaxxer/HikariCP/3.3.1/HikariCP-3.3.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/xerial/sqlite-jdbc/3.8.6/sqlite-jdbc-3.8.6.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

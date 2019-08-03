@@ -58,4 +58,8 @@ public abstract class Command extends org.bukkit.command.Command {
         return name;
     }
 
+    public Core getCore(){
+        return core;
+    }
+
 }

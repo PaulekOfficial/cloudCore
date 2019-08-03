@@ -1,9 +1,11 @@
 package com.paulek.core.basic;
 
 import com.paulek.core.basic.drop.StoneDrop;
+import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.ItemUtil;
 import com.paulek.core.common.TimeUtils;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -24,15 +26,17 @@ public class Kit implements ConfigurationSerializable {
     private boolean showInGui;
     private Material material;
     private ItemStack[] content;
+    private String description;
     private String permission;
     private String timePeriod;
 
-    public Kit(String name, String message, boolean showInGui, Material material, ItemStack[] content, String permission, String timePeriod) {
+    public Kit(String name, String message, boolean showInGui, Material material, ItemStack[] content, String description, String permission, String timePeriod) {
         this.name = name;
         this.message = message;
         this.showInGui = showInGui;
         this.material = material;
         this.content = content;
+        this.description = description;
         this.permission = permission;
         this.timePeriod = timePeriod;
     }
@@ -44,10 +48,11 @@ public class Kit implements ConfigurationSerializable {
         boolean showInGui = (boolean) map.get("show-in-gui");
         Material material = Material.valueOf((String) map.get("material"));
         ItemStack[] content = ItemUtil.deserializeItemStackList((String[]) ((List<String>) map.get("items")).toArray());
+        String description = ColorUtil.fixColor((String) map.get("description"));
         String permission = (String) map.get("permission");
         String timePeriod = (String) map.get("time-period");
 
-        return new Kit(name, message, showInGui, material, content, permission, timePeriod);
+        return new Kit(name, message, showInGui, material, content, permission, description, timePeriod);
     }
 
     //TODO serialize kit
@@ -60,6 +65,7 @@ public class Kit implements ConfigurationSerializable {
         map.put("show-in-gui", showInGui);
         map.put("material", material.name().toUpperCase());
         map.put("items", null);
+        map.put("description", description);
         map.put("permission", permission);
         map.put("time-period", timePeriod);
 
@@ -68,6 +74,10 @@ public class Kit implements ConfigurationSerializable {
 
     public boolean canAccess(Player player){
         return player.hasPermission(permission);
+    }
+
+    public boolean canAccess(CommandSender sender){
+        return sender.hasPermission(permission);
     }
 
     public String getName() {
@@ -94,7 +104,7 @@ public class Kit implements ConfigurationSerializable {
         return LocalDateTime.now().plusSeconds(TimeUtils.periodStringToLong(timePeriod));
     }
 
-    public String getTimePeriod() {
-        return timePeriod;
+    public String getDescription() {
+        return description;
     }
 }
