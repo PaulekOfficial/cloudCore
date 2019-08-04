@@ -1,13 +1,11 @@
 package com.paulek.core.common;
 
-import com.paulek.core.Core;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
@@ -45,13 +43,13 @@ public class ItemUtil {
         List<ItemStack> itemStacks = new ArrayList<>();
 
         for(String rawItemStack : strings){
-            itemStacks.add(deserializeItemStack(rawItemStack, false));
+            itemStacks.add(deserializeItemStack(rawItemStack));
         }
 
-        return (ItemStack[]) itemStacks.toArray();
+        return itemStacks.toArray(new ItemStack[0]);
     }
 
-    public static ItemStack deserializeItemStack(String itemStackString, boolean unSafeEnchantment){
+    public static ItemStack deserializeItemStack(String itemStackString){
 
         String[] strings = itemStackString.split(" ");
 
@@ -72,12 +70,19 @@ public class ItemUtil {
             amount = Integer.parseInt(strings[1]);
         }
 
-        ItemStack constructionItemStack = new ItemStack(material, amount, (short) 0, (byte) byteValue);
+        ItemStack constructionItemStack = new ItemStack(material, amount);
+        if(byteValue != 0) {
+            constructionItemStack = new ItemStack(material, amount, (short) 0, (byte) byteValue);
+        }
 
         int i = 2;
 
         while (i < strings.length){
             i++;
+
+            if(i >= strings.length){
+                break;
+            }
 
             String string = strings[i];
 
@@ -100,10 +105,7 @@ public class ItemUtil {
                 String[] rawEnchantmest = string.split(":");
                 Enchantment enchantment = EnchantUtils.getEnchantment(rawEnchantmest[0]);
                 if(enchantment != null){
-                    if(unSafeEnchantment){
-                        constructionItemStack.addUnsafeEnchantment(enchantment, Integer.parseInt(rawEnchantmest[1]));
-                    }
-                    constructionItemStack.addEnchantment(enchantment, Integer.parseInt(rawEnchantmest[1]));
+                    constructionItemStack.addUnsafeEnchantment(enchantment, Integer.parseInt(rawEnchantmest[1]));
                 }
             }
 

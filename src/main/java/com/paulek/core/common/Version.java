@@ -24,14 +24,16 @@ public class Version {
         return version;
     }
 
-    public void chceckVersion() {
+    public boolean isVersionOk() {
         if (version.contains("v1_14") || version.contains("v1_8")) {
             core.getConsoleLog().info("Hello, your Version is ok! runing: " + version);
+            return true;
         } else {
             core.getConsoleLog().log("Error! Plugin writen to 1.14 Version! Pleace change Version!", Level.WARNING);
             core.getConsoleLog().log("ShutingDown clCore!", Level.INFO);
             plugin.getPluginLoader().disablePlugin(plugin);
         }
+        return false;
     }
 
 }

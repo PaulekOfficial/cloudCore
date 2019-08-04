@@ -1,13 +1,11 @@
 package com.paulek.core.basic;
 
-import com.paulek.core.basic.drop.StoneDrop;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.ItemUtil;
 import com.paulek.core.common.TimeUtils;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -43,11 +41,13 @@ public class Kit implements ConfigurationSerializable {
 
     public static Kit deserialize(Map<String, Object> map) {
 
+        Arrays.asList(((List<String>) map.get("items")));
+
         String name = (String) map.get("name");
         String message = (String) map.get("message");
         boolean showInGui = (boolean) map.get("show-in-gui");
         Material material = Material.valueOf((String) map.get("material"));
-        ItemStack[] content = ItemUtil.deserializeItemStackList((String[]) ((List<String>) map.get("items")).toArray());
+        ItemStack[] content = ItemUtil.deserializeItemStackList(((List<String>) map.get("items")).toArray(new String[0]));
         String description = ColorUtil.fixColor((String) map.get("description"));
         String permission = (String) map.get("permission");
         String timePeriod = (String) map.get("time-period");

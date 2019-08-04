@@ -18,7 +18,6 @@ public class SkinCMD extends Command {
         super("skin", "set yours skin", "/skin {set, clear} {nick}", "core.cmd.skin", new String[]{}, core);
     }
 
-    //TODO to fix
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 

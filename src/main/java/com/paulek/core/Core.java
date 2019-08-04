@@ -77,6 +77,7 @@ public class Core extends JavaPlugin {
         ConfigurationSerialization.registerClass(Kit.class,  "Kit");
     }
 
+    @SuppressWarnings("Deprecated")
     @Override
     public void onEnable() {
         plugin = this;
@@ -86,7 +87,9 @@ public class Core extends JavaPlugin {
         consoleLog = new ConsoleLog(this);
 
         version = new Version(this);
-        version.chceckVersion();
+        if(!version.isVersionOk()){
+            return;
+        }
 
         onlineMode = Bukkit.getOnlineMode();
 
@@ -278,7 +281,7 @@ public class Core extends JavaPlugin {
             ItemStack item = new ItemStack(Material.matchMaterial(config.generatorBlock));
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(ColorUtil.fixColor(config.genertorName));
-            meta.setLore(ColorUtil.fixColors((String[]) config.generatorLore.toArray()));
+            meta.setLore(ColorUtil.fixColors(config.generatorLore.toArray(new String[0])));
             item.setItemMeta(meta);
 
             ShapedRecipe stoneGenerator = new ShapedRecipe(item)

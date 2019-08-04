@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -159,7 +158,7 @@ public class KitCMD extends Command {
 
                         }
 
-                        itemMeta.setLore(ColorUtil.fixColors((String[]) lore.toArray()));
+                        itemMeta.setLore(ColorUtil.fixColors(lore.toArray(new String[0])));
                         itemStack.setItemMeta(itemMeta);
 
                         final String finalTimeLeft = timeLeft;

@@ -2,20 +2,11 @@ package com.paulek.core.common.io;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.Kit;
-import com.paulek.core.common.ColorUtil;
-import com.paulek.core.common.EnchantUtils;
-import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.*;
 
-
-//TODO Rewrite tej calej funkcji, chujowe to
 public class Kits {
 
     private Map<String, Kit> kits;
