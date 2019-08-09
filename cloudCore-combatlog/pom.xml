@@ -11,5 +11,17 @@
 
     <artifactId>cloudcore-combatlog</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.paulek.core</groupId>
+            <artifactId>cloudcore-core</artifactId>
+            <version>1.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.paulek.core</groupId>
+            <artifactId>cloudcoreplugin</artifactId>
+            <version>1.2-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

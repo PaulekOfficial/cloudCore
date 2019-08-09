@@ -4,7 +4,7 @@ import com.paulek.core.Core;
 import com.paulek.core.basic.User;
 import com.paulek.core.basic.data.Storage;
 import com.paulek.core.basic.database.Database;
-import common.LocationUtil;
+import com.paulek.core.common.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

@@ -1,8 +1,8 @@
 package com.paulek.core.basic;
 
-import common.ColorUtil;
-import common.ItemUtil;
-import common.TimeUtils;
+import com.paulek.core.common.ColorUtil;
+import com.paulek.core.common.ItemUtil;
+import com.paulek.core.common.TimeUtils;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;

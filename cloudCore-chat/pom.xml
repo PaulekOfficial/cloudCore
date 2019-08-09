@@ -11,5 +11,13 @@
 
     <artifactId>cloudcore-chat</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.paulek.core</groupId>
+            <artifactId>cloudcore-core</artifactId>
+            <version>1.2-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 
 </project>

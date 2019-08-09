@@ -2,8 +2,8 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
-import common.ColorUtil;
-import common.io.Lang;
+import com.paulek.core.common.ColorUtil;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;

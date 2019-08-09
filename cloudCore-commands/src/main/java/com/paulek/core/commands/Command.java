@@ -1,8 +1,8 @@
 package com.paulek.core.commands;
 
 import com.paulek.core.Core;
-import common.ColorUtil;
-import common.io.Lang;
+import com.paulek.core.common.ColorUtil;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;

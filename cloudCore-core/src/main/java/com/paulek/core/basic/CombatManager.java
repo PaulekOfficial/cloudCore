@@ -2,9 +2,9 @@ package com.paulek.core.basic;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.event.PlayerCombatEndEvent;
-import common.ActionBarUtil;
-import common.ColorUtil;
-import common.io.Lang;
+import com.paulek.core.common.ActionBarUtil;
+import com.paulek.core.common.ColorUtil;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

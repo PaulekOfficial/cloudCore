@@ -22,6 +22,11 @@
             <artifactId>cloudcore-commands</artifactId>
             <version>1.2-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.paulek.core</groupId>
+            <artifactId>cloudcore-combatlog</artifactId>
+            <version>1.2-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

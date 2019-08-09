@@ -3,9 +3,9 @@ package com.paulek.core.commands.cmds.user;
 import com.paulek.core.Core;
 import com.paulek.core.basic.User;
 import com.paulek.core.commands.Command;
-import common.ColorUtil;
-import common.TabCompleterUtils;
-import common.io.Lang;
+import com.paulek.core.common.ColorUtil;
+import com.paulek.core.common.TabCompleterUtils;
+import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

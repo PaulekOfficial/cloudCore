@@ -17,6 +17,11 @@
             <artifactId>cloudcoreplugin</artifactId>
             <version>1.2-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.paulek.core</groupId>
+            <artifactId>cloudcore-skins</artifactId>
+            <version>1.2-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 
