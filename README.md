@@ -1,7 +1,4 @@
-### Build Status ![Build Status](https://api.travis-ci.org/PaulekOfficial/cloudCore.svg?branch=master)
-
-
-cloudCore
+cloudCore ![Build Status](https://travis-ci.org/PaulekOfficial/cloudCore.svg?branch=master)
 ---------
 CloudCore jest to plugin słynnego w Polsce formatu "core", jest to coś na wzór [EssentialsX](https://github.com/EssentialsX/Essentials), ale z założenia ma być wydajniejsze etc. Owy plugin zawiera wbudowane zarządzanie czatem, combatloga, losowe teleportacje, system kitów, możliwość załorzenia domów i wiele innych. Ze względu na rozwijanie pluginu nie zalecane jest instalowanie go na swoim serwerze - Pisząc ten plugin uczę się nowych rozwiązań i polepszam swoje skilsy w "programowaniu" ~ Paulek. Aktualnie prowadzone są prace nad poprawą jakości kodu, który nie oszukujmy się nie jest za dobry.
 
