@@ -5,7 +5,17 @@
     <groupId>com.paulek.core</groupId>
     <artifactId>cloudCore</artifactId>
     <version>1.2-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <modules>
+        <module>cloudCore-core</module>
+        <module>cloudCorePlugin</module>
+        <module>cloudCore-commands</module>
+        <module>cloudCore-chat</module>
+        <module>cloudCore-combatlog</module>
+        <module>cloudCore-stonegenerator</module>
+        <module>cloudCore-skins</module>
+        <module>cloudCore-randomteleport</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
