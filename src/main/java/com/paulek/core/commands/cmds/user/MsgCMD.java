@@ -8,6 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class MsgCMD extends Command {
@@ -51,6 +53,20 @@ public class MsgCMD extends Command {
             sender.sendMessage(getUsage());
         }
         return false;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+
+        if(args.length == 1){
+            List<String> playerList = new ArrayList<>();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                playerList.add(player.getDisplayName());
+            }
+            return playerList;
+        }
+
+        return new ArrayList<>();
     }
 
 }

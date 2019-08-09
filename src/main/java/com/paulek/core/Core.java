@@ -82,8 +82,6 @@ public class Core extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
-
-
         consoleLog = new ConsoleLog(this);
 
         version = new Version(this);

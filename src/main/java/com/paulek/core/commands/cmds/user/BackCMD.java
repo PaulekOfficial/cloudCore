@@ -3,6 +3,7 @@ package com.paulek.core.commands.cmds.user;
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
+import com.paulek.core.common.TabCompleterUtils;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,7 +11,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class BackCMD extends Command {
@@ -69,5 +72,10 @@ public class BackCMD extends Command {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return new ArrayList<>();
     }
 }

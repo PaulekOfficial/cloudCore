@@ -205,6 +205,31 @@ public class KitCMD extends Command {
         return false;
     }
 
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        if(args.length == 1) {
+            List<String> kits = new ArrayList<>();
+            for (String kit : getCore().getKits().getKits().keySet()) {
+
+                if (getCore().getKits().getKits().get(kit).canAccess(sender)) {
+                    kits.add(kit);
+                }
+
+            }
+            return kits;
+        }
+
+        if(args.length == 2){
+            List<String> playerList = new ArrayList<>();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                playerList.add(player.getDisplayName());
+            }
+            return playerList;
+        }
+
+        return new ArrayList<>();
+    }
+
     private GUIWindow getKitWindow(Kit kit, Player player) {
 
         GUIWindow gui = new GUIWindow(ColorUtil.fixColor(kit.getName()), getVaildRows(kit.getContent().length));

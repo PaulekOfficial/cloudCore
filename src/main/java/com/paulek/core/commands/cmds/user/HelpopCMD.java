@@ -8,6 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HelpopCMD extends Command {
 
     public HelpopCMD(Core core) {
@@ -32,4 +35,10 @@ public class HelpopCMD extends Command {
         sender.sendMessage(ColorUtil.fixColor(Lang.INFO_HELPOP_SENDED));
         return false;
     }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return new ArrayList<>();
+    }
+
 }

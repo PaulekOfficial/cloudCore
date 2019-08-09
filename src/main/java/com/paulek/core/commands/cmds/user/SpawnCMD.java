@@ -11,7 +11,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class SpawnCMD extends Command {
@@ -134,6 +136,28 @@ public class SpawnCMD extends Command {
         sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_DETY));
 
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+
+        if(args.length == 1){
+            if(sender.hasPermission("core.cmd.spawn" + args[0])){
+               return getCore().getSpawnsStorage().getSpawnNames();
+            }
+        }
+
+        if(args.length == 2) {
+            if (sender.hasPermission("core.cmd.spawn.admin")) {
+                List<String> playerList = new ArrayList<>();
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    playerList.add(player.getDisplayName());
+                }
+                return playerList;
+            }
+        }
+
+        return new ArrayList<>();
     }
 
 }

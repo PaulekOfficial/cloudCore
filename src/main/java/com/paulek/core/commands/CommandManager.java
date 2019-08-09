@@ -17,7 +17,7 @@ public class CommandManager {
     private static SimpleCommandMap map;
 
     static {
-        commands = new HashMap<String, Command>();
+        commands = new HashMap<>();
         Field f = null;
         try {
             f = SimplePluginManager.class.getDeclaredField("commandMap");
@@ -33,10 +33,7 @@ public class CommandManager {
         f.setAccessible(false);
     }
 
-    private Core core;
-
     public CommandManager(Core core) {
-        this.core = Objects.requireNonNull(core, "Core");
         menager = (SimplePluginManager) core.getPlugin().getServer().getPluginManager();
     }
 

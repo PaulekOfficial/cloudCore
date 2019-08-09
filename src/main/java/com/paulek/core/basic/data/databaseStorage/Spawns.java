@@ -26,6 +26,10 @@ public class Spawns extends Storage {
         return spawns.get(name);
     }
 
+    public List<String> getSpawnNames(){
+        return Arrays.asList(spawns.keySet().toArray(new String[0]));
+    }
+
     @Override
     public void loadFromDatabase(Database database) {
         try(Connection connection = database.getConnection()){

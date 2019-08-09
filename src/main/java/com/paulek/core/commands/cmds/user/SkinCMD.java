@@ -10,6 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class SkinCMD extends Command {
@@ -125,5 +128,13 @@ public class SkinCMD extends Command {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args){
+        if(args.length == 1){
+            return Arrays.asList("set", "clear");
+        }
+        return new ArrayList<>();
     }
 }
