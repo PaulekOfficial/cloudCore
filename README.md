@@ -1,5 +1,4 @@
-### Build Status 
-[![Build Status](https://api.travis-ci.org/PaulekOfficial/cloudCore.svg?branch=master)
+### Build Status ![Build Status](https://api.travis-ci.org/PaulekOfficial/cloudCore.svg?branch=master)
 
 
 cloudCore
