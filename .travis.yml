@@ -1,0 +1,16 @@
+language: java
+sudo: required
+dist: trusty
+
+before_install:
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
+script:
+  - mvn test -B
+
+jdk:
+  - openjdk8
+  - openjdk12
+
+notifications:
+  email: true

@@ -1,4 +1,4 @@
-name: cloudCore
+name: ${project.name}
 author: PaulekOfficial
 version: ${project.version}
 main: com.paulek.core.Core
