@@ -11,6 +11,10 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class WorldCMD extends Command {
 
     public WorldCMD(Core core) {
@@ -132,4 +136,19 @@ public class WorldCMD extends Command {
         }
         return world;
     }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+
+        if(args.length == 1){
+            List<String> worldNames = new ArrayList<>();
+            for(World world : Bukkit.getWorlds()){
+                worldNames.add(world.getName());
+            }
+            return worldNames;
+        }
+
+        return new ArrayList<>();
+    }
+
 }

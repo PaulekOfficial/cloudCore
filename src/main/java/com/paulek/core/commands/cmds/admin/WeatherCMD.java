@@ -9,6 +9,10 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class WeatherCMD extends Command {
 
     public WeatherCMD(Core core) {
@@ -60,4 +64,18 @@ public class WeatherCMD extends Command {
         }
         return false;
     }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+
+        if(args.length == 1){
+            return Arrays.asList("clear", "rain", "sun");
+        }
+        if(args.length == 2){
+            return Arrays.asList("clear", "rain", "sun");
+        }
+
+        return new ArrayList<>();
+    }
+
 }

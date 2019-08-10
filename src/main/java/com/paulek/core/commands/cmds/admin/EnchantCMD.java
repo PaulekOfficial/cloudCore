@@ -14,6 +14,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class EnchantCMD extends Command {
 
@@ -122,4 +125,19 @@ public class EnchantCMD extends Command {
         }
         return null;
     }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+
+        if(args.length == 1){
+            List<String> enchantmests = new ArrayList<>();
+            for(Enchantment enchantment : Enchantment.values()){
+                enchantmests.add(enchantment.getName().toLowerCase());
+            }
+            return enchantmests;
+        }
+
+        return new ArrayList<>();
+    }
+
 }

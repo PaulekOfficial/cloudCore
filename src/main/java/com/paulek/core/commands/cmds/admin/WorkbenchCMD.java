@@ -7,6 +7,10 @@ import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class WorkbenchCMD extends Command {
 
     public WorkbenchCMD(Core core) {
@@ -29,4 +33,10 @@ public class WorkbenchCMD extends Command {
 
         return false;
     }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return new ArrayList<>();
+    }
+
 }

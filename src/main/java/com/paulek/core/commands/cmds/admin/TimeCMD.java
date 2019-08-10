@@ -9,6 +9,9 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TimeCMD extends Command {
 
     public TimeCMD(Core core) {
@@ -54,4 +57,10 @@ public class TimeCMD extends Command {
         }
         return false;
     }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return new ArrayList<>();
+    }
+
 }

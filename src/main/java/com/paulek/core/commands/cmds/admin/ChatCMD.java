@@ -8,6 +8,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ChatCMD extends Command {
 
     public ChatCMD(Core core) {
@@ -48,4 +52,15 @@ public class ChatCMD extends Command {
         }
         return false;
     }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+
+        if(args.length == 1){
+            return Arrays.asList("clear", "on", "off");
+        }
+
+        return new ArrayList<>();
+    }
+
 }

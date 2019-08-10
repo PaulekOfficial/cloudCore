@@ -10,6 +10,9 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TpCMD extends Command {
 
     public TpCMD(Core core) {
@@ -83,4 +86,26 @@ public class TpCMD extends Command {
         }
         return false;
     }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+
+        if(args.length == 1){
+            List<String> playerList = new ArrayList<>();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                playerList.add(player.getDisplayName());
+            }
+            return playerList;
+        }
+        if(args.length == 2){
+            List<String> playerList = new ArrayList<>();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                playerList.add(player.getDisplayName());
+            }
+            return playerList;
+        }
+
+        return new ArrayList<>();
+    }
+
 }

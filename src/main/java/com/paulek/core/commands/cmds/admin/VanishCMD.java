@@ -2,10 +2,14 @@ package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class VanishCMD extends Command {
@@ -93,5 +97,10 @@ public class VanishCMD extends Command {
 //            return false;
 //        }
         return false;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return new ArrayList<>();
     }
 }

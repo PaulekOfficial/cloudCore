@@ -6,6 +6,10 @@ import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class CoreCMD extends Command {
 
     public CoreCMD(Core core) {
@@ -38,4 +42,15 @@ public class CoreCMD extends Command {
         }
         return false;
     }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+
+        if(args.length == 1){
+            return Arrays.asList("reload", "stop");
+        }
+
+        return new ArrayList<>();
+    }
+
 }

@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PingCMD extends Command {
 
@@ -91,6 +93,20 @@ public class PingCMD extends Command {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+
+        if(args.length == 1){
+            List<String> playerList = new ArrayList<>();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                playerList.add(player.getDisplayName());
+            }
+            return playerList;
+        }
+
+        return new ArrayList<>();
     }
 
 }

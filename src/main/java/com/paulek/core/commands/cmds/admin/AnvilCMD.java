@@ -9,6 +9,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AnvilCMD extends Command {
 
     public AnvilCMD(Core core) {
@@ -30,5 +33,10 @@ public class AnvilCMD extends Command {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return new ArrayList<>();
     }
 }

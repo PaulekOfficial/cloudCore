@@ -8,6 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FlyCMD extends Command {
 
     public FlyCMD(Core core) {
@@ -59,5 +62,19 @@ public class FlyCMD extends Command {
             player.setAllowFlight(true);
             player.sendMessage(ColorUtil.fixColor(Lang.INFO_FLY_SETON));
         }
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+
+        if(args.length == 1){
+            List<String> playerList = new ArrayList<>();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                playerList.add(player.getDisplayName());
+            }
+            return playerList;
+        }
+
+        return new ArrayList<>();
     }
 }

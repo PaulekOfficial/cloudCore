@@ -4,8 +4,12 @@ import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class TurboDropCMD extends Command {
@@ -43,6 +47,11 @@ public class TurboDropCMD extends Command {
         getCore().getDrops().initTurbo(duration, message.toString(), args[0]);
 
         return false;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return new ArrayList<>();
     }
 
     private int getTimeInSecounds(String string){

@@ -4,9 +4,13 @@ import com.paulek.core.Core;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class MsgspyCMD extends Command {
@@ -41,4 +45,15 @@ public class MsgspyCMD extends Command {
         }
         return false;
     }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+
+        if(args.length == 1){
+            return Arrays.asList("on", "off");
+        }
+
+        return new ArrayList<>();
+    }
+
 }

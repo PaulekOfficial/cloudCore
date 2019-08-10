@@ -7,6 +7,9 @@ import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DayCMD extends Command {
 
     public DayCMD(Core core) {
@@ -28,4 +31,10 @@ public class DayCMD extends Command {
         }
         return false;
     }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return new ArrayList<>();
+    }
+
 }

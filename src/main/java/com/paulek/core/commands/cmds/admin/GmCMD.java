@@ -9,6 +9,10 @@ import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class GmCMD extends Command {
 
     public GmCMD(Core core) {
@@ -101,4 +105,15 @@ public class GmCMD extends Command {
         }
         return false;
     }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+
+        if(args.length == 1){
+            return Arrays.asList("0", "1", "2", "3", "s", "c", "a");
+        }
+
+        return new ArrayList<>();
+    }
+
 }

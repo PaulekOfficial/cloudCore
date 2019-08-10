@@ -7,7 +7,11 @@ import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GcCMD extends Command {
 
@@ -53,4 +57,10 @@ public class GcCMD extends Command {
 
         return false;
     }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return new ArrayList<>();
+    }
+
 }
