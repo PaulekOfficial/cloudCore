@@ -53,7 +53,7 @@ public class GodCMD extends Command {
             sender.sendMessage(ColorUtil.fixColor(Lang.INFO_GOD_ENABLEPLAYER.replace("{player}", player.getDisplayName())));
 
             return false;
-        } else if(args.length == 1){
+        } else if (args.length == 0){
 
             if(!(sender instanceof Player)){
                 sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_GOD_MUSTBEPLAYER));
@@ -80,7 +80,7 @@ public class GodCMD extends Command {
             player.getActivePotionEffects().clear();
 
             player.sendMessage(ColorUtil.fixColor(Lang.INFO_GOD_ENABLE));
-
+            return false;
         }
 
         sender.sendMessage(ColorUtil.fixColor(getUsage()));
