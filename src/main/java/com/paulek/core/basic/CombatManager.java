@@ -21,7 +21,7 @@ public class CombatManager implements Runnable {
 
     public CombatManager(Core core) {
         this.core = Objects.requireNonNull(core, "Core");
-        timetoend = core.getConfiguration().generatorDelay;
+        timetoend = core.getConfiguration().combatTime;
         message = ColorUtil.fixColor(Lang.INFO_COMBAT_ACTIONBAR);
         end_combat = ColorUtil.fixColor(Lang.INFO_COMBAT_ENDEDACTION);
     }

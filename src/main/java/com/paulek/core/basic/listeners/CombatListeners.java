@@ -7,6 +7,11 @@ import com.paulek.core.basic.event.PlayerCombatStartEvent;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.ReflectionUtils;
 import com.paulek.core.common.io.Lang;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.flags.Flags;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -256,13 +261,14 @@ public class CombatListeners implements Listener {
             Class regionAssociableClass = Class.forName("com.sk89q.worldguard.protection.association.RegionAssociable");
             Class stateFlagArrayClass = Class.forName("[Lcom.sk89q.worldguard.protection.flags.StateFlag;");
             Class flagsClass = Class.forName("com.sk89q.worldguard.protection.flags.Flags");
+            Class regionManagerClass = Class.forName("com.sk89q.worldguard.protection.managers.RegionManager");
 
-            Method getPlatform = ReflectionUtils.getMethod(regionContainerClass, "getPlatform");
+            Method getPlatform = ReflectionUtils.getMethod(worldGuard.getClass(), "getPlatform");
             Method getRegionContainer = ReflectionUtils.getMethod(worldGuardPlatformClass, "getRegionContainer");
             Method adapt = ReflectionUtils.getMethod(bukkitAdapterClass, "adapt", World.class);
-            Method get = ReflectionUtils.getMethod(regionContainerClass, "get", bukkitAdapterClass);
+            Method get = ReflectionUtils.getMethod(regionContainerClass, "get", Class.forName("com.sk89q.worldedit.world.World"));
             Method at = ReflectionUtils.getMethod(blockVector3Class, "at", Double.TYPE, Double.TYPE, Double.TYPE);
-            Method getApplicableRegions = ReflectionUtils.getMethod(regionContainerClass, "getApplicableRegions", blockVector3Class);
+            Method getApplicableRegions = ReflectionUtils.getMethod(regionManagerClass, "getApplicableRegions", blockVector3Class);
             Method queryState = ReflectionUtils.getMethod(applicableRegionSetClass, "queryState", regionAssociableClass, stateFlagArrayClass);
 
             Object worldGuardPlatform = getPlatform.invoke(worldGuard, null);
@@ -273,11 +279,11 @@ public class CombatListeners implements Listener {
             Object applicableRegionSet = getApplicableRegions.invoke(regionManager, blockVector3);
             Object denyState = Class.forName("com.sk89q.worldguard.protection.flags.StateFlag$State").getEnumConstants()[1];
 
-            Field field = flagsClass.getField("PVP");
+            Field pvpFlagFiled = flagsClass.getDeclaredField("PVP");
 
-            Object pvpFlag = field.get(null);
+            Object pvpFlag = pvpFlagFiled.get(null);
 
-            Object flagsArray = Array.newInstance(stateFlagArrayClass, 1);
+            Object flagsArray = Array.newInstance(Class.forName("com.sk89q.worldguard.protection.flags.StateFlag"), 1);
             Array.set(flagsArray, 0, pvpFlag);
 
             if (queryState.invoke(applicableRegionSet, null, flagsArray) == denyState) {
@@ -285,6 +291,7 @@ public class CombatListeners implements Listener {
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             //Old wg
             try {
                 Object worldGuard = core.getWorldGuard();
