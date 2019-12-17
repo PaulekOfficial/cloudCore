@@ -9,8 +9,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.11</maven.compiler.source>
-        <maven.compiler.target>1.11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <maven.build.timestamp.format>yyyy-MM-dd HH.mm</maven.build.timestamp.format>
         <authors>[PaulekOfficial &lt;pawel.krzysztof.fortuna@outlook.com&gt;]</authors>
         <apiVersion>1.14</apiVersion>
@@ -75,36 +75,21 @@
                             </artifactSet>
                         </configuration>
                     </execution>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
                 </executions>
                 <configuration>
                     <finalName>${project.name} ${project.version}</finalName>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.8.0</version>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.codehaus.plexus</groupId>
-                        <artifactId>plexus-compiler-eclipse</artifactId>
-                        <version>2.8.5</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
-
     </build>
 
     <dependencies>
