@@ -25,6 +25,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -41,6 +42,7 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.logging.Level;
 
 public class Core extends JavaPlugin {
@@ -91,7 +93,7 @@ public class Core extends JavaPlugin {
 
         onlineMode = Bukkit.getOnlineMode();
 
-//        //TODO FOR RESTS
+//        //TODO DROP ENGINE
 //        drops.addDropMask(Material.STONE.name(), new BlockMask(this));
 //        drops.getDrops().add(new StoneDrop("diamond", "$bMasz diaksa heheheheh", true, new ItemStack(Material.DIAMOND, 1), Arrays.asList(new ItemStack(Material.DIAMOND_PICKAXE, 1), new ItemStack(Material.IRON_PICKAXE, 1), new ItemStack(Material.GOLDEN_PICKAXE, 1)), 10, "drop.diamond", 7.91, true, "1-2", "<=30"));
 
@@ -113,6 +115,7 @@ public class Core extends JavaPlugin {
         }
 
         //init database
+        //TODO Move it to another class
         if(config.storageType.toLowerCase().equalsIgnoreCase("mysql")){
 
             String host = config.mysql.get("host");
@@ -204,20 +207,23 @@ public class Core extends JavaPlugin {
         }
 
         //init all storages
+        //TODO Better storage classes design
         combatStorage = new CombatStorage();
         //drops = new Drops(this);
 
         pmsStorage = new Pms();
         if(config.rtpEnabled) rtpsStorage = new Rtps(this);
         if(config.tpaEnabled) tpaStorage = new TpaStorage();
+        //TODO Better user class design
         usersStorage = new Users(this);
         usersStorage.init();
         timestamps = new Timestamps(this);
         timestamps.init();
-        if(config.skinsEnabled) {
-            skinsStorage = new Skins(this);
-            skinsStorage.init();
-        }
+        //TODO New Skins module
+//        if(config.skinsEnabled) {
+//            skinsStorage = new Skins(this);
+//            skinsStorage.init();
+//        }
         spawnsStorage = new Spawns(this);
         spawnsStorage.init();
 
@@ -246,6 +252,7 @@ public class Core extends JavaPlugin {
         }
 
         //WorldGuard initialization
+        //TODO Remove worldguard lower versions than 7.0.0
         if (plugin.getServer().getPluginManager().getPlugin("WorldGuard") != null) {
             try{
                 Class worldGuardClass = Class.forName("com.sk89q.worldguard.WorldGuard");
@@ -262,37 +269,41 @@ public class Core extends JavaPlugin {
             }
             consoleLog.info("WorldGuard detected!");
         } else {
+            //TODO Should disable modules, that use worldguard, not disable this plugin
             consoleLog.log("Warning! WorldGuard not detected! disabling plugin...", Level.WARNING);
             plugin.getPluginLoader().disablePlugin(plugin);
             return;
         }
 
         registerListeners();
+        //TODO Rewrite all commands, (bad designed)
         registerCommands();
 
+        //TODO Fix combat issues on flag no pvp
         if (config.combatlogEnabled) {
             Bukkit.getScheduler().runTaskTimer(this, combatManager, 20, 20);
         }
 
         if (config.generatorEnabled) {
 
-            ItemStack item = new ItemStack(Material.matchMaterial(config.generatorBlock));
+            ItemStack item = new ItemStack(Objects.requireNonNull(Material.matchMaterial(config.generatorBlock)));
             ItemMeta meta = item.getItemMeta();
+            assert meta != null;
             meta.setDisplayName(ColorUtil.fixColor(config.genertorName));
             meta.setLore(ColorUtil.fixColors(config.generatorLore.toArray(new String[0])));
             item.setItemMeta(meta);
 
-            ShapedRecipe stoneGenerator = new ShapedRecipe(item)
+            ShapedRecipe stoneGenerator = new ShapedRecipe(new NamespacedKey(plugin, "stone_generator"), item)
                     .shape("ABC", "DEF", "GHI")
-                    .setIngredient('A', Material.matchMaterial(config.generatorCrafting.get(1)))
-                    .setIngredient('B', Material.matchMaterial(config.generatorCrafting.get(2)))
-                    .setIngredient('C', Material.matchMaterial(config.generatorCrafting.get(3)))
-                    .setIngredient('D', Material.matchMaterial(config.generatorCrafting.get(4)))
-                    .setIngredient('E', Material.matchMaterial(config.generatorCrafting.get(5)))
-                    .setIngredient('F', Material.matchMaterial(config.generatorCrafting.get(6)))
-                    .setIngredient('G', Material.matchMaterial(config.generatorCrafting.get(7)))
-                    .setIngredient('H', Material.matchMaterial(config.generatorCrafting.get(8)))
-                    .setIngredient('I', Material.matchMaterial(config.generatorCrafting.get(9)));
+                    .setIngredient('A', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(1))))
+                    .setIngredient('B', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(2))))
+                    .setIngredient('C', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(3))))
+                    .setIngredient('D', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(4))))
+                    .setIngredient('E', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(5))))
+                    .setIngredient('F', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(6))))
+                    .setIngredient('G', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(7))))
+                    .setIngredient('H', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(8))))
+                    .setIngredient('I', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(9))));
 
             plugin.getServer().addRecipe(stoneGenerator);
 

@@ -26,6 +26,7 @@ public class CommandManager {
         }
         f.setAccessible(true);
         try {
+            //TODO fix this, cause warnings
             map = (SimpleCommandMap) f.get(menager);
         } catch (Exception e) {
             e.printStackTrace();

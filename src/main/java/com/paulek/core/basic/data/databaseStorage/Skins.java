@@ -47,8 +47,7 @@ public class Skins extends Storage {
             LocalDateTime toDate = LocalDateTime.now();
 
             if(TimeUtils.compareLocalDateTimeInSecounds(fromDate, toDate) >= core.getConfiguration().skinsRefreshment){
-                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
-                Skin newSkin = MojangApiUtil.getPremiumSkin(offlinePlayer.getName(), core);
+                Skin newSkin = MojangApiUtil.getPremiumSkin(skin.getName(), core);
                 if(newSkin != null){
                     skin = newSkin;
                 }

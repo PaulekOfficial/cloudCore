@@ -45,9 +45,9 @@ public class Lang {
     public static String INFO_CHAT_SETOFF = "$e$lYou disabled the chat!";
     public static String INFO_CHAT_SETON = "$e$lYou enabled chat!";
     public static String INFO_CHAT_CLEAR = "$e$lChat was clear by {player}!";
-    public static String INFO_GM_CHANGE = "$e$lYour Gamemode has changet to {gamemode}";
-    public static String INFO_GM_CHANGEPLAYER = "$e$lPlayer gamemode changed!";
-    public static String ERROR_GM_NOTONLINE = "$cError! Specificed player must be online!";
+    public static String INFO_GM_CHANGE = "$e$lTwoj tryb gry zostal zmieniony na {gamemode}";
+    public static String INFO_GM_CHANGEPLAYER = "$e$lTryb gry dla gracza zmieniony!";
+    public static String ERROR_GM_NOTONLINE = "$cBlad! Podany gracz musi byc na serwerze";
     public static String INFO_SPAWN_DETY = "$eYou will be teleported to the spawn site in 20 seconds!";
     public static String ERROR_SPAWN_ABORT = "$cTeleport aborted!";
     public static String ERROR_BACK_NOHISTORY = "$cSorry, but you haven't any teleport history!";

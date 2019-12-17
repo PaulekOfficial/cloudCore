@@ -1,7 +1,7 @@
 name: ${project.name}
-author: PaulekOfficial
+author: ${authors}
 version: ${project.version}
 main: com.paulek.core.Core
 depends: [Vault, WorldGuard]
-loadbefore: [Vault, WorldEdit ,WorldGuard]
-api-version: 1.13
+loadbefore: [Vault, WorldEdit, WorldGuard]
+api-version: ${prettyVersion}
