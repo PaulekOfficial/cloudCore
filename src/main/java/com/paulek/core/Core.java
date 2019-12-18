@@ -2,6 +2,7 @@ package com.paulek.core;
 
 import com.paulek.core.basic.CombatManager;
 import com.paulek.core.basic.Kit;
+import com.paulek.core.basic.SQLCommand;
 import com.paulek.core.basic.User;
 import com.paulek.core.basic.data.StorageManager;
 import com.paulek.core.basic.data.databaseStorage.*;
@@ -39,7 +40,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -233,9 +233,8 @@ public class Core extends JavaPlugin {
     }
 
     private void initDatabase(){
-        //TODO Move it to another class
-        //TODO Replace strings with enum (SQLCommands) - all of sql commands
-        if(config.storageType.toLowerCase().equalsIgnoreCase("mysql")){
+        SQLCommand.SQLType sqlType;
+        if(config.storageType.toLowerCase().equalsIgnoreCase("mysql")) {
 
             String host = config.mysql.get("host");
             String port = config.mysql.get("port");
@@ -246,38 +245,8 @@ public class Core extends JavaPlugin {
             MySQL mySQL = new MySQL(host, port, databaseName, user, password);
             mySQL.init();
             database = mySQL;
+            sqlType = SQLCommand.SQLType.MYSQL;
 
-            try(Connection connection = database.getConnection()){
-
-                PreparedStatement usersTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_users` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `lastAccountName` TEXT NOT NULL , `logoutLocation` LONGTEXT NOT NULL , `lastLocation` LONGTEXT NOT NULL , `ipAddres` MEDIUMTEXT NOT NULL , `homes` LONGTEXT NOT NULL , `lastActivity` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `socialSpy` TINYINT NOT NULL , `vanish` TINYINT NOT NULL , `tpToogle` TINYINT NOT NULL , `tpsMonitor` TINYINT NOT NULL , `godMode` TINYINT NOT NULL , PRIMARY KEY (`id`))");
-
-                PreparedStatement timestampsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_timestamps` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `serviceName` TEXT NOT NULL , `className` TEXT NOT NULL , `startTime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `endTime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `expired` TINYINT NOT NULL , PRIMARY KEY (`id`))");
-
-                PreparedStatement skinsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_skins` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `name` LONGTEXT NOT NULL , `value` LONGTEXT NOT NULL , `signature` LONGTEXT NOT NULL , `lastUpdate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`))");
-
-                PreparedStatement spawnsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_spawns` ( `id` INT NOT NULL AUTO_INCREMENT , `name` INT NOT NULL , `world` TEXT NOT NULL ,`x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL , `pitch` FLOAT NOT NULL , `yaw` FLOAT NOT NULL , PRIMARY KEY (`id`))");
-
-                PreparedStatement buttonsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_buttons` ( `id` INT NOT NULL AUTO_INCREMENT , `world` TEXT NOT NULL , `x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL , PRIMARY KEY (`id`))");
-
-                usersTabele.executeUpdate();
-                usersTabele.close();
-
-                timestampsTabele.executeUpdate();
-                usersTabele.close();
-
-                skinsTabele.executeUpdate();
-                skinsTabele.close();
-
-                spawnsTabele.executeUpdate();
-                spawnsTabele.close();
-
-                buttonsTabele.executeUpdate();
-                buttonsTabele.close();
-                updateMethod = "ON DUPLICATE KEY UPDATE";
-
-            } catch (SQLException exception){
-                exception.printStackTrace();
-            }
         } else {
             File databaseFile = new File(plugin.getDataFolder(), "database.db");
 
@@ -291,39 +260,22 @@ public class Core extends JavaPlugin {
             SQLite sqLite = new SQLite(databaseFile);
             sqLite.init();
             database = sqLite;
-
-            try(Connection connection = database.getConnection()){
-
-                PreparedStatement usersTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_users` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `uuid` TEXT NOT NULL , `lastAccountName` TEXT NOT NULL , `logoutLocation` LONGTEXT NOT NULL , `lastLocation` LONGTEXT NOT NULL , `ipAddres` MEDIUMTEXT NOT NULL , `homes` LONGTEXT NOT NULL , `lastActivity` TIMESTAMP NOT NULL , `socialSpy` TINYINT NOT NULL , `vanish` TINYINT NOT NULL , `tpToogle` TINYINT NOT NULL , `tpsMonitor` TINYINT NOT NULL, `godMode` TINYINT NOT NULL)");
-
-                PreparedStatement timestampsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_timestamps` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `uuid` TEXT NOT NULL , `serviceName` TEXT NOT NULL , `className` TEXT NOT NULL , `startTime` TIMESTAMP NOT NULL , `endTime` TIMESTAMP NOT NULL , `expired` TINYINT NOT NULL)");
-
-                PreparedStatement skinsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_skins` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `uuid` TEXT NOT NULL , `name` LONGTEXT NOT NULL , `value` LONGTEXT NOT NULL , `signature` LONGTEXT NOT NULL , `lastUpdate` TIMESTAMP NOT NULL)");
-
-                PreparedStatement spawnsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_spawns` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `name` INT NOT NULL , `world` TEXT NOT NULL ,`x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL , `pitch` FLOAT NOT NULL , `yaw` FLOAT NOT NULL)");
-
-                PreparedStatement buttonsTabele = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cloud_buttons` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT , `world` TEXT NOT NULL , `x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL)");
-
-                usersTabele.executeUpdate();
-                usersTabele.close();
-
-                timestampsTabele.executeUpdate();
-                usersTabele.close();
-
-                skinsTabele.executeUpdate();
-                skinsTabele.close();
-
-                spawnsTabele.executeUpdate();
-                spawnsTabele.close();
-
-                buttonsTabele.executeUpdate();
-                buttonsTabele.close();
-                updateMethod = "ON CONFLICT(id) DO UPDATE SET";
-
-            } catch (SQLException exception){
-                exception.printStackTrace();
-            }
+            sqlType = SQLCommand.SQLType.SQLITE;
         }
+
+        try(Connection connection = database.getConnection()){
+
+            SQLCommand.command(connection, SQLCommand.CREATE_USERS_TABLE, sqlType);
+            SQLCommand.command(connection, SQLCommand.CREATE_TIMESTAMPS_TABLE, sqlType);
+            SQLCommand.command(connection, SQLCommand.CREATE_SKINS_TABLE, sqlType);
+            SQLCommand.command(connection, SQLCommand.CREATE_SPAWNS_TABLE, sqlType);
+            SQLCommand.command(connection, SQLCommand.CREATE_RTPBUTTONS_TABLE, sqlType);
+
+        } catch (SQLException e) {
+            //TODO Handle exception
+            e.printStackTrace();
+        }
+
     }
 
     private void initStorages(){
