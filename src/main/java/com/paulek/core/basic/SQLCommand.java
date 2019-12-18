@@ -38,7 +38,7 @@ public enum SQLCommand {
             if (values.length > 0) {
                 int i = 0;
                 for (Object o : values) {
-                    preparedStatement.setObject(0, o);
+                    preparedStatement.setObject(i, o);
                     i++;
                 }
             }
@@ -65,7 +65,7 @@ public enum SQLCommand {
         if (values.length > 0) {
             int i = 0;
             for (Object o : values) {
-                preparedStatement.setObject(0, o);
+                preparedStatement.setObject(i, o);
                 i++;
             }
         }
