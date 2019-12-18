@@ -1,13 +1,11 @@
 package com.paulek.core.basic.data.databaseStorage;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.Skin;
+import com.paulek.core.basic.skin.Skin;
 import com.paulek.core.basic.data.Storage;
 import com.paulek.core.basic.database.Database;
 import com.paulek.core.common.MojangApiUtil;
 import com.paulek.core.common.TimeUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 
 import java.sql.*;
 import java.time.LocalDateTime;

@@ -3,7 +3,7 @@ package com.paulek.core.common;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.paulek.core.Core;
-import com.paulek.core.basic.Skin;
+import com.paulek.core.basic.skin.Skin;
 
 public class MojangApiUtil {
 

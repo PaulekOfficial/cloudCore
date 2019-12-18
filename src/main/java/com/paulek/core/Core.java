@@ -21,6 +21,7 @@ import com.paulek.core.common.io.Config;
 import com.paulek.core.common.io.Drops;
 import com.paulek.core.common.io.Kits;
 import com.paulek.core.common.io.Lang;
+import com.sk89q.worldguard.WorldGuard;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -252,21 +253,8 @@ public class Core extends JavaPlugin {
         }
 
         //WorldGuard initialization
-        //TODO Remove worldguard lower versions than 7.0.0
         if (plugin.getServer().getPluginManager().getPlugin("WorldGuard") != null) {
-            try{
-                Class worldGuardClass = Class.forName("com.sk89q.worldguard.WorldGuard");
-                Method getInstance = ReflectionUtils.getMethod(worldGuardClass, "getInstance");
-                worldGuard = getInstance.invoke(null, null);
-            } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e){
-                try {
-                    Class worldGuardClass = Class.forName("com.sk89q.worldguard.bukkit.WorldGuardPlugin");
-                    Method getInstance = ReflectionUtils.getMethod(worldGuardClass, "inst");
-                    worldGuard = getInstance.invoke(null, null);
-                } catch (Exception ex){
-                    ex.printStackTrace();
-                }
-            }
+            worldGuard = WorldGuard.getInstance();
             consoleLog.info("WorldGuard detected!");
         } else {
             //TODO Should disable modules, that use worldguard, not disable this plugin

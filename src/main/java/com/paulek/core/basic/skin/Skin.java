@@ -1,4 +1,4 @@
-package com.paulek.core.basic;
+package com.paulek.core.basic.skin;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class Skin {
+public class Skin implements SkinBase {
 
     private String name;
     private String value;
