@@ -38,8 +38,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -75,6 +73,7 @@ public class Core extends JavaPlugin {
 
     private boolean onlineMode;
 
+    //TODO remove this
     static {
         ConfigurationSerialization.registerClass(StoneDrop.class, "StoneDrop");
         ConfigurationSerialization.registerClass(Kit.class,  "Kit");
@@ -85,19 +84,142 @@ public class Core extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
+        //init console
         consoleLog = new ConsoleLog(this);
 
+        //version check
         version = new Version(this);
         if(!version.isVersionOk()){
             return;
         }
 
+        //set online mode statis
         onlineMode = Bukkit.getOnlineMode();
 
-//        //TODO DROP ENGINE
-//        drops.addDropMask(Material.STONE.name(), new BlockMask(this));
-//        drops.getDrops().add(new StoneDrop("diamond", "$bMasz diaksa heheheheh", true, new ItemStack(Material.DIAMOND, 1), Arrays.asList(new ItemStack(Material.DIAMOND_PICKAXE, 1), new ItemStack(Material.IRON_PICKAXE, 1), new ItemStack(Material.GOLDEN_PICKAXE, 1)), 10, "drop.diamond", 7.91, true, "1-2", "<=30"));
+        //init configuration files
+        initConfigs();
 
+        if (!config.enabled || !plugin.isEnabled()) {
+            consoleLog.log("Warning! Core disabled in config!", Level.WARNING);
+            this.getPluginLoader().disablePlugin(this);
+            return;
+        }
+
+        //init database
+        initDatabase();
+
+        //init all storages
+        initStorages();
+
+        //Valut initialization
+        if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
+            RegisteredServiceProvider<Permission> serviceProvider_permission = this.getServer().getServicesManager().getRegistration(Permission.class);
+            if (serviceProvider_permission != null) permission = serviceProvider_permission.getProvider();
+            RegisteredServiceProvider<Chat> serviceProvider_chat = this.getServer().getServicesManager().getRegistration(Chat.class);
+            if (serviceProvider_chat != null) chat = serviceProvider_chat.getProvider();
+            consoleLog.info("Valut detected!");
+        } else {
+            consoleLog.log("Warning! Valut not detected! disabling plugin...", Level.WARNING);
+            this.getPluginLoader().disablePlugin(this);
+            return;
+        }
+
+        //WorldGuard initialization
+        if (plugin.getServer().getPluginManager().getPlugin("WorldGuard") != null) {
+            worldGuard = WorldGuard.getInstance();
+            consoleLog.info("WorldGuard detected!");
+        } else {
+            //TODO Should disable modules, that use worldguard, not disable this plugin
+            consoleLog.log("Warning! WorldGuard not detected! disabling plugin...", Level.WARNING);
+            plugin.getPluginLoader().disablePlugin(plugin);
+            return;
+        }
+
+        //init listeners
+        registerListeners();
+
+        //init commands
+        //TODO Rewrite all commands, (bad designed)
+        registerCommands();
+
+        //init combatlog
+        //TODO Fix combat issues on flag no pvp
+        if (config.combatlogEnabled) {
+            Bukkit.getScheduler().runTaskTimer(this, combatManager, 20, 20);
+        }
+
+        //TODO Rewrite it with full customization
+        registerStoneGenerator();
+
+        if(!config.teleportSafetyWater){
+            LocationUtil.disallowLiquids();
+        }
+
+    }
+
+    @Override
+    public void onDisable() {
+
+        if(usersStorage != null) {
+            if(usersStorage.getUsers() != null) {
+                for (User u : usersStorage.getUsers().values()) {
+                    if (!u.isDirty()) {
+                        usersStorage.saveAllToDatabase(database);
+                    }
+                }
+            }
+        }
+
+        Bukkit.getScheduler().cancelTasks(plugin);
+
+
+    }
+
+    public Plugin getPlugin() {
+        return plugin;
+    }
+
+    public String getVersion() {
+        return version.getVersion();
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public Permission getPermission() {
+        return permission;
+    }
+
+    private void registerStoneGenerator(){
+        if (config.generatorEnabled) {
+
+            ItemStack item = new ItemStack(Objects.requireNonNull(Material.matchMaterial(config.generatorBlock)));
+            ItemMeta meta = item.getItemMeta();
+            assert meta != null;
+            meta.setDisplayName(ColorUtil.fixColor(config.genertorName));
+            meta.setLore(ColorUtil.fixColors(config.generatorLore.toArray(new String[0])));
+            item.setItemMeta(meta);
+
+            ShapedRecipe stoneGenerator = new ShapedRecipe(new NamespacedKey(plugin, "stone_generator"), item)
+                    .shape("ABC", "DEF", "GHI")
+                    .setIngredient('A', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(1))))
+                    .setIngredient('B', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(2))))
+                    .setIngredient('C', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(3))))
+                    .setIngredient('D', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(4))))
+                    .setIngredient('E', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(5))))
+                    .setIngredient('F', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(6))))
+                    .setIngredient('G', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(7))))
+                    .setIngredient('H', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(8))))
+                    .setIngredient('I', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(9))));
+
+            plugin.getServer().addRecipe(stoneGenerator);
+
+
+        }
+    }
+
+    private void initConfigs(){
         if(!this.getDataFolder().exists()){
             this.getDataFolder().mkdir();
         }
@@ -108,15 +230,11 @@ public class Core extends JavaPlugin {
         kits = new Kits(this);
         kits.init();
         lang = new Lang(this);
+    }
 
-        if (!config.enabled || !plugin.isEnabled()) {
-            consoleLog.log("Warning! Core disabled in config!", Level.WARNING);
-            this.getPluginLoader().disablePlugin(this);
-            return;
-        }
-
-        //init database
+    private void initDatabase(){
         //TODO Move it to another class
+        //TODO Replace strings with enum (SQLCommands) - all of sql commands
         if(config.storageType.toLowerCase().equalsIgnoreCase("mysql")){
 
             String host = config.mysql.get("host");
@@ -206,8 +324,9 @@ public class Core extends JavaPlugin {
                 exception.printStackTrace();
             }
         }
+    }
 
-        //init all storages
+    private void initStorages(){
         //TODO Better storage classes design
         combatStorage = new CombatStorage();
         //drops = new Drops(this);
@@ -237,105 +356,6 @@ public class Core extends JavaPlugin {
         storageManager.addManagedStorage(usersStorage);
         storageManager.addManagedStorage(skinsStorage);
         storageManager.init();
-
-
-        //Valut initialization
-        if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
-            RegisteredServiceProvider<Permission> serviceProvider_permission = this.getServer().getServicesManager().getRegistration(Permission.class);
-            if (serviceProvider_permission != null) permission = serviceProvider_permission.getProvider();
-            RegisteredServiceProvider<Chat> serviceProvider_chat = this.getServer().getServicesManager().getRegistration(Chat.class);
-            if (serviceProvider_chat != null) chat = serviceProvider_chat.getProvider();
-            consoleLog.info("Valut detected!");
-        } else {
-            consoleLog.log("Warning! Valut not detected! disabling plugin...", Level.WARNING);
-            this.getPluginLoader().disablePlugin(this);
-            return;
-        }
-
-        //WorldGuard initialization
-        if (plugin.getServer().getPluginManager().getPlugin("WorldGuard") != null) {
-            worldGuard = WorldGuard.getInstance();
-            consoleLog.info("WorldGuard detected!");
-        } else {
-            //TODO Should disable modules, that use worldguard, not disable this plugin
-            consoleLog.log("Warning! WorldGuard not detected! disabling plugin...", Level.WARNING);
-            plugin.getPluginLoader().disablePlugin(plugin);
-            return;
-        }
-
-        registerListeners();
-        //TODO Rewrite all commands, (bad designed)
-        registerCommands();
-
-        //TODO Fix combat issues on flag no pvp
-        if (config.combatlogEnabled) {
-            Bukkit.getScheduler().runTaskTimer(this, combatManager, 20, 20);
-        }
-
-        if (config.generatorEnabled) {
-
-            ItemStack item = new ItemStack(Objects.requireNonNull(Material.matchMaterial(config.generatorBlock)));
-            ItemMeta meta = item.getItemMeta();
-            assert meta != null;
-            meta.setDisplayName(ColorUtil.fixColor(config.genertorName));
-            meta.setLore(ColorUtil.fixColors(config.generatorLore.toArray(new String[0])));
-            item.setItemMeta(meta);
-
-            ShapedRecipe stoneGenerator = new ShapedRecipe(new NamespacedKey(plugin, "stone_generator"), item)
-                    .shape("ABC", "DEF", "GHI")
-                    .setIngredient('A', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(1))))
-                    .setIngredient('B', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(2))))
-                    .setIngredient('C', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(3))))
-                    .setIngredient('D', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(4))))
-                    .setIngredient('E', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(5))))
-                    .setIngredient('F', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(6))))
-                    .setIngredient('G', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(7))))
-                    .setIngredient('H', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(8))))
-                    .setIngredient('I', Objects.requireNonNull(Material.matchMaterial(config.generatorCrafting.get(9))));
-
-            plugin.getServer().addRecipe(stoneGenerator);
-
-
-        }
-
-        if(!config.teleportSafetyWater){
-            LocationUtil.disallowLiquids();
-        }
-
-    }
-
-    @Override
-    public void onDisable() {
-
-        if(usersStorage != null) {
-            if(usersStorage.getUsers() != null) {
-                for (User u : usersStorage.getUsers().values()) {
-                    if (!u.isDirty()) {
-                        usersStorage.saveAllToDatabase(database);
-                    }
-                }
-            }
-        }
-
-        Bukkit.getScheduler().cancelTasks(plugin);
-
-
-    }
-
-    public Plugin getPlugin() {
-        return plugin;
-    }
-
-    public String getVersion() {
-        return version.getVersion();
-    }
-
-    public Chat getChat() {
-        return chat;
-    }
-
-    public Permission getPermission() {
-        return permission;
     }
 
     private void registerListeners() {
