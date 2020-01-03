@@ -100,7 +100,7 @@ public class Skin implements SkinBase {
                     Method asNMSCopy = ReflectionUtils.getMethod(craftItemStackClass, "asNMSCopy", ItemStack.class);
 
                     Object dimension;
-                    if(version.contains("1_13") || version.contains("1_14")) {
+                    if(version.contains("1_13") || version.contains("1_14") || version.contains("1_15")) {
                         Class dimensionManagerClass = ReflectionUtils.getNMSClass("DimensionManager");
                         Method a = ReflectionUtils.getMethod(dimensionManagerClass, "a", Integer.TYPE);
 
@@ -131,8 +131,7 @@ public class Skin implements SkinBase {
                     }
 
                     Object enumGamemode;
-
-                    if(version.contains("1_13") || version.contains("1_14")) {
+                    if(version.contains("1_13") || version.contains("1_14") || version.contains("1_15")) {
                         Class enumGamemodeClass = ReflectionUtils.getNMSClass("EnumGamemode");
                         Method getById = ReflectionUtils.getMethod(enumGamemodeClass, "getById", Integer.TYPE);
 
@@ -160,6 +159,10 @@ public class Skin implements SkinBase {
                         Class dimensionManagerClass = ReflectionUtils.getNMSClass("DimensionManager");
                         Class enumGamemodeClass = ReflectionUtils.getNMSClass("EnumGamemode");
                         packetPlayOutRespawn = ReflectionUtils.newInstance(packetPlayOutRespawnClass.getName(), new Class<?>[]{dimensionManagerClass, worldTypeClass, enumGamemodeClass}, dimension, worldType, enumGamemode);
+                    } else if(version.contains("1_15")){
+                        Class dimensionManagerClass = ReflectionUtils.getNMSClass("DimensionManager");
+                        Class enumGamemodeClass = ReflectionUtils.getNMSClass("EnumGamemode");
+                        packetPlayOutRespawn = ReflectionUtils.newInstance(packetPlayOutRespawnClass.getName(), new Class<?>[]{dimensionManagerClass, Long.TYPE, worldTypeClass, enumGamemodeClass}, dimension, player.getWorld().getSeed(), worldType, enumGamemode);
                     } else {
                         Class enumDifficultyClass = ReflectionUtils.getNMSClass("EnumDifficulty");
                         Method getDifficultyById = ReflectionUtils.getMethod(enumDifficultyClass, "getById", Integer.TYPE);
@@ -172,7 +175,7 @@ public class Skin implements SkinBase {
                     Location loc = player.getLocation();
 
                     Object packetPlayOutPosition;
-                    if(version.contains("1_13") || version.contains("1_14")) {
+                    if(version.contains("1_13") || version.contains("1_14") || version.contains("1_15")) {
                         packetPlayOutPosition = ReflectionUtils.newInstance(packetPlayOutPositionClass.getName(), new Class<?>[]{Double.TYPE, Double.TYPE, Double.TYPE, Float.TYPE, Float.TYPE, Set.class, Integer.TYPE}, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch(), new HashSet<>(), 0);
                     } else {
                         packetPlayOutPosition = ReflectionUtils.newInstance(packetPlayOutPositionClass.getName(), new Class<?>[]{Double.TYPE, Double.TYPE, Double.TYPE, Float.TYPE, Float.TYPE, Set.class}, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch(), new HashSet<>());
@@ -242,7 +245,7 @@ public class Skin implements SkinBase {
                     player.setVelocity(vector);
                     player.setFlying(fly);
 
-                    if(version.contains("1_13") || version.contains("1_14")) {
+                    if(version.contains("1_13") || version.contains("1_14") || version.contains("1_15")) {
                         Method triggerHealthUpdate = ReflectionUtils.getMethod(craftPlayer.getClass(), "triggerHealthUpdate");
                         triggerHealthUpdate.invoke(craftPlayer);
                     }

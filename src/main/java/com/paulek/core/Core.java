@@ -292,16 +292,16 @@ public class Core extends JavaPlugin {
         timestamps = new Timestamps(this);
         timestamps.init();
         //TODO New Skins module
-//        if(config.skinsEnabled) {
-//            skinsStorage = new Skins(this);
-//            skinsStorage.init();
-//        }
+        if(config.skinsEnabled) {
+            skinsStorage = new Skins(this);
+            skinsStorage.init();
+        }
         spawnsStorage = new Spawns(this);
         spawnsStorage.init();
 
         if(config.combatlogEnabled) combatManager = new CombatManager(this);
 
-        commandManager = new CommandManager(this);
+        commandManager = new CommandManager();
 
         storageManager = new StorageManager(this, database);
         storageManager.addManagedStorage(timestamps);

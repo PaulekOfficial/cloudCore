@@ -4,4 +4,4 @@ version: ${project.version}
 main: com.paulek.core.Core
 depends: [Vault, WorldGuard]
 loadbefore: [Vault, WorldEdit, WorldGuard]
-api-version: ${prettyVersion}
+api-version: ${apiVersion}

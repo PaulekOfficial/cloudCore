@@ -25,7 +25,7 @@ public class Version {
     }
 
     public boolean isVersionOk() {
-        if (version.contains("v1_14") || version.contains("v1_8")) {
+        if (version.contains("v1_14") || version.contains("v1_8") || version.contains("v1_15")) {
             core.getConsoleLog().info("Hello, your Version is ok! runing: " + version);
             return true;
         } else {
