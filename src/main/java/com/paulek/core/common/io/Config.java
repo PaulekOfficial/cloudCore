@@ -281,6 +281,20 @@ public class Config {
     @CfgName("skins-override-value")
     public int skinsOverrideValue = 60;
 
+    @CfgComment("###################API SKINOW NIE RUSZAC###################")
+
+    @CfgComment("Url do profili userow, domyslne https://api.mojang.com/users/profiles/minecraft/")
+    @CfgName("skins-profile-api")
+    public static String PROFILE_API = "https://api.mojang.com/users/profiles/minecraft/";
+
+    @CfgComment("Url do api skinow, domyslnie https://sessionserver.mojang.com/session/minecraft/profile/")
+    @CfgName("skins-api")
+    public static String SKIN_API = "https://sessionserver.mojang.com/session/minecraft/profile/";
+
+    @CfgComment("Czy api skinow ma zwracac sygnature")
+    @CfgName("skins-api-signature")
+    public static Boolean SKIN_SIGNATURE = true;
+
     @CfgComment("###########################################################")
     @CfgComment(" §~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~§ #")
     @CfgComment(" |                  Random Teleport                     | #")

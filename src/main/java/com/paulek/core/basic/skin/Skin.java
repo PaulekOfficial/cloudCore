@@ -258,7 +258,7 @@ public class Skin implements SkinBase {
     }
 
     public Property getProperty() {
-        return new Property(name, value, signature);
+        return (signature != null) ? new Property(name, value, signature) : new Property(name, value);
     }
 
     public String getName() {

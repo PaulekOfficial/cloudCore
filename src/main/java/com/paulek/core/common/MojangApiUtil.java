@@ -4,17 +4,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.paulek.core.Core;
 import com.paulek.core.basic.skin.Skin;
+import com.paulek.core.common.io.Config;
 
 public class MojangApiUtil {
-
-    private static String PROFILE_API = "https://api.mojang.com/users/profiles/minecraft/";
-    private static String SKIN_API = "https://sessionserver.mojang.com/session/minecraft/profile/";
 
     public static Skin getPremiumSkin(String nick, Core core) {
 
         String uuid = getPremiumUuid(nick);
 
-        String json = Util.readWebsite(SKIN_API + uuid + "?unsigned=false");
+        String json = Util.readWebsite(Config.SKIN_API + uuid + "?unsigned=" + !Config.SKIN_SIGNATURE);
 
         if (json == null) return null;
 
@@ -26,7 +24,7 @@ public class MojangApiUtil {
             JsonObject properties = object.getAsJsonArray("properties").get(0).getAsJsonObject();
             String name = properties.get("name").getAsString();
             String value = properties.get("value").getAsString();
-            String signature = properties.get("signature").getAsString();
+            String signature = (properties.get("signature") != null) ? properties.get("signature").getAsString() : null;
 
             return new Skin(name, value, signature, core);
         } catch (Exception e) {
@@ -36,7 +34,7 @@ public class MojangApiUtil {
     }
 
     public static String getPremiumUuid(String nick) {
-        String json = Util.readWebsite(PROFILE_API + nick + "?unsigned=false");
+        String json = Util.readWebsite(Config.PROFILE_API + nick + "?unsigned=" + !Config.SKIN_SIGNATURE);
 
         if (json == null) return null;
 
