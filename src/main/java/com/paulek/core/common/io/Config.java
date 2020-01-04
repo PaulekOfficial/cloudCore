@@ -27,6 +27,10 @@ import java.util.Map;
 @CfgComment("Konfiguracja zestawow(kitow) zamieszczona jest w osobnym pliku: kits.yml")
 public class Config {
 
+    public static String SKIN_API;
+    public static String PROFILE_API;
+    public static Boolean SKIN_SIGNATURE;
+    public static String COLOR_MARK;
 
     @CfgComment("###########################################################")
     @CfgComment(" §~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~§ #")
@@ -57,7 +61,7 @@ public class Config {
     @CfgComment("Jakiego znaku uzywac do tlumaczenia kolorow")
     @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
     @CfgName("color-mark")
-    public static String COLOR_MARK = "$";
+    public String colorMark = "$";
 
     @CfgComment("Maklymalna liczba znakow nicku gracza")
     @CfgName("max-nick-length")
@@ -285,15 +289,15 @@ public class Config {
 
     @CfgComment("Url do profili userow, domyslne https://api.mojang.com/users/profiles/minecraft/")
     @CfgName("skins-profile-api")
-    public static String PROFILE_API = "https://api.mojang.com/users/profiles/minecraft/";
+    public String profileAPI = "https://api.mojang.com/users/profiles/minecraft/";
 
     @CfgComment("Url do api skinow, domyslnie https://sessionserver.mojang.com/session/minecraft/profile/")
     @CfgName("skins-api")
-    public static String SKIN_API = "https://sessionserver.mojang.com/session/minecraft/profile/";
+    public String skinsApi = "https://sessionserver.mojang.com/session/minecraft/profile/";
 
     @CfgComment("Czy api skinow ma zwracac sygnature")
     @CfgName("skins-api-signature")
-    public static Boolean SKIN_SIGNATURE = true;
+    public Boolean skinsSignature = true;
 
     @CfgComment("###########################################################")
     @CfgComment(" §~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~§ #")

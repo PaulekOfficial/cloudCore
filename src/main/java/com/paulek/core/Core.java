@@ -43,6 +43,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Core extends JavaPlugin {
 
@@ -227,12 +228,17 @@ public class Core extends JavaPlugin {
         File configFile = new File(this.getDataFolder(), "config.yml");
 
         config = ConfigUtil.loadConfig(configFile, Config.class);
+        Config.SKIN_API = config.skinsApi;
+        Config.SKIN_SIGNATURE = config.skinsSignature;
+        Config.PROFILE_API = config.profileAPI;
+        Config.COLOR_MARK = config.colorMark;
         kits = new Kits(this);
         kits.init();
         lang = new Lang(this);
     }
 
     private void initDatabase(){
+        //Logger.getLogger("com.zaxxer.hikari").isLoggable(Level.FINEST);
         SQLCommand.SQLType sqlType;
         if(config.storageType.toLowerCase().equalsIgnoreCase("mysql")) {
 

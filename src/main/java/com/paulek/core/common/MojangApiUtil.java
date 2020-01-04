@@ -12,7 +12,7 @@ public class MojangApiUtil {
 
         String uuid = getPremiumUuid(nick);
 
-        String json = Util.readWebsite(Config.SKIN_API + uuid + "?unsigned=" + !Config.SKIN_SIGNATURE);
+        String json = Util.readWebsite(Config.SKIN_API + uuid + ((!Config.SKIN_SIGNATURE) ? "?unsigned=false" : ""));
 
         if (json == null) return null;
 
