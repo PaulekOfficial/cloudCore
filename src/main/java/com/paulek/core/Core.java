@@ -4,7 +4,6 @@ import com.paulek.core.basic.CombatManager;
 import com.paulek.core.basic.Kit;
 import com.paulek.core.basic.SQLCommand;
 import com.paulek.core.basic.User;
-import com.paulek.core.basic.data.StorageManager;
 import com.paulek.core.basic.data.databaseStorage.*;
 import com.paulek.core.basic.data.localStorage.CombatStorage;
 import com.paulek.core.basic.data.localStorage.Pms;
@@ -43,7 +42,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Core extends JavaPlugin {
 
