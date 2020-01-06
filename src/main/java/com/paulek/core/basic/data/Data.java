@@ -1,8 +1,8 @@
 package com.paulek.core.basic.data;
 
-import com.paulek.core.Core;
+public interface Data<T, U> {
 
-public interface Data {
+    T load(U u);
 
     void load();
 

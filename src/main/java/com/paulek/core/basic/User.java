@@ -1,6 +1,7 @@
 package com.paulek.core.basic;
 
 import com.paulek.core.Core;
+import com.paulek.core.basic.skin.SkinBase;
 import org.bukkit.Location;
 
 import java.net.InetAddress;
@@ -23,6 +24,8 @@ public class User {
     private boolean tpToogle;
     private boolean tpsMonitor;
     private boolean godMode;
+    private SkinBase skin;
+    private
 
     private Core core;
 
