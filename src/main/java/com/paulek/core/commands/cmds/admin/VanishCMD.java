@@ -42,14 +42,14 @@ public class VanishCMD extends Command {
 //                        }
 //                    },20, 20);
 //                    list.put(uuid, id);
-//                    Users.getUser(uuid).setVanish(true);
+//                    Users.get(uuid).setVanish(true);
 //                    p.getLocation().getWorld().spawnParticle(Particle.SMOKE_LARGE, p.getLocation(), 500, 20, 20 , 20);
 //                    p.sendMessage(ColorUtil.fixColor(Lang.INFO_VANISH_VANISHED));
 //                } else {
 //                    p.getLocation().getWorld().spawnParticle(Particle.SMOKE_LARGE, p.getLocation(), 500, 20, 20 , 20);
 //                    list.get(uuid).cancel();
 //                    list.remove(uuid);
-//                    Users.getUser(uuid).setVanish(false);
+//                    Users.get(uuid).setVanish(false);
 //                    for (Player player : Bukkit.getOnlinePlayers()) {
 //                        player.showPlayer(p);
 //                    }
@@ -70,13 +70,13 @@ public class VanishCMD extends Command {
 //                            }
 //                        },20, 20);
 //                        list.put(uuid, id);
-//                        Users.getUser(uuid).setVanish(true);
+//                        Users.get(uuid).setVanish(true);
 //                        player.sendMessage(ColorUtil.fixColor(Lang.INFO_VANISH_VANISHED));
 //                        p.getLocation().getWorld().spawnParticle(Particle.SMOKE_LARGE, p.getLocation(), 500, 20, 20 , 20);
 //                    } else {
 //                        list.get(uuid).cancel();
 //                        list.remove(uuid);
-//                        Users.getUser(uuid).setVanish(false);
+//                        Users.get(uuid).setVanish(false);
 //                        for (Player d : Bukkit.getOnlinePlayers()) {
 //                            d.showPlayer(player);
 //                        }

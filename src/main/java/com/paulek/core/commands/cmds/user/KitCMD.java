@@ -75,7 +75,7 @@ public class KitCMD extends Command {
 
             if (getCore().getKits().getKits().get(kitName) != null) {
 
-                User user = getCore().getUsersStorage().getUser(player.getUniqueId());
+                User user = getCore().getUsersStorage().get(player.getUniqueId());
 
                 if (getCore().getTimestamps().getTimestamp(user.getUuid(), kitName, "kit") != null) {
 
@@ -119,7 +119,7 @@ public class KitCMD extends Command {
             @Override
             public void run() {
 
-                User user = getCore().getUsersStorage().getUser(player.getUniqueId());
+                User user = getCore().getUsersStorage().get(player.getUniqueId());
 
                 GUIWindow gui = new GUIWindow(ColorUtil.fixColor(Lang.INFO_KIT_GUINAME), getVaildRows(getCore().getKits().getKits().size()));
 

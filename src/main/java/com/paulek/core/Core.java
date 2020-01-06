@@ -4,10 +4,8 @@ import com.paulek.core.basic.CombatManager;
 import com.paulek.core.basic.Kit;
 import com.paulek.core.basic.SQLCommand;
 import com.paulek.core.basic.User;
-import com.paulek.core.basic.data.databaseStorage.*;
-import com.paulek.core.basic.data.localStorage.CombatStorage;
-import com.paulek.core.basic.data.localStorage.Pms;
-import com.paulek.core.basic.data.localStorage.TpaStorage;
+import com.paulek.core.basic.data.DataModel;
+import com.paulek.core.basic.data.cache.Users;
 import com.paulek.core.basic.database.Database;
 import com.paulek.core.basic.database.MySQL;
 import com.paulek.core.basic.database.SQLite;
@@ -290,8 +288,8 @@ public class Core extends JavaPlugin {
         pmsStorage = new Pms();
         if(config.rtpEnabled) rtpsStorage = new Rtps(this);
         if(config.tpaEnabled) tpaStorage = new TpaStorage();
-        //TODO Better user class design
-        usersStorage = new Users(this);
+        //TODO Remove hardcoded data model
+        usersStorage = new Users(this, DataModel.MYSQL);
         usersStorage.init();
         timestamps = new Timestamps(this);
         timestamps.init();

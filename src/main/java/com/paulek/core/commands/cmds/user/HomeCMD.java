@@ -36,7 +36,7 @@ public class HomeCMD extends Command {
 
             final Player player = (Player) sender;
 
-            final User user = getCore().getUsersStorage().getUser(player.getUniqueId());
+            final User user = getCore().getUsersStorage().get(player.getUniqueId());
 
             if (args.length == 1) {
 

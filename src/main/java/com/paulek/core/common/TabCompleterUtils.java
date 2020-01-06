@@ -13,7 +13,7 @@ public class TabCompleterUtils {
     public static List<String> getHomes(CommandSender sender, Core core) {
         if (sender instanceof Player) {
             List<String> homes = new ArrayList<>();
-            User user = core.getUsersStorage().getUser(((Player) sender).getUniqueId());
+            User user = core.getUsersStorage().get(((Player) sender).getUniqueId());
             for (String name : user.getHomes().keySet()) {
                 homes.add(name);
             }

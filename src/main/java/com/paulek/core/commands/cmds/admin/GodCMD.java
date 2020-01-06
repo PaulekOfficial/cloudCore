@@ -30,7 +30,7 @@ public class GodCMD extends Command {
                 sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_GOD_PLAYERNOTFOUND));
                 return false;
             }
-            User user = getCore().getUsersStorage().getUser(player.getUniqueId());
+            User user = getCore().getUsersStorage().get(player.getUniqueId());
             if(user.isGodMode()){
                 user.setGodMode(false);
                 user.setDirty(true);
@@ -61,7 +61,7 @@ public class GodCMD extends Command {
 
             Player player = (Player)sender;
 
-            User user = getCore().getUsersStorage().getUser(player.getUniqueId());
+            User user = getCore().getUsersStorage().get(player.getUniqueId());
             if(user.isGodMode()){
                 user.setGodMode(false);
                 user.setDirty(true);

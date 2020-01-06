@@ -31,7 +31,7 @@ public class TphereCMD extends Command {
 
             if (Bukkit.getPlayer(nick) != null) {
 
-                if (getCore().getUsersStorage().getUser(Bukkit.getPlayer(nick).getUniqueId()).isTpToogle()) {
+                if (getCore().getUsersStorage().get(Bukkit.getPlayer(nick).getUniqueId()).isTpToogle()) {
 
                     sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPTOOGLE_TPDENY));
 

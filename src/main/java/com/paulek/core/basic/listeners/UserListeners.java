@@ -4,6 +4,7 @@ import com.paulek.core.Core;
 import com.paulek.core.basic.User;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -12,6 +13,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class UserListeners implements Listener {
@@ -25,7 +27,7 @@ public class UserListeners implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event){
 
-        User user = core.getUsersStorage().getUser(event.getEntity().getUniqueId());
+        User user = core.getUsersStorage().get(event.getEntity().getUniqueId());
 
         if (user != null) {
 
@@ -46,6 +48,14 @@ public class UserListeners implements Listener {
         if(!joinMessage.equalsIgnoreCase("none")){
             event.setJoinMessage(joinMessage.replace("{PLAYER}", event.getPlayer().getDisplayName()));
         }
+        Player player = event.getPlayer();
+        User user = core.getUsersStorage().get(player.getUniqueId());
+        if(user == null) {
+            user = new User(player.getUniqueId(), player.getDisplayName(), player.getLocation(), player.getLocation(), player.getAddress().getAddress(), new HashMap<>(), null, false, false, false, false, false, core);
+            user.setDirty(true);
+            core.getUsersStorage().add(player.getUniqueId(), user);
+            core.getConsoleLog().info("Created new " + user.getUuid().toString() + " user known as " + player.getDisplayName());
+        }
     }
 
     @EventHandler
@@ -55,7 +65,7 @@ public class UserListeners implements Listener {
             event.setQuitMessage(joinMessage.replace("{PLAYER}", event.getPlayer().getDisplayName()));
         }
 
-        User user = core.getUsersStorage().getUser(event.getPlayer().getUniqueId());
+        User user = core.getUsersStorage().get(event.getPlayer().getUniqueId());
 
         if (user != null) {
 
@@ -75,7 +85,7 @@ public class UserListeners implements Listener {
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
 
-        User user = core.getUsersStorage().getUser(event.getPlayer().getUniqueId());
+        User user = core.getUsersStorage().get(event.getPlayer().getUniqueId());
 
         if (user != null) {
             user.setLastlocation(event.getFrom());

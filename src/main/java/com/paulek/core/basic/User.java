@@ -24,10 +24,6 @@ public class User {
     private boolean tpToogle;
     private boolean tpsMonitor;
     private boolean godMode;
-    private SkinBase skin;
-    private
-
-    private Core core;
 
     private boolean dirty = true;
 
@@ -44,7 +40,6 @@ public class User {
         this.tpToogle = tpToogle;
         this.tpsMonitor = tpsMonitor;
         this.godMode = godMode;
-        this.core = Objects.requireNonNull(core, "Core");
     }
 
     public UUID getUuid() {

@@ -26,7 +26,7 @@ public class TptoggleCMD extends Command {
             return false;
         }
 
-        User user = getCore().getUsersStorage().getUser(((Player) sender).getUniqueId());
+        User user = getCore().getUsersStorage().get(((Player) sender).getUniqueId());
 
         if (args.length == 1) {
 

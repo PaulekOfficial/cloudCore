@@ -24,7 +24,7 @@ public class DelhomeCMD extends Command {
         if (sender instanceof Player) {
 
             Player player = (Player) sender;
-            User user = getCore().getUsersStorage().getUser(player.getUniqueId());
+            User user = getCore().getUsersStorage().get(player.getUniqueId());
 
             if (args.length == 0) {
 

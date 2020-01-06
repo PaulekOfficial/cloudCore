@@ -33,7 +33,7 @@ public class RCMD extends Command {
                     sender.sendMessage(message.replace("{from}", sender.getName()));
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         UUID u = p.getUniqueId();
-                        if (getCore().getUsersStorage().getUser(u).isSocialSpy()) {
+                        if (getCore().getUsersStorage().get(u).isSocialSpy()) {
                             String m = ColorUtil.fixColor(Lang.INFO_MSG_SPYFORMAT.replace("{from}", sender.getName()).replace("{to}", Bukkit.getPlayer(getCore().getPmsStorage().getMessages().get(uuid)).getDisplayName()).replace("{message}", s));
                             p.sendMessage(m);
                         }

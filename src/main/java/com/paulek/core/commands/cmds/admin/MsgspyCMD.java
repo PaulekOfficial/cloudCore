@@ -23,8 +23,8 @@ public class MsgspyCMD extends Command {
         if (args.length != 0) {
             if (args[0].equalsIgnoreCase("on")) {
                 UUID uuid = ((Player) sender).getUniqueId();
-                if (!getCore().getUsersStorage().getUser(uuid).isSocialSpy()) {
-                    getCore().getUsersStorage().getUser(uuid).setSocialSpy(true);
+                if (!getCore().getUsersStorage().get(uuid).isSocialSpy()) {
+                    getCore().getUsersStorage().get(uuid).setSocialSpy(true);
                     sender.sendMessage(ColorUtil.fixColor(Lang.INFO_MSG_SPY));
                 } else {
                     sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_MSG_ALREADY));
@@ -32,8 +32,8 @@ public class MsgspyCMD extends Command {
             }
             if (args[0].equalsIgnoreCase("off")) {
                 UUID uuid = ((Player) sender).getUniqueId();
-                if (getCore().getUsersStorage().getUser(uuid).isSocialSpy()) {
-                    getCore().getUsersStorage().getUser(uuid).setSocialSpy(false);
+                if (getCore().getUsersStorage().get(uuid).isSocialSpy()) {
+                    getCore().getUsersStorage().get(uuid).setSocialSpy(false);
                     sender.sendMessage(ColorUtil.fixColor(Lang.INFO_MSG_DISABLE));
                 } else {
                     sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_MSG_ALREADYNO));

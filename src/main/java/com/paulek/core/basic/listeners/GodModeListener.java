@@ -70,7 +70,7 @@ public class GodModeListener implements Listener {
             return false;
         }
 
-        if(entity instanceof Player && core.getUsersStorage().getUser(entity.getUniqueId()).isGodMode()){
+        if(entity instanceof Player && core.getUsersStorage().get(entity.getUniqueId()).isGodMode()){
             Player player = (Player) entity;
             player.setFireTicks(0);
             player.setRemainingAir(player.getRemainingAir());

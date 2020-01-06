@@ -50,7 +50,7 @@ public class SethomeCMD extends Command {
 
                 Location location = player.getLocation();
 
-                User user = getCore().getUsersStorage().getUser(player.getUniqueId());
+                User user = getCore().getUsersStorage().get(player.getUniqueId());
 
                 if (!sender.hasPermission("core.cmd.home.bypasslimit")) {
                     if (user.getHomes().size() >= amount) {
@@ -74,7 +74,7 @@ public class SethomeCMD extends Command {
 
                 Location location = player.getLocation();
 
-                User user = getCore().getUsersStorage().getUser(player.getUniqueId());
+                User user = getCore().getUsersStorage().get(player.getUniqueId());
 
                 user.addHome("home", location);
 

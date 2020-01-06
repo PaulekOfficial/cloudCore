@@ -30,7 +30,7 @@ public class TpallCMD extends Command {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
 
-            if (!getCore().getUsersStorage().getUser(p.getUniqueId()).isTpToogle()) {
+            if (!getCore().getUsersStorage().get(p.getUniqueId()).isTpToogle()) {
                 p.teleport(location);
             }
 
