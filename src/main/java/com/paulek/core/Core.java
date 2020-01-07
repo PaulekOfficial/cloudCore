@@ -53,20 +53,13 @@ public class Core extends JavaPlugin {
     private Lang lang;
     private CombatManager combatManager;
     private CommandManager commandManager;
-    private CombatStorage combatStorage;
     private Drops drops;
-    private Pms pmsStorage;
-    private Rtps rtpsStorage;
-    private TpaStorage tpaStorage;
-    private Timestamps timestamps;
     private Users usersStorage;
     private Object worldGuard;
     private Database database;
-    private StorageManager storageManager;
-    private Skins skinsStorage;
-    private Spawns spawnsStorage;
     private String updateMethod;
     private Version version;
+    private DataModel dataModel;
 
     private boolean onlineMode;
 
@@ -157,18 +150,8 @@ public class Core extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        if(usersStorage != null) {
-            if(usersStorage.getUsers() != null) {
-                for (User u : usersStorage.getUsers().values()) {
-                    if (!u.isDirty()) {
-                        usersStorage.saveAllToDatabase(database);
-                    }
-                }
-            }
-        }
-
         Bukkit.getScheduler().cancelTasks(plugin);
-
+        usersStorage.saveDataBeforeShutdown();
 
     }
 
@@ -235,8 +218,8 @@ public class Core extends JavaPlugin {
 
     private void initDatabase(){
         //Logger.getLogger("com.zaxxer.hikari").isLoggable(Level.FINEST);
-        SQLCommand.SQLType sqlType;
-        if(config.storageType.toLowerCase().equalsIgnoreCase("mysql")) {
+        dataModel = DataModel.getModelByName(config.storageType);
+        if(dataModel.equals(DataModel.MYSQL)) {
 
             String host = config.mysql.get("host");
             String port = config.mysql.get("port");
@@ -247,9 +230,8 @@ public class Core extends JavaPlugin {
             MySQL mySQL = new MySQL(host, port, databaseName, user, password);
             mySQL.init();
             database = mySQL;
-            sqlType = SQLCommand.SQLType.MYSQL;
 
-        } else {
+        } else if(dataModel.equals(DataModel.SQLITE)) {
             File databaseFile = new File(plugin.getDataFolder(), "database.db");
 
             if(!databaseFile.exists()){
@@ -262,54 +244,21 @@ public class Core extends JavaPlugin {
             SQLite sqLite = new SQLite(databaseFile);
             sqLite.init();
             database = sqLite;
-            sqlType = SQLCommand.SQLType.SQLITE;
-        }
-
-        try(Connection connection = database.getConnection()){
-
-            SQLCommand.command(connection, SQLCommand.CREATE_USERS_TABLE, sqlType);
-            SQLCommand.command(connection, SQLCommand.CREATE_TIMESTAMPS_TABLE, sqlType);
-            SQLCommand.command(connection, SQLCommand.CREATE_SKINS_TABLE, sqlType);
-            SQLCommand.command(connection, SQLCommand.CREATE_SPAWNS_TABLE, sqlType);
-            SQLCommand.command(connection, SQLCommand.CREATE_RTPBUTTONS_TABLE, sqlType);
-
-        } catch (SQLException e) {
-            //TODO Handle exception
-            e.printStackTrace();
         }
 
     }
 
     private void initStorages(){
         //TODO Better storage classes design
-        combatStorage = new CombatStorage();
         //drops = new Drops(this);
 
-        pmsStorage = new Pms();
-        if(config.rtpEnabled) rtpsStorage = new Rtps(this);
-        if(config.tpaEnabled) tpaStorage = new TpaStorage();
-        //TODO Remove hardcoded data model
-        usersStorage = new Users(this, DataModel.MYSQL);
+        usersStorage = new Users(this, dataModel);
         usersStorage.init();
-        timestamps = new Timestamps(this);
-        timestamps.init();
-        //TODO New Skins module
-        if(config.skinsEnabled) {
-            skinsStorage = new Skins(this);
-            skinsStorage.init();
-        }
-        spawnsStorage = new Spawns(this);
-        spawnsStorage.init();
 
         if(config.combatlogEnabled) combatManager = new CombatManager(this);
 
         commandManager = new CommandManager();
 
-        storageManager = new StorageManager(this, database);
-        storageManager.addManagedStorage(timestamps);
-        storageManager.addManagedStorage(usersStorage);
-        storageManager.addManagedStorage(skinsStorage);
-        storageManager.init();
     }
 
     private void registerListeners() {

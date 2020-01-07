@@ -6,6 +6,7 @@ import com.paulek.core.basic.data.Cache;
 import com.paulek.core.basic.data.Data;
 import com.paulek.core.basic.data.DataModel;
 import com.paulek.core.basic.data.cache.models.mysql.MySQLUserData;
+import org.bukkit.Bukkit;
 
 import java.util.Map;
 import java.util.Objects;
@@ -33,6 +34,13 @@ public class Users implements Cache<User, UUID> {
         };
         assert usersData != null;
         usersData.load();
+        Bukkit.getScheduler().runTaskTimerAsynchronously(core.getPlugin(), run -> {
+            usersData.save(cachedUsers.values(), false);
+        }, 0, 20 * 60);
+    }
+
+    public void saveDataBeforeShutdown() {
+        usersData.save(cachedUsers.values(), true);
     }
 
     @Override
