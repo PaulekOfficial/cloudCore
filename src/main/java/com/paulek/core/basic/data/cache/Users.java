@@ -39,6 +39,11 @@ public class Users implements Cache<User, UUID> {
         }, 0, 20 * 60);
     }
 
+    public void saveAndDelete(UUID uuid) {
+        usersData.save(cachedUsers.get(uuid));
+        delete(uuid);
+    }
+
     public void saveDataBeforeShutdown() {
         usersData.save(cachedUsers.values(), true);
     }

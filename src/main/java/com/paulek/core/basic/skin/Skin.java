@@ -21,6 +21,7 @@ public class Skin implements SkinBase {
     private String value;
     private String signature;
     private LocalDateTime lastUpdate;
+    private boolean manuallySet;
     private Core core;
     private boolean dirty;
 
@@ -33,6 +34,7 @@ public class Skin implements SkinBase {
         this.lastUpdate = lastUpdate;
         this.core = Objects.requireNonNull(core, "Core");
         this.dirty = false;
+        this.manuallySet = false;
 
     }
 
@@ -43,7 +45,19 @@ public class Skin implements SkinBase {
         this.signature = signature;
         this.lastUpdate = LocalDateTime.now();
         this.core = Objects.requireNonNull(core, "Core");
+        this.dirty = false;
+        this.manuallySet = false;
 
+    }
+
+    public Skin(String name, String value, String signature, LocalDateTime lastUpdate, boolean manuallySet, Core core, boolean dirty) {
+        this.name = name;
+        this.value = value;
+        this.signature = signature;
+        this.lastUpdate = lastUpdate;
+        this.manuallySet = manuallySet;
+        this.core = Objects.requireNonNull(core, "Core");
+        this.dirty = dirty;
     }
 
     public void applySkinForPlayers(Player player) {
@@ -293,5 +307,10 @@ public class Skin implements SkinBase {
 
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
+    }
+
+    @Override
+    public boolean isManuallySet() {
+        return manuallySet;
     }
 }

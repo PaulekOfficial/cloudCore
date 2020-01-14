@@ -263,7 +263,7 @@ public class Config {
     @CfgName("skins-command")
     public boolean skinsCommand = true;
 
-    @CfgComment("Po jakim czasie skin gracza ma zostac odswierzony na nowy (podana w sekundach)")
+    @CfgComment("Po jakim czasie skin gracza ma zostac odswierzony na nowy (podana w milisekundach)")
     @CfgName("skins-refreshment")
     public int skinsRefreshment = 1296000;
 

@@ -2,11 +2,14 @@ package com.paulek.core.basic.listeners;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.skin.Skin;
+import com.paulek.core.basic.skin.SkinBase;
 import com.paulek.core.common.MojangApiUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -23,62 +26,20 @@ public class SkinListeners implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-
-        core.getUsersStorage().checkPlayer(event.getPlayer());
-
-
-        Bukkit.getScheduler().runTaskLaterAsynchronously(core.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                UUID fakeUUID = event.getPlayer().getUniqueId();
-                String nick = event.getPlayer().getDisplayName();
-                if (!core.isOnlineMode() && core.getConfiguration().skinsEnabled) {
-
-                    if (core.getSkinsStorage().getSkin(fakeUUID) == null) {
-
-                        Skin skin = MojangApiUtil.getPremiumSkin(nick, core);
-
-                        if (skin == null){
-                            Random random = new Random();
-
-                            if(core.getSkinsStorage().getPlayerSkins().size() >= core.getConfiguration().skinsOverrideValue && core.getConfiguration().skinsOverride){
-                                Object[] skinArray = core.getSkinsStorage().getPlayerSkins().values().toArray();
-                                skin = (Skin) skinArray[random.nextInt(skinArray.length)];
-                            } else {
-                                while (true) {
-                                    String randomPremiumNick = core.getConfiguration().skinsList.get(random.nextInt(core.getConfiguration().skinsList.size()));
-                                    skin = MojangApiUtil.getPremiumSkin(randomPremiumNick, core);
-                                    if (skin != null) {
-                                        break;
-                                    }
-                                }
-                            }
-
-                        }
-
-                        skin.updateSkinForPlayer(Bukkit.getPlayer(fakeUUID));
-                        skin.applySkinForPlayers(Bukkit.getPlayer(fakeUUID));
-                        skin.setDirty(true);
-
-                        core.getSkinsStorage().addSkin(fakeUUID, skin);
-
-                        return;
-                    }
-
-                    Skin skin = core.getSkinsStorage().getSkin(fakeUUID);
-                    if (skin.getLastUpdate().isAfter(LocalDateTime.now())) {
-                        Skin newSkin = MojangApiUtil.getPremiumSkin(nick, core);
-                        if (newSkin != null) {
-                            skin = newSkin;
-                            skin.setDirty(true);
-                        }
-                    }
-                    skin.updateSkinForPlayer(Bukkit.getPlayer(fakeUUID));
-                    skin.applySkinForPlayers(Bukkit.getPlayer(fakeUUID));
-                }
-            }
-        }, 10);
-
+        if(!core.getConfiguration().skinsEnabled) {
+            return;
+        }
+        Player player = event.getPlayer();
+        SkinBase skin = core.getSkinsStorage().get(player.getUniqueId());
+        skin.applySkinForPlayers(player);
+        skin.updateSkinForPlayer(player);
+    }
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        if(!core.getConfiguration().skinsEnabled) {
+            return;
+        }
+        core.getSkinsStorage().delete(event.getPlayer().getUniqueId());
     }
 
 }

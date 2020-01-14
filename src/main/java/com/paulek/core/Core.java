@@ -5,6 +5,7 @@ import com.paulek.core.basic.Kit;
 import com.paulek.core.basic.SQLCommand;
 import com.paulek.core.basic.User;
 import com.paulek.core.basic.data.DataModel;
+import com.paulek.core.basic.data.cache.Skins;
 import com.paulek.core.basic.data.cache.Users;
 import com.paulek.core.basic.database.Database;
 import com.paulek.core.basic.database.MySQL;
@@ -55,9 +56,9 @@ public class Core extends JavaPlugin {
     private CommandManager commandManager;
     private Drops drops;
     private Users usersStorage;
+    private Skins skinsStorage;
     private Object worldGuard;
     private Database database;
-    private String updateMethod;
     private Version version;
     private DataModel dataModel;
 
@@ -152,6 +153,7 @@ public class Core extends JavaPlugin {
 
         Bukkit.getScheduler().cancelTasks(plugin);
         usersStorage.saveDataBeforeShutdown();
+        skinsStorage.saveDataBeforeShutdown();
 
     }
 
@@ -414,6 +416,8 @@ public class Core extends JavaPlugin {
     public Database getDatabase() {
         return database;
     }
+
+
 
     public boolean isOnlineMode() {
         return onlineMode;

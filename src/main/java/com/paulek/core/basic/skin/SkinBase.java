@@ -25,4 +25,6 @@ public interface SkinBase {
 
     void setLastUpdate(LocalDateTime lastUpdate);
 
+    boolean isManuallySet();
+
 }

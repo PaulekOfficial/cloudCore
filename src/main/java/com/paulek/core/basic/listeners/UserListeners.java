@@ -26,16 +26,11 @@ public class UserListeners implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event){
-
         User user = core.getUsersStorage().get(event.getEntity().getUniqueId());
-
         if (user != null) {
-
             user.setLastlocation(event.getEntity().getLocation());
             user.setDirty(true);
-
         }
-
     }
 
     @EventHandler
@@ -64,34 +59,25 @@ public class UserListeners implements Listener {
         if(!joinMessage.equalsIgnoreCase("none")){
             event.setQuitMessage(joinMessage.replace("{PLAYER}", event.getPlayer().getDisplayName()));
         }
-
         User user = core.getUsersStorage().get(event.getPlayer().getUniqueId());
-
         if (user != null) {
-
             user.setLogoutlocation(event.getPlayer().getLocation());
             user.setLastActivity(LocalDateTime.now());
-
             if(core.getConfiguration().removeGodmodeOnDisconect && user.isGodMode()){
                 user.setGodMode(false);
             }
-
-            user.setDirty(true);
-
+            core.getUsersStorage().saveAndDelete(user.getUuid());
         }
 
     }
 
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
-
         User user = core.getUsersStorage().get(event.getPlayer().getUniqueId());
-
         if (user != null) {
             user.setLastlocation(event.getFrom());
             user.setDirty(true);
         }
-
     }
 
 }
