@@ -18,8 +18,6 @@ import java.util.UUID;
 
 public class TpacceptCMD extends Command {
 
-    private static HashMap<UUID, Integer> to_teleport_map = new HashMap<UUID, Integer>();
-
     public TpacceptCMD(Core core) {
         super("tpaccept", "accepts a teleport to player", "/tpaccept", "core.cmd.tpaccept", new String[]{}, core);
     }

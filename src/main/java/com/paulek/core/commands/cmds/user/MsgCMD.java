@@ -24,14 +24,9 @@ public class MsgCMD extends Command {
             String tosend = args[0];
             if (Bukkit.getPlayer(tosend) != null) {
                 UUID uuid = ((Player) sender).getUniqueId();
-                if (!getCore().getPmsStorage().getMessages().containsKey(uuid)) {
-                    getCore().getPmsStorage().getMessages().put(uuid, tosend);
-                }
                 Player send = Bukkit.getPlayer(tosend);
-                UUID u = send.getUniqueId();
-                if (!getCore().getPmsStorage().getMessages().containsKey(u)) {
-                    getCore().getPmsStorage().getMessages().put(u, sender.getName());
-                }
+                assert send != null;
+                this.getCore().getPrivateMessagesStorage().add(send.getUniqueId(), uuid);
                 String s = "";
                 for (int i = 1; i != args.length; i++) {
                     s += args[i] + " ";

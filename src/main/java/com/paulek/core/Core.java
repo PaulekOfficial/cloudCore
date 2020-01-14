@@ -5,6 +5,7 @@ import com.paulek.core.basic.Kit;
 import com.paulek.core.basic.SQLCommand;
 import com.paulek.core.basic.User;
 import com.paulek.core.basic.data.DataModel;
+import com.paulek.core.basic.data.cache.PrivateMessages;
 import com.paulek.core.basic.data.cache.Skins;
 import com.paulek.core.basic.data.cache.Users;
 import com.paulek.core.basic.database.Database;
@@ -57,6 +58,7 @@ public class Core extends JavaPlugin {
     private Drops drops;
     private Users usersStorage;
     private Skins skinsStorage;
+    private PrivateMessages privateMessagesStorage;
     private Object worldGuard;
     private Database database;
     private Version version;
@@ -256,11 +258,13 @@ public class Core extends JavaPlugin {
 
         usersStorage = new Users(this, dataModel);
         usersStorage.init();
-
-        if(config.combatlogEnabled) combatManager = new CombatManager(this);
-
+        if(config.combatlogEnabled) {
+            combatManager = new CombatManager(this);
+        }
         commandManager = new CommandManager();
-
+        privateMessagesStorage = new PrivateMessages();
+        skinsStorage = new Skins(this);
+        skinsStorage.init();
     }
 
     private void registerListeners() {
@@ -377,10 +381,6 @@ public class Core extends JavaPlugin {
         return drops;
     }
 
-    public Pms getPmsStorage() {
-        return pmsStorage;
-    }
-
     public Rtps getRtpsStorage() {
         return rtpsStorage;
     }
@@ -417,18 +417,16 @@ public class Core extends JavaPlugin {
         return database;
     }
 
-
-
     public boolean isOnlineMode() {
         return onlineMode;
     }
 
-    public Skins getSkinsStorage() {
-        return skinsStorage;
+    public PrivateMessages getPrivateMessagesStorage() {
+        return privateMessagesStorage;
     }
 
-    public String getUpdateMethod() {
-        return updateMethod;
+    public Skins getSkinsStorage() {
+        return skinsStorage;
     }
 
     public Spawns getSpawnsStorage() {

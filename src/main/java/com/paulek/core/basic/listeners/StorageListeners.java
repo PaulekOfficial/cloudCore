@@ -38,20 +38,9 @@ public class StorageListeners implements Listener {
 
         }
 
-        if (TpacceptCMD.getTo_teleport().containsKey(uuid)) {
-            Bukkit.getScheduler().cancelTask(TpacceptCMD.getTo_teleport().get(uuid));
-            TpacceptCMD.getTo_teleport().remove(uuid);
-        }
+        core.getPrivateMessagesStorage().delete(uuid);
 
-        if (core.getTpaStorage().getToAcceptTpahere(uuid) != null) {
-            core.getTpaStorage().removeToAcceptTpahere(uuid);
-            core.getTpaStorage().cancelTaskTpahere(uuid);
-        }
 
-        if (core.getTpaStorage().getToAcceptTpa(uuid) != null) {
-            core.getTpaStorage().removeToAcceptTpa(uuid);
-            core.getTpaStorage().cancelTaskTpa(uuid);
-        }
 
         if (SpawnCMD.getIn_detly().containsKey(uuid)) {
             Bukkit.getScheduler().cancelTask(SpawnCMD.getIn_detly().get(uuid));

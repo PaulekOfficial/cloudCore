@@ -22,19 +22,21 @@ public class RCMD extends Command {
     public boolean execute(CommandSender sender, String[] args) {
         if (args.length != 0) {
             UUID uuid = ((Player) sender).getUniqueId();
-            if (getCore().getPmsStorage().getMessages().containsKey(uuid)) {
-                String s = "";
+            UUID targetPlayerUUID = getCore().getPrivateMessagesStorage().get(uuid);
+            if (targetPlayerUUID != null) {
+                StringBuilder s = new StringBuilder();
                 for (int i = 0; i != args.length; i++) {
-                    s += args[i] + " ";
+                    s.append(args[i]).append(" ");
                 }
-                String message = ColorUtil.fixColor(Lang.INFO_MSG_FORMAT.replace("{message}", s));
-                if (Bukkit.getPlayer(getCore().getPmsStorage().getMessages().get(uuid)) != null) {
-                    Bukkit.getPlayer(getCore().getPmsStorage().getMessages().get(uuid)).sendMessage(message.replace("{from}", sender.getName()));
+                String message = ColorUtil.fixColor(Lang.INFO_MSG_FORMAT.replace("{message}", s.toString()));
+                Player player = Bukkit.getPlayer(targetPlayerUUID);
+                if (player != null) {
+                    player.sendMessage(message.replace("{from}", sender.getName()));
                     sender.sendMessage(message.replace("{from}", sender.getName()));
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         UUID u = p.getUniqueId();
                         if (getCore().getUsersStorage().get(u).isSocialSpy()) {
-                            String m = ColorUtil.fixColor(Lang.INFO_MSG_SPYFORMAT.replace("{from}", sender.getName()).replace("{to}", Bukkit.getPlayer(getCore().getPmsStorage().getMessages().get(uuid)).getDisplayName()).replace("{message}", s));
+                            String m = ColorUtil.fixColor(Lang.INFO_MSG_SPYFORMAT.replace("{from}", sender.getName()).replace("{to}", player.getDisplayName()).replace("{message}", s.toString()));
                             p.sendMessage(m);
                         }
                     }
