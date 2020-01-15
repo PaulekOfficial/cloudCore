@@ -17,6 +17,7 @@ import java.util.*;
 
 public class Skin implements SkinBase {
 
+    private UUID uuid;
     private String name;
     private String value;
     private String signature;
@@ -50,7 +51,7 @@ public class Skin implements SkinBase {
 
     }
 
-    public Skin(String name, String value, String signature, LocalDateTime lastUpdate, boolean manuallySet, Core core, boolean dirty) {
+    public Skin(UUID uuid, String name, String value, String signature, LocalDateTime lastUpdate, boolean manuallySet, Core core, boolean dirty) {
         this.name = name;
         this.value = value;
         this.signature = signature;
@@ -312,5 +313,9 @@ public class Skin implements SkinBase {
     @Override
     public boolean isManuallySet() {
         return manuallySet;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 }

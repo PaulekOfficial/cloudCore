@@ -11,4 +11,6 @@ public interface SQLDataModel<T> extends Serializable<T, ResultSet> {
 
     @Override
     T deserializeData(ResultSet resultSet);
+
+    int count();
 }
