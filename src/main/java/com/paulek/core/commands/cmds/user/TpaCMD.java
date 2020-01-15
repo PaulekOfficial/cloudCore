@@ -2,6 +2,8 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.Pair;
+import com.paulek.core.basic.TeleportRequstType;
+import com.paulek.core.basic.TriplePackage;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
@@ -30,8 +32,9 @@ public class TpaCMD extends Command {
         if (args.length >= 1) {
             if (Bukkit.getPlayer(args[0]) != null) {
                 final Player player = Bukkit.getPlayer(args[0]);
+                assert player != null;
                 if (LocationUtil.isUserTpToogle(player, getCore())) return false;
-                getCore().getTeleportRequestsStorage().add(player.getUniqueId(), new Pair<>(player.getUniqueId(), LocalDateTime.now()));
+                getCore().getTeleportRequestsStorage().add(player.getUniqueId(), new TriplePackage<>(((Player)sender).getUniqueId(), LocalDateTime.now(), TeleportRequstType.TPA));
                 sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_REQUEST.replace("{player}", player.getDisplayName())));
                 player.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_REQUESTPLAYER.replace("{player}", ((Player) sender).getDisplayName())));
                 return true;

@@ -129,12 +129,6 @@ public class Core extends JavaPlugin {
         //TODO Rewrite all commands, (bad designed)
         registerCommands();
 
-        //init combatlog
-        //TODO Fix combat issues on flag no pvp
-        if (config.combatlogEnabled) {
-            Bukkit.getScheduler().runTaskTimer(this, combatManager, 20, 20);
-        }
-
         //TODO Rewrite it with full customization
         registerStoneGenerator();
 
@@ -260,6 +254,8 @@ public class Core extends JavaPlugin {
         privateMessagesStorage = new PrivateMessages();
         skinsStorage = new Skins(this);
         skinsStorage.init();
+        teleportRequestsStorage = new TeleportRequests(this);
+        teleportRequestsStorage.init();
     }
 
     private void registerListeners() {
@@ -291,6 +287,7 @@ public class Core extends JavaPlugin {
         }
         pluginManager.registerEvents(new UserListeners(this), this);
         pluginManager.registerEvents(new GUIListeners(), this);
+        pluginManager.registerEvents(new LocationListeners(this), this);
     }
 
     private void registerCommands() {

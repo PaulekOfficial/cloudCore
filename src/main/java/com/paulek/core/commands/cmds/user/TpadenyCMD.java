@@ -24,7 +24,7 @@ public class TpadenyCMD extends Command {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             UUID uuid = player.getUniqueId();
-            LocalDateTime time = getCore().getTeleportRequestsStorage().get(uuid).getR();
+            LocalDateTime time = getCore().getTeleportRequestsStorage().get(uuid).getD();
             if (time != null) {
                 getCore().getTeleportRequestsStorage().delete(uuid);
                 sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPADENY_DENY));

@@ -2,6 +2,8 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.Pair;
+import com.paulek.core.basic.TeleportRequstType;
+import com.paulek.core.basic.TriplePackage;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
@@ -35,26 +37,45 @@ public class TpacceptCMD extends Command {
         final Player player = (Player) sender;
         UUID uuid = player.getUniqueId();
 
-        //TODO Check it later
-        Pair<UUID, LocalDateTime> pair = getCore().getTeleportRequestsStorage().get(uuid);
-        if (pair != null) {
+        TriplePackage<UUID, LocalDateTime, TeleportRequstType> dataPacket = getCore().getTeleportRequestsStorage().get(uuid);
+        if (dataPacket != null) {
 
-            Player p = Bukkit.getPlayer(pair.getT());
-
-            if(p == null) {
-                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPACCEPT_NOTHINGTOACCEPT));
-                return true;
+            if(dataPacket.getR().equals(TeleportRequstType.TPA)) {
+                Player p = Bukkit.getPlayer(dataPacket.getT());
+                if(p == null) {
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPACCEPT_NOTHINGTOACCEPT));
+                    return true;
+                }
+                int taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(getCore().getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        player.teleport(p.getLocation());
+                        player.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_TELEPORT));
+                    }
+                }, getCore().getConfiguration().teleportDelay * 20);
+                getCore().getTeleportRequestsStorage().addTeleportDelay(player.getUniqueId(), taskId);
+                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_ACCEPT));
+                p.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_ACCEPTED));
+                getCore().getTeleportRequestsStorage().delete(uuid);
             }
-
-            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_ACCEPT));
-
-            p.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_ACCEPTED));
-
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getCore().getPlugin(), run -> {
-
-            }, getCore().getConfiguration().teleportDelay * 20);
-
-            //TODO fixxxxxxxxxxxxxxxxxxxxxxxxxxxx
+            if(dataPacket.getR().equals(TeleportRequstType.TPAHERE)) {
+                Player p = Bukkit.getPlayer(dataPacket.getT());
+                if(p == null) {
+                    sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPACCEPT_NOTHINGTOACCEPT));
+                    return true;
+                }
+                int taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(getCore().getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        p.teleport(player.getLocation());
+                        p.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_TELEPORT));
+                    }
+                }, getCore().getConfiguration().teleportDelay * 20);
+                getCore().getTeleportRequestsStorage().addTeleportDelay(p.getUniqueId(), taskId);
+                p.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_ACCEPT));
+                player.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_ACCEPTED));
+                getCore().getTeleportRequestsStorage().delete(uuid);
+            }
 
         } else {
             sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPACCEPT_NOTHINGTOACCEPT));

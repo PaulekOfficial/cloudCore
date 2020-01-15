@@ -2,6 +2,8 @@ package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
 import com.paulek.core.basic.Pair;
+import com.paulek.core.basic.TeleportRequstType;
+import com.paulek.core.basic.TriplePackage;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
@@ -34,7 +36,7 @@ public class TpahereCMD extends Command {
                 if (LocationUtil.isUserTpToogle(player, getCore())) {
                     return false;
                 }
-                getCore().getTeleportRequestsStorage().add(p.getUniqueId(), new Pair<>(player.getUniqueId(), LocalDateTime.now()));
+                getCore().getTeleportRequestsStorage().add(p.getUniqueId(), new TriplePackage<>(player.getUniqueId(), LocalDateTime.now(), TeleportRequstType.TPAHERE));
                 sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_REQUEST));
                 p.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_REQUESTPLAYER));
                 return true;
