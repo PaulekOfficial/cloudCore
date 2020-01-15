@@ -51,13 +51,14 @@ public class Config {
     @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_QUOTED)
     @CfgName("mysql")
     public Map<String, String> mysql = ImmutableMap.<String, String>builder()
+            .put("jdbcUrl", "jdbc:mysql://{host}:{port}/{database-name}")
             .put("host", "localhost")
             .put("port", "3306")
             .put("user", "root")
             .put("password", "password")
             .put("database-name", "core")
+            .put("pool-size", "10")
             .build();
-
     @CfgComment("Jakiego znaku uzywac do tlumaczenia kolorow")
     @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
     @CfgName("color-mark")

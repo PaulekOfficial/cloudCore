@@ -1,14 +1,17 @@
 package com.paulek.core.basic.database;
 
+import com.paulek.core.Core;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class MySQL extends Database{
 
     private HikariDataSource dataSource;
+    private Core core;
 
     private String host;
     private String port;
@@ -28,19 +31,13 @@ public class MySQL extends Database{
     public void init(){
         HikariConfig config = new HikariConfig();
 
-        StringBuilder link = new StringBuilder();
-        link.append("jdbc:mysql://");
-        link.append(host);
-        link.append(":");
-        link.append(port);
-        link.append("/");
-        link.append(database);
-        link.append("?useUnicode=true&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+        Map<String, String> linkMap = core.getConfiguration().mysql;
+        String link = linkMap.get("jdbcUrl");
 
-        config.setJdbcUrl(link.toString());
+        config.setJdbcUrl(link.replace("{host}", linkMap.get("host")).replace("{port}", linkMap.get("port")).replace("{database-name}", linkMap.get("database-name")));
         config.setUsername(user);
         config.setPassword(password);
-        config.setMaximumPoolSize(4);
+        config.setMaximumPoolSize(Integer.parseInt(linkMap.get("pool-size")));
         config.setConnectionTimeout(30000);
 
         this.dataSource = new HikariDataSource(config);
