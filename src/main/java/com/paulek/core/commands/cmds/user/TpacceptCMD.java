@@ -1,6 +1,7 @@
 package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
+import com.paulek.core.basic.Pair;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
@@ -11,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,10 +22,6 @@ public class TpacceptCMD extends Command {
 
     public TpacceptCMD(Core core) {
         super("tpaccept", "accepts a teleport to player", "/tpaccept", "core.cmd.tpaccept", new String[]{}, core);
-    }
-
-    public static HashMap<UUID, Integer> getTo_teleport() {
-        return to_teleport_map;
     }
 
     @Override
@@ -37,79 +35,26 @@ public class TpacceptCMD extends Command {
         final Player player = (Player) sender;
         UUID uuid = player.getUniqueId();
 
-        if (getCore().getTpaStorage().getToAcceptTpa(uuid) != null) {
+        //TODO Check it later
+        Pair<UUID, LocalDateTime> pair = getCore().getTeleportRequestsStorage().get(uuid);
+        if (pair != null) {
 
-            if (Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpa(uuid)) != null) {
+            Player p = Bukkit.getPlayer(pair.getT());
 
-                final Player to_teleport = Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpa(uuid));
-
-                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_ACCEPT));
-
-                to_teleport.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_ACCEPTED));
-
-                getCore().getTpaStorage().cancelTaskTpa(to_teleport.getUniqueId());
-                getCore().getTpaStorage().removeToAcceptTpa(uuid);
-
-                BukkitTask id;
-
-                final Location location = player.getLocation();
-
-                id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
-                    public void run() {
-
-                        if (Bukkit.getPlayer(to_teleport.getUniqueId()) != null)
-                            LocationUtil.safeTeleport(getCore().getConfiguration(), location, to_teleport);
-
-                        if (Bukkit.getPlayer(to_teleport.getUniqueId()) != null)
-                            to_teleport.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_TELEPORT));
-
-                        to_teleport_map.remove(to_teleport.getUniqueId());
-
-                    }
-                }, getCore().getConfiguration().teleportDelay * 20);
-
-                to_teleport_map.put(to_teleport.getUniqueId(), id.getTaskId());
-
-            } else {
-                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPA_NOPLAYER));
+            if(p == null) {
+                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPACCEPT_NOTHINGTOACCEPT));
+                return true;
             }
 
-        } else if (getCore().getTpaStorage().getToAcceptTpahere(uuid) != null) {
+            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_ACCEPT));
 
-            if (Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpahere(uuid)) != null) {
+            p.sendMessage(ColorUtil.fixColor(Lang.INFO_TPA_ACCEPTED));
 
-                final Player player1 = Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpahere(uuid));
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getCore().getPlugin(), run -> {
 
-                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_ACCEPTED));
+            }, getCore().getConfiguration().teleportDelay * 20);
 
-                player1.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_ACCEPT));
-
-                getCore().getTpaStorage().cancelTaskTpahere(player.getUniqueId());
-                getCore().getTpaStorage().removeToAcceptTpahere(uuid);
-
-                BukkitTask id;
-
-                final Location location = Bukkit.getPlayer(getCore().getTpaStorage().getToAcceptTpahere(player1.getUniqueId())).getLocation();
-
-                id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
-                    public void run() {
-
-                        if (Bukkit.getPlayer(player1.getUniqueId()) != null){
-                            LocationUtil.safeTeleport(getCore().getConfiguration(), location, player1);
-                        }
-
-                        if (Bukkit.getPlayer(player1.getUniqueId()) != null)
-                            player1.sendMessage(ColorUtil.fixColor(Lang.INFO_TPAHERE_TELEPORT));
-
-                        to_teleport_map.remove(player1.getUniqueId());
-
-                    }
-                }, getCore().getConfiguration().teleportDelay * 20);
-
-                to_teleport_map.put(player1.getUniqueId(), id.getTaskId());
-            } else {
-                sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPAHERE_NOPLAYER));
-            }
+            //TODO fixxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
         } else {
             sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_TPACCEPT_NOTHINGTOACCEPT));

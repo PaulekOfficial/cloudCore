@@ -1,13 +1,14 @@
 package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.Warrior;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,28 +31,18 @@ public class CombatCMD extends Command {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            if (getCore().getCombatStorage().isMarked(player.getUniqueId())) {
+            LocalDateTime time = getCore().getCombatsStorage().get(player.getUniqueId());
+            if (time != null) {
+                long coldDown = getCore().getConfiguration().combatTime - time.until(LocalDateTime.now(), ChronoUnit.SECONDS);
 
-                for (Warrior po : getCore().getCombatStorage().getMarked().values()) {
+                if (coldDown > 0) {
 
-                    if (po.getUuid().equals(player.getUniqueId())) {
-                        long time = (java.lang.System.currentTimeMillis() / 1000L) - (po.getCurenttimemilirs() / 1000L);
+                    String str = ColorUtil.fixColor(Lang.INFO_COMBAT_COMMAND.replace("{time}", "$c" + coldDown + "/" + timetoend).replace("{check}", "$c" + no));
 
-                        long coldown = timetoend - time;
+                    player.sendMessage(str);
 
-                        if (coldown > 0) {
-
-                            String str = ColorUtil.fixColor(Lang.INFO_COMBAT_COMMAND.replace("{time}", "$c" + coldown + "/" + timetoend).replace("{check}", "$c" + no));
-
-                            player.sendMessage(str);
-
-                            return false;
-                        }
-
-                    }
-
+                    return false;
                 }
-
                 return false;
             }
 

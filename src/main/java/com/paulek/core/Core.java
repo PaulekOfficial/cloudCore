@@ -1,13 +1,8 @@
 package com.paulek.core;
 
-import com.paulek.core.basic.CombatManager;
 import com.paulek.core.basic.Kit;
-import com.paulek.core.basic.SQLCommand;
-import com.paulek.core.basic.User;
 import com.paulek.core.basic.data.DataModel;
-import com.paulek.core.basic.data.cache.PrivateMessages;
-import com.paulek.core.basic.data.cache.Skins;
-import com.paulek.core.basic.data.cache.Users;
+import com.paulek.core.basic.data.cache.*;
 import com.paulek.core.basic.database.Database;
 import com.paulek.core.basic.database.MySQL;
 import com.paulek.core.basic.database.SQLite;
@@ -38,8 +33,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -53,13 +46,14 @@ public class Core extends JavaPlugin {
     private Config config;
     private Kits kits;
     private Lang lang;
-    private CombatManager combatManager;
     private CommandManager commandManager;
     private Drops drops;
     private Users usersStorage;
     private Skins skinsStorage;
     private PrivateMessages privateMessagesStorage;
+    private TeleportRequests teleportRequestsStorage;
     private Object worldGuard;
+    private Combats combatsStorage;
     private Database database;
     private Version version;
     private DataModel dataModel;
@@ -259,7 +253,8 @@ public class Core extends JavaPlugin {
         usersStorage = new Users(this, dataModel);
         usersStorage.init();
         if(config.combatlogEnabled) {
-            combatManager = new CombatManager(this);
+            combatsStorage = new Combats(this);
+            combatsStorage.init();
         }
         commandManager = new CommandManager();
         privateMessagesStorage = new PrivateMessages();
@@ -284,7 +279,7 @@ public class Core extends JavaPlugin {
         if(config.easteregg){
             pluginManager.registerEvents(new EasterEggListeners(this), this);
         }
-        pluginManager.registerEvents(new StorageListeners(this), this);
+        pluginManager.registerEvents(new CacheListeners(this), this);
         if(config.rtpEnabled){
             pluginManager.registerEvents(new RandomTeleportListener(this), this);
         }
@@ -373,8 +368,8 @@ public class Core extends JavaPlugin {
         return kits;
     }
 
-    public CombatStorage getCombatStorage() {
-        return combatStorage;
+    public Combats getCombatsStorage() {
+        return combatsStorage;
     }
 
     public Drops getDrops() {
@@ -385,8 +380,8 @@ public class Core extends JavaPlugin {
         return rtpsStorage;
     }
 
-    public TpaStorage getTpaStorage() {
-        return tpaStorage;
+    public TeleportRequests getTeleportRequestsStorage() {
+        return teleportRequestsStorage;
     }
 
     public Users getUsersStorage() {

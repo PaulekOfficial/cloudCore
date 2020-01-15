@@ -1,8 +1,7 @@
 package com.paulek.core.basic.listeners;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.Warrior;
-import com.paulek.core.basic.data.localStorage.CombatStorage;
+import com.paulek.core.basic.data.cache.Combats;
 import com.paulek.core.basic.event.PlayerCombatStartEvent;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.ReflectionUtils;
@@ -15,10 +14,12 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class CombatListeners implements Listener {
@@ -30,11 +31,29 @@ public class CombatListeners implements Listener {
     }
 
     @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        if (core.getCombatsStorage().get(event.getPlayer().getUniqueId()) != null) {
+            core.getCombatsStorage().delete(event.getPlayer().getUniqueId());
+
+            if (core.getConfiguration().combatAnnouncement) {
+
+                String s = ColorUtil.fixColor(Lang.INFO_COMBAT_BRODCASTLOGOUT).replace("{player}", event.getPlayer().getName()).replace("{health}", (int) event.getPlayer().getHealth() + "♥");
+
+                Bukkit.broadcastMessage(s);
+
+            }
+
+            if (core.getConfiguration().combatKillOnQuit) event.getPlayer().setHealth(0.0);
+
+        }
+    }
+
+    @EventHandler
     public void onInteract(PlayerInteractEvent event) {
 
         if (!core.getConfiguration().combatAllowChests) {
 
-            if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
+            if (core.getCombatsStorage().get(event.getPlayer().getUniqueId()) != null) {
 
                 if ((event.getAction().equals(Action.LEFT_CLICK_BLOCK) && event.getClickedBlock().getType().equals(Material.CHEST)) ||
                         (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getClickedBlock().getType().equals(Material.CHEST)) ||
@@ -56,7 +75,7 @@ public class CombatListeners implements Listener {
 
         if (!core.getConfiguration().combatAllowCommands) {
 
-            if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
+            if (core.getCombatsStorage().get(event.getPlayer().getUniqueId()) != null) {
                 boolean found = false;
 
                 for (String s : core.getConfiguration().combatCommandsAllowed) {
@@ -79,8 +98,9 @@ public class CombatListeners implements Listener {
 
         Player player = event.getEntity();
 
-        if (core.getCombatStorage().isMarked(player.getUniqueId()))
-            core.getCombatStorage().unmark(player.getUniqueId());
+        if (core.getCombatsStorage().get(player.getUniqueId()) != null){
+            core.getCombatsStorage().delete(player.getUniqueId());
+        }
 
     }
 
@@ -88,7 +108,7 @@ public class CombatListeners implements Listener {
     public void onMove(PlayerMoveEvent event) {
         if (core.getConfiguration().comabtRejected) {
 
-            if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
+            if (core.getCombatsStorage().get(event.getPlayer().getUniqueId()) != null) {
 
                 Material m = Material.matchMaterial(core.getConfiguration().comabtRejectedBlock);
 
@@ -111,7 +131,7 @@ public class CombatListeners implements Listener {
 
         if (!core.getConfiguration().combatAllowBlockBreak) {
 
-            if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
+            if (core.getCombatsStorage().get(event.getPlayer().getUniqueId()) != null) {
                 event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_COMBAT_BREAKDISABLED));
 
                 event.setCancelled(true);
@@ -124,7 +144,7 @@ public class CombatListeners implements Listener {
 
         if (!core.getConfiguration().combatAllowBlockPlace) {
 
-            if (core.getCombatStorage().isMarked(event.getPlayer().getUniqueId())) {
+            if (core.getCombatsStorage().get(event.getPlayer().getUniqueId()) != null) {
                 boolean allow = false;
 
                 for (String s : core.getConfiguration().combatBlocksAllowed) {
@@ -150,20 +170,14 @@ public class CombatListeners implements Listener {
     @EventHandler
     public void onPlayerCombatStart(PlayerCombatStartEvent event){
 
-        CombatStorage combatStorage = core.getCombatStorage();
+        Combats combatStorage = core.getCombatsStorage();
 
-        if(combatStorage.isMarked(event.getAttacked().getUniqueId())){
-            combatStorage.changeTimeMilisrs(event.getAttacked().getUniqueId(), System.currentTimeMillis());
-        }
-        combatStorage.addMarkedWarrior(new Warrior(event.getAttacked().getUniqueId(), event.getAttacked().getDisplayName()));
+        combatStorage.add(event.getAttacked().getUniqueId(), LocalDateTime.now());
         if (core.getConfiguration().combatChat) {
             event.getAttacked().sendMessage(ColorUtil.fixColor(Lang.INFO_COMBAT_CHAT));
         }
         if(event.getAttacker() instanceof Player){
-            if(combatStorage.isMarked((event.getAttacker().getUniqueId()))){
-                combatStorage.changeTimeMilisrs(event.getAttacker().getUniqueId(), System.currentTimeMillis());
-            }
-            combatStorage.addMarkedWarrior(new Warrior(event.getAttacker().getUniqueId(), ((Player) event.getAttacker()).getDisplayName()));
+            combatStorage.add(event.getAttacker().getUniqueId(), LocalDateTime.now());
             if (core.getConfiguration().combatChat) {
                 event.getAttacker().sendMessage(ColorUtil.fixColor(Lang.INFO_COMBAT_CHAT));
             }

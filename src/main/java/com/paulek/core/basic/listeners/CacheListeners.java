@@ -15,11 +15,11 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.Objects;
 import java.util.UUID;
 
-public class StorageListeners implements Listener {
+public class CacheListeners implements Listener {
 
     private Core core;
 
-    public StorageListeners(Core core) {
+    public CacheListeners(Core core) {
         this.core = Objects.requireNonNull(core, "Core");
     }
 
@@ -47,20 +47,6 @@ public class StorageListeners implements Listener {
             SpawnCMD.getIn_detly().remove(uuid);
         }
 
-        if (core.getCombatStorage().isMarked(uuid)) {
-            core.getCombatStorage().unmark(uuid);
-
-            if (core.getConfiguration().combatAnnouncement) {
-
-                String s = ColorUtil.fixColor(Lang.INFO_COMBAT_BRODCASTLOGOUT).replace("{player}", event.getPlayer().getName()).replace("{health}", (int) event.getPlayer().getHealth() + "♥");
-
-                Bukkit.broadcastMessage(s);
-
-            }
-
-            if (core.getConfiguration().combatKillOnQuit) event.getPlayer().setHealth(0.0);
-
-        }
     }
 
     @EventHandler
