@@ -62,7 +62,7 @@ public class Config {
     @CfgComment("Jakiego znaku uzywac do tlumaczenia kolorow")
     @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
     @CfgName("color-mark")
-    public String colorMark = "$";
+    public String colorMark = "&";
 
     @CfgComment("Maklymalna liczba znakow nicku gracza")
     @CfgName("max-nick-length")
@@ -231,8 +231,8 @@ public class Config {
     @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
     @CfgCollectionStyle(CfgCollectionStyle.CollectionStyle.ALWAYS_NEW_LINE)
     public Map<String, String> chatFormating = ImmutableMap.<String, String>builder()
-            .put("default", "$a{displayname} $6» $f{message}")
-            .put("admin", "$c{displayname} $6» $c{message}")
+            .put("default", "&a{displayname} &6» &f{message}")
+            .put("admin", "&c{displayname} &6» &c{message}")
             .build();
 
     @CfgComment("Czy cenzor przeklenstw ma zostac wlaczony")
@@ -389,19 +389,19 @@ public class Config {
     @CfgComment("Nazwa generatora po scraftowaniu go")
     @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
     @CfgName("genertor-name")
-    public String genertorName = "$cGenerator stone";
+    public String genertorName = "&cGenerator stone";
 
     @CfgComment("Opis generatora po najechaniu na scraftowany blok")
     @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
     @CfgCollectionStyle(CfgCollectionStyle.CollectionStyle.ALWAYS_NEW_LINE)
     @CfgName("generator-lore")
-    public List<String> generatorLore = Arrays.asList("$aPostaw ten blok generatora,", "$aPostaw na nim stone lub obsidian", "$aw zaleznosci co na generowac.", "$aCiesz sie twoim generatorem :D");
+    public List<String> generatorLore = Arrays.asList("&aPostaw ten blok generatora,", "&aPostaw na nim stone lub obsidian", "&aw zaleznosci co na generowac.", "&aCiesz sie twoim generatorem :D");
 
 //    public static boolean WHITELIST_ENABLE = true;
-//    public static String WHITELIST_MOD = "$cYou are not in whitelist!";
+//    public static String WHITELIST_MOD = "&cYou are not in whitelist!";
 //    public static List<String> WHITELIST_ALLOWEDPLAYERS = Arrays.asList();
-//    public static String DROP_GUINAME = "$cDropy";
-//    public static String DROP_ITEM_NAME = "$a{drop-name}";
+//    public static String DROP_GUINAME = "&cDropy";
+//    public static String DROP_ITEM_NAME = "&a{drop-name}";
 //    public static List<String> DROP_ITEM_LORE = Arrays.asList("Mozna wydropic: {can-drop}", "szansa: {chance}", "exp: {exp}", "dziala fortunka: {enabled-fortune}", "wypada na wysokosci: {height}", "Moze wypasc w ilosci {amount}", "mozna wydobyc dzieki: {tools}");
 //    public static boolean DROP_ONGAMEMODE = false;
 //    public static boolean DROP_VIP_ENABLE = true;

@@ -70,24 +70,26 @@ public class Skins implements Cache<Skin, UUID> {
                 if(skinBase != null) {
                     add(uuid, skinBase);
                 } else {
-                    int count = skinsData.count();
-                    Random random = new Random();
-                    if(core.getConfiguration().skinsOverride && count >= core.getConfiguration().skinsOverrideValue) {
-                        int id = random.nextInt(count) + 1;
-                        skinBase = skinsData.load(id);
-                        add(uuid, skinBase);
-                    } else {
-                        int id = random.nextInt(core.getConfiguration().skinsList.size());
-                        String nick = core.getConfiguration().skinsList.get(id);
-                        skinBase = MojangApiUtil.getPremiumSkin(nick, core);
-                        if(skinBase == null) {
-                            id = random.nextInt(core.getConfiguration().skinsList.size());
-                            nick = core.getConfiguration().skinsList.get(id);
-                            skinBase = MojangApiUtil.getPremiumSkin(nick, core);
-                        }
-                        if(skinBase != null) {
-                            skinsData.save(skinBase);
+                    if(core.getConfiguration().skinsNonPremium) {
+                        int count = skinsData.count();
+                        Random random = new Random();
+                        if (core.getConfiguration().skinsOverride && count >= core.getConfiguration().skinsOverrideValue) {
+                            int id = random.nextInt(count) + 1;
+                            skinBase = skinsData.load(id);
                             add(uuid, skinBase);
+                        } else {
+                            int id = random.nextInt(core.getConfiguration().skinsList.size());
+                            String nick = core.getConfiguration().skinsList.get(id);
+                            skinBase = MojangApiUtil.getPremiumSkin(nick, core);
+                            if (skinBase == null) {
+                                id = random.nextInt(core.getConfiguration().skinsList.size());
+                                nick = core.getConfiguration().skinsList.get(id);
+                                skinBase = MojangApiUtil.getPremiumSkin(nick, core);
+                            }
+                            if (skinBase != null) {
+                                skinsData.save(skinBase);
+                                add(uuid, skinBase);
+                            }
                         }
                     }
                 }
