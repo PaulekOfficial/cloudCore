@@ -52,6 +52,7 @@ public class Core extends JavaPlugin {
     private Skins skinsStorage;
     private PrivateMessages privateMessagesStorage;
     private TeleportRequests teleportRequestsStorage;
+    private RandomTeleportButtons randomTeleportButtonsStorage;
     private Object worldGuard;
     private Combats combatsStorage;
     private Database database;
@@ -256,6 +257,8 @@ public class Core extends JavaPlugin {
         skinsStorage.init();
         teleportRequestsStorage = new TeleportRequests(this);
         teleportRequestsStorage.init();
+        randomTeleportButtonsStorage = new RandomTeleportButtons(this);
+        randomTeleportButtonsStorage.init();
     }
 
     private void registerListeners() {
@@ -373,8 +376,8 @@ public class Core extends JavaPlugin {
         return drops;
     }
 
-    public Rtps getRtpsStorage() {
-        return rtpsStorage;
+    public RandomTeleportButtons getRandomTeleportButtonsStorage() {
+        return randomTeleportButtonsStorage;
     }
 
     public TeleportRequests getTeleportRequestsStorage() {

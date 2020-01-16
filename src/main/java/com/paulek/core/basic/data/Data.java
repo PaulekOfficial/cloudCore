@@ -14,6 +14,10 @@ public interface Data<T, U> {
 
     void save(T t);
 
+    void delete(U u);
+
+    void delete(int id);
+
     int count();
 
     //void validateLoadedData();

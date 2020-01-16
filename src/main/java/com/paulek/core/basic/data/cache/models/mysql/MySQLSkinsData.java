@@ -21,6 +21,16 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
     }
 
     @Override
+    public void delete(UUID uuid) {
+        return;
+    }
+
+    @Override
+    public void delete(int id) {
+        return;
+    }
+
+    @Override
     public Skin load(int id) {
         try(Connection connection = core.getDatabase().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM skins WHERE id=?");
