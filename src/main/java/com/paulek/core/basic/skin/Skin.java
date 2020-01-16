@@ -310,6 +310,10 @@ public class Skin implements SkinBase {
         this.dirty = dirty;
     }
 
+    public void setManuallySet(boolean manuallySet) {
+        this.manuallySet = manuallySet;
+    }
+
     @Override
     public boolean isManuallySet() {
         return manuallySet;

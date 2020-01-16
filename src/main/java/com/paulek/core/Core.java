@@ -261,6 +261,10 @@ public class Core extends JavaPlugin {
         randomTeleportButtonsStorage.init();
     }
 
+    public void reloadConfigs() {
+        //TODO reload
+    }
+
     private void registerListeners() {
         consoleLog.info("Registering Listeners...");
         PluginManager pluginManager = plugin.getServer().getPluginManager();

@@ -33,58 +33,19 @@ public class SkinCMD extends Command {
                 if(args[0].equalsIgnoreCase("clear")){
 
                     if(args.length == 1) {
-
-                        if(MojangApiUtil.getPremiumUuid(player.getDisplayName()) == null) {
-
-                            if (getCore().getConfiguration().skinsNonPremium) {
-
-                                if(getCore().getConfiguration().skinsList.size() == 0){
-                                    sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SKIN_CLEAR));
-                                    return false;
-                                }
-
-                                Random random = new Random();
-
-                                int rand = random.nextInt(getCore().getConfiguration().skinsList.size());
-
-                                String nick = getCore().getConfiguration().skinsList.get(rand);
-
-                                Skin skin = MojangApiUtil.getPremiumSkin(nick, getCore());
-                                if(skin != null) {
-                                    skin.setDirty(true);
-                                    getCore().getSkinsStorage().addSkin(player.getUniqueId(), skin);
-                                    skin.applySkinForPlayers(player);
-                                    skin.updateSkinForPlayer(player);
-                                }
-
-                                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SKIN_CLEAR));
-
-                            } else {
-
-                                Skin skin = MojangApiUtil.getPremiumSkin("Steve", getCore());
-                                if(skin != null) {
-                                    skin.setDirty(true);
-                                    getCore().getSkinsStorage().addSkin(player.getUniqueId(), skin);
-                                    skin.applySkinForPlayers(player);
-                                    skin.updateSkinForPlayer(player);
-                                }
-
-                                sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SKIN_CLEAR));
-                            }
-                        } else {
-
-                            Skin skin = MojangApiUtil.getPremiumSkin(player.getDisplayName(), getCore());
-                            if(skin != null) {
-                                skin.setDirty(true);
-                                getCore().getSkinsStorage().addSkin(player.getUniqueId(), skin);
-                                skin.applySkinForPlayers(player);
-                                skin.updateSkinForPlayer(player);
-                            }
-
-                            sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SKIN_CLEAR));
-
+                        Skin skin = getCore().getSkinsStorage().get(player.getUniqueId());
+                        skin.setLastUpdate(LocalDateTime.MIN);
+                        skin.setManuallySet(false);
+                        getCore().getSkinsStorage().save(skin);
+                        getCore().getSkinsStorage().delete(player.getUniqueId());
+                        skin = getCore().getSkinsStorage().get(player.getUniqueId());
+                        if(skin != null) {
+                            skin.setDirty(true);
+                            getCore().getSkinsStorage().add(player.getUniqueId(), skin);
+                            skin.applySkinForPlayers(player);
+                            skin.updateSkinForPlayer(player);
                         }
-
+                        sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SKIN_CLEAR));
                     } else {
                         sender.sendMessage(getUsage());
                     }
@@ -92,41 +53,31 @@ public class SkinCMD extends Command {
                 } else if(args[0].equalsIgnoreCase("set")){
 
                     if(args.length == 2) {
-
                         String skin_string = args[1];
-
                         Skin skin = MojangApiUtil.getPremiumSkin(skin_string, getCore());
-
                         if(skin != null) {
-
                             skin.setDirty(true);
+                            skin.setManuallySet(true);
                             skin.setLastUpdate(LocalDateTime.now().plusYears(1));
-                            getCore().getSkinsStorage().addSkin(player.getUniqueId(), skin);
+                            getCore().getSkinsStorage().add(player.getUniqueId(), skin);
                             skin.updateSkinForPlayer(player);
                             skin.applySkinForPlayers(player);
-
                             sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SKIN_CHANGED));
-
                         } else {
                             sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SKIN_NOTPREMIUM));
                         }
-
                     } else {
                         sender.sendMessage(getUsage());
                     }
-
                 } else {
                     sender.sendMessage(getUsage());
                 }
-
             } else {
                 sender.sendMessage(getUsage());
             }
-
         } else {
             sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
         }
-
         return false;
     }
 

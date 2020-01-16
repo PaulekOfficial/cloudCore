@@ -1,6 +1,8 @@
 package com.paulek.core.commands.cmds.admin;
 
+import com.google.common.base.Charsets;
 import com.paulek.core.Core;
+import com.paulek.core.basic.Vector3D;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.XMaterial;
@@ -11,10 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class RandomCMD extends Command {
 
@@ -36,8 +35,8 @@ public class RandomCMD extends Command {
             }
             if ((player.getTargetBlock(new HashSet<Material>(), 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(new HashSet<Material>(), 5).getType() == Material.STONE_BUTTON)) {
                 Location loc = player.getTargetBlock(new HashSet<Material>(), 1).getLocation();
-                if (getCore().getRtpsStorage().getButtons().contains(loc)) {
-                    getCore().getRtpsStorage().remove(loc);
+                if (getCore().getRandomTeleportButtonsStorage().get(UUID.nameUUIDFromBytes(new Vector3D(loc).toString().getBytes(Charsets.UTF_8))) != null) {
+                    getCore().getRandomTeleportButtonsStorage().delete(UUID.nameUUIDFromBytes(new Vector3D(loc).toString().getBytes(Charsets.UTF_8)));
                     sender.sendMessage(ColorUtil.fixColor(Lang.INFO_RANDOMTP_REMOVED));
                 } else {
                     sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_RANDOMTP_NOTREMOVED));
@@ -54,12 +53,12 @@ public class RandomCMD extends Command {
             }
             if ((player.getTargetBlock(new HashSet<Material>(), 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(new HashSet<Material>(), 5).getType() == Material.STONE_BUTTON)) {
                 Location loc = player.getTargetBlock(new HashSet<Material>(), 1).getLocation();
-                if (getCore().getRtpsStorage().getButtons().contains(loc)) {
+                if (getCore().getRandomTeleportButtonsStorage().get(UUID.nameUUIDFromBytes(new Vector3D(loc).toString().getBytes(Charsets.UTF_8))) != null) {
                     sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_RANDOMTP_EXIST));
                     return false;
                 }
-                Location button = new Location(Bukkit.getWorld(loc.getWorld().getName()), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-                getCore().getRtpsStorage().add(button);
+                Vector3D vector3D = new Vector3D(loc);
+                getCore().getRandomTeleportButtonsStorage().add(UUID.nameUUIDFromBytes(vector3D.toString().getBytes(Charsets.UTF_8)), vector3D);
                 sender.sendMessage(ColorUtil.fixColor(Lang.INFO_RANDOMTP_CREATED));
                 return true;
             } else {

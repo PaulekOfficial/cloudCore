@@ -98,6 +98,10 @@ public class Skins implements Cache<Skin, UUID> {
         return skinBase;
     }
 
+    public void save(Skin skin) {
+        skinsData.save(skin);
+    }
+
     public Skin get(String nick) {
         return MojangApiUtil.getPremiumSkin(nick, core);
     }

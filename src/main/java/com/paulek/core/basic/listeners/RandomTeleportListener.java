@@ -1,6 +1,8 @@
 package com.paulek.core.basic.listeners;
 
+import com.google.common.base.Charsets;
 import com.paulek.core.Core;
+import com.paulek.core.basic.Vector3D;
 import com.paulek.core.basic.event.PlayerRandomTeleportEvent;
 import com.paulek.core.common.ActionBarUtil;
 import com.paulek.core.common.ColorUtil;
@@ -16,7 +18,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.nio.charset.Charset;
 import java.util.Objects;
+import java.util.UUID;
 
 public class RandomTeleportListener implements Listener {
 
@@ -35,7 +39,7 @@ public class RandomTeleportListener implements Listener {
         if ((action == Action.RIGHT_CLICK_BLOCK) && ((clickedb.getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (clickedb.getType() == Material.STONE_BUTTON))) {
             Location loc = clickedb.getLocation();
 
-            if (core.getRtpsStorage().getButtons().contains(loc)) {
+            if (core.getRandomTeleportButtonsStorage().get(UUID.nameUUIDFromBytes(new Vector3D(loc).toString().getBytes(Charsets.UTF_8))) != null) {
                 PlayerRandomTeleportEvent playerRandomTeleportEvent = new PlayerRandomTeleportEvent(e.getPlayer(), loc.getWorld(), core.getConfiguration().rtpMaxX, core.getConfiguration().rtpMaxZ, core.getConfiguration().rtpCenterX, core.getConfiguration().rtpCenterZ);
                 Bukkit.getPluginManager().callEvent(playerRandomTeleportEvent);
             }
