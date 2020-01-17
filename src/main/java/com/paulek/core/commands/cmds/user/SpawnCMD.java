@@ -1,6 +1,7 @@
 package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
+import com.paulek.core.basic.Vector3D;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
@@ -74,7 +75,7 @@ public class SpawnCMD extends Command {
             return false;
         }
 
-        Location location = getCore().getSpawnsStorage().getSpawn(spawnName);
+        Vector3D location = getCore().getSpawnsStorage().get(spawnName);
 
         Player player = Bukkit.getPlayer(playerName);
 
@@ -99,7 +100,7 @@ public class SpawnCMD extends Command {
             }
         } else {
             if(location == null){
-                location = getCore().getSpawnsStorage().getSpawn("default");
+                location = getCore().getSpawnsStorage().get("default");
                 if(location == null){
                     sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SPAWN_NOTSET));
                     return false;
@@ -113,13 +114,13 @@ public class SpawnCMD extends Command {
         }
 
         if(sender.hasPermission("core.cmd.spawn.cooldownbypass")){
-            LocationUtil.safeTeleport(getCore().getConfiguration(), location, player);
+            LocationUtil.safeTeleport(getCore().getConfiguration(), location.asLocation(), player);
 
             sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_TELEPORT));
             return false;
         }
 
-        final Location finalLocation = location;
+        final Location finalLocation = location.asLocation();
         final Player finalPlayer = player;
 
         BukkitTask id = Bukkit.getScheduler().runTaskLater(getCore().getPlugin(), new Runnable() {
@@ -143,7 +144,7 @@ public class SpawnCMD extends Command {
 
         if(args.length == 1){
             if(sender.hasPermission("core.cmd.spawn" + args[0])){
-               return getCore().getSpawnsStorage().getSpawnNames();
+               return (List<String>) getCore().getSpawnsStorage().getAllSpawnNames();
             }
         }
 

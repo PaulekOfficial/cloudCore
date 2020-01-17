@@ -1,6 +1,7 @@
 package com.paulek.core.commands.cmds.admin;
 
 import com.paulek.core.Core;
+import com.paulek.core.basic.Vector3D;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
@@ -32,13 +33,13 @@ public class SetSpawnCMD extends Command {
         if(args.length == 1){
             Location location = ((Player) sender).getLocation();
             String name = args[0];
-            getCore().getSpawnsStorage().addNewSpawn(name, location);
+            getCore().getSpawnsStorage().add(name, new Vector3D(location));
             sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_SET));
         }
 
         Location location = ((Player) sender).getLocation();
 
-        getCore().getSpawnsStorage().addNewSpawn("default", location);
+        getCore().getSpawnsStorage().add("default", new Vector3D(location));
 
         sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_SET));
 

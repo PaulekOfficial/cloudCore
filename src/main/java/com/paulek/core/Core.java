@@ -53,6 +53,7 @@ public class Core extends JavaPlugin {
     private PrivateMessages privateMessagesStorage;
     private TeleportRequests teleportRequestsStorage;
     private RandomTeleportButtons randomTeleportButtonsStorage;
+    private Spawns spawnsStorage;
     private Object worldGuard;
     private Combats combatsStorage;
     private Database database;
@@ -259,6 +260,8 @@ public class Core extends JavaPlugin {
         teleportRequestsStorage.init();
         randomTeleportButtonsStorage = new RandomTeleportButtons(this);
         randomTeleportButtonsStorage.init();
+        spawnsStorage = new Spawns(this);
+        spawnsStorage.init();
     }
 
     public void reloadConfigs() {
