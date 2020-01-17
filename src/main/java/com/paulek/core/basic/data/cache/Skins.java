@@ -87,7 +87,6 @@ public class Skins implements Cache<Skin, UUID> {
                                 skinBase = MojangApiUtil.getPremiumSkin(nick, core);
                             }
                             if (skinBase != null) {
-                                skinsData.save(skinBase);
                                 add(uuid, skinBase);
                             }
                         }

@@ -103,20 +103,30 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
             return null;
         }
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO skins SET uuid=?, name=?, value=?, signature=?, lastUpdate=?, manuallySet=? ON DUPLICATE uuid UPDATE uuid=?, name=?, value=?, signature=?, lastUpdate=?, manuallySet=?");
-            preparedStatement.setString(1, skin.getUuid().toString());
-            preparedStatement.setString(2, skin.getName());
-            preparedStatement.setString(3, skin.getValue());
-            preparedStatement.setString(4, skin.getSignature());
-            preparedStatement.setTimestamp(5, Timestamp.valueOf(skin.getLastUpdate()));
-            preparedStatement.setBoolean(6, skin.isManuallySet());
-            preparedStatement.setString(7, skin.getUuid().toString());
-            preparedStatement.setString(8, skin.getName());
-            preparedStatement.setString(9, skin.getValue());
-            preparedStatement.setString(10, skin.getSignature());
-            preparedStatement.setTimestamp(11, Timestamp.valueOf(skin.getLastUpdate()));
-            preparedStatement.setBoolean(12, skin.isManuallySet());
-            preparedStatement.executeUpdate();
+            PreparedStatement checkIfExists = connection.prepareStatement("SELECT * FROM skins WHERE uuid=?");
+            checkIfExists.setString(1,skin.getUuid().toString());
+            boolean shuldUpdate = checkIfExists.executeQuery().getString("value") != null;
+            if(shuldUpdate) {
+                PreparedStatement preparedStatement = connection.prepareStatement("UPDATE skins SET name=?, value=?, signature=?, lastUpdate=?, manuallySet=? WHERE uuid=?");
+                preparedStatement.setString(1, skin.getName());
+                preparedStatement.setString(2, skin.getValue());
+                preparedStatement.setString(3, skin.getSignature());
+                preparedStatement.setTimestamp(4, Timestamp.valueOf(skin.getLastUpdate()));
+                preparedStatement.setBoolean(5, skin.isManuallySet());
+                preparedStatement.setString(6, skin.getUuid().toString());
+
+                preparedStatement.executeUpdate();
+            } else {
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO skins SET uuid=?, name=?, value=?, signature=?, lastUpdate=?, manuallySet=?");
+                preparedStatement.setString(1, skin.getUuid().toString());
+                preparedStatement.setString(2, skin.getName());
+                preparedStatement.setString(3, skin.getValue());
+                preparedStatement.setString(4, skin.getSignature());
+                preparedStatement.setTimestamp(5, Timestamp.valueOf(skin.getLastUpdate()));
+                preparedStatement.setBoolean(6, skin.isManuallySet());
+
+                preparedStatement.executeQuery();
+            }
         } catch (SQLException exception) {
             core.getLogger().log(Level.WARNING, "Could not save skin data from database: ", exception);
         }
