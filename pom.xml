@@ -24,11 +24,6 @@
             <url>https://repo.diorite.org/repository/diorite/</url>
         </repository>
         <repository>
-            <name>Insertt repo</name>
-            <id>insertt</id>
-            <url>https://repo.insertt.dev/releases/</url>
-        </repository>
-        <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
@@ -47,6 +42,11 @@
         <repository>
             <id>panda-lang</id>
             <url>https://repo.panda-lang.org/</url>
+        </repository>
+        <repository>
+            <name>Insertt repo</name>
+            <id>insertt</id>
+            <url>https://repo.insertt.dev/releases/</url>
         </repository>
     </repositories>
 
