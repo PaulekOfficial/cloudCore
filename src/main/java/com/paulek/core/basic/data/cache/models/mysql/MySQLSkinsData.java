@@ -50,7 +50,11 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
         try(Connection connection = core.getDatabase().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM skins WHERE uuid=?");
             preparedStatement.setString(1, uuid.toString());
-            Skin skin = deserializeData(preparedStatement.executeQuery());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(!resultSet.first()){
+                return null;
+            }
+            Skin skin = deserializeData(resultSet);
             if(skin != null) {
                 return skin;
             }
@@ -76,7 +80,7 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
     public void load() {
         try(Connection connection = core.getDatabase().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `skins` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `name` LONGTEXT NOT NULL , `value` LONGTEXT NOT NULL , `signature` LONGTEXT NOT NULL , `lastUpdate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `manuallySet` TINYINT(1) , PRIMARY KEY (`id`))");
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             core.getLogger().log(Level.WARNING, "Could not create new skins table in database: ", exception);
         }
@@ -104,7 +108,7 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
         }
         try(Connection connection = core.getDatabase().getConnection()) {
             PreparedStatement checkIfExists = connection.prepareStatement("SELECT * FROM skins WHERE uuid=?");
-            checkIfExists.setString(1,skin.getUuid().toString());
+            checkIfExists.setString(1, skin.getUuid().toString());
             boolean shuldUpdate = checkIfExists.executeQuery().getString("value") != null;
             if(shuldUpdate) {
                 PreparedStatement preparedStatement = connection.prepareStatement("UPDATE skins SET name=?, value=?, signature=?, lastUpdate=?, manuallySet=? WHERE uuid=?");
@@ -137,7 +141,7 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
     public Skin deserializeData(ResultSet resultSet) {
         if(resultSet == null) return null;
         try {
-            if(resultSet.next()) return null;
+            if(resultSet.getString("uuid") == null || resultSet.getString("name") == null) return null;
             UUID uuid = UUID.fromString(resultSet.getString("uuid"));
             String name = resultSet.getString("name");
             String value = resultSet.getString("value");

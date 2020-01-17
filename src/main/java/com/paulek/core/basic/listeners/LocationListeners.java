@@ -60,8 +60,6 @@ public class LocationListeners implements Listener {
             core.getTeleportRequestsStorage().deleteTeleportDelay(uuid);
         }
 
-        event.getPlayer().sendMessage(ColorUtil.fixColor(Lang.ERROR_TPA_ABORT));
-
         if (HomeCMD.getTo_teleport().containsKey(uuid)) {
             if ((event.getFrom().getBlockX() < event.getTo().getBlockX()) || (event.getFrom().getBlockZ() < event.getTo().getBlockZ()) || (event.getFrom().getBlockY() < event.getTo().getBlockY())) {
 

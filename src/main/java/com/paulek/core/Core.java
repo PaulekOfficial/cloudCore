@@ -262,9 +262,9 @@ public class Core extends JavaPlugin {
         randomTeleportButtonsStorage = new RandomTeleportButtons(this, dataModel);
         randomTeleportButtonsStorage.init();
         spawnsStorage = new Spawns(this, dataModel);
-        spawnsStorage.init();
+        //spawnsStorage.init();
         timestamps = new Timestamps(this, dataModel);
-        timestamps.init();
+        //timestamps.init();
     }
 
     public void reloadConfigs() {

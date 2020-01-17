@@ -31,6 +31,7 @@ public class Users implements Cache<User, UUID> {
             case MYSQL: usersData = new MySQLUserData(core);
             case SQLITE: usersData = null;
             case FLAT: usersData = null;
+            default: usersData = new MySQLUserData(core);
         }
         assert usersData != null;
         usersData.load();

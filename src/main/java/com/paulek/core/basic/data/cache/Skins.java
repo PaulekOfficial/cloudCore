@@ -36,6 +36,7 @@ public class Skins implements Cache<Skin, UUID> {
             case MYSQL: skinsData = new MySQLSkinsData(core);
             case SQLITE: skinsData = null;
             case FLAT: skinsData = null;
+            default: skinsData = new MySQLSkinsData(core);
         }
         assert skinsData != null;
         skinsData.load();
@@ -61,6 +62,8 @@ public class Skins implements Cache<Skin, UUID> {
                 if(core.getConfiguration().skinsRefreshment <= lastUpdated && !skinBase.isManuallySet()) {
                     assert player != null;
                     skinBase = get(player.getName());
+                    skinBase.setUuid(player.getUniqueId());
+                    add(uuid, skinBase);
                     skinsData.save(skinBase);
                 }
             }
@@ -69,7 +72,9 @@ public class Skins implements Cache<Skin, UUID> {
             if(player != null) {
                 skinBase = get(player.getName());
                 if(skinBase != null) {
+                    skinBase.setUuid(player.getUniqueId());
                     add(uuid, skinBase);
+                    save(skinBase);
                 } else {
                     if(core.getConfiguration().skinsNonPremium) {
                         int count = skinsData.count();
@@ -77,6 +82,7 @@ public class Skins implements Cache<Skin, UUID> {
                         if (core.getConfiguration().skinsOverride && count >= core.getConfiguration().skinsOverrideValue) {
                             int id = random.nextInt(count) + 1;
                             skinBase = skinsData.load(id);
+                            skinBase.setUuid(player.getUniqueId());
                             add(uuid, skinBase);
                         } else {
                             int id = random.nextInt(core.getConfiguration().skinsList.size());
@@ -88,6 +94,7 @@ public class Skins implements Cache<Skin, UUID> {
                                 skinBase = MojangApiUtil.getPremiumSkin(nick, core);
                             }
                             if (skinBase != null) {
+                                skinBase.setUuid(player.getUniqueId());
                                 add(uuid, skinBase);
                             }
                         }

@@ -28,6 +28,7 @@ public class RandomTeleportButtons implements Cache<Vector3D, UUID> {
             case MYSQL: randomTeleportButtonsData = new MySQLRandomTeleportButtonsData(core);
             case SQLITE: randomTeleportButtonsData = null;
             case FLAT: randomTeleportButtonsData = null;
+            default: randomTeleportButtonsData = new MySQLRandomTeleportButtonsData(core);
         }
         assert randomTeleportButtonsData != null;
         randomTeleportButtonsData.load();

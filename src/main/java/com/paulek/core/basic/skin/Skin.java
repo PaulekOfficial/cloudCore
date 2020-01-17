@@ -310,6 +310,10 @@ public class Skin implements SkinBase {
         this.dirty = dirty;
     }
 
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
     public void setManuallySet(boolean manuallySet) {
         this.manuallySet = manuallySet;
     }

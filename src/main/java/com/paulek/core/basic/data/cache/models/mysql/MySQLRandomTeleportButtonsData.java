@@ -37,7 +37,7 @@ public class MySQLRandomTeleportButtonsData implements Data<Vector3D, UUID>, SQL
     public void load() {
         try(Connection connection = core.getDatabase().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `buttons` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` LONGTEXT NOT NULL , `world` TEXT NOT NULL , `x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL , PRIMARY KEY (`id`))");
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
 
             PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM buttons");
             ResultSet resultSet = preparedStatement1.executeQuery();
