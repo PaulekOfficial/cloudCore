@@ -32,10 +32,6 @@
             <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
         <repository>
-            <id>techcable-repo</id>
-            <url>http://repo.techcable.net/content/groups/public/</url>
-        </repository>
-        <repository>
             <id>sk89q-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
