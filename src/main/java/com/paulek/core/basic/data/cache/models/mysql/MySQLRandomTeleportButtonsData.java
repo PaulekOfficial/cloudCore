@@ -44,7 +44,7 @@ public class MySQLRandomTeleportButtonsData implements Data<Vector3D, UUID>, SQL
             Map<UUID, Vector3D> map = new HashMap<>();
             while (resultSet.next()) {
                 Vector3D vector3D = deserializeData(resultSet);
-                map.put(UUID.nameUUIDFromBytes(vector3D.toString().getBytes(Charsets.UTF_8)), vector3D);
+                map.put(UUID.nameUUIDFromBytes(("rtp" + vector3D.toString()).getBytes(Charsets.UTF_8)), vector3D);
             }
             core.getRandomTeleportButtonsStorage().addToCache(map);
         } catch (SQLException exception) {
@@ -90,7 +90,7 @@ public class MySQLRandomTeleportButtonsData implements Data<Vector3D, UUID>, SQL
         }
         try(Connection connection = core.getDatabase().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO buttons SET uuid=?, world=?, x=?, y=?, z=?");
-            preparedStatement.setString(1, UUID.nameUUIDFromBytes(vector3D.toString().getBytes(Charsets.UTF_8)).toString());
+            preparedStatement.setString(1, UUID.nameUUIDFromBytes(("rtp" + vector3D.toString()).getBytes(Charsets.UTF_8)).toString());
             preparedStatement.setString(2, vector3D.getWorld().getUID().toString());
             preparedStatement.setDouble(3, vector3D.getX());
             preparedStatement.setDouble(4, vector3D.getX());

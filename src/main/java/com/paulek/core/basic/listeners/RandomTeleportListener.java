@@ -39,7 +39,7 @@ public class RandomTeleportListener implements Listener {
         if ((action == Action.RIGHT_CLICK_BLOCK) && ((clickedb.getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (clickedb.getType() == Material.STONE_BUTTON))) {
             Location loc = clickedb.getLocation();
 
-            if (core.getRandomTeleportButtonsStorage().get(UUID.nameUUIDFromBytes(new Vector3D(loc).toString().getBytes(Charsets.UTF_8))) != null) {
+            if (core.getRandomTeleportButtonsStorage().get(UUID.nameUUIDFromBytes(("rtp" + new Vector3D(loc).toString()).getBytes(Charsets.UTF_8))) != null) {
                 PlayerRandomTeleportEvent playerRandomTeleportEvent = new PlayerRandomTeleportEvent(e.getPlayer(), loc.getWorld(), core.getConfiguration().rtpMaxX, core.getConfiguration().rtpMaxZ, core.getConfiguration().rtpCenterX, core.getConfiguration().rtpCenterZ);
                 Bukkit.getPluginManager().callEvent(playerRandomTeleportEvent);
             }

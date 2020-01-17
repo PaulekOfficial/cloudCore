@@ -35,8 +35,8 @@ public class RandomCMD extends Command {
             }
             if ((player.getTargetBlock(new HashSet<Material>(), 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(new HashSet<Material>(), 5).getType() == Material.STONE_BUTTON)) {
                 Location loc = player.getTargetBlock(new HashSet<Material>(), 1).getLocation();
-                if (getCore().getRandomTeleportButtonsStorage().get(UUID.nameUUIDFromBytes(new Vector3D(loc).toString().getBytes(Charsets.UTF_8))) != null) {
-                    getCore().getRandomTeleportButtonsStorage().delete(UUID.nameUUIDFromBytes(new Vector3D(loc).toString().getBytes(Charsets.UTF_8)));
+                if (getCore().getRandomTeleportButtonsStorage().get(UUID.nameUUIDFromBytes(("rtp" + new Vector3D(loc).toString()).getBytes(Charsets.UTF_8))) != null) {
+                    getCore().getRandomTeleportButtonsStorage().delete(UUID.nameUUIDFromBytes(("rtp" + new Vector3D(loc).toString()).getBytes(Charsets.UTF_8)));
                     sender.sendMessage(ColorUtil.fixColor(Lang.INFO_RANDOMTP_REMOVED));
                 } else {
                     sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_RANDOMTP_NOTREMOVED));
@@ -53,12 +53,12 @@ public class RandomCMD extends Command {
             }
             if ((player.getTargetBlock(new HashSet<Material>(), 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(new HashSet<Material>(), 5).getType() == Material.STONE_BUTTON)) {
                 Location loc = player.getTargetBlock(new HashSet<Material>(), 1).getLocation();
-                if (getCore().getRandomTeleportButtonsStorage().get(UUID.nameUUIDFromBytes(new Vector3D(loc).toString().getBytes(Charsets.UTF_8))) != null) {
+                if (getCore().getRandomTeleportButtonsStorage().get(UUID.nameUUIDFromBytes(("rtp" + new Vector3D(loc).toString()).getBytes(Charsets.UTF_8))) != null) {
                     sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_RANDOMTP_EXIST));
                     return false;
                 }
                 Vector3D vector3D = new Vector3D(loc);
-                getCore().getRandomTeleportButtonsStorage().add(UUID.nameUUIDFromBytes(vector3D.toString().getBytes(Charsets.UTF_8)), vector3D);
+                getCore().getRandomTeleportButtonsStorage().add(UUID.nameUUIDFromBytes(("rtp" + vector3D.toString()).getBytes(Charsets.UTF_8)), vector3D);
                 sender.sendMessage(ColorUtil.fixColor(Lang.INFO_RANDOMTP_CREATED));
                 return true;
             } else {
