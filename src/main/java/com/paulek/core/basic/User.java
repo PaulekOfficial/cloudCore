@@ -1,13 +1,11 @@
 package com.paulek.core.basic;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.skin.SkinBase;
 import org.bukkit.Location;
 
 import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 public class User {
@@ -48,6 +46,7 @@ public class User {
 
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
+        this.dirty = true;
     }
 
     public Location getLogoutlocation() {
@@ -56,6 +55,7 @@ public class User {
 
     public void setLogoutlocation(Location logoutlocation) {
         this.logoutlocation = logoutlocation;
+        this.dirty = true;
     }
 
     public Location getLastlocation() {
@@ -64,6 +64,7 @@ public class User {
 
     public void setLastlocation(Location lastlocation) {
         this.lastlocation = lastlocation;
+        this.dirty = true;
     }
 
     public InetAddress getIpAddres() {
@@ -72,6 +73,7 @@ public class User {
 
     public void setIpAddres(InetAddress ipAddres) {
         this.ipAddres = ipAddres;
+        this.dirty = true;
     }
 
     public LocalDateTime getLastActivity() {
@@ -80,6 +82,7 @@ public class User {
 
     public void setLastActivity(LocalDateTime lastActivity) {
         this.lastActivity = lastActivity;
+        this.dirty = true;
     }
 
     public String getLastAccountName() {
@@ -88,6 +91,7 @@ public class User {
 
     public void setLastAccountName(String lastAccountName) {
         this.lastAccountName = lastAccountName;
+        this.dirty = true;
     }
 
     public Location getHome(String homeName) {
@@ -101,10 +105,12 @@ public class User {
 
     public void addHome(String homeName, Location location) {
         homes.put(homeName, location);
+        this.dirty = true;
     }
 
     public void removeHome(String homeName) {
         homes.remove(homeName);
+        this.dirty = true;
     }
 
     public boolean isDirty() {
@@ -121,6 +127,7 @@ public class User {
 
     public void setGodMode(boolean godMode) {
         this.godMode = godMode;
+        this.dirty = true;
     }
 
     public Map<String, Location> getHomes() {
@@ -128,6 +135,7 @@ public class User {
     }
 
     public void setHomes(Map<String, Location> homes) {
+        this.dirty = true;
         this.homes = homes;
     }
 
@@ -149,17 +157,21 @@ public class User {
 
     public void setSocialSpy(boolean socialSpy) {
         this.socialSpy = socialSpy;
+        this.dirty = true;
     }
 
     public void setVanish(boolean vanish) {
         this.vanish = vanish;
+        this.dirty = true;
     }
 
     public void setTpToogle(boolean tpToogle) {
         this.tpToogle = tpToogle;
+        this.dirty = true;
     }
 
     public void setTpsMonitor(boolean tpsMonitor) {
         this.tpsMonitor = tpsMonitor;
+        this.dirty = true;
     }
 }

@@ -6,7 +6,6 @@ import com.paulek.core.basic.data.Data;
 import com.paulek.core.basic.data.DataModel;
 import com.paulek.core.basic.data.cache.models.mysql.MySQLSkinsData;
 import com.paulek.core.basic.skin.Skin;
-import com.paulek.core.basic.skin.SkinBase;
 import com.paulek.core.common.MojangApiUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

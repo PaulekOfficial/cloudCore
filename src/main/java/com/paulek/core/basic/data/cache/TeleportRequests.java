@@ -1,7 +1,6 @@
 package com.paulek.core.basic.data.cache;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.Pair;
 import com.paulek.core.basic.TeleportRequstType;
 import com.paulek.core.basic.TriplePackage;
 import com.paulek.core.basic.data.Cache;

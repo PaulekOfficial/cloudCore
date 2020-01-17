@@ -1,7 +1,6 @@
 package com.paulek.core.commands.cmds.user;
 
 import com.paulek.core.Core;
-import com.paulek.core.basic.Pair;
 import com.paulek.core.basic.TeleportRequstType;
 import com.paulek.core.basic.TriplePackage;
 import com.paulek.core.commands.Command;
@@ -11,7 +10,6 @@ import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

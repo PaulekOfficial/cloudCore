@@ -1,6 +1,8 @@
 package com.paulek.core.common;
 
 import com.google.gson.Gson;
+import org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64InputStream;
+import org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64OutputStream;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

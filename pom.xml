@@ -24,6 +24,11 @@
             <url>https://repo.diorite.org/repository/diorite/</url>
         </repository>
         <repository>
+            <name>Insertt repo</name>
+            <id>insertt</id>
+            <url>https://repo.insertt.dev/releases/</url>
+        </repository>
+        <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
@@ -118,7 +123,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.14.4-R0.1-SNAPSHOT</version>
+            <version>1.15.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- Valut API -->

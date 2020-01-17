@@ -4,7 +4,6 @@ import com.paulek.core.Core;
 import com.paulek.core.commands.cmds.user.BackCMD;
 import com.paulek.core.commands.cmds.user.HomeCMD;
 import com.paulek.core.commands.cmds.user.SpawnCMD;
-import com.paulek.core.commands.cmds.user.TpacceptCMD;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;

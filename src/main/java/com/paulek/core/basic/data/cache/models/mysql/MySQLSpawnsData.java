@@ -1,13 +1,11 @@
 package com.paulek.core.basic.data.cache.models.mysql;
 
-import com.paulek.core.basic.User;
 import com.paulek.core.basic.Vector3D;
 import com.paulek.core.basic.data.Data;
 import com.paulek.core.basic.data.cache.models.SQLDataModel;
 
 import java.sql.ResultSet;
 import java.util.Collection;
-import java.util.UUID;
 
 public class MySQLSpawnsData implements Data<Vector3D, String>, SQLDataModel<Vector3D> {
 
