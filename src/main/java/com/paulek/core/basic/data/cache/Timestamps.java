@@ -25,11 +25,11 @@ public class Timestamps implements Cache<Timestamp, UUID> {
     }
 
     public void init() {
-        timestampsData = switch (dataModel) {
-            case MYSQL -> null;
-            case SQLITE -> null;
-            case FLAT -> null;
-        };
+        switch (dataModel) {
+            case MYSQL: timestampsData = null;
+            case SQLITE: timestampsData = null;
+            case FLAT: timestampsData = null;
+        }
         assert timestampsData != null;
         timestampsData.load();
     }

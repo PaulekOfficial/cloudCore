@@ -222,7 +222,7 @@ public class Core extends JavaPlugin {
             String user = config.mysql.get("user");
             String password = config.mysql.get("password");
 
-            MySQL mySQL = new MySQL(host, port, databaseName, user, password);
+            MySQL mySQL = new MySQL(this, host, port, databaseName, user, password);
             mySQL.init();
             database = mySQL;
 

@@ -24,11 +24,11 @@ public class RandomTeleportButtons implements Cache<Vector3D, UUID> {
     }
 
     public void init() {
-        randomTeleportButtonsData = switch (dataModel) {
-            case MYSQL -> new MySQLRandomTeleportButtonsData(core);
-            case SQLITE -> null;
-            case FLAT -> null;
-        };
+        switch (dataModel) {
+            case MYSQL: randomTeleportButtonsData = new MySQLRandomTeleportButtonsData(core);
+            case SQLITE: randomTeleportButtonsData = null;
+            case FLAT: randomTeleportButtonsData = null;
+        }
         assert randomTeleportButtonsData != null;
         randomTeleportButtonsData.load();
     }

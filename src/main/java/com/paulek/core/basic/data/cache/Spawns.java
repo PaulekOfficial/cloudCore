@@ -27,11 +27,11 @@ public class Spawns implements Cache<Vector3D, String> {
     }
 
     public void init() {
-        spawnsData = switch (dataModel) {
-            case MYSQL -> null;
-            case SQLITE -> null;
-            case FLAT -> null;
-        };
+        switch (dataModel) {
+            case MYSQL:spawnsData = null;
+            case SQLITE: spawnsData = null;
+            case FLAT: spawnsData = null;
+        }
         assert spawnsData != null;
         spawnsData.load();
     }

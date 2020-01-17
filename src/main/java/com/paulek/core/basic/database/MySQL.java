@@ -7,6 +7,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Objects;
 
 public class MySQL extends Database{
 
@@ -19,7 +20,8 @@ public class MySQL extends Database{
     private String user;
     private String password;
 
-    public MySQL(String host, String port, String database, String user, String password) {
+    public MySQL(Core core, String host, String port, String database, String user, String password) {
+        this.core = Objects.requireNonNull(core, "core");
         this.host = host;
         this.port = port;
         this.database = database;

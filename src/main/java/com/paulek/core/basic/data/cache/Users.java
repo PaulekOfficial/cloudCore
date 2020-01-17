@@ -27,11 +27,11 @@ public class Users implements Cache<User, UUID> {
     }
 
     public void init() {
-        usersData = switch (dataModel) {
-            case MYSQL -> new MySQLUserData(core);
-            case SQLITE -> null;
-            case FLAT -> null;
-        };
+        switch (dataModel) {
+            case MYSQL: usersData = new MySQLUserData(core);
+            case SQLITE: usersData = null;
+            case FLAT: usersData = null;
+        }
         assert usersData != null;
         usersData.load();
         Bukkit.getScheduler().runTaskTimerAsynchronously(core.getPlugin(), run -> {

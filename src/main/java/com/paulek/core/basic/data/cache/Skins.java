@@ -32,11 +32,11 @@ public class Skins implements Cache<Skin, UUID> {
     }
 
     public void init() {
-        skinsData = switch (dataModel) {
-            case MYSQL -> new MySQLSkinsData(core);
-            case SQLITE -> null;
-            case FLAT -> null;
-        };
+        switch (dataModel) {
+            case MYSQL: skinsData = new MySQLSkinsData(core);
+            case SQLITE: skinsData = null;
+            case FLAT: skinsData = null;
+        }
         assert skinsData != null;
         skinsData.load();
         Bukkit.getScheduler().runTaskTimerAsynchronously(core.getPlugin(), run -> {
