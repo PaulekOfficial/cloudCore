@@ -26,7 +26,8 @@ public class Skins implements Cache<Skin, UUID> {
     private DataModel dataModel;
     private Map<UUID, Skin> cachedSkins = new ConcurrentHashMap<>(100);
 
-    public Skins(Core core) {
+    public Skins(Core core, DataModel dataModel) {
+        this.dataModel = dataModel;
         this.core = Objects.requireNonNull(core, "core");
     }
 

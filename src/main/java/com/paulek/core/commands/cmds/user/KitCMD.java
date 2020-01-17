@@ -1,5 +1,6 @@
 package com.paulek.core.commands.cmds.user;
 
+import com.google.common.base.Charsets;
 import com.paulek.core.Core;
 import com.paulek.core.basic.Kit;
 import com.paulek.core.basic.Timestamp;
@@ -16,9 +17,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class KitCMD extends Command {
 
@@ -77,15 +80,15 @@ public class KitCMD extends Command {
 
                 User user = getCore().getUsersStorage().get(player.getUniqueId());
 
-                if (getCore().getTimestamps().getTimestamp(user.getUuid(), kitName, "kit") != null) {
+                if (getCore().getTimestamps().get(UUID.nameUUIDFromBytes(("{" + "userUUID:" + user.getUuid().toString() + ",service:" + kitName + ",serviceName:kit" + "}").getBytes(Charsets.UTF_8))) != null) {
 
-                    Timestamp timestamp = getCore().getTimestamps().getTimestamp(user.getUuid(), kitName, "kit");
+                    Timestamp timestamp = getCore().getTimestamps().get(UUID.nameUUIDFromBytes(("{" + "userUUID:" + user.getUuid().toString() + ",service:" + kitName + ",serviceName:kit" + "}").getBytes(Charsets.UTF_8)));
                     if (timestamp.getClassName().equalsIgnoreCase("kit")) {
                         if (timestamp.applicable()) {
                             sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_KIT_WAIT.replace("{time}", timestamp.timeLeft())));
                             return false;
                         } else {
-                            getCore().getTimestamps().removeTimestamp(user.getUuid(), kitName);
+                            getCore().getTimestamps().delete(UUID.nameUUIDFromBytes(("{" + "userUUID:" + user.getUuid().toString() + ",service:" + kitName + ",serviceName:kit" + "}").getBytes(Charsets.UTF_8)));
                         }
 
                     }
@@ -106,7 +109,7 @@ public class KitCMD extends Command {
                 player.sendMessage(ColorUtil.fixColor(Lang.INFO_KIT_SUCCES.replace("{kit}", kitName)));
 
                 if (!player.hasPermission("core.cmd.kit.nocooldown"))
-                    getCore().getTimestamps().addTimestamp(new Timestamp(player.getUniqueId(), kitName, "kit", LocalDateTime.now() , kit.getRenewTime()));
+                    getCore().getTimestamps().add(UUID.nameUUIDFromBytes(("{" + "userUUID:" + user.getUuid().toString() + ",service:" + kitName + ",serviceName:kit" + "}").getBytes(Charsets.UTF_8)), new Timestamp(player.getUniqueId(), kitName, "kit", LocalDateTime.now() , kit.getRenewTime()));
 
                 return false;
             }
@@ -136,8 +139,8 @@ public class KitCMD extends Command {
                         List<String> lore = new ArrayList<>();
 
                         Timestamp timestamp = null;
-                        if (getCore().getTimestamps().getTimestamp(player.getUniqueId(), kitName, "kit") != null) {
-                            timestamp = getCore().getTimestamps().getTimestamp(player.getUniqueId(), kitName, "kit");
+                        if (getCore().getTimestamps().get(UUID.nameUUIDFromBytes(("{" + "userUUID:" + player.getUniqueId().toString() + ",service:" + kitName + ",serviceName:kit" + "}").getBytes(Charsets.UTF_8))) != null) {
+                            timestamp = getCore().getTimestamps().get(UUID.nameUUIDFromBytes(("{" + "userUUID:" + player.getUniqueId().toString() + ",service:" + kitName + ",serviceName:kit" + "}").getBytes(Charsets.UTF_8)));
                         }
 
                         String availability = Lang.INFO_KIT_YES;
@@ -172,7 +175,7 @@ public class KitCMD extends Command {
                             player.sendMessage(ColorUtil.fixColor(Lang.INFO_KIT_SUCCES.replace("{kit}", kit.getName())));
 
                             if (!player.hasPermission("core.kit.nocooldown"))
-                                getCore().getTimestamps().addTimestamp(new Timestamp(player.getUniqueId(), kitName, "kit", LocalDateTime.now(), kit.getRenewTime()));
+                                getCore().getTimestamps().add(UUID.nameUUIDFromBytes(("{" + "userUUID:" + player.getUniqueId().toString() + ",service:" + kitName + ",serviceName:kit" + "}").getBytes(Charsets.UTF_8)), new Timestamp(player.getUniqueId(), kitName, "kit", LocalDateTime.now(), kit.getRenewTime()));
 
                         });
                         if (timestamp != null) {

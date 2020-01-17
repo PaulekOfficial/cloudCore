@@ -54,6 +54,7 @@ public class Core extends JavaPlugin {
     private TeleportRequests teleportRequestsStorage;
     private RandomTeleportButtons randomTeleportButtonsStorage;
     private Spawns spawnsStorage;
+    private Timestamps timestamps;
     private Object worldGuard;
     private Combats combatsStorage;
     private Database database;
@@ -254,14 +255,16 @@ public class Core extends JavaPlugin {
         }
         commandManager = new CommandManager();
         privateMessagesStorage = new PrivateMessages();
-        skinsStorage = new Skins(this);
+        skinsStorage = new Skins(this, dataModel);
         skinsStorage.init();
         teleportRequestsStorage = new TeleportRequests(this);
         teleportRequestsStorage.init();
-        randomTeleportButtonsStorage = new RandomTeleportButtons(this);
+        randomTeleportButtonsStorage = new RandomTeleportButtons(this, dataModel);
         randomTeleportButtonsStorage.init();
-        spawnsStorage = new Spawns(this);
+        spawnsStorage = new Spawns(this, dataModel);
         spawnsStorage.init();
+        timestamps = new Timestamps(this, dataModel);
+        timestamps.init();
     }
 
     public void reloadConfigs() {

@@ -18,7 +18,8 @@ public class RandomTeleportButtons implements Cache<Vector3D, UUID> {
 
     private Map<UUID, Vector3D> cachedLocations = new ConcurrentHashMap<>(10);
 
-    public RandomTeleportButtons(Core core) {
+    public RandomTeleportButtons(Core core, DataModel dataModel) {
+        this.dataModel = dataModel;
         this.core = Objects.requireNonNull(core, "core");
     }
 

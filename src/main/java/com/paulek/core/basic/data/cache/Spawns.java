@@ -21,7 +21,8 @@ public class Spawns implements Cache<Vector3D, String> {
     private DataModel dataModel;
     private Map<String, Vector3D> cachedSpawns = new ConcurrentHashMap<>(100);
 
-    public Spawns(Core core) {
+    public Spawns(Core core, DataModel dataModel) {
+        this.dataModel = dataModel;
         this.core = Objects.requireNonNull(core, "core");
     }
 
