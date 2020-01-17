@@ -109,7 +109,11 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
         try(Connection connection = core.getDatabase().getConnection()) {
             PreparedStatement checkIfExists = connection.prepareStatement("SELECT * FROM skins WHERE uuid=?");
             checkIfExists.setString(1, skin.getUuid().toString());
-            boolean shuldUpdate = checkIfExists.executeQuery().getString("value") != null;
+            ResultSet rs = checkIfExists.executeQuery();
+            boolean shuldUpdate = rs.next();
+            if(!shuldUpdate) {
+                rs.beforeFirst();
+            }
             if(shuldUpdate) {
                 PreparedStatement preparedStatement = connection.prepareStatement("UPDATE skins SET name=?, value=?, signature=?, lastUpdate=?, manuallySet=? WHERE uuid=?");
                 preparedStatement.setString(1, skin.getName());
@@ -129,7 +133,7 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
                 preparedStatement.setTimestamp(5, Timestamp.valueOf(skin.getLastUpdate()));
                 preparedStatement.setBoolean(6, skin.isManuallySet());
 
-                preparedStatement.executeQuery();
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException exception) {
             core.getLogger().log(Level.WARNING, "Could not save skin data from database: ", exception);

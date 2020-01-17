@@ -19,10 +19,6 @@
 
     <repositories>
         <repository>
-            <id>dbanaszewski-repo</id>
-            <url>https://nexus.dbanaszewski.pl/repository/maven-public/</url>
-        </repository>
-        <repository>
             <name>Diorite repository</name>
             <id>diorite</id>
             <url>https://repo.diorite.org/repository/diorite/</url>
@@ -122,7 +118,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.14-R0.1-SNAPSHOT</version>
+            <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- Valut API -->

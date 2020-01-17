@@ -57,6 +57,7 @@ public class Users implements Cache<User, UUID> {
         User user = usersData.load(uuid);
         if(user != null) {
             add(uuid, user);
+            return user;
         }
         return null;
     }

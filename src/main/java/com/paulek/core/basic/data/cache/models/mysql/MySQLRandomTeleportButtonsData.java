@@ -67,7 +67,7 @@ public class MySQLRandomTeleportButtonsData implements Data<Vector3D, UUID>, SQL
         try(Connection connection = core.getDatabase().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM buttons WHERE uuid=?");
             preparedStatement.setString(1, uuid.toString());
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             core.getLogger().log(Level.WARNING, "Could not delete random teleport button location in database or load it to cache: ", exception);
         }

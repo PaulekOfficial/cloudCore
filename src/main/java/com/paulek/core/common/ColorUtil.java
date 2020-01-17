@@ -9,7 +9,7 @@ import java.util.List;
 public class ColorUtil {
 
     public static String fixColor(String string) {
-        return ChatColor.translateAlternateColorCodes('$', string);
+        return ChatColor.translateAlternateColorCodes(Config.COLOR_MARK.charAt(1), string);
     }
 
     public static List<String> fixColors(String... strings) {
