@@ -5,6 +5,7 @@ import com.paulek.core.basic.Vector3D;
 import com.paulek.core.commands.Command;
 import com.paulek.core.common.ColorUtil;
 import com.paulek.core.common.LocationUtil;
+import com.paulek.core.common.PermissionsUtil;
 import com.paulek.core.common.io.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -39,11 +40,11 @@ public class SpawnCMD extends Command {
                 return false;
             }
 
-            spawnMethod(((Player)sender).getDisplayName(), "default", sender);
+            spawnMethod(sender.getName(), "default", sender);
 
         } else if (args.length == 1) {
 
-            spawnMethod(null, args[0], sender);
+            spawnMethod(sender.getName(), args[0], sender);
 
         } else if(args.length == 2) {
             String spawnName = args[0];
@@ -70,7 +71,7 @@ public class SpawnCMD extends Command {
             }
         }
 
-        if(!sender.hasPermission("core.cmd.spawn." + spawnName)){
+        if(!PermissionsUtil.checkCommandPermission("spawn." + spawnName, sender)){
             sender.sendMessage(ColorUtil.fixColor(getPermissionMessage()));
             return false;
         }
@@ -92,10 +93,10 @@ public class SpawnCMD extends Command {
             if (location == null) {
                 if (!spawnName.equalsIgnoreCase("default")) {
                     sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SPAWN_NAMEDNOTSET.replace("{name}", spawnName)));
-                    return false;
+                    return true;
                 } else {
                     sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SPAWN_NOTSET));
-                    return false;
+                    return true;
                 }
             }
         } else {
@@ -103,21 +104,21 @@ public class SpawnCMD extends Command {
                 location = getCore().getSpawnsStorage().get("default");
                 if(location == null){
                     sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_SPAWN_NOTSET));
-                    return false;
+                    return true;
                 }
             }
         }
 
-        if(isPlayer && !sender.hasPermission("core.spawn.admin")){
+        if(isPlayer && !PermissionsUtil.checkCommandPermission("spawn.admin", sender)){
             sender.sendMessage(ColorUtil.fixColor(getPermissionMessage()));
             return false;
         }
 
-        if(sender.hasPermission("core.cmd.spawn.cooldownbypass")){
+        if(PermissionsUtil.checkCommandPermission("spawn.coolddownbypass", sender)){
             LocationUtil.safeTeleport(getCore().getConfiguration(), location.asLocation(), player);
 
             sender.sendMessage(ColorUtil.fixColor(Lang.INFO_SPAWN_TELEPORT));
-            return false;
+            return true;
         }
 
         final Location finalLocation = location.asLocation();
@@ -143,13 +144,18 @@ public class SpawnCMD extends Command {
     public List<String> tabComplete(CommandSender sender, String[] args) {
 
         if(args.length == 1){
-            if(sender.hasPermission("core.cmd.spawn" + args[0])){
-               return (List<String>) getCore().getSpawnsStorage().getAllSpawnNames();
+            List<String> allSpawns = new ArrayList<>(getCore().getSpawnsStorage().getAllSpawnNames());
+            List<String> permittedSpawn = new ArrayList<>(allSpawns.size());
+            for(String s : allSpawns) {
+                if(PermissionsUtil.checkCommandPermission("spawn." + s, sender)){
+                    permittedSpawn.add(s);
+                }
             }
+            return permittedSpawn;
         }
 
         if(args.length == 2) {
-            if (sender.hasPermission("core.cmd.spawn.admin")) {
+            if (PermissionsUtil.checkCommandPermission("spawn.admin", sender)) {
                 List<String> playerList = new ArrayList<>();
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     playerList.add(player.getDisplayName());

@@ -170,15 +170,15 @@ public class Config {
 
     @CfgComment("Czy podczas walki mozna otwierac skrzynie")
     @CfgName("combat-allow-chests")
-    public boolean combatAllowChests = false;
+    public boolean combatAllowChests = true;
 
     @CfgComment("Czy podczas walki mozna niszczyc bloki")
     @CfgName("combat-allow-block-break")
-    public boolean combatAllowBlockBreak = false;
+    public boolean combatAllowBlockBreak = true;
 
     @CfgComment("Czy podczas walki mozna stawaic bloki")
     @CfgName("combat-allow-block-place")
-    public boolean combatAllowBlockPlace = false;
+    public boolean combatAllowBlockPlace = true;
 
     @CfgComment("Bloki ktore mozna postawic jezeli obcja combat-allow-block-place jest wylaczona")
     @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
@@ -188,7 +188,7 @@ public class Config {
 
     @CfgComment("Czy podczas walki gracz moze wykonywac komendy")
     @CfgName("combat-allow-commands")
-    public boolean combatAllowCommands = false;
+    public boolean combatAllowCommands = true;
 
     @CfgComment("Komedy ktore mozna wykonywac podczas walki jezeli obcja combat-allow-commands jest wylaczona")
     @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
@@ -334,7 +334,7 @@ public class Config {
 
     @CfgComment("Czy gracz po pierwszym wejsciu na serwer ma zostac losowo przeteleportowany na mapie")
     @CfgName("rtp-on-first-join")
-    public boolean rtpOnFirstJoin = true;
+    public boolean rtpOnFirstJoin = false;
 
     @CfgComment("###########################################################")
     @CfgComment(" §~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~§ #")

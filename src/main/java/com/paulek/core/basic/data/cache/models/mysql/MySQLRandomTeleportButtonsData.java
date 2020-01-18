@@ -104,8 +104,7 @@ public class MySQLRandomTeleportButtonsData implements Data<Vector3D, UUID>, SQL
     public Vector3D deserializeData(ResultSet resultSet) {
         if(resultSet == null) return null;
         try {
-            if(resultSet.next()) return null;
-            UUID worldUUID = UUID.fromString("world");
+            UUID worldUUID = UUID.fromString(resultSet.getString("world"));
             double x = resultSet.getDouble("x");
             double y = resultSet.getDouble("y");
             double z = resultSet.getDouble("z");

@@ -20,12 +20,12 @@ public class Vector3D {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.pitch = -256;
-        this.yaw = -256;
+        this.pitch = -10000;
+        this.yaw = -10000;
     }
 
-    public Vector3D(World world, double x, double y, double z, float pitch, float yaw) {
-        this.world = world;
+    public Vector3D(UUID world, double x, double y, double z, float pitch, float yaw) {
+        this.world = Bukkit.getWorld(world);
         this.x = x;
         this.y = y;
         this.z = z;
@@ -58,8 +58,16 @@ public class Vector3D {
         return z;
     }
 
+    public float getPitch() {
+        return pitch;
+    }
+
+    public float getYaw() {
+        return yaw;
+    }
+
     public Location asLocation() {
-        if(pitch == -256 || yaw == -256) {
+        if(pitch == -10000 || yaw == -10000) {
             return new Location(world, x, y, z);
         }
         return new Location(world, x, y, z, yaw, pitch);
@@ -68,7 +76,7 @@ public class Vector3D {
     @Override
     public String toString() {
         World world = this.world == null ? null : Bukkit.getWorlds().get(0);
-        if(pitch == -256 || yaw == -256) {
+        if(pitch == -10000 || yaw == -10000) {
             return "Location{world=" + world + ",x=" + this.x + ",y=" + this.y + ",z=" + this.z + '}';
         }
         return "Location{world=" + world + ",x=" + this.x + ",y=" + this.y + ",z=" + this.z + ",yaw=" + this.yaw + ",pitch=" +this.pitch + '}';

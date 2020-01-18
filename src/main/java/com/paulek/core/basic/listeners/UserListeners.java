@@ -50,6 +50,8 @@ public class UserListeners implements Listener {
             user.setDirty(true);
             core.getUsersStorage().add(player.getUniqueId(), user);
             core.getConsoleLog().info("Created new " + user.getUuid().toString() + " user known as " + player.getDisplayName());
+        } else {
+            core.getConsoleLog().info("Loaded " + user.getUuid().toString() + " user known as " + player.getDisplayName());
         }
     }
 

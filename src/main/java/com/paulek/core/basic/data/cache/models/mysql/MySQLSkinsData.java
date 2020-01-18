@@ -88,16 +88,21 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
 
     @Override
     public void save(Collection<Skin> collection, boolean ignoreNotChanged) {
-        for(Skin skin : collection) {
-            if(skin.isDirty() || ignoreNotChanged) {
-                save(skin);
-                skin.setDirty(false);
+        if(collection.size() > 0) {
+            for (Skin skin : collection) {
+                if (skin.isDirty() || ignoreNotChanged) {
+                    save(skin);
+                    skin.setDirty(false);
+                }
             }
         }
     }
 
     @Override
     public void save(Skin skin) {
+        if(skin.getUuid() == null) {
+            return;
+        }
         serializeData(skin);
     }
 

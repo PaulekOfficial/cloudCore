@@ -61,9 +61,7 @@ public class MySQLUserData implements Data<User, UUID>, SQLDataModel<User> {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE uuid=?");
             preparedStatement.setString(1, uuid.toString());
             User user = deserializeData(preparedStatement.executeQuery());
-            if(user != null) {
-                return user;
-            }
+            return user;
         } catch (SQLException exception) {
             core.getLogger().log(Level.WARNING, "Could not load user (" + uuid.toString() + ") data from database: ", exception);
         }
@@ -138,20 +136,21 @@ public class MySQLUserData implements Data<User, UUID>, SQLDataModel<User> {
     public User deserializeData(ResultSet resultSet) {
         if(resultSet == null) return null;
         try {
-            if(resultSet.next()) return null;
-            UUID uuid = UUID.fromString(resultSet.getString("uuid"));
-            String lastAccountName = resultSet.getString("lastAccountName");
-            Location logoutlocation = LocationUtil.locationFromString(resultSet.getString("logoutLocation"));
-            Location lastlocation = LocationUtil.locationFromString(resultSet.getString("lastLocation"));
-            InetAddress ipAddres = InetAddress.getByName(resultSet.getString("ipAddres"));
-            Map<String, Location> homes = LocationUtil.locationMapFormString(resultSet.getString("homes"));
-            LocalDateTime lastActivity = resultSet.getTimestamp("lastActivity").toLocalDateTime();
-            boolean socialSpy = resultSet.getBoolean("socialSpy");
-            boolean vanish = resultSet.getBoolean("vanish");
-            boolean tpToogle = resultSet.getBoolean("tpToogle");
-            boolean tpsMonitor = resultSet.getBoolean("tpsMonitor");
-            boolean godMode = resultSet.getBoolean("godMode");
-            return new User(uuid, lastAccountName, logoutlocation, lastlocation, ipAddres, homes, lastActivity, socialSpy, vanish, tpToogle, tpsMonitor, godMode, core);
+            if(resultSet.next()) {
+                UUID uuid = UUID.fromString(resultSet.getString("uuid"));
+                String lastAccountName = resultSet.getString("lastAccountName");
+                Location logoutlocation = LocationUtil.locationFromString(resultSet.getString("logoutLocation"));
+                Location lastlocation = LocationUtil.locationFromString(resultSet.getString("lastLocation"));
+                InetAddress ipAddres = InetAddress.getByName(resultSet.getString("ipAddres"));
+                Map<String, Location> homes = LocationUtil.locationMapFormString(resultSet.getString("homes"));
+                LocalDateTime lastActivity = resultSet.getTimestamp("lastActivity").toLocalDateTime();
+                boolean socialSpy = resultSet.getBoolean("socialSpy");
+                boolean vanish = resultSet.getBoolean("vanish");
+                boolean tpToogle = resultSet.getBoolean("tpToogle");
+                boolean tpsMonitor = resultSet.getBoolean("tpsMonitor");
+                boolean godMode = resultSet.getBoolean("godMode");
+                return new User(uuid, lastAccountName, logoutlocation, lastlocation, ipAddres, homes, lastActivity, socialSpy, vanish, tpToogle, tpsMonitor, godMode, core);
+            }
         } catch (SQLException | UnknownHostException exception) {
             core.getLogger().log(Level.WARNING, "Could load user data from database: ", exception);
         }

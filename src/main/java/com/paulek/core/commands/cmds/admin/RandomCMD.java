@@ -32,8 +32,8 @@ public class RandomCMD extends Command {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
                 return false;
             }
-            if ((player.getTargetBlock(new HashSet<Material>(), 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(new HashSet<Material>(), 5).getType() == Material.STONE_BUTTON)) {
-                Location loc = player.getTargetBlock(new HashSet<Material>(), 1).getLocation();
+            if ((player.getTargetBlock(new HashSet<>(), 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(new HashSet<>(), 5).getType() == Material.STONE_BUTTON)) {
+                Location loc = player.getTargetBlock(new HashSet<>(), 1).getLocation();
                 if (getCore().getRandomTeleportButtonsStorage().get(UUID.nameUUIDFromBytes(("rtp" + new Vector3D(loc).toString()).getBytes(Charsets.UTF_8))) != null) {
                     getCore().getRandomTeleportButtonsStorage().delete(UUID.nameUUIDFromBytes(("rtp" + new Vector3D(loc).toString()).getBytes(Charsets.UTF_8)));
                     sender.sendMessage(ColorUtil.fixColor(Lang.INFO_RANDOMTP_REMOVED));
@@ -50,8 +50,8 @@ public class RandomCMD extends Command {
                 sender.sendMessage(Lang.ERROR_MUSTBEPLAYER);
                 return false;
             }
-            if ((player.getTargetBlock(new HashSet<Material>(), 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(new HashSet<Material>(), 5).getType() == Material.STONE_BUTTON)) {
-                Location loc = player.getTargetBlock(new HashSet<Material>(), 1).getLocation();
+            if ((player.getTargetBlock(new HashSet<>(), 1).getType() == XMaterial.LEGACY_WOOD_BUTTON.parseMaterial()) || (player.getTargetBlock(new HashSet<>(), 5).getType() == Material.STONE_BUTTON)) {
+                Location loc = player.getTargetBlock(new HashSet<>(), 1).getLocation();
                 if (getCore().getRandomTeleportButtonsStorage().get(UUID.nameUUIDFromBytes(("rtp" + new Vector3D(loc).toString()).getBytes(Charsets.UTF_8))) != null) {
                     sender.sendMessage(ColorUtil.fixColor(Lang.ERROR_RANDOMTP_EXIST));
                     return false;

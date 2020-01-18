@@ -2,6 +2,8 @@ package com.paulek.core.common;
 
 import org.bukkit.Material;
 
+import java.util.Arrays;
+
 public enum XMaterial {
 
 
@@ -18,7 +20,7 @@ public enum XMaterial {
     }
 
     public Material parseMaterial(){
-        Material material = Material.matchMaterial(materialNames.toString());
+        Material material = Material.matchMaterial(Arrays.toString(materialNames));
         if(material == null){
 
             for(String materialName : materialNames){

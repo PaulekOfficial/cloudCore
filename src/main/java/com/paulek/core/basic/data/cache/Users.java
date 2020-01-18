@@ -46,7 +46,9 @@ public class Users implements Cache<User, UUID> {
     }
 
     public void saveDataBeforeShutdown() {
-        usersData.save(cachedUsers.values(), true);
+        if(cachedUsers.values().size() > 0) {
+            usersData.save(cachedUsers.values(), true);
+        }
     }
 
     @Override

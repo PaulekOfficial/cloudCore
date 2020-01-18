@@ -45,7 +45,9 @@ public class Skins implements Cache<Skin, UUID> {
     }
 
     public void saveDataBeforeShutdown() {
-        skinsData.save(cachedSkins.values(), true);
+        if(cachedSkins.values().size() > 0) {
+            skinsData.save(cachedSkins.values(), true);
+        }
     }
 
     @Override
@@ -62,7 +64,6 @@ public class Skins implements Cache<Skin, UUID> {
                     assert player != null;
                     skinBase = get(player.getName());
                     skinBase.setUuid(player.getUniqueId());
-                    add(uuid, skinBase);
                     skinsData.save(skinBase);
                 }
             }
