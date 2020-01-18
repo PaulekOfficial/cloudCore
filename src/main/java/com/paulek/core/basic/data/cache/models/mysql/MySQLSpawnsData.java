@@ -34,10 +34,10 @@ public class MySQLSpawnsData implements Data<Pair<String, Vector3D>, String>, SQ
     @Override
     public void load() {
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `spawns` ( `id` INT NOT NULL AUTO_INCREMENT , `name` TEXT NOT NULL , `world` TEXT NOT NULL ,`x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL , `pitch` FLOAT NOT NULL , `yaw` FLOAT NOT NULL , PRIMARY KEY (`id`))");
+            PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + core.getConfiguration().tablePrefix + "spawns ( `id` INT NOT NULL AUTO_INCREMENT , `name` TEXT NOT NULL , `world` TEXT NOT NULL ,`x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL , `pitch` FLOAT NOT NULL , `yaw` FLOAT NOT NULL , PRIMARY KEY (`id`))");
             preparedStatement.executeUpdate();
 
-            PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM spawns");
+            PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM " + core.getConfiguration().tablePrefix + "spawns");
             ResultSet resultSet = preparedStatement1.executeQuery();
             Map<String, Vector3D> spawnsMap = new HashMap<>();
             while (resultSet.next()) {
@@ -65,7 +65,7 @@ public class MySQLSpawnsData implements Data<Pair<String, Vector3D>, String>, SQ
     @Override
     public void delete(String s) {
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM spawns WHERE name=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + core.getConfiguration().tablePrefix + "spawns WHERE name=?");
             preparedStatement.setString(1, s);
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
@@ -89,7 +89,7 @@ public class MySQLSpawnsData implements Data<Pair<String, Vector3D>, String>, SQ
             return null;
         }
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO spawns SET name=?, world=?, x=?, y=?, z=?, pitch=?, yaw=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + core.getConfiguration().tablePrefix + "spawns SET name=?, world=?, x=?, y=?, z=?, pitch=?, yaw=?");
             Vector3D vector3D1 = vector3D.getR();
             preparedStatement.setString(1, vector3D.getT());
             preparedStatement.setString(2, vector3D1.getWorld().getUID().toString());

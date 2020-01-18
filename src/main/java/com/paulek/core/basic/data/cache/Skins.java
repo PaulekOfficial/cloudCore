@@ -69,6 +69,9 @@ public class Skins implements Cache<Skin, UUID> {
             }
             add(uuid, skinBase);
         } else {
+            if(Bukkit.getServer().getOnlineMode()) {
+                return null;
+            }
             if(player != null) {
                 skinBase = get(player.getName());
                 if(skinBase != null) {

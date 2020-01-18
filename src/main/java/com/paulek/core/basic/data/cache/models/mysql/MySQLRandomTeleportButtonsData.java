@@ -34,10 +34,10 @@ public class MySQLRandomTeleportButtonsData implements Data<Vector3D, UUID>, SQL
     @Override
     public void load() {
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `buttons` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` LONGTEXT NOT NULL , `world` TEXT NOT NULL , `x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL , PRIMARY KEY (`id`))");
+            PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + core.getConfiguration().tablePrefix + "buttons ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` LONGTEXT NOT NULL , `world` TEXT NOT NULL , `x` DOUBLE NOT NULL , `y` DOUBLE NOT NULL , `z` DOUBLE NOT NULL , PRIMARY KEY (`id`))");
             preparedStatement.executeUpdate();
 
-            PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM buttons");
+            PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM " + core.getConfiguration().tablePrefix +"buttons");
             ResultSet resultSet = preparedStatement1.executeQuery();
             Map<UUID, Vector3D> map = new HashMap<>();
             while (resultSet.next()) {
@@ -63,7 +63,7 @@ public class MySQLRandomTeleportButtonsData implements Data<Vector3D, UUID>, SQL
     @Override
     public void delete(UUID uuid) {
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM buttons WHERE uuid=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + core.getConfiguration().tablePrefix + "buttons WHERE uuid=?");
             preparedStatement.setString(1, uuid.toString());
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
@@ -87,7 +87,7 @@ public class MySQLRandomTeleportButtonsData implements Data<Vector3D, UUID>, SQL
             return null;
         }
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO buttons SET uuid=?, world=?, x=?, y=?, z=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + core.getConfiguration().tablePrefix + "buttons SET uuid=?, world=?, x=?, y=?, z=?");
             preparedStatement.setString(1, UUID.nameUUIDFromBytes(("rtp" + vector3D.toString()).getBytes(Charsets.UTF_8)).toString());
             preparedStatement.setString(2, vector3D.getWorld().getUID().toString());
             preparedStatement.setDouble(3, vector3D.getX());

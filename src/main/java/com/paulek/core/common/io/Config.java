@@ -40,7 +40,7 @@ public class Config {
 
     @CfgComment("Czy plugin ma byc wlaczony")
     @CfgName("enabled")
-    public boolean enabled = false;
+    public boolean enabled = true;
 
     @CfgComment("Z jakiego rodzaju baz danych ma kozysztac plugin. Dostepne MySQL, SQLite")
     @CfgName("storgae-type")
@@ -59,6 +59,11 @@ public class Config {
             .put("database-name", "core")
             .put("pool-size", "10")
             .build();
+    @CfgComment("Jaki prefix ma miec kazda tabela utworzona w bazie danych przez ten plugin")
+    @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
+    @CfgName("table-prefix")
+    public String tablePrefix = "cloudcore_";
+
     @CfgComment("Jakiego znaku uzywac do tlumaczenia kolorow")
     @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
     @CfgName("color-mark")

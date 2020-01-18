@@ -48,7 +48,7 @@ public class MySQLUserData implements Data<User, UUID>, SQLDataModel<User> {
     @Override
     public void load() {
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `users` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `lastAccountName` TEXT NOT NULL , `logoutLocation` LONGTEXT NOT NULL , `lastLocation` LONGTEXT NOT NULL , `ipAddres` MEDIUMTEXT NOT NULL , `homes` LONGTEXT NOT NULL , `lastActivity` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `socialSpy` TINYINT NOT NULL , `vanish` TINYINT NOT NULL , `tpToogle` TINYINT NOT NULL , `tpsMonitor` TINYINT NOT NULL , `godMode` TINYINT NOT NULL , PRIMARY KEY (`id`))");
+            PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + core.getConfiguration().tablePrefix + "users ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `lastAccountName` TEXT NOT NULL , `logoutLocation` LONGTEXT NOT NULL , `lastLocation` LONGTEXT NOT NULL , `ipAddres` MEDIUMTEXT NOT NULL , `homes` LONGTEXT NOT NULL , `lastActivity` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `socialSpy` TINYINT NOT NULL , `vanish` TINYINT NOT NULL , `tpToogle` TINYINT NOT NULL , `tpsMonitor` TINYINT NOT NULL , `godMode` TINYINT NOT NULL , PRIMARY KEY (`id`))");
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             core.getLogger().log(Level.WARNING, "Could not create new users table in database: ", exception);
@@ -58,7 +58,7 @@ public class MySQLUserData implements Data<User, UUID>, SQLDataModel<User> {
     @Override
     public User load(UUID uuid) {
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE uuid=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + core.getConfiguration().tablePrefix + "users WHERE uuid=?");
             preparedStatement.setString(1, uuid.toString());
             User user = deserializeData(preparedStatement.executeQuery());
             return user;
@@ -92,7 +92,7 @@ public class MySQLUserData implements Data<User, UUID>, SQLDataModel<User> {
             user.setLastActivity(LocalDateTime.now());
             user.setDirty(false);
             try(Connection connection = core.getDatabase().getConnection()) {
-                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users SET lastAccountName=?, logoutlocation=?, lastlocation=?, ipAddres=?, homes=?, lastActivity=?, socialSpy=?, vanish=?, tpToogle=?, tpsMonitor=?, godMode=?, uuid=?");
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + core.getConfiguration().tablePrefix + "users SET lastAccountName=?, logoutlocation=?, lastlocation=?, ipAddres=?, homes=?, lastActivity=?, socialSpy=?, vanish=?, tpToogle=?, tpsMonitor=?, godMode=?, uuid=?");
                 preparedStatement.setString(1, user.getLastAccountName());
                 preparedStatement.setString(2, LocationUtil.locationToString(user.getLogoutlocation()));
                 preparedStatement.setString(3, LocationUtil.locationToString(user.getLogoutlocation()));
@@ -112,7 +112,7 @@ public class MySQLUserData implements Data<User, UUID>, SQLDataModel<User> {
             return null;
         }
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE users SET lastAccountName=?, logoutlocation=?, lastlocation=?, ipAddres=?, homes=?, lastActivity=?, socialSpy=?, vanish=?, tpToogle=?, tpsMonitor=?, godMode=? WHERE uuid=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + core.getConfiguration().tablePrefix + "users SET lastAccountName=?, logoutlocation=?, lastlocation=?, ipAddres=?, homes=?, lastActivity=?, socialSpy=?, vanish=?, tpToogle=?, tpsMonitor=?, godMode=? WHERE uuid=?");
             preparedStatement.setString(1, user.getLastAccountName());
             preparedStatement.setString(2, LocationUtil.locationToString(user.getLogoutlocation()));
             preparedStatement.setString(3, LocationUtil.locationToString(user.getLogoutlocation()));

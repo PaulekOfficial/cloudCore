@@ -33,7 +33,7 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
     @Override
     public Skin load(int id) {
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM skins WHERE id=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + core.getConfiguration().tablePrefix + "skins WHERE id=?");
             preparedStatement.setInt(1, id);
             Skin skin = deserializeData(preparedStatement.executeQuery());
             if(skin != null) {
@@ -48,7 +48,7 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
     @Override
     public Skin load(UUID uuid) {
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM skins WHERE uuid=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + core.getConfiguration().tablePrefix + "skins WHERE uuid=?");
             preparedStatement.setString(1, uuid.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             if(!resultSet.first()){
@@ -67,7 +67,7 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
     @Override
     public int count() {
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) FROM skins");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) FROM " + core.getConfiguration().tablePrefix + "skins");
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.getInt(1);
         } catch (SQLException exception) {
@@ -79,7 +79,7 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
     @Override
     public void load() {
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `skins` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `name` LONGTEXT NOT NULL , `value` LONGTEXT NOT NULL , `signature` LONGTEXT NOT NULL , `lastUpdate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `manuallySet` TINYINT(1) , PRIMARY KEY (`id`))");
+            PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + core.getConfiguration().tablePrefix + "skins ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` TEXT NOT NULL , `name` LONGTEXT NOT NULL , `value` LONGTEXT NOT NULL , `signature` LONGTEXT NOT NULL , `lastUpdate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , `manuallySet` TINYINT(1) , PRIMARY KEY (`id`))");
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             core.getLogger().log(Level.WARNING, "Could not create new skins table in database: ", exception);
@@ -112,7 +112,7 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
             return null;
         }
         try(Connection connection = core.getDatabase().getConnection()) {
-            PreparedStatement checkIfExists = connection.prepareStatement("SELECT * FROM skins WHERE uuid=?");
+            PreparedStatement checkIfExists = connection.prepareStatement("SELECT * FROM " + core.getConfiguration().tablePrefix + "skins WHERE uuid=?");
             checkIfExists.setString(1, skin.getUuid().toString());
             ResultSet rs = checkIfExists.executeQuery();
             boolean shuldUpdate = rs.next();
@@ -120,7 +120,7 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
                 rs.beforeFirst();
             }
             if(shuldUpdate) {
-                PreparedStatement preparedStatement = connection.prepareStatement("UPDATE skins SET name=?, value=?, signature=?, lastUpdate=?, manuallySet=? WHERE uuid=?");
+                PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + core.getConfiguration().tablePrefix + "skins SET name=?, value=?, signature=?, lastUpdate=?, manuallySet=? WHERE uuid=?");
                 preparedStatement.setString(1, skin.getName());
                 preparedStatement.setString(2, skin.getValue());
                 preparedStatement.setString(3, skin.getSignature());
@@ -130,7 +130,7 @@ public class MySQLSkinsData implements Data<Skin, UUID>, SQLDataModel<Skin> {
 
                 preparedStatement.executeUpdate();
             } else {
-                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO skins SET uuid=?, name=?, value=?, signature=?, lastUpdate=?, manuallySet=?");
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + core.getConfiguration().tablePrefix + "skins SET uuid=?, name=?, value=?, signature=?, lastUpdate=?, manuallySet=?");
                 preparedStatement.setString(1, skin.getUuid().toString());
                 preparedStatement.setString(2, skin.getName());
                 preparedStatement.setString(3, skin.getValue());
