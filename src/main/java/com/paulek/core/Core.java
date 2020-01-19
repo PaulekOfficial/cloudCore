@@ -12,10 +12,7 @@ import com.paulek.core.commands.CommandManager;
 import com.paulek.core.commands.cmds.admin.*;
 import com.paulek.core.commands.cmds.user.*;
 import com.paulek.core.common.*;
-import com.paulek.core.common.io.Config;
-import com.paulek.core.common.io.Drops;
-import com.paulek.core.common.io.Kits;
-import com.paulek.core.common.io.Lang;
+import com.paulek.core.common.io.*;
 import com.sk89q.worldguard.WorldGuard;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
@@ -40,6 +37,7 @@ public class Core extends JavaPlugin {
 
     public boolean chatEnabled = true;
     private Plugin plugin;
+    private I18n i18n;
     private Permission permission = null;
     private ConsoleLog consoleLog;
     private Chat chat = null;
@@ -61,8 +59,6 @@ public class Core extends JavaPlugin {
     private Version version;
     private DataModel dataModel;
 
-    private boolean onlineMode;
-
     //TODO remove this
     static {
         ConfigurationSerialization.registerClass(StoneDrop.class, "StoneDrop");
@@ -83,11 +79,13 @@ public class Core extends JavaPlugin {
             return;
         }
 
-        //set online mode statis
-        onlineMode = Bukkit.getOnlineMode();
-
         //init configuration files
         initConfigs();
+
+        //init essentials i18n
+        i18n = new I18n(this);
+        i18n.init();
+        i18n.updateLocale(config.locale);
 
         if (!config.enabled || !plugin.isEnabled()) {
             consoleLog.log("Warning! Core disabled in config!", Level.WARNING);
@@ -420,10 +418,6 @@ public class Core extends JavaPlugin {
 
     public Database getDatabase() {
         return database;
-    }
-
-    public boolean isOnlineMode() {
-        return onlineMode;
     }
 
     public PrivateMessages getPrivateMessagesStorage() {

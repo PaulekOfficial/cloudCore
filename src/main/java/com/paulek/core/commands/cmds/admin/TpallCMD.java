@@ -36,7 +36,7 @@ public class TpallCMD extends Command {
 
         }
 
-        sender.sendMessage(ColorUtil.fixColor(Lang.INFO_TPALL_TELEPORTED));
+        sender.sendMessage(tl("teleport-all"));
 
         return false;
     }

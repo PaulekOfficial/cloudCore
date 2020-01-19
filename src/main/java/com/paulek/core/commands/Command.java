@@ -74,4 +74,8 @@ public abstract class Command extends org.bukkit.command.Command {
         return core;
     }
 
+    public String tl(String message, Object... objects) {
+        return com.paulek.core.common.io.I18n.tl(message, objects);
+    }
+
 }

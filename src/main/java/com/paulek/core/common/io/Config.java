@@ -64,6 +64,11 @@ public class Config {
     @CfgName("table-prefix")
     public String tablePrefix = "cloudcore_";
 
+    @CfgComment("W jakim jezyku maja byc wiadomosci z pluginu")
+    @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
+    @CfgName("locale")
+    public String locale = "en";
+
     @CfgComment("Jakiego znaku uzywac do tlumaczenia kolorow")
     @CfgStringStyle(CfgStringStyle.StringStyle.ALWAYS_SINGLE_QUOTED)
     @CfgName("color-mark")
